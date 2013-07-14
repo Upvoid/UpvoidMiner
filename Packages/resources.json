@@ -1,0 +1,156 @@
+[
+{
+    "Descriptor": "File",
+    "Name": "Hills",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "PineTrunk",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "PineLeaves",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "PineImpostor",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "PineLeaves",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "PineLeaves.normals",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "PineImpostor",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "PineField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Decimate" :
+            {
+                "Type" : "Decimate",
+                "Nodes" : ["Input"]
+            },
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "PineLeaves" :
+            {
+                "Type" : "Resource",
+                "Resource": "PineLeaves"
+            },
+            "Seeds" :
+            {
+                "Type" : "SeedPoint",
+                "Nodes" : ["Decimate"]
+            },
+            "PineSpawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["PineLeaves", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "PineImpostorField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "PineImpostor" :
+            {
+                "Type" : "Resource",
+                "Resource": "PineImpostor"
+            },
+            "Seeds" :
+            {
+                "Type" : "SeedPoint",
+                "Nodes" : ["Input"]
+            },
+            "PineSpawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["PineImpostor", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Descriptor" : "File",
+    "Name" : "materials",
+    "Path" : "~.mat",
+    "Type" : "MaterialCollection"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "PineLeaves",
+        "Type" : "FromCollection"
+    },
+    "Name" : "PineLeaves",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "PineImpostor",
+        "Type" : "FromCollection"
+    },
+    "Name" : "PineImpostor",
+    "Path" : "~.mat",
+    "Type" : "Material"
+}
+
+]

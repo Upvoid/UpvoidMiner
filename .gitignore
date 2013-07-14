@@ -1,0 +1,22 @@
+# Files and file types that should be ignored by git
+
+# Binaries
+*.processed
+*.obj
+*.png
+*.jpg
+*.jpeg
+*.wav
+*.pidb
+*.exe
+*.mdb
+
+# Monodevelop
+bin
+*.userprefs
+
+# OS specific temp files:
+*~
+.directory
+.DS_Store
+Thumbs.db

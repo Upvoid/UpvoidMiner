@@ -1,0 +1,11 @@
+
+[PineLeaves] : Default
+    Shader: Opaque/MeshNormalmapInstancedDiscard
+    Texture: uColor, PineLeaves
+    Texture: uNormalmap, PineLeaves.normals
+    Color: uSpecularColor, .05, .1, .05, 16
+
+[PineImpostor] : Default
+    Shader: Opaque/MeshTexturedInstancedDiscard
+    Texture: uColor, PineImpostor
+    Color: uSpecularColor, .0, .0, .0, 1

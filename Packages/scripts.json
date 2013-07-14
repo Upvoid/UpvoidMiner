@@ -1,0 +1,25 @@
+[
+    {
+        "Descriptor": {
+            "Type": "Collection",
+        "ScriptFiles": [ "HostScript.cs" ],
+            "Domain": "Host",
+            "ExternalAssemblies": [ "System.dll" ]
+        },
+        "Type": "ScriptModule",
+        "Name": "UpvoidMiner.HostScript",
+        "Path": "~.dll"
+    },
+    {
+        "Descriptor": {
+            "Type": "Collection",
+            "ScriptFiles": [ "LocalScript.cs" ],
+            "Domain": "Local",
+            "ExternalAssemblies": [ "System.dll" ],
+            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]
+        },
+        "Type": "ScriptModule",
+        "Name": "UpvoidMiner.LocalScript",
+        "Path": "~.dll"
+    }
+]

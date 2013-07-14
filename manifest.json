@@ -1,0 +1,35 @@
+{
+  "Author" : "Upvoid",
+  "Name" : "UpvoidMiner",
+  "Description" : "Techdemo mod for the Upvoid Engine",
+  "Date" : "2013-07-12",  
+  "Resources" : [ "scripts", "resources" ],
+  "Standalone" : true,
+  "Version" : {
+    "Major" : 0,
+    "Minor" : 0,
+    "Revision" : 1
+  },
+  
+  "Dependencies" : [
+	{ "Name": "Common.Cameras", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } }
+  ],
+  "HostScripting" : {
+    "Startup" : [
+      {
+        "Class" : "UpvoidMiner.HostScript",
+        "Method" : "Startup",
+        "Module" : "UpvoidMiner.HostScript"
+      }
+    ]
+  },
+  "LocalScripting" : {
+    "Startup" : [
+      {
+        "Class" : "UpvoidMiner.LocalScript",
+        "Method" : "Startup",
+        "Module" : "UpvoidMiner.LocalScript"
+      }
+    ]
+  }
+}
