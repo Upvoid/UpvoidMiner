@@ -34,8 +34,8 @@
     },
     {
       "amplitude" : 2.1,
-      "base" : 2.1,
-      "depth" : 7,
+      "base" : 2.3,
+      "depth" : 5,
       "id" : 3,
       "inputs" : [
         0,
@@ -137,7 +137,7 @@
       "nodetype" : "Fractalizer"
     },
     {
-      "function" : "y+val*100",
+      "function" : "y+pow2(val+1)*50",
       "id" : 4,
       "inputs" : [
         0,
