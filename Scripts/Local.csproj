@@ -34,4 +34,9 @@
   <ItemGroup>
     <Compile Include="LocalScript.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ApiLocal">
+      <HintPath>..\..\..\..\..\AssemblyCache\ApiLocal.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

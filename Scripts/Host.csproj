@@ -34,4 +34,9 @@
   <ItemGroup>
     <Compile Include="HostScript.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ApiHost">
+      <HintPath>..\..\..\..\..\AssemblyCache\ApiHost.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
