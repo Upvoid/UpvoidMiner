@@ -7,6 +7,13 @@
 },
 
 {
+    "Descriptor": "File",
+    "Name": "TreeDensity",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
     "Type": "Mesh",
     "Name": "PineTrunk",
     "Path": "~.obj",
@@ -65,11 +72,6 @@
         "Type" : "Json",
         "Pipeline" :
         {
-            "Decimate" :
-            {
-                "Type" : "Decimate",
-                "Nodes" : ["Input"]
-            },
             "Input" :
             {
                 "Type" : "Input"
@@ -82,7 +84,11 @@
             "Seeds" :
             {
                 "Type" : "SeedPoint",
-                "Nodes" : ["Decimate"]
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "TreeDensity",
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
             },
             "PineSpawns" :
             {
@@ -114,6 +120,10 @@
             "Seeds" :
             {
                 "Type" : "SeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "TreeDensity",
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
                 "Nodes" : ["Input"]
             },
             "PineSpawns" :
