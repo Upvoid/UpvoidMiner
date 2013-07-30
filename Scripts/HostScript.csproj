@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}</ProjectGuid>
+    <ProjectGuid>{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Local</RootNamespace>
-    <AssemblyName>Local</AssemblyName>
+    <RootNamespace>Host</RootNamespace>
+    <AssemblyName>Host</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,11 +32,18 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="LocalScript.cs" />
+    <Compile Include="HostScript.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ApiLocal">
-      <HintPath>..\..\..\..\..\AssemblyCache\ApiLocal.dll</HintPath>
+    <Reference Include="ApiHost">
+      <HintPath>..\..\..\..\..\AssemblyCache\ApiHost.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Common.csproj">
+      <Project>{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

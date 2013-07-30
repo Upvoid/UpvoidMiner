@@ -8,6 +8,8 @@ using Engine.Rendering;
 using Engine.Physics;
 using Engine.Input;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
 
 namespace UpvoidMiner
 {
@@ -17,6 +19,8 @@ namespace UpvoidMiner
 	public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
 	{
 		TerrainMaterial MatGround;
+
+		public static void Main() {}
 
 		/// <summary>
 		/// Initializes the terrain materials and settings.
@@ -45,6 +49,7 @@ namespace UpvoidMiner
 			MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
 			MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
 			return base.init();
 		}
 
@@ -59,7 +64,6 @@ namespace UpvoidMiner
 			union.AddNode(new CsgExpression(MatGround.MaterialIndex, expression));
 			return union;
 		}
-
 	}
 
 	/// <summary>
