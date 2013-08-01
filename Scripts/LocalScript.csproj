@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="LocalScript.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="CharacterController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ApiLocal">

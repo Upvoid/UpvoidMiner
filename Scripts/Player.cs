@@ -37,13 +37,32 @@ namespace UpvoidMiner
 		/// </summary>
 		private PhysicsComponent physicsComponent;
 
+		/// <summary>
+		/// This is the camera that is used to show the perspective of the player.
+		/// </summary>
+		GenericCamera camera;
+
+		/// <summary>
+		/// This takes control of the rigid body attached to this entity and lets us walk around.
+		/// </summary>
+		CharacterController controller;
+
+		public Player(GenericCamera _camera)
+		{
+			camera = _camera;
+		}
+
 		protected override void Init()
 		{
 			// For now, attach this entity to a simple sphere physics object.
-			physicsComponent = new PhysicsComponent(Entity.FromId(ID), 
-                                 ContainingWorld.Physics.CreateAndAddRigidBody(70.0f, mat4.Identity, new SphereShape(2.0f)),
-			                     mat4.Identity);
+			physicsComponent = new PhysicsComponent(thisEntity,
+                                 ContainingWorld.Physics.CreateAndAddRigidBody(0f, mat4.Identity, new CapsuleShape(0.3f, 1.5f)),
+			                     mat4.Translate(new vec3(0, 1.5f, 0)));
+
+			// Create a character controller that allows us to walk around.
+			controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld, thisEntity.Position);
 		}
+
 	}
 }
 

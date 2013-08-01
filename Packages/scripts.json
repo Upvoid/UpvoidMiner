@@ -25,7 +25,7 @@
     {
         "Descriptor": {
             "Type": "Collection",
-            "ScriptFiles": [ "LocalScript.cs", "Player.cs" ],
+            "ScriptFiles": [ "LocalScript.cs", "Player.cs", "CharacterController.cs" ],
             "Domain": "Local",
             "ExternalAssemblies": [ "System.dll" ],
             "ModuleDependencies": [ "UpvoidMiner.CommonScript", "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]

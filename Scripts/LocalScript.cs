@@ -80,7 +80,7 @@ namespace UpvoidMiner
 
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.
-			player = world.AddEntity(new Player(), mat4.Translate(new vec3(0, 30f, 0)));
+			player = world.AddEntity(new Player(camera), mat4.Translate(new vec3(0, 30f, 0)));
 
 			// Configure the camera to receive user input.
 			Input.RootGroup.AddListener(cameraControl);
@@ -112,7 +112,7 @@ namespace UpvoidMiner
 			cameraControl.Update(_elapsedSeconds);
 
 			// Set the camera to the player position if free camera movement is disabled.
-			if(!noclipEnabled) {
+			if(!noclipEnabled && player != null) {
 				camera.Position = player.Position;
 			}
 		}
