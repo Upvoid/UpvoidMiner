@@ -1,9 +1,10 @@
 using System;
 using Engine;
-using Engine.Model;
+using Engine.Universe;
 using Engine.Physics;
 using Engine.Input;
 using Engine.Scripting;
+using Engine.Webserver;
 
 namespace UpvoidMiner
 {
@@ -158,7 +159,7 @@ namespace UpvoidMiner
 			}
 
 			// Perform a ray query to find the ground below us. The ray starts at our position and ends 1km below us.
-			ContainingWorld.Physics.RayQuery(Position, Position + new vec3(0, -1000f, 0),
+			ContainingWorld.Physics.RayQuery(Position, Position + new vec3(0, -100f, 0),
             	delegate(bool _hit, vec3 _hitPosition, vec3 _normal, RigidBody _body)
 	            {
 					// Receiving the async ray result here.
@@ -168,7 +169,7 @@ namespace UpvoidMiner
 
 					// Set the distance to the ground to the end of the ray if no collision was found.
 					if(!_hit) {
-						distanceToGround = 1000f;
+						distanceToGround = 100f;
 					} else {
 						distanceToGround = Position.y - _hitPosition.y;
 					}

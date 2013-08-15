@@ -37,13 +37,13 @@
     <Compile Include="CharacterController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="ApiLocal">
-      <HintPath>..\..\..\..\..\AssemblyCache\ApiLocal.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Cameras.Local">
       <HintPath>..\..\..\..\..\AssemblyCache\Common.Cameras.Local.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="Engine">
+      <HintPath>..\..\..\..\..\AssemblyCache\Engine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Common.csproj">

@@ -18,11 +18,12 @@
 using System;
 using Engine;
 using Engine.Input;
-using Engine.Model;
+using Engine.Universe;
 using Engine.Rendering;
 using Engine.Modding;
 using Engine.Resources;
 using Engine.Scripting;
+using Engine.Webserver;
 using Common.Cameras;
 
 using System.Runtime.InteropServices;
@@ -34,6 +35,14 @@ namespace UpvoidMiner
 	/// </summary>
 	public class LocalScript
 	{
+		/// <summary>
+		/// Resource domain
+		/// </summary>
+		public static ResourceDomain ModDomain;
+		/// <summary>
+		/// Mod
+		/// </summary>
+		public static Module Mod;
 		
 		/// <summary>
 		/// The main world. We will use this to create new entities or query information about the environment.
@@ -65,6 +74,10 @@ namespace UpvoidMiner
 		/// </summary>
 		public static void Startup(IntPtr _unmanagedModule)
 		{
+			// Get and save the resource domain of the mod, needed for loading resources.
+			Mod = Module.FromHandle(_unmanagedModule);
+			ModDomain = Mod.ResourceDomain;
+
 			// Create a simple camera that allows free movement.
 			camera = new GenericCamera();
 			camera.FarClippingPlane = 750.0;
