@@ -2,21 +2,8 @@
     {
         "Descriptor": {
             "Type": "Collection",
-            "ScriptFiles": [ "Messages.cs" ],
-            "Domain": "Host",
-            "ExternalAssemblies": [ "System.dll" ]
-        },
-        "Type": "ScriptModule",
-        "Name": "UpvoidMiner.CommonScript",
-        "Path": "~.dll"
-    },
-    {
-        "Descriptor": {
-            "Type": "Collection",
         	"ScriptFiles": [ "HostScript.cs" ],
-            "Domain": "Host",
-            "ExternalAssemblies": [ "System.dll" ],
-            "ModuleDependencies": [ "UpvoidMiner.CommonScript" ]
+            "ModuleDependencies": [ ]
         },
         "Type": "ScriptModule",
         "Name": "UpvoidMiner.HostScript",
@@ -26,9 +13,7 @@
         "Descriptor": {
             "Type": "Collection",
             "ScriptFiles": [ "LocalScript.cs", "Player.cs", "CharacterController.cs" ],
-            "Domain": "Local",
-            "ExternalAssemblies": [ "System.dll" ],
-            "ModuleDependencies": [ "UpvoidMiner.CommonScript", "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]
+            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]
         },
         "Type": "ScriptModule",
         "Name": "UpvoidMiner.LocalScript",
