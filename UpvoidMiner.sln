@@ -1,11 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HostScript", "Scripts\HostScript.csproj", "{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalScript", "Scripts\LocalScript.csproj", "{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{2245AFD9-6A82-4FA3-BB55-478E4BDD6EC6}"
+	ProjectSection(SolutionItems) = preProject
+		Packages\resources.json = Packages\resources.json
+		Packages\scripts.json = Packages\scripts.json
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Scripts\Common.csproj", "{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expressions", "Expressions", "{3794FABE-57C0-41F6-9FC3-C734B330CE58}"
+	ProjectSection(SolutionItems) = preProject
+		Expressions\Hills.json = Expressions\Hills.json
+		Expressions\TreeDensity.json = Expressions\TreeDensity.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MaterialCollections", "MaterialCollections", "{C723C33C-2A85-4C6F-9557-00ED0AC5F824}"
+	ProjectSection(SolutionItems) = preProject
+		MaterialCollections\materials.mat = MaterialCollections\materials.mat
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,17 +30,11 @@ Global
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Debug|x86.Build.0 = Debug|x86
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x86.ActiveCfg = Release|x86
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x86.Build.0 = Release|x86
-		{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}.Debug|x86.ActiveCfg = Debug|x86
-		{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}.Debug|x86.Build.0 = Debug|x86
-		{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}.Release|x86.ActiveCfg = Release|x86
-		{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}.Release|x86.Build.0 = Release|x86
-		{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}.Debug|x86.ActiveCfg = Debug|x86
-		{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}.Debug|x86.Build.0 = Debug|x86
-		{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}.Release|x86.ActiveCfg = Release|x86
-		{BC3DA00C-61DC-4E8E-A1C2-D2186FE14A2D}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Scripts\LocalScript.csproj
+		StartupItem = Scripts\Scripts.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
 		$1.inheritsSet = null

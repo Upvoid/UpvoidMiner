@@ -35,6 +35,7 @@
     <Compile Include="LocalScript.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="CharacterController.cs" />
+    <Compile Include="HostScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
@@ -44,11 +45,5 @@
     <Reference Include="Engine">
       <HintPath>..\..\..\..\..\AssemblyCache\Engine.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Common.csproj">
-      <Project>{A9C54BE9-3F76-402F-9DD7-28FA5133DFBB}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
   </ItemGroup>
 </Project>
