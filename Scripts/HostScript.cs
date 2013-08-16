@@ -37,8 +37,6 @@ namespace UpvoidMiner
 	{
 		TerrainMaterial MatGround;
 
-		public static void Main() {}
-
 		/// <summary>
 		/// Initializes the terrain materials and settings.
 		/// </summary>
