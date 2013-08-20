@@ -50,7 +50,28 @@ namespace UpvoidMiner
 		public Player(GenericCamera _camera)
 		{
 			camera = _camera;
+            Input.OnPressInput += HandlePressInput;
 		}
+
+        void HandlePressInput (object sender, InputPressArgs e)
+        {
+            // We don't have tools or items yet, so we hard-code digging on left mouse click here.
+            if(e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Up) {
+
+                // Send a ray query to find the position on the terrain we are looking at.
+                ContainingWorld.Physics.RayQuery(thisEntity.Position + camera.ForwardDirection * 0.5f, thisEntity.Position + camera.ForwardDirection * 20f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body) {
+                    // Receiving the async ray query result here
+                    if(_hit)
+                    {
+                        // Create a CsgNode that defines the digging shape as a diff operation.
+                        CsgNode digShape = new CsgOpDiff(new CsgExpression(1, "-1.5 + sqrt(distance2(vec3(x,y,z), vec3"+_position.ToString()+"))"));
+
+                        // Apply that diff operation to the terrain.
+                        ContainingWorld.Terrain.ModifyTerrain(new BoundingSphere(_position, 2), digShape);
+                    }
+                });
+            }
+        }
 
 		protected override void Init()
 		{
