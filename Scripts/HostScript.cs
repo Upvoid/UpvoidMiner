@@ -49,10 +49,10 @@ namespace UpvoidMiner
 			MatGround = terr.RegisterMaterial("Ground");
 
 			// Add the geometry for the terrain LoDs >= 9.
-			int pipeline = MatGround.AddDefaultPipeline(9);
+			int pipeline = MatGround.AddDefaultPipeline(0);
 			MatGround.AddDefaultShadowAndZPre(pipeline);
 			MatGround.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
-
+			/*
 			// Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
 			pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", 5, 8);
 			MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
@@ -64,7 +64,7 @@ namespace UpvoidMiner
 			MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
 			MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
-
+*/
 			return base.init();
 		}
 

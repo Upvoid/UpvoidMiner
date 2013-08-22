@@ -9,3 +9,7 @@
     Shader: Opaque/MeshTexturedInstancedDiscard
     Texture: uColor, PineImpostor
     Color: uSpecularColor, .0, .0, .0, 1
+
+[DiggingConstraints] : Default
+    Shader: Opaque/MeshPseudoTransparent
+    Color: uSpecularColor 1.0, .0, .0, 0.001

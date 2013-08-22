@@ -47,6 +47,13 @@ namespace UpvoidMiner
 		/// </summary>
 		CharacterController controller;
 
+		// Define an area the user can NOT dig in. Note that the expression defines everything but the are we are allowed to dig in. 
+		const float halfCubeSideLength = 10.0f;
+		CsgExpression inverseCube = new CsgExpression(1, "-(max(max(abs(x), abs(y)), abs(z)) - " + halfCubeSideLength.ToString() + ")");
+
+		// Create a pointer to an area we are allowed to dig in.
+		MeshRenderJob diggingConstraints = null;
+
 		public Player(GenericCamera _camera)
 		{
 			camera = _camera;
@@ -56,18 +63,38 @@ namespace UpvoidMiner
         void HandlePressInput (object sender, InputPressArgs e)
         {
             // We don't have tools or items yet, so we hard-code digging on left mouse click here.
-            if(e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Up) {
+			if((e.Key == InputKey.MouseLeft || e.Key == InputKey.MouseMiddle) && e.PressType == InputPressArgs.KeyPressType.Down) {
 
                 // Send a ray query to find the position on the terrain we are looking at.
                 ContainingWorld.Physics.RayQuery(thisEntity.Position + camera.ForwardDirection * 0.5f, thisEntity.Position + camera.ForwardDirection * 20f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
                     // Receiving the async ray query result here
                     if(_hit)
                     {
-                        // Create a CsgNode that defines the digging shape as a diff operation.
-                        CsgNode digShape = new CsgOpDiff(new CsgExpression(1, "-1.5 + sqrt(distance2(vec3(x,y,z), vec3"+_position.ToString()+"))"));
+						// Set the actual shape to be dug or built.
+						CsgExpression sphereShape = new CsgExpression(1, "-1.5 + sqrt(distance2(vec3(x,y,z), vec3"+_position.ToString()+"))");
 
-                        // Apply that diff operation to the terrain.
-                        ContainingWorld.Terrain.ModifyTerrain(new BoundingSphere(_position, 2), digShape);
+						// Concatenate this sphere shape and the diff-operation that we do not allow digging in.
+						CsgOpConcat concatenator = new CsgOpConcat();
+						concatenator.AddNode(sphereShape);
+						concatenator.AddNode(new CsgOpDiff(inverseCube));
+
+						// Distinguish between middle mouse button (build) and left mouse button (dig).
+						if(e.Key == InputKey.MouseMiddle)
+						{
+							// Shape is a union, so we add something.
+							CsgOpUnion digShape = new CsgOpUnion(concatenator);
+
+	                        // Apply that union operation to the terrain -> build.
+							ContainingWorld.Terrain.ModifyTerrain(new BoundingSphere(_position, 4), digShape);
+						}
+						else
+						{
+							// Shape is a diff, so we remove something.
+							CsgOpDiff digShape = new CsgOpDiff(concatenator);
+
+							// Apply that diff operation to the terrain -> dig.
+							ContainingWorld.Terrain.ModifyTerrain(new BoundingSphere(_position, 4), digShape);
+						}
                     }
                 });
             }
@@ -82,6 +109,16 @@ namespace UpvoidMiner
 
 			// Create a character controller that allows us to walk around.
 			controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld, thisEntity.Position);
+
+			// Make the area we are allowed to dig in visible
+			diggingConstraints = new MeshRenderJob(
+				Renderer.Opaque.Mesh, 
+				Resources.UseMaterial("DiggingConstraints", LocalScript.ModDomain), 
+				Resources.UseMesh("::Debug/Box", LocalScript.ModDomain),
+				mat4.Scale(0.999f * halfCubeSideLength)); // avoid z-fighting
+
+			// Add this RenderJob to the world's jobs
+			ContainingWorld.AddRenderJob(diggingConstraints);
 		}
 
 	}

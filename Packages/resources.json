@@ -39,6 +39,16 @@
         "Type": "File",
         "sRGB": true
     },
+    "Name" : "CrossedDiscard",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
     "Name" : "PineLeaves",
     "Path" : "~.png",
     "Type" : "Texture"
@@ -159,6 +169,17 @@
         "Type" : "FromCollection"
     },
     "Name" : "PineImpostor",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "DiggingConstraints",
+        "Type" : "FromCollection"
+    },
+    "Name" : "DiggingConstraints",
     "Path" : "~.mat",
     "Type" : "Material"
 }
