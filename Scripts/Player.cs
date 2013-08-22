@@ -59,7 +59,7 @@ namespace UpvoidMiner
             if(e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Up) {
 
                 // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(thisEntity.Position + camera.ForwardDirection * 0.5f, thisEntity.Position + camera.ForwardDirection * 20f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body) {
+                ContainingWorld.Physics.RayQuery(thisEntity.Position + camera.ForwardDirection * 0.5f, thisEntity.Position + camera.ForwardDirection * 20f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
                     // Receiving the async ray query result here
                     if(_hit)
                     {

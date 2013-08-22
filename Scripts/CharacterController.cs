@@ -160,7 +160,7 @@ namespace UpvoidMiner
 
 			// Perform a ray query to find the ground below us. The ray starts at our position and ends 1km below us.
 			ContainingWorld.Physics.RayQuery(Position, Position + new vec3(0, -100f, 0),
-            	delegate(bool _hit, vec3 _hitPosition, vec3 _normal, RigidBody _body)
+            	delegate(bool _hit, vec3 _hitPosition, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
 	            {
 					// Receiving the async ray result here.
 
