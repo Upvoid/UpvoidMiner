@@ -47,11 +47,13 @@ namespace UpvoidMiner
 		/// </summary>
 		CharacterController controller;
 
-		// Define an area the user can NOT dig in. Note that the expression defines everything but the are we are allowed to dig in. 
-		const float halfCubeSideLength = 10.0f;
-		CsgExpression inverseCube = new CsgExpression(1, "-(max(max(abs(x), abs(y)), abs(z)) - " + halfCubeSideLength.ToString() + ")");
+		// Define an area cube the user can NOT dig in.
+		int halfCubeSideLength = 10;
 
-		// Create a pointer to an area we are allowed to dig in.
+		// Position where this cube is located.
+		vec3 currentAreaPosition = new vec3(0, 0, 0);
+
+		// Create a pointer to a renderjob visualizing the area we are allowed to dig in.
 		MeshRenderJob diggingConstraints = null;
 
 		public Player(GenericCamera _camera)
@@ -62,6 +64,46 @@ namespace UpvoidMiner
 
         void HandlePressInput (object sender, InputPressArgs e)
         {
+
+			// Scale the area using + and - keys.
+			// Translate it using up down left right (x, z)
+			// and PageUp PageDown (y).
+			if(e.Key == InputKey.Plus) 
+			{
+				++halfCubeSideLength;
+			}
+			else if(e.Key == InputKey.Minus) 
+			{
+				--halfCubeSideLength;
+			}
+			else if(e.Key == InputKey.Up)
+			{
+				currentAreaPosition.z += 1.0f;
+			}
+			else if(e.Key == InputKey.Down)
+			{
+				currentAreaPosition.z -= 1.0f;
+			}
+			else if(e.Key == InputKey.Left)
+			{
+				currentAreaPosition.x += 1.0f;
+			}
+			else if(e.Key == InputKey.Right)
+			{
+				currentAreaPosition.x -= 1.0f;
+			}
+			else if(e.Key == InputKey.PageUp)
+			{
+				currentAreaPosition.y += 1.0f;
+			}
+			else if(e.Key == InputKey.PageDown)
+			{
+				currentAreaPosition.y -= 1.0f;
+			}
+
+			// Set the new modelmatrix.
+			diggingConstraints.ModelMatrix = mat4.Translate(currentAreaPosition) * mat4.Scale(0.999f * halfCubeSideLength);
+
             // We don't have tools or items yet, so we hard-code digging on left mouse click here.
 			if((e.Key == InputKey.MouseLeft || e.Key == InputKey.MouseMiddle) && e.PressType == InputPressArgs.KeyPressType.Down) {
 
@@ -70,6 +112,10 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
+
+						//  The actual definition of the area. Note that the expression defines everything but the are we are allowed to dig in. 
+						CsgExpression inverseCube = new CsgExpression(1, "-(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
+
 						// Set the actual shape to be dug or built.
 						CsgExpression sphereShape = new CsgExpression(1, "-1.5 + sqrt(distance2(vec3(x,y,z), vec3"+_position.ToString()+"))");
 
@@ -95,6 +141,7 @@ namespace UpvoidMiner
 							// Apply that diff operation to the terrain -> dig.
 							ContainingWorld.Terrain.ModifyTerrain(new BoundingSphere(_position, 4), digShape);
 						}
+
                     }
                 });
             }
