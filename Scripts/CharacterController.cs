@@ -164,6 +164,10 @@ namespace UpvoidMiner
 	            {
 					// Receiving the async ray result here.
 
+                    // There is currently a bug in the physics system that returns NaNs in some cases.
+                    if(!_hitPosition.IsFinite)
+                        return;
+
 					// Nothing found below us? Might be stuck in the terrain.
 					noGroundBelow = !_hit;
 

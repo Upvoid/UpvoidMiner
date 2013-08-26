@@ -126,6 +126,8 @@ namespace UpvoidMiner
 
 			// Set the camera to the player position if free camera movement is disabled.
 			if(!noclipEnabled && player != null) {
+                if(!player.Position.IsFinite)
+                    return;
 				camera.Position = player.Position;
 			}
 		}

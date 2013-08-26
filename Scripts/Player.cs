@@ -112,6 +112,9 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
+                        // There is currently a bug in the physics system that returns NaNs in some cases.
+                        if(!_position.IsFinite)
+                            return;
 
 						//  The actual definition of the area. Note that the expression defines everything but the are we are allowed to dig in. 
 						CsgExpression inverseCube = new CsgExpression(1, "-(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
