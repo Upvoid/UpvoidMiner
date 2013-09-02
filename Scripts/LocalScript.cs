@@ -95,6 +95,11 @@ namespace UpvoidMiner
 			// For now, place him 30 meters above the ground and let him drop to the ground.
 			player = world.AddEntity(new Player(camera), mat4.Translate(new vec3(0, 30f, 0)));
 
+			// Create an active region around the player spawn
+			// Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
+			// In near future it will be updated when the player moves out of it
+			world.AddActiveRegion(new ivec3(), 100f, 400f, 100f, 100f);
+
 			// Configure the camera to receive user input.
 			Input.RootGroup.AddListener(cameraControl);
 

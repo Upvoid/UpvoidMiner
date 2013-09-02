@@ -85,6 +85,7 @@ namespace UpvoidMiner
 		/// </summary>
 		bool noGroundBelow = false;
 
+		Random r = new Random();
 
 		public CharacterController(RigidBody _controlledBody, GenericCamera _camera, World _containingWorld, vec3 _position)
 		{
@@ -159,7 +160,7 @@ namespace UpvoidMiner
 			}
 
 			// Perform a ray query to find the ground below us. The ray starts at our position and ends 1km below us.
-			ContainingWorld.Physics.RayQuery(Position, Position + new vec3(0, -100f, 0),
+			ContainingWorld.Physics.RayQuery(Position, Position + new vec3((float)r.NextDouble()-.5f, -100f, (float)r.NextDouble()-.5f),
             	delegate(bool _hit, vec3 _hitPosition, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
 	            {
 					// Receiving the async ray result here.
