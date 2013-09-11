@@ -62,12 +62,17 @@ namespace UpvoidMiner
         public float JumpImpulse = 300f;
 
 		/// <summary>
-		/// The velocity of the character when walking (meters per seconds). Default is 1.8 (about 6.5 km/h).
+		/// The velocity of the character when walking (meters per second). Default is 1.8 (about 6.5 km/h).
 		/// </summary>
         public float WalkSpeed = 1.8f;
 
+        /// <summary>
+        /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
+        /// </summary>
+        public float StrafeSpeed = 1f;
+
 		/// <summary>
-		/// The velocity of the character when running (meters per seconds). Default is 4 (about 15 km/h).
+		/// The velocity of the character when running (meters per second). Default is 4 (about 15 km/h).
 		/// </summary>
         public float WalkSpeedRunning = 4f;
 
@@ -147,16 +152,18 @@ namespace UpvoidMiner
 
 			// When touching the ground, we can walk around.
 			if(TouchesGround) {
-				// Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
-				vec3 moveDir = camera.ForwardDirection * walkDirForward + camera.RightDirection * walkDirRight;
-				moveDir.y = 0;
-				moveDir = moveDir.Normalized;
 
-                float maxWalkSpeed = (IsRunning ? WalkSpeedRunning : WalkSpeed);
+                float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
 
-                if(Body.GetVelocity().Length < maxWalkSpeed) {
-                    Body.ApplyImpulse(moveDir * maxWalkSpeed * CharacterMass, vec3.Zero);
-                }
+                // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
+                vec3 globalMoveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * StrafeSpeed;
+				globalMoveDir.y = 0;
+
+                vec3 velocity = Body.GetVelocity();
+                velocity.y = 0;
+
+                Body.ApplyImpulse( (globalMoveDir - velocity)  * CharacterMass, vec3.Zero);
+
 			}
 
             // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.5 meters.
