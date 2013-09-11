@@ -68,11 +68,13 @@ namespace UpvoidMiner
 		{
 			// For now, attach this entity to a simple sphere physics object.
 			physicsComponent = new PhysicsComponent(thisEntity,
-                                 ContainingWorld.Physics.CreateAndAddRigidBody(0f, mat4.Identity, new CapsuleShape(0.3f, 1.5f)),
+                                 ContainingWorld.Physics.CreateAndAddRigidBody(70f, mat4.Identity, new CapsuleShape(0.3f, 1.5f)),
 			                     mat4.Translate(new vec3(0, 1.5f, 0)));
 
-			// Create a character controller that allows us to walk around.
-			controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld, thisEntity.Position);
+            physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
+
+            // Create a character controller that allows us to walk around.
+            controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld);

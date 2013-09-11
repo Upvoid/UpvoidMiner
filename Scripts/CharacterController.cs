@@ -15,28 +15,50 @@ namespace UpvoidMiner
 	/// </summary>
 	public class CharacterController
 	{
-		/// <summary>
-		/// The current velocity of the controlled rigid body, in meters per second. Note that for the physics system, the body is static. We move it manually for maximum control.
-		/// </summary>
-		public vec3 Velocity { get; protected set; }
 
 		/// <summary>
 		/// The current position of the controlled character.
 		/// </summary>
-		public vec3 Position { get; protected set; }
+        public vec3 Position { 
+            get
+            {
+                return new vec3(ControlledBody.GetTransformation().col3); 
+            }
+        }
+
+        /// <summary>
+        /// The height that the controller tries to keep between the body and the ground.
+        /// The RigidBody representing the character hovers above the ground to make walking on non-planar ground easier.
+        /// </summary>
+        /// <value>
+        /// Sane values usually lie between 0.2 and 0.5. Default is 0.4.
+        /// If it is too low, the body will collide with obstacles that a real person would just step over.
+        /// If it is too high, the body will not collide with obstacles that a real person would not simply step over.
+        /// </value>
+        public float HoverHeight = 0.4f;
+
+        /// <summary>
+        /// The physical impulse (meters per second) that will be applied to the body for a jump.
+        /// </summary>
+        public float JumpImpulse = 300f;
 
 		/// <summary>
-		/// The velocity of the character when walking, in meters per seconds. Default is 1.8 (about 6.5 km/h).
+		/// The velocity of the character when walking (meters per seconds). Default is 1.8 (about 6.5 km/h).
 		/// </summary>
-		public float WalkSpeed { get; set; }
+        public float WalkSpeed = 1.8f;
 
 		/// <summary>
-		/// The velocity of the character when running, in meters per seconds. Default is 4 (about 15 km/h).
+		/// The velocity of the character when running (meters per seconds). Default is 4 (about 15 km/h).
 		/// </summary>
-		public float WalkSpeedRunning { get; set; }
+        public float WalkSpeedRunning = 4f;
+
+        /// <summary>
+        /// Returns true iff the character is currently walking or running.
+        /// </summary>
+        public bool IsWalking { get { return walkDirRight != 0 || walkDirForward != 0; } }
 
 		/// <summary>
-		/// True iff the character is currently running
+		/// True iff the character is currently running.
 		/// </summary>
 		public bool IsRunning { get; protected set; }
 
@@ -75,30 +97,19 @@ namespace UpvoidMiner
 		/// </summary>
 		float distanceToGround = 0;
 
-		/// <summary>
-		/// The amount of seconds since we had ground below us.
-		/// </summary>
-		float secondsSinceGroundWasBelow = 0f;
-
-		/// <summary>
-		/// True iff there is ground below us.
-		/// </summary>
-		bool noGroundBelow = false;
-
-		Random r = new Random();
-
-		public CharacterController(RigidBody _controlledBody, GenericCamera _camera, World _containingWorld, vec3 _position)
+		public CharacterController(RigidBody _controlledBody, GenericCamera _camera, World _containingWorld)
 		{
 			camera = _camera;
 			ContainingWorld = _containingWorld;
 			ControlledBody = _controlledBody;
-			Position = _position;
 
-			// Initialize default values
-			Velocity = new vec3(0, 0, 0);
+			// Initialize default values for auto properties
 			IsRunning = false;
 			WalkSpeed = 1.8f;
 			WalkSpeedRunning = 4f;
+
+            // Prevent the rigid body from falling to the ground by simply disabling any rotation
+            ControlledBody.SetAngularFactor(vec3.Zero);
 
 			// Register the required callbacks.
 			// This update function is called 20 - 60 times per second to update the character position.
@@ -114,86 +125,51 @@ namespace UpvoidMiner
 		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
 		protected void Update(float _elapsedSeconds)
 		{
-			// Store the velocity to enable writing to single coordinates.
-			vec3 velocity = Velocity;
-
-			// Move the rigid body along the velocity.
-			Position += velocity * _elapsedSeconds;
-
-			// Update the rigid body position
-			ControlledBody.SetTransformation(mat4.Translate(Position));
 
 			// When touching the ground, we can walk around.
 			if(TouchesGround) {
 				// Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
 				vec3 moveDir = camera.ForwardDirection * walkDirForward + camera.RightDirection * walkDirRight;
 				moveDir.y = 0;
+				moveDir = moveDir.Normalized;
 
-				// Normalize and multiply with the walk or running speed to get the designated velocity.
-				moveDir = moveDir.Normalized * (IsRunning ? WalkSpeedRunning : WalkSpeed);
-				velocity.x = moveDir.x;
-				velocity.z = moveDir.z;
+                float maxWalkSpeed = (IsRunning ? WalkSpeedRunning : WalkSpeed);
+
+                if(ControlledBody.GetVelocity().Length < maxWalkSpeed) {
+                    ControlledBody.ApplyImpulse(moveDir * maxWalkSpeed * ControlledBody.Mass, vec3.Zero);
+                }
 			}
 
-			// No ground below us? Then we may be stuck in the earth.
-			if(noGroundBelow) {
-				secondsSinceGroundWasBelow += _elapsedSeconds;
+            // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.5 meters.
+            // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
+            if(distanceToGround < HoverHeight+0.5f) {
 
-				// Ignore short times where no ground is beneath.
-				// However, when we don't find any ground below us for longer than one second,
-				// we assume that we are underground and move upward to fix this.
-				// This currently can also occur when we walk into areas where no terrain is generated yet.
-				if(secondsSinceGroundWasBelow > 1f)
-					velocity = new vec3(0, 1f, 0);
+                vec3 velocity = ControlledBody.GetVelocity();
 
-			} else {
-				// We have ground below us, so set this timer to zero.
-				secondsSinceGroundWasBelow = 0;
+                // Never move down when more than 5cm below the desired height.
+                if(distanceToGround < HoverHeight-0.05f && velocity.y < 0f) {
+                    velocity.y = 0;
+                    ControlledBody.SetVelocity(velocity);
+                }
 
-				// Approach our optimal position (hovering 30cm over the ground).
-				// When we are more than 10cm away from our goal position, we apply an acceleration that gives us a fake gravity at the same time.
-				// When closer than 10cm to the goal position, we move linearly towards it to prevent oscillation around it.
-				if(Math.Abs(distanceToGround - 0.3f) > 0.1f)
-					velocity.y += -10f * Math.Max(Math.Min(distanceToGround - 0.3f, 1f), -1f) * _elapsedSeconds;
-				else
-					velocity.y = 0.3f - distanceToGround;
-			}
+                float customGravity = HoverHeight - distanceToGround;
+                ControlledBody.SetGravity(new vec3(0, customGravity, 0));
+            }
+            else
+                ControlledBody.SetGravity(new vec3(0, -9.807f, 0));
 
-			// Perform a ray query to find the ground below us. The ray starts at our position and ends 1km below us.
-			ContainingWorld.Physics.RayQuery(Position, Position + new vec3((float)r.NextDouble()-.5f, -100f, (float)r.NextDouble()-.5f),
-            	delegate(bool _hit, vec3 _hitPosition, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
-	            {
-					// Receiving the async ray result here.
-
-                    // There is currently a bug in the physics system that returns NaNs in some cases.
-                    if(!_hitPosition.IsFinite)
-                        return;
-
-					// Nothing found below us? Might be stuck in the terrain.
-					noGroundBelow = !_hit;
-
-					// Set the distance to the ground to the end of the ray if no collision was found.
-					if(!_hit) {
-						distanceToGround = 100f;
-					} else {
-						distanceToGround = Position.y - _hitPosition.y;
-					}
-
-					// Usually, we hover at 30cm over the ground. We are by definition touching the ground if we are closer to it than 40cm.
-					if(Math.Abs(distanceToGround) < 0.4f)
-						TouchesGround = true;
-
-					// When we got very close to the ground, make sure we stop there.
-				if(distanceToGround < 0.05f && velocity.y < 0)
-					velocity.y = 0;
-
-				}
-			);
-
-			// Write the new velocity back to the property
-			Velocity = velocity;
-
+            ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 5f, 0), ReceiveRayqueryResult);
 		}
+
+        protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
+        {
+            if(hasCollision)
+                distanceToGround = Position.y - hitPosition.y - 1f;
+            else
+                distanceToGround = 5f;
+
+            TouchesGround = Math.Abs(distanceToGround) < 1f;
+        }
 
 		/// <summary>
 		/// Called on keyboard input. Updates the walking directions of the character.
@@ -201,32 +177,39 @@ namespace UpvoidMiner
 		protected void HandleInput(object sender, InputPressArgs e)
 		{
 			// Let the default WASD-keys control the walking directions.
-			if(e.Key == InputKey.W) {
-				if(e.PressType == InputPressArgs.KeyPressType.Down)
-					walkDirForward++;
-				else
-					walkDirForward--;
-			} else if(e.Key == InputKey.S) {
-				if(e.PressType == InputPressArgs.KeyPressType.Down)
-					walkDirForward--;
-				else
-					walkDirForward++;
-			} else if(e.Key == InputKey.D) {
-				if(e.PressType == InputPressArgs.KeyPressType.Down)
-					walkDirRight++;
-				else
-					walkDirRight--;
-			} else if(e.Key == InputKey.A) {
-				if(e.PressType == InputPressArgs.KeyPressType.Down)
-					walkDirRight--;
-				else
-					walkDirRight++;
-			} else if(e.Key == InputKey.Shift) { // Shift controls running
-				if(e.PressType == InputPressArgs.KeyPressType.Down)
-					IsRunning = true;
-				else
-					IsRunning = false;
-			}
+            if(e.Key == InputKey.W) {
+                if(e.PressType == InputPressArgs.KeyPressType.Down)
+                    walkDirForward++;
+                else
+                    walkDirForward--;
+            } else if(e.Key == InputKey.S) {
+                if(e.PressType == InputPressArgs.KeyPressType.Down)
+                    walkDirForward--;
+                else
+                    walkDirForward++;
+            } else if(e.Key == InputKey.D) {
+                if(e.PressType == InputPressArgs.KeyPressType.Down)
+                    walkDirRight++;
+                else
+                    walkDirRight--;
+            } else if(e.Key == InputKey.A) {
+                if(e.PressType == InputPressArgs.KeyPressType.Down)
+                    walkDirRight--;
+                else
+                    walkDirRight++;
+            } else if(e.Key == InputKey.Space) { //Space lets the player jump
+                if(TouchesGround) {
+                    ControlledBody.ApplyImpulse(new vec3(0, 300f, 0), vec3.Zero);
+                }
+            } else if(e.Key == InputKey.Shift) { // Shift controls running
+                if(e.PressType == InputPressArgs.KeyPressType.Down)
+                    IsRunning = true;
+                else
+                    IsRunning = false;
+            } else if(e.Key == InputKey.Q) {
+                ControlledBody.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * ControlledBody.GetTransformation());
+                ControlledBody.SetVelocity(vec3.Zero);
+            }
 
 			// Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
 			if(walkDirForward < -1)
@@ -237,6 +220,12 @@ namespace UpvoidMiner
 				walkDirRight = -1;
 			if(walkDirRight > 1)
 				walkDirRight = 1;
+
+            // This hack stops the player movement immediately when we stop walking
+            //TODO: do some actual friction simulation instead
+            if(walkDirRight == 0 && walkDirRight == 0 && TouchesGround && e.PressType == InputPressArgs.KeyPressType.Up) {
+                ControlledBody.SetVelocity(vec3.Zero);
+            }
 		}
 	}
 }
