@@ -69,6 +69,13 @@ namespace UpvoidMiner
 		/// </summary>
 		static bool noclipEnabled = false;
 
+        static void hudGui(WebRequest request, WebResponse response)
+        {
+            response.AppendBody("<html><head></head><body>" +
+                                "<div style=\"width: 2px; height: 2px; background: #000; position: fixed; top: 50%; left: 50%; margin: -1px; border: 1px solid #fff;\"></div>" +
+                "</body></html>");
+        }
+
 		/// <summary>
 		/// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
 		/// </summary>
@@ -93,12 +100,16 @@ namespace UpvoidMiner
 
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.
-			player = world.AddEntity(new Player(camera), mat4.Translate(new vec3(0, 30f, 0)));
+			player = world.AddEntity(new Player(camera), mat4.Translate(new vec3(0, 50f, 0)));
 
-			// Create an active region around the player spawn
-			// Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
-			// In near future it will be updated when the player moves out of it
-			world.AddActiveRegion(new ivec3(), 100f, 400f, 100f, 100f);
+            // Create an active region around the player spawn
+            // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
+            // In near future it will be updated when the player moves out of it
+            world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
+
+            Webserver.DefaultWebserver.RegisterDynamicContent(ModDomain, "Hud", hudGui);
+
+            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/Hud");
 
 			// Configure the camera to receive user input.
 			Input.RootGroup.AddListener(cameraControl);
