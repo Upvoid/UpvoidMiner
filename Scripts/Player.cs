@@ -47,8 +47,10 @@ namespace UpvoidMiner
 		/// </summary>
 		CharacterController controller;
 
+        DiggingController digging;
+
 		// Define an area cube the user can NOT dig in.
-		int halfCubeSideLength = 10;
+		float halfCubeSideLength = 10f;
 
 		// Position where this cube is located.
 		vec3 currentAreaPosition = new vec3(0, 0, 0);
@@ -160,16 +162,78 @@ namespace UpvoidMiner
 			// Create a character controller that allows us to walk around.
 			controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld, thisEntity.Position);
 
-			// Make the area we are allowed to dig in visible
-			diggingConstraints = new MeshRenderJob(
-				Renderer.Opaque.Mesh, 
-				Resources.UseMaterial("DiggingConstraints", LocalScript.ModDomain), 
-				Resources.UseMesh("::Debug/Box", LocalScript.ModDomain),
-				mat4.Scale(0.999f * halfCubeSideLength)); // avoid z-fighting
+            // This digging controller will perform digging and handle digging constraints for us.
+            digging = new DiggingController(ContainingWorld);
 
-			// Add this RenderJob to the world's jobs
-			ContainingWorld.AddRenderJob(diggingConstraints);
+            // Make the area we are allowed to dig in visible
+            diggingConstraints = new MeshRenderJob(
+                Renderer.Opaque.Mesh, 
+                Resources.UseMaterial("DiggingConstraints", LocalScript.ModDomain), 
+                Resources.UseMesh("::Debug/Box", LocalScript.ModDomain),
+                mat4.Scale(0.999f * halfCubeSideLength)); // avoid z-fighting
+
+            // Add this RenderJob to the world's jobs
+            ContainingWorld.AddRenderJob(diggingConstraints);
 		}
+
+        void HandlePressInput (object sender, InputPressArgs e)
+        {
+
+            // Scale the area using + and - keys.
+            // Translate it using up down left right (x, z)
+            // and PageUp PageDown (y).
+            if(e.PressType == InputPressArgs.KeyPressType.Down) {
+                if(e.Key == InputKey.Plus) {
+                    halfCubeSideLength += 0.5f;
+                } else if(e.Key == InputKey.Minus) {
+                    halfCubeSideLength -= 0.5f;
+                } else if(e.Key == InputKey.Up) {
+                    currentAreaPosition.z += 0.5f;
+                } else if(e.Key == InputKey.Down) {
+                    currentAreaPosition.z -= 0.5f;
+                } else if(e.Key == InputKey.Left) {
+                    currentAreaPosition.x += 0.5f;
+                } else if(e.Key == InputKey.Right) {
+                    currentAreaPosition.x -= 0.5f;
+                } else if(e.Key == InputKey.PageUp) {
+                    currentAreaPosition.y += 0.5f;
+                } else if(e.Key == InputKey.PageDown) {
+                    currentAreaPosition.y -= 0.5f;
+                } else if(e.Key == InputKey.O) {
+                    CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
+                    digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.OutsideAllowed);
+                } else if(e.Key == InputKey.I) {
+                    CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
+                    digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.InsideAllowed);
+                }
+            }
+
+            // Set the new modelmatrix.
+            diggingConstraints.ModelMatrix = mat4.Translate(currentAreaPosition) * mat4.Scale(0.999f * halfCubeSideLength);
+
+            // We don't have tools or items yet, so we hard-code digging on left mouse click here.
+            if((e.Key == InputKey.MouseLeft || e.Key == InputKey.MouseMiddle || e.Key == InputKey.C || e.Key == InputKey.V) && e.PressType == InputPressArgs.KeyPressType.Down) {
+
+                // Send a ray query to find the position on the terrain we are looking at.
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                    // Receiving the async ray query result here
+                    if(_hit)
+                    {
+                        // There is currently a bug in the physics system that returns NaNs in some cases.
+                        if(!_position.IsFinite)
+                            return;
+
+                        if (e.Key == InputKey.MouseLeft)
+                        {
+                            digging.DigSphere(_position, 1.5f);
+                        } else if (e.Key == InputKey.MouseMiddle) {
+                            digging.DigSphere(_position, 1.5f, 1, DiggingController.DigMode.Add);
+                        }
+
+                    }
+                });
+            }
+        }
 
 	}
 }

@@ -36,6 +36,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="CharacterController.cs" />
     <Compile Include="HostScript.cs" />
+    <Compile Include="DiggingController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

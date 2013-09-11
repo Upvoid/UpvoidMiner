@@ -12,7 +12,7 @@
     {
         "Descriptor": {
             "Type": "Collection",
-            "ScriptFiles": [ "LocalScript.cs", "Player.cs", "CharacterController.cs" ],
+            "ScriptFiles": [ "LocalScript.cs", "Player.cs", "CharacterController.cs", "DiggingController.cs" ],
             "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]
         },
         "Type": "ScriptModule",
