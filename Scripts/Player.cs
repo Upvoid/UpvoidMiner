@@ -45,7 +45,7 @@ namespace UpvoidMiner
 		/// <summary>
 		/// This takes control of the rigid body attached to this entity and lets us walk around.
 		/// </summary>
-		CharacterController controller;
+		CharacterController character;
 
         DiggingController digging;
 
@@ -66,15 +66,15 @@ namespace UpvoidMiner
 
         protected override void Init()
 		{
+            // Create a character controller that allows us to walk around.
+            character = new CharacterController(camera, ContainingWorld);
+
 			// For now, attach this entity to a simple sphere physics object.
 			physicsComponent = new PhysicsComponent(thisEntity,
-                                 ContainingWorld.Physics.CreateAndAddRigidBody(70f, mat4.Identity, new CapsuleShape(0.3f, 1.5f)),
-			                     mat4.Translate(new vec3(0, 1.5f, 0)));
+                                 character.Body,
+			                     mat4.Translate(new vec3(0, 0.6f, 0)));
 
             physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
-
-            // Create a character controller that allows us to walk around.
-            controller = new CharacterController(physicsComponent.RigidBody, camera, ContainingWorld);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld);

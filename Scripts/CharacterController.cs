@@ -15,6 +15,10 @@ namespace UpvoidMiner
 	/// </summary>
 	public class CharacterController
 	{
+        /// <summary>
+        /// The rigid body that represents the controlled character to the physics system.
+        /// </summary>
+        public RigidBody Body { get; protected set; }
 
 		/// <summary>
 		/// The current position of the controlled character.
@@ -22,7 +26,7 @@ namespace UpvoidMiner
         public vec3 Position { 
             get
             {
-                return new vec3(ControlledBody.GetTransformation().col3); 
+                return new vec3(Body.GetTransformation().col3); 
             }
         }
 
@@ -36,6 +40,21 @@ namespace UpvoidMiner
         /// If it is too high, the body will not collide with obstacles that a real person would not simply step over.
         /// </value>
         public float HoverHeight = 0.4f;
+
+        /// <summary>
+        /// The total height of the simulated character (from the ground to the top, including HoverHeight).
+        /// </summary>
+        public float CharacterHeight { get; protected set; }
+
+        /// <summary>
+        /// The diameter of the character's body.
+        /// </summary>
+        public float CharacterDiameter { get; protected set; }
+
+        /// <summary>
+        /// The mass of the character's body in kilograms.
+        /// </summary>
+        public float CharacterMass { get { return Body.Mass; } }
 
         /// <summary>
         /// The physical impulse (meters per second) that will be applied to the body for a jump.
@@ -73,11 +92,6 @@ namespace UpvoidMiner
 		public World ContainingWorld { get; protected set; }
 
 		/// <summary>
-		/// The rigid body that represents the controlled character to the physics system.
-		/// </summary>
-		public RigidBody ControlledBody { get; protected set; }
-
-		/// <summary>
 		/// This camera is used to determine the directions we are walking. Forward means the direction the camera is currently pointing.
 		/// </summary>
 		GenericCamera camera;
@@ -97,19 +111,24 @@ namespace UpvoidMiner
 		/// </summary>
 		float distanceToGround = 0;
 
-		public CharacterController(RigidBody _controlledBody, GenericCamera _camera, World _containingWorld)
+        public CharacterController(GenericCamera _camera, World _containingWorld, float _bodyHeight = 1.75f, float _bodyDiameter = 0.3f, float _bodyMass = 70f)
 		{
 			camera = _camera;
 			ContainingWorld = _containingWorld;
-			ControlledBody = _controlledBody;
+
+            CharacterHeight = _bodyHeight;
+            CharacterDiameter = _bodyDiameter;
 
 			// Initialize default values for auto properties
 			IsRunning = false;
 			WalkSpeed = 1.8f;
 			WalkSpeedRunning = 4f;
 
+            // Create a capsule shaped rigid body representing the character in the physics world.
+            Body = ContainingWorld.Physics.CreateAndAddRigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, CharacterHeight - HoverHeight));
+
             // Prevent the rigid body from falling to the ground by simply disabling any rotation
-            ControlledBody.SetAngularFactor(vec3.Zero);
+            Body.SetAngularFactor(vec3.Zero);
 
 			// Register the required callbacks.
 			// This update function is called 20 - 60 times per second to update the character position.
@@ -135,8 +154,8 @@ namespace UpvoidMiner
 
                 float maxWalkSpeed = (IsRunning ? WalkSpeedRunning : WalkSpeed);
 
-                if(ControlledBody.GetVelocity().Length < maxWalkSpeed) {
-                    ControlledBody.ApplyImpulse(moveDir * maxWalkSpeed * ControlledBody.Mass, vec3.Zero);
+                if(Body.GetVelocity().Length < maxWalkSpeed) {
+                    Body.ApplyImpulse(moveDir * maxWalkSpeed * CharacterMass, vec3.Zero);
                 }
 			}
 
@@ -144,19 +163,19 @@ namespace UpvoidMiner
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
             if(distanceToGround < HoverHeight+0.5f) {
 
-                vec3 velocity = ControlledBody.GetVelocity();
+                vec3 velocity = Body.GetVelocity();
 
                 // Never move down when more than 5cm below the desired height.
                 if(distanceToGround < HoverHeight-0.05f && velocity.y < 0f) {
                     velocity.y = 0;
-                    ControlledBody.SetVelocity(velocity);
+                    Body.SetVelocity(velocity);
                 }
 
                 float customGravity = HoverHeight - distanceToGround;
-                ControlledBody.SetGravity(new vec3(0, customGravity, 0));
+                Body.SetGravity(new vec3(0, customGravity, 0));
             }
             else
-                ControlledBody.SetGravity(new vec3(0, -9.807f, 0));
+                Body.SetGravity(new vec3(0, -9.807f, 0));
 
             ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 5f, 0), ReceiveRayqueryResult);
 		}
@@ -199,7 +218,7 @@ namespace UpvoidMiner
                     walkDirRight++;
             } else if(e.Key == InputKey.Space) { //Space lets the player jump
                 if(TouchesGround) {
-                    ControlledBody.ApplyImpulse(new vec3(0, 300f, 0), vec3.Zero);
+                    Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
                 }
             } else if(e.Key == InputKey.Shift) { // Shift controls running
                 if(e.PressType == InputPressArgs.KeyPressType.Down)
@@ -207,8 +226,8 @@ namespace UpvoidMiner
                 else
                     IsRunning = false;
             } else if(e.Key == InputKey.Q) {
-                ControlledBody.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * ControlledBody.GetTransformation());
-                ControlledBody.SetVelocity(vec3.Zero);
+                Body.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * Body.GetTransformation());
+                Body.SetVelocity(vec3.Zero);
             }
 
 			// Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
@@ -224,7 +243,7 @@ namespace UpvoidMiner
             // This hack stops the player movement immediately when we stop walking
             //TODO: do some actual friction simulation instead
             if(walkDirRight == 0 && walkDirRight == 0 && TouchesGround && e.PressType == InputPressArgs.KeyPressType.Up) {
-                ControlledBody.SetVelocity(vec3.Zero);
+                Body.SetVelocity(vec3.Zero);
             }
 		}
 	}
