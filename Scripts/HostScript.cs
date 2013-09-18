@@ -100,7 +100,23 @@ namespace UpvoidMiner
 
 			// Create the world. Multiple worlds could be created here, but we only want one.
 			// Use the UpvoidMinerWorldGenerator, which will create a simple terrain with some vegetation.
-			Universe.CreateWorld("UpvoidMinerWorld", new UpvoidMinerWorldGenerator());
+			World world = Universe.CreateWorld("UpvoidMinerWorld", new UpvoidMinerWorldGenerator());
+
+            for(int i = 0; i<3; ++i) {
+
+                Item testItem = new Item(
+                    "TestItem",
+                    "A test item.",
+                    1f,
+                    false,
+                    Resources.UseMaterial("::Rock", ModDomain),
+                    Resources.UseMesh("::Debug/Sphere", ModDomain),
+                    1f
+                );
+
+                world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i*2f, ((i%3)*2f))));
+            }
+
 		}
 	}
 }

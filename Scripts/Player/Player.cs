@@ -16,6 +16,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Engine;
 using Engine.Universe;
 using Engine.Modding;
@@ -49,6 +50,8 @@ namespace UpvoidMiner
 
         DiggingController digging;
 
+        PlayerGui gui;
+
 		// Define an area cube the user can NOT dig in.
 		float halfCubeSideLength = 10f;
 
@@ -57,6 +60,11 @@ namespace UpvoidMiner
 
 		// Create a pointer to a renderjob visualizing the area we are allowed to dig in.
 		MeshRenderJob diggingConstraints = null;
+
+        /// <summary>
+        /// A list of items representing the inventory of the player.
+        /// </summary>
+        public List<Item> inventory = new List<Item>();
 
 		public Player(GenericCamera _camera)
 		{
@@ -88,6 +96,10 @@ namespace UpvoidMiner
 
             // Add this RenderJob to the world's jobs
             ContainingWorld.AddRenderJob(diggingConstraints);
+
+            gui = new PlayerGui(this);
+
+            AddTriggerSlot("AddItem");
 		}
 
         void HandlePressInput (object sender, InputPressArgs e)
@@ -133,20 +145,49 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
-                        // There is currently a bug in the physics system that returns NaNs in some cases.
-                        if(!_position.IsFinite)
-                            return;
-
                         if (e.Key == InputKey.MouseLeft)
                         {
-                            digging.DigSphere(_position, 1.5f);
+                            digging.DigSphere(_position, 1f);
                         } else if (e.Key == InputKey.MouseMiddle) {
-                            digging.DigSphere(_position, 1.5f, 1, DiggingController.DigMode.Add);
+                            digging.DigSphere(_position, 1f, 1, DiggingController.DigMode.Add);
                         }
 
                     }
                 });
             }
+
+            if(e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down) {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                    // Receiving the async ray query result here
+                    if(_body != null)
+                    {
+                        Entity entity = _body.AttachedEntity;
+                        if(entity != null)
+                        {
+                            TriggerId trigger = TriggerId.getIdByName("Interaction");
+                            entity[trigger] |= new InteractionMessage(thisEntity);
+                        }
+                    }
+                });
+            }
+
+        }
+
+        /// <summary>
+        /// This trigger slot is for sending an item to the receiving entity, which usually will add it to its inventory.
+        /// This is triggered as a response to the Interaction trigger by items, but can be used whenever you want to give an item to a character.
+        /// </summary>
+        /// <param name="msg">Expected to be a of type PickupResponseMessage.</param>
+        public void AddItem(object msg)
+        {
+            // Make sure we get the message type we are expecting.
+            AddItemMessage addItemMsg = msg as AddItemMessage;
+            if(addItemMsg == null)
+                return;
+
+            // Add the received item to the inventory.
+            inventory.Add(addItemMsg.PickedItem);
+
         }
 
 	}

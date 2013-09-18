@@ -12,14 +12,16 @@
   },
   
   "Dependencies" : [
-	{ "Name": "Common.Cameras", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } }
+    { "Name": "Common.Cameras", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
+    { "Name": "Common.JSON", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
+    { "Name": "Web.Tools.Common", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } }
   ],
   "HostScripting" : {
     "Startup" : [
       {
         "Class" : "UpvoidMiner.HostScript",
         "Method" : "Startup",
-        "Module" : "UpvoidMiner.HostScript"
+        "Module" : "UpvoidMiner"
       }
     ]
   },
@@ -28,7 +30,7 @@
       {
         "Class" : "UpvoidMiner.LocalScript",
         "Method" : "Startup",
-        "Module" : "UpvoidMiner.LocalScript"
+        "Module" : "UpvoidMiner"
       }
     ]
   }

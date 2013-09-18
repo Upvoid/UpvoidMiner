@@ -2,21 +2,21 @@
     {
         "Descriptor": {
             "Type": "Collection",
-        	"ScriptFiles": [ "HostScript.cs" ],
-            "ModuleDependencies": [ ]
+            "ScriptFiles": [ 
+                "HostScript.cs",
+                "LocalScript.cs",
+                "Messages.cs",
+                "Items/Item.cs",
+                "Items/ItemEntity.cs",
+                "Player/Player.cs",
+                "Player/PlayerGui.cs",
+                "Player/CharacterController.cs",
+                "Player/DiggingController.cs"
+            ],
+            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local", "Mods/Upvoid/Common.JSON/0.0.1::Newtonsoft.Json" ]
         },
         "Type": "ScriptModule",
-        "Name": "UpvoidMiner.HostScript",
-        "Path": "~.dll"
-    },
-    {
-        "Descriptor": {
-            "Type": "Collection",
-            "ScriptFiles": [ "LocalScript.cs", "Player.cs", "CharacterController.cs", "DiggingController.cs" ],
-            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local" ]
-        },
-        "Type": "ScriptModule",
-        "Name": "UpvoidMiner.LocalScript",
+        "Name": "UpvoidMiner",
         "Path": "~.dll"
     }
 ]

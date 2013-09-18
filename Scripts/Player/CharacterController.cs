@@ -156,13 +156,13 @@ namespace UpvoidMiner
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
 
                 // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
-                vec3 globalMoveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * StrafeSpeed;
-				globalMoveDir.y = 0;
+                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * StrafeSpeed;
+				moveDir.y = 0;
 
                 vec3 velocity = Body.GetVelocity();
                 velocity.y = 0;
 
-                Body.ApplyImpulse( (globalMoveDir - velocity)  * CharacterMass, vec3.Zero);
+                Body.ApplyImpulse( (moveDir - velocity)  * CharacterMass, vec3.Zero);
 
 			}
 

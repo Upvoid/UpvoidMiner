@@ -1,0 +1,45 @@
+<html>
+  <head>
+      <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
+      <style> body { background: transparent; }</style>
+  </head>
+  <body>
+
+    <div class="container">
+
+    <div style="width: 2px; height: 2px; background: #000; position: fixed; top: 50%; left: 50%; margin: -1px; border: 1px solid #fff;"></div>
+
+    <a id="inventory-toggle" href="javascript:toggleInventory()">Show Inventory</a>
+    <div id="inventory" style="display: none;" class="well"><h2>Inventory</h2><ul id="inventory-list"></ul></div></div>
+
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
+    <script>
+    
+        var inventoryVisible = false;
+        function toggleInventory()
+        {
+            inventoryVisible = !inventoryVisible;
+            
+            if(inventoryVisible)
+            {
+                $('#inventory-toggle').html("Hide Inventory");
+                $('#inventory').show();
+            }
+            else
+            {
+                $('#inventory-toggle').html("Show Inventory");
+                $('#inventory').hide();
+            }
+        }
+    
+        function updateInventory()
+        {
+          $.get('/Mods/Upvoid/UpvoidMiner/0.0.1/Inventory', '', function(data) {
+            $('#inventory-list').html(''); for(var i = 0; i < data.length; ++i) $('#inventory-list').append('<li>'+data[i]+'</li>'); 
+          }, 'json'); 
+        }
+        window.setInterval(updateInventory, 500);
+    </script>
+  </body>
+</html>

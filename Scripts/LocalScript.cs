@@ -69,13 +69,6 @@ namespace UpvoidMiner
 		/// </summary>
 		static bool noclipEnabled = false;
 
-        static void hudGui(WebRequest request, WebResponse response)
-        {
-            response.AppendBody("<html><head></head><body>" +
-                                "<div style=\"width: 2px; height: 2px; background: #000; position: fixed; top: 50%; left: 50%; margin: -1px; border: 1px solid #fff;\"></div>" +
-                "</body></html>");
-        }
-
 		/// <summary>
 		/// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
 		/// </summary>
@@ -107,9 +100,8 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-            Webserver.DefaultWebserver.RegisterDynamicContent(ModDomain, "Hud", hudGui);
 
-            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/Hud");
+            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/");
 
 			// Configure the camera to receive user input.
 			Input.RootGroup.AddListener(cameraControl);
@@ -137,7 +129,8 @@ namespace UpvoidMiner
 		/// Updates the camera position.
 		/// </summary>
 		public static void Update(float _elapsedSeconds)
-		{
+        {
+
 			cameraControl.Update(_elapsedSeconds);
 
 			// Set the camera to the player position if free camera movement is disabled.

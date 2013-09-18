@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Local</RootNamespace>
+    <RootNamespace>UpvoidMiner</RootNamespace>
     <AssemblyName>Local</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -33,10 +33,14 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="LocalScript.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="CharacterController.cs" />
     <Compile Include="HostScript.cs" />
-    <Compile Include="DiggingController.cs" />
+    <Compile Include="Player\CharacterController.cs" />
+    <Compile Include="Player\DiggingController.cs" />
+    <Compile Include="Player\Player.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\ItemEntity.cs" />
+    <Compile Include="Messages.cs" />
+    <Compile Include="Player\PlayerGui.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
@@ -46,5 +50,12 @@
     <Reference Include="Engine">
       <HintPath>..\..\..\..\..\AssemblyCache\Engine.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\AssemblyCache\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Player\" />
+    <Folder Include="Items\" />
   </ItemGroup>
 </Project>
