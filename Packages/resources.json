@@ -93,9 +93,10 @@
             },
             "Seeds" :
             {
-                "Type" : "SeedPoint",
+                "Type" : "ConsistentSeedPoint",
                 "refNormal": [0.0, 1.0, 0.0],
                 "densityDistribution": "TreeDensity",
+                "gridSize": 2.0,
                 "overrideUpVector": true,
                 "maxRefDeviation": 0.8,
                 "Nodes" : ["Input"]
@@ -129,10 +130,11 @@
             },
             "Seeds" :
             {
-                "Type" : "SeedPoint",
+                "Type" : "ConsistentSeedPoint",
                 "refNormal": [0.0, 1.0, 0.0],
                 "densityDistribution": "TreeDensity",
                 "overrideUpVector": true,
+                "gridSize": 2.0,
                 "maxRefDeviation": 0.8,
                 "Nodes" : ["Input"]
             },
