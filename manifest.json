@@ -2,7 +2,7 @@
   "Author" : "Upvoid",
   "Name" : "UpvoidMiner",
   "Description" : "Techdemo mod for the Upvoid Engine",
-  "Date" : "2013-07-12",  
+  "Date" : "2013-07-12",
   "Resources" : [ "scripts", "resources" ],
   "Standalone" : true,
   "Version" : {
@@ -10,11 +10,12 @@
     "Minor" : 0,
     "Revision" : 1
   },
-  
+
   "Dependencies" : [
     { "Name": "Common.Cameras", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
     { "Name": "Common.JSON", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
-    { "Name": "Web.Tools.Common", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } }
+    { "Name": "Web.Tools.Common", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } },
+    { "Name": "Resources.TerrainMaterials", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } }
   ],
   "HostScripting" : {
     "Startup" : [

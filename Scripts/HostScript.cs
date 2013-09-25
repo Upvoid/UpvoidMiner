@@ -73,7 +73,7 @@ namespace UpvoidMiner
 				MatStone = terr.RegisterMaterial("Stone");
 				int pipeline = MatStone.AddDefaultPipeline(0);
 				MatStone.AddDefaultShadowAndZPre(pipeline);
-				MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("::Terrain/RockNear", HostScript.ModDomain), Renderer.Opaque.Mesh);
+				MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock03", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			}
 
             return base.init();

@@ -196,6 +196,17 @@
     "Name" : "DiggingConstraints",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock03",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock03",
+    "Path" : "~.mat",
+    "Type" : "Material"
 }
 
 ]

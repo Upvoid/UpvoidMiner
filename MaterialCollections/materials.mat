@@ -13,3 +13,15 @@
 [DiggingConstraints] : Default
     Shader: Opaque/MeshPseudoTransparent
     Color: uSpecularColor 1.0, .0, .0, 0.001
+
+[Terrain/Rock03] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Diffuse
+    Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Diffuse
+    Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Diffuse
+    Texture: uNormalXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Normal
+    Texture: uNormalXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Normal
+    Texture: uNormalZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock03.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
