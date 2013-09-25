@@ -19,6 +19,18 @@
     "Path": "~.obj",
     "Descriptor": "File"
 },
+{
+    "Type": "Mesh",
+    "Name": "Stone",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Automaton",
+    "Name": "StoneSpawner",
+    "Path": "~.ca",
+    "Descriptor": "File"
+},
 
 {
     "Type": "Mesh",
