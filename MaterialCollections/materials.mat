@@ -16,12 +16,12 @@
 
 [Terrain/Rock03] : Default
     Shader: Opaque/MeshTripleProjectionObjectNormalmap
-    Texture: uColorXZ, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Diffuse
-    Texture: uColorXY, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Diffuse
-    Texture: uColorZY, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Diffuse
-    Texture: uNormalXZ, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Normal
-    Texture: uNormalXY, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Normal
-    Texture: uNormalZY, Upvoid/Resources.TerrainMaterials::Rock/Rock03.Normal
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock03.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock03.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock03.Normal
     Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScale, 5
     Parameter: uBlendingCoefficient, 4
