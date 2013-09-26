@@ -30,93 +30,111 @@ using System.Runtime.InteropServices;
 
 namespace UpvoidMiner
 {
-	/// <summary>
-	/// Implements a world generator to create a basic world with some vegetation.
-	/// </summary>
-	public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
+    /// <summary>
+    /// Implements a world generator to create a basic world with some vegetation.
+    /// </summary>
+    public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
 	{
 		TerrainMaterial MatGround;
+		TerrainMaterial MatStone;
 
-		/// <summary>
-		/// Initializes the terrain materials and settings.
-		/// </summary>
-		public override bool init()
-		{
-			World world = World;
-			TerrainEngine terr = world.Terrain;
+        /// <summary>
+        /// Initializes the terrain materials and settings.
+        /// </summary>
+        public override bool init()
+        {
+            World world = World;
+            TerrainEngine terr = world.Terrain;
 
-			// For now, register a single ground material.
-			MatGround = terr.RegisterMaterial("Ground");
+			{
+				// For now, register a single ground material.
+				MatGround = terr.RegisterMaterial("Ground");
 
-			// Add the geometry for the terrain LoDs >= 9.
-			int pipeline = MatGround.AddDefaultPipeline(0);
-			MatGround.AddDefaultShadowAndZPre(pipeline);
-			MatGround.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
-			/*
-			// Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
-			pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", 5, 8);
-			MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
-			MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
-			MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", HostScript.ModDomain), Renderer.Opaque.Mesh);
+				// Add the geometry for the terrain LoDs >= 9.
+				int pipeline = MatGround.AddDefaultPipeline(0);
+				MatGround.AddDefaultShadowAndZPre(pipeline);
+				MatGround.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
 
-			// For terrain LoDs 0-4, spawn "real" tree models instead of the impostors.
-			pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineField", HostScript.ModDomain), "Input", 0, 4);
-			MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
-			MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
-			MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
-*/
-			return base.init();
+				// Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", "", 5, 8);
+				MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
+				MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
+				MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
+				// For terrain LoDs 0-4, spawn "real" tree models instead of the impostors.
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineField", HostScript.ModDomain), "Input", "", 0, 4);
+				MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
+				MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
+				MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
+			}
+
+			{			
+				// Also register a simple stone material.
+				MatStone = terr.RegisterMaterial("Stone");
+				int pipeline = MatStone.AddDefaultPipeline(0);
+				MatStone.AddDefaultShadowAndZPre(pipeline);
+				MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock03", HostScript.ModDomain), Renderer.Opaque.Mesh);
+			}
+
+            return base.init();
+        }
+
+        /// <summary>
+        /// Creates the CSG node network for the terrain generation.
+        /// </returns>
+        public override CsgNode createTerrain()
+        {
+                // Load and return a CsgNode based on the "Hills" expression resource. This will create some generic perlin-based hills.
+				CsgOpConcat concat = new CsgOpConcat();
+    
+				CsgOpUnion union = new CsgOpUnion();
+				
+				ExpressionResource expression = Resources.UseExpression("Hills", HostScript.ModDomain);
+				union.AddNode(new CsgExpression(MatGround.MaterialIndex, expression));
+				//union.AddNode(new CsgMeshNode(MatGround.MaterialIndex, Resources.UseMesh("::Debug/Monkey", HostScript.ModDomain), mat4.Translate(new vec3(-30.1f, 10.1f, 0.1f)) * mat4.Scale(10)));
+
+				concat.AddNode(union);
+				concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("StoneSpawner", HostScript.ModDomain), World, 4));
+				return concat;
 		}
+    }
 
-		/// <summary>
-		/// Creates the CSG node network for the terrain generation.
-		/// </returns>
-		public override CsgNode createTerrain()
-		{
-			// Load and return a CsgNode based on the "Hills" expression resource. This will create some generic perlin-based hills.
-			CsgOpUnion union = new CsgOpUnion();
-			ExpressionResource expression = Resources.UseExpression("Hills", HostScript.ModDomain);
-			union.AddNode(new CsgExpression(MatGround.MaterialIndex, expression));
-			return union;
-		}
-	}
+    /// <summary>
+    /// Main class for the host script.
+    /// </summary>
+    public class HostScript
+    {
+        public static Module Mod;
+        public static ResourceDomain ModDomain;
 
-	/// <summary>
-	/// Main class for the host script.
-	/// </summary>
-	public class HostScript
-	{
-		public static Module Mod;
-		public static ResourceDomain ModDomain;
+        /// <summary>
+        /// Starts
+        /// </summary>
+        public static void Startup(IntPtr _unmanagedModule)
+        {
+            // Get and save the resource domain of the mod, needed for loading resources.
+            Mod = Module.FromHandle(_unmanagedModule);
+            ModDomain = Mod.ResourceDomain;
 
-		/// <summary>
-		/// Starts 
-		/// </summary>
-		public static void Startup(IntPtr _unmanagedModule)
-		{
-			// Get and save the resource domain of the mod, needed for loading resources.
-			Mod = Module.FromHandle(_unmanagedModule);
-			ModDomain = Mod.ResourceDomain;
+            // Create the world. Multiple worlds could be created here, but we only want one.
+            // Use the UpvoidMinerWorldGenerator, which will create a simple terrain with some vegetation.
+            World world = Universe.CreateWorld("UpvoidMinerWorld", new UpvoidMinerWorldGenerator());
 
-			// Create the world. Multiple worlds could be created here, but we only want one.
-			// Use the UpvoidMinerWorldGenerator, which will create a simple terrain with some vegetation.
-			World world = Universe.CreateWorld("UpvoidMinerWorld", new UpvoidMinerWorldGenerator());
+	        for(int i = 0; i<3; ++i) {
 
-            for(int i = 0; i<3; ++i) {
+	            Item testItem = new Item(
+	                "TestItem",
+	                "A test item.",
+	                1f,
+	                false,
+	                Resources.UseMaterial("::Rock", ModDomain),
+	                Resources.UseMesh("::Debug/Sphere", ModDomain),
+	                1f
+	            );
 
-                Item testItem = new Item(
-                    "TestItem",
-                    "A test item.",
-                    1f,
-                    false,
-                    Resources.UseMaterial("::Rock", ModDomain),
-                    Resources.UseMesh("::Debug/Sphere", ModDomain),
-                    1f
-                );
+	            world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i*2f, ((i%3)*2f))));
+	        }
 
-                world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i*2f, ((i%3)*2f))));
-            }
-
-		}
-	}
+        }
+    }
 }

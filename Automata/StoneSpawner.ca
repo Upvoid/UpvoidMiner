@@ -1,0 +1,21 @@
+// Stone spawning Automaton
+automaton StonerTon
+
+cells
+  0, 1, 0 as Top
+
+pre
+  this.material is "Ground"
+  Top.material is void
+
+body
+
+  if random(0,1) < 1 / 10000
+    spawn with sphere(this.position, 10)
+      union
+        mesh "Stone" $Stone
+          rotateY = random(0, 360)
+          rotateX = random(-20, 20)
+          rotateZ = random(-20, 20)
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3)
+          translate = this.position

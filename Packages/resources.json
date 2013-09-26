@@ -19,6 +19,18 @@
     "Path": "~.obj",
     "Descriptor": "File"
 },
+{
+    "Type": "Mesh",
+    "Name": "Stone",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Automaton",
+    "Name": "StoneSpawner",
+    "Path": "~.ca",
+    "Descriptor": "File"
+},
 
 {
     "Type": "Mesh",
@@ -182,6 +194,17 @@
         "Type" : "FromCollection"
     },
     "Name" : "DiggingConstraints",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock03",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock03",
     "Path" : "~.mat",
     "Type" : "Material"
 }
