@@ -38,33 +38,45 @@ namespace UpvoidMiner
 		TerrainMaterial MatGround;
 		TerrainMaterial MatStone;
 
-        /// <summary>
-        /// Initializes the terrain materials and settings.
-        /// </summary>
-        public override bool init()
-        {
-            World world = World;
-            TerrainEngine terr = world.Terrain;
+		/// <summary>
+		/// Initializes the terrain materials and settings.
+		/// </summary>
+		public override bool init()
+		{
+			World world = World;
+			TerrainEngine terr = world.Terrain;
 
 			{
 				// For now, register a single ground material.
 				MatGround = terr.RegisterMaterial("Ground");
 
-				// Add the geometry for the terrain LoDs >= 9.
+				// Add the geometry for the terrain LoDs >= 0.
 				int pipeline = MatGround.AddDefaultPipeline(0);
 				MatGround.AddDefaultShadowAndZPre(pipeline);
-				MatGround.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
+				MatGround.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("GrassyMountains2", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
+				// Spawn Grass
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "Input", 0, 4);
+				MatGround.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
+				// Spawn Grass
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("GrassField2", HostScript.ModDomain), "Input", "Input", 0, 4);
+				MatGround.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
+				// Spawn Herbs
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("HerbField", HostScript.ModDomain), "Input", "Input", 0, 4);
+				MatGround.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs17", HostScript.ModDomain), Renderer.Opaque.Mesh);
+
+				// Spawn Herbs
+				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("HerbField2", HostScript.ModDomain), "Input", "Input", 0, 4);
+				MatGround.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs18", HostScript.ModDomain), Renderer.Opaque.Mesh);
 
 				// Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
 				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", "", 5, 8);
-				MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
-				MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
 				MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", HostScript.ModDomain), Renderer.Opaque.Mesh);
 
 				// For terrain LoDs 0-4, spawn "real" tree models instead of the impostors.
 				pipeline = MatGround.AddPipeline(Resources.UseGeometryPipeline("PineField", HostScript.ModDomain), "Input", "", 0, 4);
-				MatGround.AddDefaultShadowAndZPre(pipeline, "Input");
-				MatGround.AddMeshMaterial(pipeline, "Input", Resources.UseMaterial("::Terrain/GrassyMountains", HostScript.ModDomain), Renderer.Opaque.Mesh);
 				MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			}
 
@@ -76,8 +88,9 @@ namespace UpvoidMiner
 				MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock03", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			}
 
-            return base.init();
-        }
+			return base.init();
+		}
+
 
         /// <summary>
         /// Creates the CSG node network for the terrain generation.

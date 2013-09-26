@@ -25,3 +25,78 @@
     Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScale, 5
     Parameter: uBlendingCoefficient, 4
+    
+[Grass01] : Default
+    Shader: Foliage
+    Texture: uColor, GrassTest.Low
+    Texture: uNormal, GrassTest.Normal
+    Texture: uTranslucency, GrassTest.Translucency
+    Color: uSpecularColor, .0, .0, .0, 0.1
+    Parameter: uDiscardBias, .9
+    
+[Herbs17] : Default
+	Shader: Foliage
+	Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
+	Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Normal
+	Texture: uTranslucency, FullTranslucency
+	Color: uSpecularColor, .0, .0, .0, 0.1
+	Parameter: uDiscardBias, .9
+    
+[Herbs18] : Default
+	Shader: Foliage
+	Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
+	Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Normal
+	Texture: uTranslucency, FullTranslucency
+	Color: uSpecularColor, .0, .0, .0, 0.1
+	Parameter: uDiscardBias, .9
+	
+[Grass01.zPre] : Default
+	Shader: ZPre/Foliage
+	Texture: uColor, GrassTest.Low
+	Parameter: uDiscardBias, .9
+	
+[Herbs17.zPre] : Default
+	Shader: ZPre/Foliage
+	Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
+	Parameter: uDiscardBias, .9
+	
+[Herbs18.zPre] : Default
+	Shader: ZPre/Foliage
+	Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
+	Parameter: uDiscardBias, .9
+
+[GrassyMountains2] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
+    Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+    Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+    Texture: uNormalXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Normal
+    Texture: uNormalXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+    Texture: uNormalZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScale, 30
+    Parameter: uBlendingCoefficient, 4
+
+[GrassyMountains3] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
+    Texture: uColorXY, ::Terrain/Cliffs0144_5_S
+    Texture: uColorZY, ::Terrain/Cliffs0144_5_S
+    Texture: uNormalXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Normal
+    Texture: uNormalXY, ::Terrain/Cliffs0144_5_S.normals
+    Texture: uNormalZY, ::Terrain/Cliffs0144_5_S.normals
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScale, 30
+    Parameter: uBlendingCoefficient, 4
+    
+[Rocky] : Default
+	Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+	Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Soil/Soil05.Diffuse
+	Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+	Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+	Texture: uNormalXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Soil/Soil05.Normal
+	Texture: uNormalXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+	Texture: uNormalZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+	Color: uSpecularColor, .0, .0, .0, 4
+	Parameter: uTexScale, 30
+	Parameter: uBlendingCoefficient, 4

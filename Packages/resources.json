@@ -14,6 +14,41 @@
 },
 
 {
+    "Descriptor": "File",
+    "Name": "TreeDensity2",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
+    "Name": "GrassDensity",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
+    "Name": "GrassDensity2",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
+    "Name": "HerbDensity",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
+    "Name": "HerbDensity2",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
     "Type": "Mesh",
     "Name": "PineTrunk",
     "Path": "~.obj",
@@ -52,6 +87,47 @@
         "sRGB": true
     },
     "Name" : "CrossedDiscard",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true,
+        "PremultipliedAlpha": true
+    },
+    "Name" : "GrassTest.Low",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "GrassTest.Normal",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "GrassTest.Translucency",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "FullTranslucency",
     "Path" : "~.png",
     "Type" : "Texture"
 },
@@ -124,6 +200,154 @@
 
 {
     "Type": "GeometryPipeline",
+    "Name": "GrassField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Grass" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "GrassDensity",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Grass", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "GrassField2",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Grass" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "GrassDensity2",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Grass", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "HerbField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Herbs" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "HerbDensity",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Herbs", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "HerbField2",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Herbs" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "HerbDensity2",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Herbs", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
     "Name": "PineImpostorField",
     "Path": "~.geopipe",
     "Descriptor" :
@@ -183,6 +407,105 @@
         "Type" : "FromCollection"
     },
     "Name" : "PineImpostor",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Grass01",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Grass01",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Grass02",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Grass02",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Herbs18",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Herbs18",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Herbs17",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Herbs17",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Grass01.zPre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Grass01.zPre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Herbs17.zPre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Herbs17.zPre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Herbs18.zPre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Herbs18.zPre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "GrassyMountains2",
+        "Type" : "FromCollection"
+    },
+    "Name" : "GrassyMountains2",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "GrassyMountains3",
+        "Type" : "FromCollection"
+    },
+    "Name" : "GrassyMountains3",
     "Path" : "~.mat",
     "Type" : "Material"
 },
