@@ -1,0 +1,174 @@
+{
+  "inputs" : [
+    0,
+    1,
+    2
+  ],
+  "nodes" : [
+    {
+      "id" : 0,
+      "identifier" : "x",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "id" : 1,
+      "identifier" : "y",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "id" : 2,
+      "identifier" : "z",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "amplitude" : 1.5,
+      "base" : 1.5,
+      "depth" : 3,
+      "id" : 3,
+      "inputs" : [
+        0,
+        2,
+        1
+      ],
+      "network" : {
+        "inputs" : [
+          0,
+          2,
+          4
+        ],
+        "nodes" : [
+          {
+            "id" : 0,
+            "identifier" : "pX",
+            "inputs" : [
+            ],
+            "nodetype" : "Input",
+            "type" : [
+            ]
+          },
+          {
+            "function" : "(x\/30)",
+            "id" : 1,
+            "inputs" : [
+              0
+            ],
+            "nodetype" : "Function",
+            "varMapping" : {
+              "x" : {
+                "index" : 0,
+                "type" : [
+                ]
+              }
+            }
+          },
+          {
+            "id" : 2,
+            "identifier" : "pZ",
+            "inputs" : [
+            ],
+            "nodetype" : "Input",
+            "type" : [
+            ]
+          },
+          {
+            "function" : "(z\/30)",
+            "id" : 3,
+            "inputs" : [
+              2
+            ],
+            "nodetype" : "Function",
+            "varMapping" : {
+              "z" : {
+                "index" : 2,
+                "type" : [
+                ]
+              }
+            }
+          },
+        {
+          "id" : 4,
+          "identifier" : "pY",
+          "inputs" : [
+          ],
+          "nodetype" : "Input",
+          "type" : [
+          ]
+        },
+        {
+          "function" : "(y\/30)",
+          "id" : 5,
+          "inputs" : [
+            4
+          ],
+          "nodetype" : "Function",
+          "varMapping" : {
+            "y" : {
+              "index" : 4,
+              "type" : [
+              ]
+            }
+          }
+        },
+          {
+            "id" : 6,
+            "inputs" : [
+              1,
+              5,
+              3
+            ],
+            "nodetype" : "Perlin",
+            "seed" : 67527
+          }
+        ],
+        "output" : 6
+      },
+      "nodetype" : "Fractalizer"
+    },
+    {
+      "function" : "1*val",
+      "id" : 4,
+      "inputs" : [
+        0,
+        1,
+        2,
+        3
+      ],
+      "nodetype" : "Function",
+      "varMapping" : {
+        "val" : {
+          "index" : 3,
+          "type" : [
+          ]
+        },
+        "x" : {
+          "index" : 0,
+          "type" : [
+          ]
+        },
+        "y" : {
+          "index" : 1,
+          "type" : [
+          ]
+        },
+        "z" : {
+          "index" : 2,
+          "type" : [
+          ]
+        }
+      }
+    }
+  ],
+  "output" : 4
+}
