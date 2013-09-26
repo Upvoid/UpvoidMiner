@@ -109,6 +109,10 @@ namespace UpvoidMiner
             // Translate it using up down left right (x, z)
             // and PageUp PageDown (y).
             if(e.PressType == InputPressArgs.KeyPressType.Down) {
+
+				if ( e.Key == InputKey.F8 )
+					Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
+
                 if(e.Key == InputKey.Plus) {
                     halfCubeSideLength += 0.5f;
                 } else if(e.Key == InputKey.Minus) {
