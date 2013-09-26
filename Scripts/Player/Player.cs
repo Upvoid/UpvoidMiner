@@ -108,7 +108,7 @@ namespace UpvoidMiner
 
 		void HandleAxisInput (object sender, InputAxisArgs e)
 		{
-			if(e.Axis == AxisType.MouseWheel) 
+			if(e.Axis == AxisType.MouseWheelY) 
 			{
 				diggingSphereRadius = Math.Max(1.0f, diggingSphereRadius + e.RelativeChange);
 			}
