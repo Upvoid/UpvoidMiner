@@ -11,11 +11,11 @@ pre
 body
 
   if random(0,1) < 1 / 10000
-    spawn with sphere(this.position, 10)
+    spawn with sphere(this.position, 20)
       union
-        mesh "Stone" $Stone
+        mesh "Stone.04" $Stone001
           rotateY = random(0, 360)
           rotateX = random(-20, 20)
           rotateZ = random(-20, 20)
-          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3)
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) / 20
           translate = this.position

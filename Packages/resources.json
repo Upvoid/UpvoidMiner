@@ -61,6 +61,12 @@
     "Descriptor": "File"
 },
 {
+    "Type": "Mesh",
+    "Name": "Stone001",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
     "Type": "Automaton",
     "Name": "StoneSpawner",
     "Path": "~.ca",
@@ -523,13 +529,164 @@
 
 {
     "Descriptor" : {
-        "Collection" : "materials",
-        "Name" : "Terrain/Rock03",
+    "Collection" : "materials",
+    "Name" : "Terrain/Rock03",
+        "Name" : "Terrain/Rock01",
         "Type" : "FromCollection"
     },
-    "Name" : "Terrain/Rock03",
+    "Name" : "Terrain/Rock01",
     "Path" : "~.mat",
     "Type" : "Material"
-}
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock02",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock02",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+         "Name" : "Terrain/Rock03",
+         "Type" : "FromCollection"
+     },
+     "Name" : "Terrain/Rock03",
+     "Path" : "~.mat",
+     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock04",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock04",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock05",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock05",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock06",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock06",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock07",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock07",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock08",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock08",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock09",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock09",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock10",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock10",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock11",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock11",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock12",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock12",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock13",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock13",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Rock14",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Rock14",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/FireRock",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/FireRock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/AlienRock",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/AlienRock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ }
 
 ]

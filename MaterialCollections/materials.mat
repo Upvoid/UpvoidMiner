@@ -14,6 +14,31 @@
     Shader: Opaque/MeshPseudoTransparent
     Color: uSpecularColor, 1.0, .0, .0, 0.001
 
+[Terrain/Rock01] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock01.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock01.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock01.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock02] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock02.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock02.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock02.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+
 [Terrain/Rock03] : Default
     Shader: Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
@@ -22,6 +47,162 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock03.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock03.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock03.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock04] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock04.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock04.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock04.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock05] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock05.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock05.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock05.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock06] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock06.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock06.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock06.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock07] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock07.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock07.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock07.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock08] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock08.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock08.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock08.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock09] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock09.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock09.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock09.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock10] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock10.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock10.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock10.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock11] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock11.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock11.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock11.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock12] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock12.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock12.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock12.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock13] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock13.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock13.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock13.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Rock14] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Rock/Rock14.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock14.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock14.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/FireRock] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/AlienRock] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScale, 5
     Parameter: uBlendingCoefficient, 4

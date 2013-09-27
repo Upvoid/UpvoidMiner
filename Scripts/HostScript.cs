@@ -80,13 +80,26 @@ namespace UpvoidMiner
 				MatGround.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
 			}
 
-			{			
-				// Also register a simple stone material.
-				MatStone = terr.RegisterMaterial("Stone");
-				int pipeline = MatStone.AddDefaultPipeline(0);
-				MatStone.AddDefaultShadowAndZPre(pipeline);
-				MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock03", HostScript.ModDomain), Renderer.Opaque.Mesh);
-			}
+                        // Register some simple stone materials.
+                        for (int i = 1; i <= 14; ++i)
+                        {
+                                MatStone = terr.RegisterMaterial("Stone." + i.ToString("00"));
+                                int pipeline = MatStone.AddDefaultPipeline(0);
+                                MatStone.AddDefaultShadowAndZPre(pipeline);
+                                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock" + i.ToString("00"), HostScript.ModDomain), Renderer.Opaque.Mesh);
+                        }
+                        {
+                                MatStone = terr.RegisterMaterial("FireRock");
+                                int pipeline = MatStone.AddDefaultPipeline(0);
+                                MatStone.AddDefaultShadowAndZPre(pipeline);
+                                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/FireRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                        }
+                        {
+                                MatStone = terr.RegisterMaterial("AlienRock");
+                                int pipeline = MatStone.AddDefaultPipeline(0);
+                                MatStone.AddDefaultShadowAndZPre(pipeline);
+                                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/AlienRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                        }
 
 			return base.init();
 		}

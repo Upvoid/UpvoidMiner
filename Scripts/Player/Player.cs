@@ -55,6 +55,9 @@ namespace UpvoidMiner
 		// Define an area cube the user can NOT dig in.
 		float halfCubeSideLength = 10f;
 
+		// Radius of digging/building sphere
+		float diggingSphereRadius = 1.0f;
+
 		// Position where this cube is located.
 		vec3 currentAreaPosition = new vec3(0, 0, 0);
 
@@ -70,6 +73,7 @@ namespace UpvoidMiner
 		{
 			camera = _camera;
             Input.OnPressInput += HandlePressInput;
+			Input.OnAxisInput += HandleAxisInput;
 		}
 
         protected override void Init()
@@ -100,6 +104,14 @@ namespace UpvoidMiner
             gui = new PlayerGui(this);
 
             AddTriggerSlot("AddItem");
+		}
+
+		void HandleAxisInput (object sender, InputAxisArgs e)
+		{
+			if(e.Axis == AxisType.MouseWheelY) 
+			{
+				diggingSphereRadius = Math.Max(1.0f, diggingSphereRadius + e.RelativeChange);
+			}
 		}
 
         void HandlePressInput (object sender, InputPressArgs e)
@@ -151,9 +163,9 @@ namespace UpvoidMiner
                     {
                         if (e.Key == InputKey.MouseLeft)
                         {
-                            digging.DigSphere(_position, 1f);
+							digging.DigSphere(_position, diggingSphereRadius);
                         } else if (e.Key == InputKey.MouseMiddle) {
-                            digging.DigSphere(_position, 1f, 1, DiggingController.DigMode.Add);
+							digging.DigSphere(_position, diggingSphereRadius, 1, DiggingController.DigMode.Add);
                         }
 
                     }
