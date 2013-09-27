@@ -1,0 +1,70 @@
+# Ledge spawning Automaton
+automaton LedgeTon
+
+cells
+  0,1,0  as Top
+  0,-1,0 as Bottom
+  1,0,0  as Left
+  -1,0,0 as Right
+  0,0,-1 as Front
+  0,0,1  as Back
+
+pre
+  this.material   is "Ground"
+  Top.material    is "Ground"
+  Bottom.material is "Ground"
+  Left.material   is in {"Ground", void} #only used for "void" material in predictor
+
+body
+
+  spawnProbability = 5 / 10000
+  spawnSize = 2
+
+  # Left
+  if Left.material is void
+    if random(0,1) < spawnProbability
+      spawn with sphere(this.position, spawnSize * 3)
+        union
+          mesh "Stone.09" $Ledge
+            rotateY = random(0, 360)
+            rotateX = random(-10, 10)
+            rotateZ = random(-10, 10)
+            scale = random(vec3(.8), vec3(1.2)) * random(0.8, 1.3) * spawnSize
+            translate = this.position
+
+  # Right
+  else if Right.material is void
+    if random(0,1) < spawnProbability
+      spawn with sphere(this.position, spawnSize * 3)
+        union
+          mesh "Stone.09" $Ledge
+            rotateY = random(0, 360)
+            rotateX = random(-10, 10)
+            rotateZ = random(-10, 10)
+            scale = random(vec3(.8), vec3(1.2)) * random(0.8, 1.3) * spawnSize
+            translate = this.position
+
+  # Front
+  else if Front.material is void
+    if random(0,1) < spawnProbability
+      spawn with sphere(this.position, spawnSize * 3)
+        union
+          mesh "Stone.09" $Ledge
+            rotateY = random(0, 360)
+            rotateX = random(-10, 10)
+            rotateZ = random(-10, 10)
+            scale = random(vec3(.8), vec3(1.2)) * random(0.8, 1.3) * spawnSize
+            translate = this.position
+
+  # Back
+  else if Back.material is void
+    if random(0,1) < spawnProbability
+      spawn with sphere(this.position, spawnSize * 3)
+        union
+          mesh "Stone.09" $Ledge
+            rotateY = random(0, 360)
+            rotateX = random(-10, 10)
+            rotateZ = random(-10, 10)
+            scale = random(vec3(.8), vec3(1.2)) * random(0.8, 1.3) * spawnSize
+            translate = this.position
+

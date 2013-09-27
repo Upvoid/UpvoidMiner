@@ -97,8 +97,21 @@
     "Descriptor": "File"
 },
 {
+    "Type": "Mesh",
+    "Name": "Ledge",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
     "Type": "Automaton",
     "Name": "StoneSpawner",
+    "Path": "~.ca",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Automaton",
+    "Name": "LedgeSpawner",
     "Path": "~.ca",
     "Descriptor": "File"
 },
