@@ -10,12 +10,110 @@ pre
 
 body
 
-  if random(0,1) < 1 / 10000
-    spawn with sphere(this.position, 20)
+  # spawn probabilities
+  spawnMod = 1 / 10000 / 10
+  spawnModOften  = spawnMod * 10
+  spawnModMedium = spawnMod * 3
+  spawnModSeldom = spawnMod * 1
+
+  # sizes
+  sizeMod = 4
+  sizeModSmall = sizeMod * 1.4
+  sizeModMedium = sizeMod * 2
+  sizeModLarge = sizeMod * 3
+
+  # Stone 1, material 4,9, small, often
+  if random(0,1) < spawnModOften
+    spawn with sphere(this.position, sizeModSmall * 5)
       union
-        mesh "Stone.04" $Stone001
-          rotateY = random(0, 360)
-          rotateX = random(-20, 20)
-          rotateZ = random(-20, 20)
-          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) / 20
+        mesh "Stone.09" $Stones/Stone.001
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModSmall
+          translate = this.position
+  else if random(0,1) < spawnModOften
+    spawn with sphere(this.position, sizeModSmall * 5)
+      union
+        mesh "Stone.04" $Stones/Stone.001
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModSmall
+          translate = this.position
+
+  # Stone 2, material 1,6, medium, often
+  else if random(0,1) < spawnModOften
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.02" $Stones/Stone.002
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+  else if random(0,1) < spawnModOften
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.06" $Stones/Stone.002
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+
+  # Stone 3, material 2,8, medium, seldom
+  else if random(0,1) < spawnModSeldom
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.03" $Stones/Stone.003
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+  else if random(0,1) < spawnModSeldom
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.08" $Stones/Stone.003
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+
+  # Stone 4, material 7,8, big, medium
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModLarge * 5)
+      union
+        mesh "Stone.07" $Stones/Stone.004
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModLarge
+          translate = this.position
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModLarge * 5)
+      union
+        mesh "Stone.08" $Stones/Stone.004
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModLarge
+          translate = this.position
+
+  # Stone 5, material 8,9, medium, medium
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.08" $Stones/Stone.005
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.09" $Stones/Stone.005
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+
+  # Stone 6, material 9,14, medium, medium
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.09" $Stones/Stone.006
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
+          translate = this.position
+  else if random(0,1) < spawnModMedium
+    spawn with sphere(this.position, sizeModMedium * 5)
+      union
+        mesh "Stone.14" $Stones/Stone.006
+          rotate = vec(random(vec3(-1), vec3(1)), random(0, 360))
+          scale = random(vec3(.8), vec3(1.2)) * random(0.5, 3) * sizeModMedium
           translate = this.position

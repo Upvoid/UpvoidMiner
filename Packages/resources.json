@@ -62,7 +62,37 @@
 },
 {
     "Type": "Mesh",
-    "Name": "Stone001",
+    "Name": "Stones/Stone.001",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Stones/Stone.002",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Stones/Stone.003",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Stones/Stone.004",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Stones/Stone.005",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Stones/Stone.006",
     "Path": "~.obj",
     "Descriptor": "File"
 },
