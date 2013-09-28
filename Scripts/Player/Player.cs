@@ -142,10 +142,10 @@ namespace UpvoidMiner
                 } else if(e.Key == InputKey.PageDown) {
                     currentAreaPosition.y -= 0.5f;
                 } else if(e.Key == InputKey.O) {
-                    CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
+					CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")", HostScript.ModDomain);
                     digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.OutsideAllowed);
                 } else if(e.Key == InputKey.I) {
-                    CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")");
+					CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")", HostScript.ModDomain);
                     digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.InsideAllowed);
                 }
             }

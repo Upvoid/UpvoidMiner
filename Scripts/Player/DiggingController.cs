@@ -32,7 +32,7 @@ namespace UpvoidMiner
         {
             this.world = world;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
-            sphereNode = new CsgExpression(1, sphereExpression, "sphereRadius:float, spherePosition:vec3");
+            sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
         }
 
         public void SetConstraint(CsgNode shape, BoundingSphere boundary, ConstraintMode mode)
@@ -60,7 +60,7 @@ namespace UpvoidMiner
                     // When in outside mode, we want to cut away everything on the outside.
                     // We get the outside by computing (1 - constraintShape), which translates to these CSG nodes.
                     CsgOpConcat invertedConstraint = new CsgOpConcat();
-                    invertedConstraint.AddNode(new CsgExpression(1, "-1"));
+					invertedConstraint.AddNode(new CsgExpression(1, "-1", HostScript.ModDomain));
                     invertedConstraint.AddNode(new CsgOpDiff(constraintShape));
 
                     constraintDiffNode = new CsgOpDiff(invertedConstraint);
