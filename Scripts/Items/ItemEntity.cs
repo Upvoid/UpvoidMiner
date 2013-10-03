@@ -1,6 +1,7 @@
 using System;
 using Engine;
 using Engine.Rendering;
+using Engine.Resources;
 using Engine.Universe;
 using Engine.Physics;
 
@@ -16,6 +17,7 @@ namespace UpvoidMiner
 
         protected PhysicsComponent physicsComponent;
         protected RenderComponent renderComponent;
+        protected RenderComponent renderComponentShadow;
 
         TriggerId AddItemTrigger;
 
@@ -37,13 +39,21 @@ namespace UpvoidMiner
 
             // Create the graphical representation of the item.
             MeshRenderJob renderJob = new MeshRenderJob(
-                Renderer.Opaque.Mesh, 
-                PresentedItem.EntityMaterial, 
+                Renderer.Opaque.Mesh,
+                PresentedItem.EntityMaterial,
                 PresentedItem.EntityMesh,
                 mat4.Identity
-            );
-
+                );
             renderComponent = new RenderComponent(thisEntity, mat4.Identity, renderJob, true);
+
+            MeshRenderJob renderJobShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh, 
+                Resources.UseMaterial("::Shadow", HostScript.ModDomain), 
+                PresentedItem.EntityMesh,
+                mat4.Identity
+                );
+            renderComponentShadow = new RenderComponent(thisEntity, mat4.Identity, renderJobShadow, true);
+
 
             // Set up the triggers.
             AddItemTrigger = TriggerId.getIdByName("AddItem");
@@ -62,6 +72,7 @@ namespace UpvoidMiner
 
             // For now, simply hide this entity (entity deletion is not yet possible)
             renderComponent.Visible = false;
+            renderComponentShadow.Visible = false;
             physicsComponent.Transform = mat4.Scale(0f);
         }
     }
