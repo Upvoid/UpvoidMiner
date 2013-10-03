@@ -208,6 +208,18 @@
     Parameter: uTexScale, 5
     Parameter: uBlendingCoefficient, 4
 
+[Miner/Torso] : Default
+    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, .5
+    Parameter: uBlendingCoefficient, 4
+
 [Grass01] : Default
     Shader: Foliage
     Texture: uColor, GrassTest.Low

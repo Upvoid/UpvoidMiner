@@ -39,6 +39,15 @@ namespace UpvoidMiner
 		private PhysicsComponent physicsComponent;
 
 		/// <summary>
+		/// The render component for the torso.
+		/// </summary>
+		private RenderComponent renderComponentTorso;
+		/// <summary>
+		/// The render component for the torso (shadow pass).
+		/// </summary>
+		private RenderComponent renderComponentTorsoShadow;
+
+		/// <summary>
 		/// This is the camera that is used to show the perspective of the player.
 		/// </summary>
 		GenericCamera camera;
@@ -87,6 +96,16 @@ namespace UpvoidMiner
 			                     mat4.Translate(new vec3(0, 0.6f, 0)));
 
             physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
+
+			// Add Torso mesh.
+			renderComponentTorso = new RenderComponent(thisEntity,
+			                                           mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0)),
+			                                           new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                                           true);
+			renderComponentTorsoShadow = new RenderComponent(thisEntity,
+			                                                 renderComponentTorso.Transform,
+			                                           new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                                           true);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld);

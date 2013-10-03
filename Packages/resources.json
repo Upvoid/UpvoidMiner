@@ -62,6 +62,12 @@
 },
 {
     "Type": "Mesh",
+    "Name": "Miner/Torso",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
     "Name": "Stones/Stone.001",
     "Path": "~.obj",
     "Descriptor": "File"
@@ -730,6 +736,16 @@
     "Name" : "Terrain/AlienRock",
     "Path" : "~.mat",
     "Type" : "Material"
- }
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Miner/Torso",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Miner/Torso",
+    "Path" : "~.mat",
+    "Type" : "Material"
+}
 
 ]
