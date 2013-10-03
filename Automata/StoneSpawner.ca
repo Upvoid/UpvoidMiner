@@ -11,7 +11,7 @@ pre
 body
 
   # spawn probabilities
-  spawnMod = 1 / 10000 / 10
+  spawnMod = 1 / 10000 / 10 / 5
   spawnModOften  = spawnMod * 10
   spawnModMedium = spawnMod * 3
   spawnModSeldom = spawnMod * 1

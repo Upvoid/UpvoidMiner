@@ -13,7 +13,10 @@ pre
   this.material   is "Ground"
   Top.material    is "Ground"
   Bottom.material is "Ground"
-  Left.material   is in {"Ground", void} #only used for "void" material in predictor
+  Left.material   is in {"Ground", void}
+  Right.material  is in {"Ground", void}
+  Front.material  is in {"Ground", void}
+  Back.material   is in {"Ground", void}
 
 body
 
