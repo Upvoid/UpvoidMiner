@@ -2,13 +2,14 @@
     {
         "Descriptor": {
             "Type": "Collection",
-            "ScriptFiles": [ 
+            "ScriptFiles": [
                 "HostScript.cs",
                 "LocalScript.cs",
                 "Messages.cs",
                 "Items/Item.cs",
                 "Items/ItemEntity.cs",
                 "Player/Player.cs",
+                "Player/Drone.cs",
                 "Player/PlayerGui.cs",
                 "Player/CharacterController.cs",
                 "Player/DiggingController.cs"

@@ -41,6 +41,7 @@
     <Compile Include="Items\ItemEntity.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="Player\PlayerGui.cs" />
+    <Compile Include="Player\Drone.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

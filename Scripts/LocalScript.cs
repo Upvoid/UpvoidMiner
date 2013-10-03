@@ -47,7 +47,7 @@ namespace UpvoidMiner
 		/// <summary>
 		/// The main world. We will use this to create new entities or query information about the environment.
 		/// </summary>
-		static World world;
+        public static World world;
 
 		/// <summary>
 		/// The main camera that renders to the screen.
@@ -62,7 +62,9 @@ namespace UpvoidMiner
 		/// <summary>
 		/// The player entity. Not to confuse with the Player EntityScript.
 		/// </summary>
-		static Entity player = null;
+		static Entity playerEntity = null;
+
+        static Player player;
 
 		/// <summary>
 		/// Set this to true to enable free camera movement.
@@ -93,7 +95,8 @@ namespace UpvoidMiner
 
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.
-			player = world.AddEntity(new Player(camera), mat4.Translate(new vec3(0, 50f, 0)));
+            player = new Player(camera);
+			playerEntity = world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
 
             // Create an active region around the player spawn
             // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
@@ -130,15 +133,16 @@ namespace UpvoidMiner
 		/// </summary>
 		public static void Update(float _elapsedSeconds)
         {
-
 			cameraControl.Update(_elapsedSeconds);
 
 			// Set the camera to the player position if free camera movement is disabled.
-			if(!noclipEnabled && player != null) {
-                if(!player.Position.IsFinite)
+			if(!noclipEnabled && playerEntity != null) {
+                if(!playerEntity.Position.IsFinite)
                     return;
-				camera.Position = player.Position;
+				camera.Position = playerEntity.Position;
 			}
+
+            player.Update(_elapsedSeconds);
 		}
 
 		/// <summary>

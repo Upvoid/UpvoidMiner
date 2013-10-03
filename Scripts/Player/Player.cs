@@ -78,12 +78,31 @@ namespace UpvoidMiner
         /// </summary>
         public List<Item> inventory = new List<Item>();
 
+        /// <summary>
+        /// List of drones of the player.
+        /// </summary>
+        public List<Drone> Drones = new List<Drone>();
+
+        /// <summary>
+        /// Position of the player.
+        /// </summary>
+        public vec3 Position
+        {
+            get { return character.Position; }
+        }
+
 		public Player(GenericCamera _camera)
 		{
 			camera = _camera;
             Input.OnPressInput += HandlePressInput;
 			Input.OnAxisInput += HandleAxisInput;
 		}
+
+        public void Update(float elapsedSeconds)
+        {
+            foreach (var drone in Drones)
+                drone.Update(elapsedSeconds);
+        }
 
         protected override void Init()
 		{
@@ -103,7 +122,7 @@ namespace UpvoidMiner
 			                                           new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
 			                                           true);
 			renderComponentTorsoShadow = new RenderComponent(thisEntity,
-			                                                 renderComponentTorso.Transform,
+			                                           renderComponentTorso.Transform,
 			                                           new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
 			                                           true);
 
@@ -190,7 +209,7 @@ namespace UpvoidMiner
                     }
                 });
             }
-
+            
             if(e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down) {
                 ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
                     // Receiving the async ray query result here
@@ -202,6 +221,18 @@ namespace UpvoidMiner
                             TriggerId trigger = TriggerId.getIdByName("Interaction");
                             entity[trigger] |= new InteractionMessage(thisEntity);
                         }
+                    }
+                });
+            }
+            
+            if(e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down) {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                    // Receiving the async ray query result here
+                    if(_hit)
+                    {
+                        Drone d = new Drone(_position + new vec3(0, 1, 0), this, DroneType.Line);
+                        Drones.Add(d);
+                        LocalScript.world.AddEntity(d, mat4.Identity);
                     }
                 });
             }

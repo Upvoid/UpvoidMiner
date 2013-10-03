@@ -68,6 +68,30 @@
 },
 {
     "Type": "Mesh",
+    "Name": "Miner/Drone",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Miner/DroneBody",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Miner/DroneWing1",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Miner/DroneWing2",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
     "Name": "Stones/Stone.001",
     "Path": "~.obj",
     "Descriptor": "File"
