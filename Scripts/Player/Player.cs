@@ -42,11 +42,11 @@ namespace UpvoidMiner
 		/// <summary>
 		/// The render component for the torso.
 		/// </summary>
-		private RenderComponent renderComponentTorso;
-		/// <summary>
-		/// The render component for the torso (shadow pass).
-		/// </summary>
-		private RenderComponent renderComponentTorsoShadow;
+		private RenderComponent rcTorso, rcTorsoShadow;
+        private RenderComponent rcTorsoSteam;
+        private CpuParticleSystemBase psTorsoSteam;
+        private CpuParticleComponent pcTorsoSteam;
+        private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
         /// Relative torso transformation.
         /// </summary>
@@ -125,9 +125,18 @@ namespace UpvoidMiner
                 // Update player model.
                 vec3 up = new vec3(0, 1, 0);
                 vec3 left = vec3.cross(up, Direction);
-                renderComponentTorso.Transform = renderComponentTorsoShadow.Transform =
+                rcTorso.Transform = rcTorsoShadow.Transform =
                    new mat4(left, up, Direction, new vec3()) * torsoTransform;
             }
+
+            rcTorsoSteam.Transform = rcTorso.Transform * torsoSteamOffset;
+            psTorsoSteam.SetSpawner2D(.2f, new BoundingSphere(new vec3(0), .01f), 
+                                      new vec3(.13f, 0.05f, 0), new vec3(.16f, 0.07f, 0),
+                                      new vec4(new vec3(.9f), .8f), new vec4(new vec3(.99f), .9f),
+                                      2.0f, 3.4f,
+                                      .1f, .2f,
+                                      0, 360,
+                                      -.2f, .2f);
         }
 
         /// <summary>
@@ -152,14 +161,17 @@ namespace UpvoidMiner
             physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
 
 			// Add Torso mesh.
-			renderComponentTorso = new RenderComponent(thisEntity,
-                                                       torsoTransform,
-			                                           new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                                           true);
-			renderComponentTorsoShadow = new RenderComponent(thisEntity,
-                                                             torsoTransform,
-			                                                 new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                                                 true);
+			rcTorso = new RenderComponent(thisEntity, torsoTransform,
+                                          new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                              true);
+			rcTorsoShadow = new RenderComponent(thisEntity, torsoTransform,
+			                                    new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                                    true);
+            psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
+            pcTorsoSteam = new CpuParticleComponent(thisEntity, psTorsoSteam, mat4.Identity);
+            rcTorsoSteam = new RenderComponent(thisEntity, torsoTransform,
+                                               new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("::Particle/SmokeWhite", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
+                                               true);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
@@ -195,7 +207,7 @@ namespace UpvoidMiner
             if ( !foundConstraint )
                 DroneConstraints.Add(new DroneConstraint(d));
             
-            LocalScript.world.AddEntity(d, mat4.Translate(d.CurrentPosition));
+            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition));
         }
 
         void HandlePressInput (object sender, InputPressArgs e)
