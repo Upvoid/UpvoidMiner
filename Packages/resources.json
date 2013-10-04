@@ -105,6 +105,19 @@
 {
     "Descriptor" : {
         "Files" : [
+            "Miner/Metal.fsh",
+            "Miner/Metal.vsh"
+        ],
+        "Name" : "Miner/Metal",
+        "Type" : "File"
+    },
+    "Name" : "Miner/Metal",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
             "Miner/DroneIndicator.fsh",
             "Miner/DroneIndicator.vsh"
         ],

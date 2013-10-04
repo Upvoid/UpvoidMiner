@@ -209,7 +209,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Miner/Torso] : Default
-    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: Miner/Metal
     Texture: uColorXZ, Metal.Diffuse
     Texture: uColorXY, Metal.Diffuse
     Texture: uColorZY, Metal.Diffuse
@@ -307,7 +307,7 @@
     Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScale, 30
     Parameter: uBlendingCoefficient, 4
-    
+
 [Particle/Smoke] : CpuParticleDefault
     Shader: Particle/Smoke
     Texture: uColor, ::Material/Particles/Smoke0369_S
