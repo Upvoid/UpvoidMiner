@@ -139,7 +139,11 @@ namespace UpvoidMiner
 			if(!noclipEnabled && playerEntity != null) {
                 if(!playerEntity.Position.IsFinite)
                     return;
-				camera.Position = playerEntity.Position;
+                
+                // Also add 10cm of forward.xz direction for a "head offset"
+                vec3 forward = camera.ForwardDirection;
+                forward.y = 0;
+                camera.Position = playerEntity.Position + forward.Normalized * 0.1f;
 			}
 
             player.Update(_elapsedSeconds);
