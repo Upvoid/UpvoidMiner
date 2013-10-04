@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Engine.Universe;
 
 namespace UpvoidMiner
 {
@@ -49,7 +50,7 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-        /// Sets a given item to a given quickaccess slot.
+        /// Sets a given item to a given quickaccess slot. Item may be null.
         /// </summary>
         public void SetQuickAccess(Item item, int idx)
         {
@@ -57,8 +58,11 @@ namespace UpvoidMiner
 
             if (quickAccessItems[idx] != null)
                 quickAccessItems[idx].QuickAccessIndex = -1;
+
             quickAccessItems[idx] = item;
-            item.QuickAccessIndex = idx;
+
+            if ( item != null )
+                item.QuickAccessIndex = idx;
         }
 
         /// <summary>
@@ -66,6 +70,7 @@ namespace UpvoidMiner
         /// </summary>
         public void AddItem(Item item)
         {
+            Debug.Assert(item != null);
             Items.Add(item);
 
             for (int i = 0; i < quickAccessItems.Length; ++i)
@@ -75,6 +80,55 @@ namespace UpvoidMiner
                     SetQuickAccess(item, i);
                     break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Removes a given item.
+        /// </summary>
+        public void RemoveItem(Item item)
+        {
+            Debug.Assert(item != null);
+
+            for (int i = 0; i < Items.Count; ++i)
+            {
+                if (Items[i] == item)
+                {
+                    Items.RemoveAt(i);
+                    break;
+                }
+            }
+
+            if (item.QuickAccessIndex >= 0)
+                SetQuickAccess(null, item.QuickAccessIndex);
+        }
+
+        /// <summary>
+        /// Adds a resource of a given terrain material type. Amount can be negative.
+        /// </summary>
+        public void AddResource(TerrainMaterial mat, float amount)
+        {
+            foreach (var item in Items)
+            {
+                if ( item is ResourceItem )
+                {
+                    ResourceItem ritem = item as ResourceItem;
+                    if ( ritem.Material.MaterialIndex == mat.MaterialIndex )
+                    {
+                        ritem.Volume += amount;
+                        if ( ritem.Volume < .001f )
+                            RemoveItem(ritem);
+                        return;
+                    }
+                }
+            }
+
+            // We have not found this resource so far: create a new one.
+            if (amount > 0)
+            {
+                ResourceItem newItem = new ResourceItem(mat);
+                newItem.Volume += amount;
+                AddItem(newItem);
             }
         }
     }

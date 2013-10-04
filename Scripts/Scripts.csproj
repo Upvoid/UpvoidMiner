@@ -46,6 +46,8 @@
     <Compile Include="Items\Inventory.cs" />
     <Compile Include="Items\ItemCategory.cs" />
     <Compile Include="Items\DiscreteItem.cs" />
+    <Compile Include="Items\VolumeItem.cs" />
+    <Compile Include="Items\ResourceItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
