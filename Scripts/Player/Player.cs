@@ -47,6 +47,16 @@ namespace UpvoidMiner
 		/// The render component for the torso (shadow pass).
 		/// </summary>
 		private RenderComponent renderComponentTorsoShadow;
+        /// <summary>
+        /// Relative torso transformation.
+        /// </summary>
+        private mat4 torsoTransform = mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0));
+
+        /// <summary>
+        /// The direction in which this player is facing.
+        /// Is not the same as the camera, but follows it.
+        /// </summary>
+        private vec3 Direction = new vec3(1,0,0);
 
 		/// <summary>
 		/// This is the camera that is used to show the perspective of the player.
@@ -96,10 +106,24 @@ namespace UpvoidMiner
 
         public void Update(float elapsedSeconds)
         {
+            // Update drones.
             foreach (var drone in Drones)
                 drone.Update(elapsedSeconds);
             foreach (var dc in DroneConstraints)
                 dc.Update(elapsedSeconds);
+
+            // Update direction.
+            float mix = (float)Math.Pow(0.02, elapsedSeconds);
+            vec3 camDir = camera.ForwardDirection;
+            Direction.x = Direction.x * mix + camDir.x * (1 - mix);
+            Direction.z = Direction.z * mix + camDir.z * (1 - mix);
+            Direction = Direction.Normalized;
+
+            // Update player model.
+            vec3 up = new vec3(0, 1, 0);
+            vec3 left = vec3.cross(up, Direction);
+            renderComponentTorso.Transform = renderComponentTorsoShadow.Transform =
+                new mat4(left, up, Direction, new vec3()) * torsoTransform;
         }
 
         /// <summary>
@@ -125,13 +149,13 @@ namespace UpvoidMiner
 
 			// Add Torso mesh.
 			renderComponentTorso = new RenderComponent(thisEntity,
-			                                           mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0)),
+                                                       torsoTransform,
 			                                           new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
 			                                           true);
 			renderComponentTorsoShadow = new RenderComponent(thisEntity,
-			                                           renderComponentTorso.Transform,
-			                                           new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                                           true);
+                                                             torsoTransform,
+			                                                 new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                                                 true);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
@@ -191,10 +215,14 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
+                        /// Subtract a few cm toward camera to increase stability near constraints.
+                        _position -= camera.ForwardDirection * .04f;
+
                         if (e.Key == InputKey.MouseLeft)
                         {
 							digging.DigSphere(_position, diggingSphereRadius);
                         } else if (e.Key == InputKey.MouseMiddle) {
+                            // TODO: proper terrain material index.
 							digging.DigSphere(_position, diggingSphereRadius, 1, DiggingController.DigMode.Add);
                         }
 
