@@ -1,22 +1,22 @@
 
 [PineLeaves] : Default
-    Shader: Opaque/MeshNormalmapInstancedDiscard
+    Shader: ::Opaque/MeshNormalmapInstancedDiscard
     Texture: uColor, PineLeaves
     Texture: uNormalmap, PineLeaves.normals
     Color: uSpecularColor, .0, .0, .0, 1
 
 [PineImpostor] : Default
-    Shader: Opaque/MeshTexturedInstancedDiscard
+    Shader: ::Opaque/MeshTexturedInstancedDiscard
     Texture: uColor, PineImpostor
     Color: uSpecularColor, .0, .0, .0, 1
 
 [DiggingConstraints] : Default
-    Shader: Opaque/MeshPseudoTransparent
+    Shader: ::Opaque/MeshPseudoTransparent
     Color: uSpecularColor, 1.0, .0, .0, 0.001
     Culling: None
 
 [Terrain/Rock01] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
@@ -28,7 +28,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock02] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
@@ -41,7 +41,7 @@
 
 
 [Terrain/Rock03] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
@@ -53,7 +53,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock04] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
@@ -65,7 +65,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock05] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
@@ -77,7 +77,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock06] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
@@ -89,7 +89,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock07] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
@@ -101,7 +101,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock08] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
@@ -113,7 +113,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock09] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
@@ -125,7 +125,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock10] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
@@ -137,7 +137,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock11] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
@@ -149,7 +149,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock12] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
@@ -161,7 +161,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock13] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
@@ -173,7 +173,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock14] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
@@ -185,7 +185,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/FireRock] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
@@ -197,7 +197,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/AlienRock] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
@@ -209,7 +209,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Miner/Torso] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmap
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
@@ -220,8 +220,14 @@
     Parameter: uTexScale, .5
     Parameter: uBlendingCoefficient, 4
 
+[Miner/DroneIndicator] : Default
+    Shader: Miner/DroneIndicator
+    Color: uColor, 1, 0, 0, .7
+    Parameter: uScale, 10
+    Parameter: uSpeed, -2
+
 [Grass01] : Default
-    Shader: Foliage
+    Shader: ::Foliage
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
     Texture: uTranslucency, GrassTest.Translucency
@@ -229,7 +235,7 @@
     Parameter: uDiscardBias, .9
 
 [Herbs17] : Default
-    Shader: Foliage
+    Shader: ::Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Normal
     Texture: uTranslucency, FullTranslucency
@@ -237,7 +243,7 @@
     Parameter: uDiscardBias, .9
 
 [Herbs18] : Default
-    Shader: Foliage
+    Shader: ::Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Normal
     Texture: uTranslucency, FullTranslucency
@@ -245,22 +251,22 @@
     Parameter: uDiscardBias, .9
 
 [Grass01.zPre] : Default
-    Shader: ZPre/Foliage
+    Shader: ::ZPre/Foliage
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
 
 [Herbs17.zPre] : Default
-    Shader: ZPre/Foliage
+    Shader: ::ZPre/Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
     Parameter: uDiscardBias, .9
 
 [Herbs18.zPre] : Default
-    Shader: ZPre/Foliage
+    Shader: ::ZPre/Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
     Parameter: uDiscardBias, .9
 
 [GrassyMountains2] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
     Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
     Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
     Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
@@ -272,7 +278,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [GrassyMountains3] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
     Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
     Texture: uColorXY, ::Terrain/Cliffs0144_5_S
     Texture: uColorZY, ::Terrain/Cliffs0144_5_S
@@ -284,7 +290,7 @@
     Parameter: uBlendingCoefficient, 4
 
 [Rocky] : Default
-    Shader: Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
     Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Soil/Soil05.Diffuse
     Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
     Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse

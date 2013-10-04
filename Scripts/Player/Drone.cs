@@ -11,7 +11,8 @@ namespace UpvoidMiner
     /// </summary>
     public enum DroneType
     {
-        Line,
+        Chain,
+        Loop,
         Circular,
         Plane
     }
@@ -65,6 +66,7 @@ namespace UpvoidMiner
         private RenderComponent renderComponentWing1Shadow;
         private RenderComponent renderComponentWing2Opaque;
         private RenderComponent renderComponentWing2Shadow;
+        private RenderComponent renderComponentIndicator;
 
         /// <summary>
         /// Creates a new drone.
@@ -124,11 +126,16 @@ namespace UpvoidMiner
             renderComponentWing2Opaque = new RenderComponent(thisEntity,
                                                              mat4.Scale(DroneScale),
                                                             new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
-                                                            true);
+                                                             true);
             renderComponentWing2Shadow = new RenderComponent(thisEntity,
                                                              mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
-                                                            true);
+                                                             new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
+                                                             true);
+
+            renderComponentIndicator = new RenderComponent(thisEntity,
+                                                           mat4.Scale(new vec3(.03f,7,.03f)),
+                                                           new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Miner/DroneIndicator", HostScript.ModDomain), Resources.UseMesh("Miner/DroneIndicator", HostScript.ModDomain), mat4.Identity),
+                                                           true);
         }
     }
 }

@@ -230,9 +230,9 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
-                        Drone d = new Drone(_position + new vec3(0, 1, 0), this, DroneType.Line);
+                        Drone d = new Drone(_position + new vec3(0, 1, 0), this, DroneType.Chain);
                         Drones.Add(d);
-                        LocalScript.world.AddEntity(d, mat4.Identity);
+                        LocalScript.world.AddEntity(d, mat4.Translate(d.CurrentPosition));
                     }
                 });
             }

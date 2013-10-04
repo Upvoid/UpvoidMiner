@@ -92,6 +92,25 @@
 },
 {
     "Type": "Mesh",
+    "Name": "Miner/DroneIndicator",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Miner/DroneIndicator.fsh",
+            "Miner/DroneIndicator.vsh"
+        ],
+        "Name" : "Miner/DroneIndicator",
+        "Type" : "File"
+    },
+    "Name" : "Miner/DroneIndicator",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Type": "Mesh",
     "Name": "Stones/Stone.001",
     "Path": "~.obj",
     "Descriptor": "File"
@@ -768,6 +787,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Miner/Torso",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Miner/DroneIndicator",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Miner/DroneIndicator",
     "Path" : "~.mat",
     "Type" : "Material"
 }
