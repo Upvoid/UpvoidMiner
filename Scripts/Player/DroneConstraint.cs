@@ -22,6 +22,7 @@ namespace UpvoidMiner
         /// List of renderjobs for boundary indicators.
         /// </summary>
         private List<MeshRenderJob> boundaryIndicators = new List<MeshRenderJob>();
+        private List<MeshRenderJob> boundaryIndicatorsDistort = new List<MeshRenderJob>();
 
         /// <summary>
         /// List of expressions used for realizing boundaries
@@ -73,7 +74,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Configures a renderjob for a vertical constraint between two drones.
         /// </summary>
-        private void configureVerticalConstraint(Drone first, Drone second, MeshRenderJob job, CsgExpression expr)
+        private void configureVerticalConstraint(Drone first, Drone second, MeshRenderJob job1, MeshRenderJob job2, CsgExpression expr)
         {
             vec3 startPos = first.CurrentPosition;
             vec3 endPos = second.CurrentPosition;
@@ -89,7 +90,7 @@ namespace UpvoidMiner
                 new vec3()
                 );
 
-            job.ModelMatrix = mat4.Translate(startPos) * transform * mat4.Scale(.5f) * mat4.Translate(new vec3(1, 0, 0));
+            job1.ModelMatrix = job2.ModelMatrix = mat4.Translate(startPos) * transform * mat4.Scale(.5f) * mat4.Translate(new vec3(1, 0, 0));
 
             // Configure expression.
             expr.SetParameterVec3("planePos", startPos);
@@ -118,16 +119,24 @@ namespace UpvoidMiner
                                                                      Resources.UseMaterial("Miner/DroneConstraintVertical", LocalScript.ModDomain),
                                                                      Resources.UseMesh("::Debug/Quad", LocalScript.ModDomain),
                                                                      mat4.Identity));
+                            boundaryIndicatorsDistort.Add(new MeshRenderJob(Renderer.Distortion.Mesh, 
+                                                                     Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", LocalScript.ModDomain),
+                                                                     Resources.UseMesh("::Debug/Quad", LocalScript.ModDomain),
+                                                                     mat4.Identity));
                             constraintExpression.Add(new CsgExpression(1, "dot(planeNormal, (planePos - vec3(x, y, z))) * invert", LocalScript.ModDomain, "planeNormal:vec3, planePos:vec3, invert:float"));
                             addJob = true;
                         }
+                        
+                        MeshRenderJob job1 = boundaryIndicators[i];
+                        MeshRenderJob job2 = boundaryIndicatorsDistort[i];
 
-                        MeshRenderJob job = boundaryIndicators[i];
-
-                        configureVerticalConstraint(first, second, job, constraintExpression[i]);
+                        configureVerticalConstraint(first, second, job1, job2, constraintExpression[i]);
 
                         if ( addJob )
-                            LocalScript.world.AddRenderJob(job);
+                        {
+                            LocalScript.world.AddRenderJob(job1);
+                            LocalScript.world.AddRenderJob(job2);
+                        }
                     }
                     break;
                 default: Debug.Fail("Not implemented/Invalid");
