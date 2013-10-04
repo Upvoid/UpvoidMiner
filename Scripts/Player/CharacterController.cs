@@ -65,11 +65,16 @@ namespace UpvoidMiner
 		/// The velocity of the character when walking (meters per second). Default is 1.8 (about 6.5 km/h).
 		/// </summary>
         public float WalkSpeed = 1.8f;
-
+        
         /// <summary>
         /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
         /// </summary>
         public float StrafeSpeed = 1f;
+        
+        /// <summary>
+        /// The velocity of the character when strafing while running (meters per second). Default is 3.0 (11 km/h).
+        /// </summary>
+        public float StrafeSpeedRunning = 3f;
 
 		/// <summary>
 		/// The velocity of the character when running (meters per second). Default is 4 (about 15 km/h).
@@ -152,11 +157,12 @@ namespace UpvoidMiner
 
 			// When touching the ground, we can walk around.
 			if(TouchesGround) {
-
+                
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
+                float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
 
                 // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
-                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * StrafeSpeed;
+                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
 				moveDir.y = 0;
 
                 vec3 velocity = Body.GetVelocity();
