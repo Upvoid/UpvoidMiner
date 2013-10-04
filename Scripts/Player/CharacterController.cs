@@ -208,6 +208,9 @@ namespace UpvoidMiner
 		/// </summary>
 		protected void HandleInput(object sender, InputPressArgs e)
 		{
+            if (LocalScript.NoclipEnabled)
+                return;
+
 			// Let the default WASD-keys control the walking directions.
             if(e.Key == InputKey.W) {
                 if(e.PressType == InputPressArgs.KeyPressType.Down)

@@ -69,7 +69,7 @@ namespace UpvoidMiner
 		/// <summary>
 		/// Set this to true to enable free camera movement.
 		/// </summary>
-		static bool noclipEnabled = false;
+        public static bool NoclipEnabled { get; private set; }
 
 		/// <summary>
 		/// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
@@ -125,7 +125,7 @@ namespace UpvoidMiner
 
 			// N toggles noclip.
 			if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
-				noclipEnabled = !noclipEnabled;
+				NoclipEnabled = !NoclipEnabled;
 		}
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace UpvoidMiner
 			cameraControl.Update(_elapsedSeconds);
 
 			// Set the camera to the player position if free camera movement is disabled.
-			if(!noclipEnabled && playerEntity != null) {
+			if(!NoclipEnabled && playerEntity != null) {
                 if(!playerEntity.Position.IsFinite)
                     return;
                 

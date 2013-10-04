@@ -112,18 +112,21 @@ namespace UpvoidMiner
             foreach (var dc in DroneConstraints)
                 dc.Update(elapsedSeconds);
 
-            // Update direction.
-            float mix = (float)Math.Pow(0.02, elapsedSeconds);
-            vec3 camDir = camera.ForwardDirection;
-            Direction.x = Direction.x * mix + camDir.x * (1 - mix);
-            Direction.z = Direction.z * mix + camDir.z * (1 - mix);
-            Direction = Direction.Normalized;
+            if (!LocalScript.NoclipEnabled)
+            {
+                // Update direction.
+                float mix = (float)Math.Pow(0.02, elapsedSeconds);
+                vec3 camDir = camera.ForwardDirection;
+                Direction.x = Direction.x * mix + camDir.x * (1 - mix);
+                Direction.z = Direction.z * mix + camDir.z * (1 - mix);
+                Direction = Direction.Normalized;
 
-            // Update player model.
-            vec3 up = new vec3(0, 1, 0);
-            vec3 left = vec3.cross(up, Direction);
-            renderComponentTorso.Transform = renderComponentTorsoShadow.Transform =
-                new mat4(left, up, Direction, new vec3()) * torsoTransform;
+                // Update player model.
+                vec3 up = new vec3(0, 1, 0);
+                vec3 left = vec3.cross(up, Direction);
+                renderComponentTorso.Transform = renderComponentTorsoShadow.Transform =
+                   new mat4(left, up, Direction, new vec3()) * torsoTransform;
+            }
         }
 
         /// <summary>
