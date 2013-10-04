@@ -307,3 +307,13 @@
     Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScale, 30
     Parameter: uBlendingCoefficient, 4
+    
+[Particle/Smoke] : CpuParticleDefault
+    Shader: Particle/Smoke
+    Texture: uColor, ::Material/Particles/Smoke0369_S
+    Color: uColorFilter, 1, 1, 1, 1
+    ParticleAttribute: aParticlePosition
+    ParticleAttribute: aParticleColor
+    ParticleAttribute: aParticleSize
+    ParticleAttribute: aParticleAngle
+    ParticleAttribute: aParticleLife
