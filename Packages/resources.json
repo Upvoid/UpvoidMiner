@@ -205,6 +205,26 @@
 {
     "Descriptor" : {
         "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "Metal.Diffuse",
+    "Path" : "~.jpg",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "Metal.Normal",
+    "Path" : "~.jpg",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
         "sRGB": true,
         "PremultipliedAlpha": true
     },
