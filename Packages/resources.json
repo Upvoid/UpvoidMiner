@@ -799,6 +799,30 @@
     "Name" : "Miner/DroneIndicator",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Particle/Smoke",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particle/Smoke",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Particle/ParticleBillboardSmoke.fsh",
+            "Particle/ParticleBillboard.vsh"
+        ],
+        "Name" : "Particle/Smoke",
+        "Type" : "File"
+    },
+    "Name" : "Particle/Smoke",
+            "Path" : "~.shader",
+            "Type" : "Shader"
 }
+
 
 ]
