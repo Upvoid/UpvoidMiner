@@ -10,6 +10,7 @@
                 "Items/ItemEntity.cs",
                 "Player/Player.cs",
                 "Player/Drone.cs",
+                "Player/DroneConstraint.cs",
                 "Player/PlayerGui.cs",
                 "Player/CharacterController.cs",
                 "Player/DiggingController.cs"

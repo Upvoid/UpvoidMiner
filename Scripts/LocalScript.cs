@@ -82,7 +82,7 @@ namespace UpvoidMiner
 
 			// Create a simple camera that allows free movement.
 			camera = new GenericCamera();
-			camera.FarClippingPlane = 750.0;
+			camera.FarClippingPlane = 1750.0;
 			cameraControl = new FreeCameraControl(-10f, camera);
 
 			// Get the world (created by the host script).
@@ -139,7 +139,11 @@ namespace UpvoidMiner
 			if(!noclipEnabled && playerEntity != null) {
                 if(!playerEntity.Position.IsFinite)
                     return;
-				camera.Position = playerEntity.Position;
+                
+                // Also add 10cm of forward.xz direction for a "head offset"
+                vec3 forward = camera.ForwardDirection;
+                forward.y = 0;
+                camera.Position = playerEntity.Position + forward.Normalized * 0.1f;
 			}
 
             player.Update(_elapsedSeconds);

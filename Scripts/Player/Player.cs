@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Engine;
 using Engine.Universe;
 using Engine.Modding;
@@ -46,6 +47,16 @@ namespace UpvoidMiner
 		/// The render component for the torso (shadow pass).
 		/// </summary>
 		private RenderComponent renderComponentTorsoShadow;
+        /// <summary>
+        /// Relative torso transformation.
+        /// </summary>
+        private mat4 torsoTransform = mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0));
+
+        /// <summary>
+        /// The direction in which this player is facing.
+        /// Is not the same as the camera, but follows it.
+        /// </summary>
+        private vec3 Direction = new vec3(1,0,0);
 
 		/// <summary>
 		/// This is the camera that is used to show the perspective of the player.
@@ -61,17 +72,8 @@ namespace UpvoidMiner
 
         PlayerGui gui;
 
-		// Define an area cube the user can NOT dig in.
-		float halfCubeSideLength = 10f;
-
 		// Radius of digging/building sphere
 		float diggingSphereRadius = 1.0f;
-
-		// Position where this cube is located.
-		vec3 currentAreaPosition = new vec3(0, 0, 0);
-
-		// Create a pointer to a renderjob visualizing the area we are allowed to dig in.
-		MeshRenderJob diggingConstraints = null;
 
         /// <summary>
         /// A list of items representing the inventory of the player.
@@ -82,6 +84,10 @@ namespace UpvoidMiner
         /// List of drones of the player.
         /// </summary>
         public List<Drone> Drones = new List<Drone>();
+        /// <summary>
+        /// List of drone constraints that are currently active.
+        /// </summary>
+        public List<DroneConstraint> DroneConstraints = new List<DroneConstraint>();
 
         /// <summary>
         /// Position of the player.
@@ -100,8 +106,33 @@ namespace UpvoidMiner
 
         public void Update(float elapsedSeconds)
         {
+            // Update drones.
             foreach (var drone in Drones)
                 drone.Update(elapsedSeconds);
+            foreach (var dc in DroneConstraints)
+                dc.Update(elapsedSeconds);
+
+            // Update direction.
+            float mix = (float)Math.Pow(0.02, elapsedSeconds);
+            vec3 camDir = camera.ForwardDirection;
+            Direction.x = Direction.x * mix + camDir.x * (1 - mix);
+            Direction.z = Direction.z * mix + camDir.z * (1 - mix);
+            Direction = Direction.Normalized;
+
+            // Update player model.
+            vec3 up = new vec3(0, 1, 0);
+            vec3 left = vec3.cross(up, Direction);
+            renderComponentTorso.Transform = renderComponentTorsoShadow.Transform =
+                new mat4(left, up, Direction, new vec3()) * torsoTransform;
+        }
+
+        /// <summary>
+        /// Adds all active drone constraints to a Csg Diff Node.
+        /// </summary>
+        public void AddDroneConstraints(CsgOpDiff diffNode, vec3 refPos)
+        {
+            foreach (var dc in DroneConstraints)
+                dc.AddCsgConstraints(diffNode, refPos);
         }
 
         protected override void Init()
@@ -118,26 +149,16 @@ namespace UpvoidMiner
 
 			// Add Torso mesh.
 			renderComponentTorso = new RenderComponent(thisEntity,
-			                                           mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0)),
+                                                       torsoTransform,
 			                                           new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
 			                                           true);
 			renderComponentTorsoShadow = new RenderComponent(thisEntity,
-			                                           renderComponentTorso.Transform,
-			                                           new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                                           true);
+                                                             torsoTransform,
+			                                                 new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+			                                                 true);
 
             // This digging controller will perform digging and handle digging constraints for us.
-            digging = new DiggingController(ContainingWorld);
-
-            // Make the area we are allowed to dig in visible
-            diggingConstraints = new MeshRenderJob(
-                Renderer.Opaque.Mesh, 
-                Resources.UseMaterial("DiggingConstraints", LocalScript.ModDomain), 
-                Resources.UseMesh("::Debug/Box", LocalScript.ModDomain),
-                mat4.Scale(0.999f * halfCubeSideLength)); // avoid z-fighting
-
-            // Add this RenderJob to the world's jobs
-            ContainingWorld.AddRenderJob(diggingConstraints);
+            digging = new DiggingController(ContainingWorld, this);
 
             gui = new PlayerGui(this);
 
@@ -152,6 +173,27 @@ namespace UpvoidMiner
 			}
 		}
 
+        void AddDrone(vec3 position)
+        {
+            Drone d = new Drone(position + new vec3(0, 1, 0), this, DroneType.Chain);
+            Drones.Add(d);
+            
+            bool foundConstraint = false;
+            foreach (var dc in DroneConstraints)
+            {
+                if ( dc.IsAddable(d) )
+                {
+                    dc.AddDrone(d);
+                    foundConstraint = true;
+                    break;
+                }
+            }
+            if ( !foundConstraint )
+                DroneConstraints.Add(new DroneConstraint(d));
+            
+            LocalScript.world.AddEntity(d, mat4.Translate(d.CurrentPosition));
+        }
+
         void HandlePressInput (object sender, InputPressArgs e)
         {
 
@@ -163,33 +205,7 @@ namespace UpvoidMiner
 				if ( e.Key == InputKey.F8 )
 					Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
 
-                if(e.Key == InputKey.Plus) {
-                    halfCubeSideLength += 0.5f;
-                } else if(e.Key == InputKey.Minus) {
-                    halfCubeSideLength -= 0.5f;
-                } else if(e.Key == InputKey.Up) {
-                    currentAreaPosition.z += 0.5f;
-                } else if(e.Key == InputKey.Down) {
-                    currentAreaPosition.z -= 0.5f;
-                } else if(e.Key == InputKey.Left) {
-                    currentAreaPosition.x += 0.5f;
-                } else if(e.Key == InputKey.Right) {
-                    currentAreaPosition.x -= 0.5f;
-                } else if(e.Key == InputKey.PageUp) {
-                    currentAreaPosition.y += 0.5f;
-                } else if(e.Key == InputKey.PageDown) {
-                    currentAreaPosition.y -= 0.5f;
-                } else if(e.Key == InputKey.O) {
-					CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")", HostScript.ModDomain);
-                    digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.OutsideAllowed);
-                } else if(e.Key == InputKey.I) {
-					CsgExpression cube = new CsgExpression(1, "(max(max(abs(x - " + currentAreaPosition.x.ToString() + "), abs(y - " + currentAreaPosition.y.ToString() + ")), abs(z - " + currentAreaPosition.z.ToString() + ")) - " + halfCubeSideLength.ToString() + ")", HostScript.ModDomain);
-                    digging.SetConstraint(cube, new BoundingSphere(currentAreaPosition, halfCubeSideLength * 2f), DiggingController.ConstraintMode.InsideAllowed);
-                }
             }
-
-            // Set the new modelmatrix.
-            diggingConstraints.ModelMatrix = mat4.Translate(currentAreaPosition) * mat4.Scale(0.999f * halfCubeSideLength);
 
             // We don't have tools or items yet, so we hard-code digging on left mouse click here.
             if((e.Key == InputKey.MouseLeft || e.Key == InputKey.MouseMiddle || e.Key == InputKey.C || e.Key == InputKey.V) && e.PressType == InputPressArgs.KeyPressType.Down) {
@@ -199,10 +215,14 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
+                        /// Subtract a few cm toward camera to increase stability near constraints.
+                        _position -= camera.ForwardDirection * .04f;
+
                         if (e.Key == InputKey.MouseLeft)
                         {
 							digging.DigSphere(_position, diggingSphereRadius);
                         } else if (e.Key == InputKey.MouseMiddle) {
+                            // TODO: proper terrain material index.
 							digging.DigSphere(_position, diggingSphereRadius, 1, DiggingController.DigMode.Add);
                         }
 
@@ -230,9 +250,7 @@ namespace UpvoidMiner
                     // Receiving the async ray query result here
                     if(_hit)
                     {
-                        Drone d = new Drone(_position + new vec3(0, 1, 0), this, DroneType.Chain);
-                        Drones.Add(d);
-                        LocalScript.world.AddEntity(d, mat4.Translate(d.CurrentPosition));
+                        AddDrone(_position);
                     }
                 });
             }
