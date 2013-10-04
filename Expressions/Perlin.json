@@ -1,0 +1,52 @@
+{
+  "inputs" : [
+    0,
+    1,
+    2
+  ],
+  "nodes" : [
+    {
+      "id" : 0,
+      "identifier" : "x",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+        0
+      ]
+    },
+    {
+      "id" : 1,
+      "identifier" : "y",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+        0
+      ]
+    },
+    {
+      "id" : 2,
+      "identifier" : "z",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+        0
+      ]
+    },
+    {
+      "id" : 3,
+      "inputs" : [
+        0,
+        1,
+        2
+      ],
+      "nodetype" : "Perlin",
+      "seed" : 87654321
+    }
+  ],
+  "output" : 3,
+  "parameters" : [
+  ]
+}

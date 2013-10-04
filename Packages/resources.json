@@ -5,6 +5,12 @@
     "Path": "~.json",
     "Type": "Expression"
 },
+{
+    "Descriptor": "File",
+    "Name": "Perlin",
+    "Path": "~.json",
+    "Type": "Expression"
+},
 
 {
     "Descriptor": "File",
@@ -166,7 +172,7 @@
 },
 {
     "Type": "Automaton",
-    "Name": "StoneSpawner",
+    "Name": "Surface",
     "Path": "~.ca",
     "Descriptor": "File"
 },
