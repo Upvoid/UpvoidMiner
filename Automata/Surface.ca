@@ -1,5 +1,5 @@
 // Stone spawning Automaton
-automaton StonerTon
+automaton SurfaceTon
 
 cells
   0, 1, 0 as Top
@@ -9,6 +9,12 @@ pre
   Top.material is void
 
 body
+
+  # === Gras ===
+
+  this.aGras = 0 #perlin(x,y,z) $= Perlin; max(0, perlin(x / 20, y / 20, z / 20))
+
+  # === Stones ===
 
   # spawn probabilities
   spawnMod = 1 / 10000 / 10 / 5
