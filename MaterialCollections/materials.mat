@@ -226,6 +226,13 @@
     Parameter: uScale, 10
     Parameter: uSpeed, -2
 
+[Miner/DroneConstraintVertical] : Default
+    Shader: Miner/DroneConstraintVertical
+    Color: uColor, 1, 0, 0, .7
+    Parameter: uScale, 10
+    Parameter: uSpeed, -2
+    Culling: None
+
 [Grass01] : Default
     Shader: ::Foliage
     Texture: uColor, GrassTest.Low

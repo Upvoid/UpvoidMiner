@@ -110,6 +110,19 @@
             "Type" : "Shader"
 },
 {
+    "Descriptor" : {
+        "Files" : [
+            "Miner/DroneConstraintVertical.fsh",
+            "Miner/DroneConstraintVertical.vsh"
+        ],
+        "Name" : "Miner/DroneConstraintVertical",
+        "Type" : "File"
+    },
+    "Name" : "Miner/DroneConstraintVertical",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
     "Type": "Mesh",
     "Name": "Stones/Stone.001",
     "Path": "~.obj",
@@ -797,6 +810,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Miner/DroneIndicator",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Miner/DroneConstraintVertical",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Miner/DroneConstraintVertical",
     "Path" : "~.mat",
     "Type" : "Material"
 }

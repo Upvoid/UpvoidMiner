@@ -2,6 +2,8 @@ using System;
 
 using Engine;
 using Engine.Universe;
+using Engine.Resources;
+using Engine.Rendering;
 using Engine.Physics;
 
 namespace UpvoidMiner
@@ -14,64 +16,43 @@ namespace UpvoidMiner
             Add
         }
 
-        public enum ConstraintMode
-        {
-            InsideAllowed,
-            OutsideAllowed
-        }
-
+        /// <summary>
+        /// Backref to world.
+        /// </summary>
         World world;
+        /// <summary>
+        /// Backref to player.
+        /// </summary>
+        Player player;
 
-        CsgNode constraintShape = null;
-        BoundingSphere constraintBoundary = new BoundingSphere(vec3.Zero, 0f);
-        ConstraintMode constraintMode = ConstraintMode.InsideAllowed;
-
+        /// <summary>
+        /// Cached CSG Sphere.
+        /// </summary>
         CsgExpression sphereNode;
 
-        public DiggingController(World world)
+        public DiggingController(World world, Player player)
         {
             this.world = world;
+            this.player = player;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
             sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
-        }
-
-        public void SetConstraint(CsgNode shape, BoundingSphere boundary, ConstraintMode mode)
-        {
-            constraintShape = shape;
-            constraintBoundary = boundary;
-            constraintMode = mode;
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode = DigMode.Substract)
         {
             CsgNode digShape = null;
-            if(constraintShape == null) {
-                // When no constraint is set, we simply use the given shape for digging.
-                digShape = shape;
-            } else {
 
-                // constraintDiffNode performs the constraint as a CSG operation 
-                // by cutting away anything of thge digging shape not inside the allowed area.
-                CsgNode constraintDiffNode = null;
-                if(constraintMode == ConstraintMode.OutsideAllowed) {
-                    // When the constraint is in outside mode, we cut away everything inside the constraint shape
-                    constraintDiffNode = new CsgOpDiff(constraintShape);
-                } else {
-                    // When in outside mode, we want to cut away everything on the outside.
-                    // We get the outside by computing (1 - constraintShape), which translates to these CSG nodes.
-                    CsgOpConcat invertedConstraint = new CsgOpConcat();
-					invertedConstraint.AddNode(new CsgExpression(1, "-1", HostScript.ModDomain));
-                    invertedConstraint.AddNode(new CsgOpDiff(constraintShape));
+            // constraintDiffNode performs the constraint as a CSG operation 
+            // by cutting away anything of thge digging shape not inside the allowed area.
+            CsgOpDiff constraintDiffNode = new CsgOpDiff();
+            // Assemble difference operation by applying all drone constraints.
+            player.AddDroneConstraints(constraintDiffNode, shapeBoundary.Center);
 
-                    constraintDiffNode = new CsgOpDiff(invertedConstraint);
-                }
-
-                // We apply the constraint by substracting it from the given shape.
-                CsgOpConcat constraintedShape = new CsgOpConcat();
-                constraintedShape.AddNode(shape);
-                constraintedShape.AddNode(constraintDiffNode);
-                digShape = constraintedShape;
-            }
+            // We apply the constraint by substracting it from the given shape.
+            CsgOpConcat constraintedShape = new CsgOpConcat();
+            constraintedShape.AddNode(shape);
+            constraintedShape.AddNode(constraintDiffNode);
+            digShape = constraintedShape;
 
             CsgNode digNode = null;
             // Depending on the digging mode, we either add or substract the digging shape from the terrain.
@@ -80,6 +61,9 @@ namespace UpvoidMiner
             } else {
                 digNode = new CsgOpUnion(digShape);
             }
+
+            // Callback for statistical purposes.
+            digNode = new CsgStatCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback", digNode, 4, 4);
 
             world.Terrain.ModifyTerrain(shapeBoundary, digNode);
         }
@@ -90,6 +74,11 @@ namespace UpvoidMiner
             sphereNode.SetParameterVec3("spherePosition", position);
 
             Dig(sphereNode, new BoundingSphere(position, radius*1.25f), digMode);
+        }
+
+        public static void StatCallback(int mat, float volume, int lod)
+        {
+            Console.WriteLine("Mat " + mat + " changed by " + volume + " m^3");
         }
 
         /*
