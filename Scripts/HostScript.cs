@@ -155,9 +155,7 @@ namespace UpvoidMiner
                     "A test item.",
                     1f,
                     false,
-                    Resources.UseMaterial("::Rock", ModDomain),
-                    Resources.UseMesh("::Debug/Sphere", ModDomain),
-                    1f
+                    ItemCategory.Resources
                 );
 
                 world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i * 2f, ((i % 3) * 2f))));

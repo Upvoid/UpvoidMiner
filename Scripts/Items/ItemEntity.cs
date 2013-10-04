@@ -4,6 +4,7 @@ using Engine.Rendering;
 using Engine.Resources;
 using Engine.Universe;
 using Engine.Physics;
+using System.Collections.Generic;
 
 namespace UpvoidMiner
 {
@@ -11,49 +12,38 @@ namespace UpvoidMiner
     /// An entity representing an item lying around in the world.
     /// It "presents" the contained item graphically and physically. Responds to Interaction triggers with an AddItem trigger (so interaction means picking up the item).
     /// </summary>
-    public class ItemEntity: EntityScript
+    public class ItemEntity : EntityScript
     {
-        public Item PresentedItem;
-
-        protected PhysicsComponent physicsComponent;
-        protected RenderComponent renderComponent;
-        protected RenderComponent renderComponentShadow;
+        public Item RepresentedItem;
+        
+        protected List<PhysicsComponent> physicsComponents = new List<PhysicsComponent>();
+        protected List<RenderComponent> renderComponents = new List<RenderComponent>();
 
         TriggerId AddItemTrigger;
 
-        public ItemEntity(Item presentedItem)
+        public ItemEntity(Item representedItem)
         {
-            PresentedItem = presentedItem;
+            RepresentedItem = representedItem;
+        }
+
+        /// <summary>
+        /// Adds a physics component to this entity.
+        /// </summary>
+        public void AddPhysicsComponent(PhysicsComponent comp)
+        {
+            physicsComponents.Add(comp);
+        }
+        /// <summary>
+        /// Adds a render component to this entity.
+        /// </summary>
+        public void AddRenderComponent(RenderComponent comp)
+        {
+            renderComponents.Add(comp);
         }
 
         protected override void Init()
         {
-            // Create the physical representation of the item.
-            RigidBody body = ContainingWorld.Physics.CreateAndAddRigidBody(
-                50f,
-                mat4.Translate(thisEntity.Position),
-                new SphereShape(PresentedItem.EntityRadius)
-            );
-
-            physicsComponent = new PhysicsComponent(thisEntity, body, mat4.Identity);
-
-            // Create the graphical representation of the item.
-            MeshRenderJob renderJob = new MeshRenderJob(
-                Renderer.Opaque.Mesh,
-                PresentedItem.EntityMaterial,
-                PresentedItem.EntityMesh,
-                mat4.Identity
-                );
-            renderComponent = new RenderComponent(thisEntity, mat4.Identity, renderJob, true);
-
-            MeshRenderJob renderJobShadow = new MeshRenderJob(
-                Renderer.Shadow.Mesh, 
-                Resources.UseMaterial("::Shadow", HostScript.ModDomain), 
-                PresentedItem.EntityMesh,
-                mat4.Identity
-                );
-            renderComponentShadow = new RenderComponent(thisEntity, mat4.Identity, renderJobShadow, true);
-
+            RepresentedItem.SetupItemEntity(this, thisEntity);
 
             // Set up the triggers.
             AddItemTrigger = TriggerId.getIdByName("AddItem");
@@ -68,12 +58,13 @@ namespace UpvoidMiner
                 return;
 
             // Interacting with an item means picking it up. Answer by sending the item to the sender.
-            interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(PresentedItem);
+            interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(RepresentedItem);
 
             // For now, simply hide this entity (entity deletion is not yet possible)
-            renderComponent.Visible = false;
-            renderComponentShadow.Visible = false;
-            physicsComponent.Transform = mat4.Scale(0f);
+            foreach (RenderComponent comp in renderComponents)
+                comp.Visible = false;
+            foreach (PhysicsComponent comp in physicsComponents)
+                comp.Transform = mat4.Scale(0f);
         }
     }
 }

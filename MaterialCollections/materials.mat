@@ -323,3 +323,8 @@
     ParticleAttribute: aParticleSize
     ParticleAttribute: aParticleAngle
     ParticleAttribute: aParticleLife
+    
+[Items/Dummy] : Default
+	Shader: ::Opaque/MeshTextured
+	Texture: uColor, Items/ItemDummy
+    Color: uSpecularColor, .0, .0, .0, 4

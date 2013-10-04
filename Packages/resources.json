@@ -247,6 +247,16 @@
 {
     "Descriptor" : {
         "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "Items/ItemDummy",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Type": "File",
         "sRGB": false
     },
     "Name" : "Metal.Normal",
@@ -905,6 +915,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Miner/DroneConstraintVerticalDistort",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/Dummy",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/Dummy",
     "Path" : "~.mat",
     "Type" : "Material"
 }

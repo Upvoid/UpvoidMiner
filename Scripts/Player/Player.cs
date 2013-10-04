@@ -78,7 +78,7 @@ namespace UpvoidMiner
         /// <summary>
         /// A list of items representing the inventory of the player.
         /// </summary>
-        public List<Item> inventory = new List<Item>();
+        public readonly Inventory Inventory;
 
         /// <summary>
         /// List of drones of the player.
@@ -102,6 +102,7 @@ namespace UpvoidMiner
 			camera = _camera;
             Input.OnPressInput += HandlePressInput;
 			Input.OnAxisInput += HandleAxisInput;
+            Inventory = new Inventory(this);
 		}
 
         public void Update(float elapsedSeconds)
@@ -273,7 +274,7 @@ namespace UpvoidMiner
                 return;
 
             // Add the received item to the inventory.
-            inventory.Add(addItemMsg.PickedItem);
+            Inventory.AddItem(addItemMsg.PickedItem);
 
         }
 

@@ -28,7 +28,7 @@ namespace UpvoidMiner
             // For now, the inventory is displayed as a list of the item names.
 
             List<string> itemList = new List<string>();
-            foreach(Item item in player.inventory) {
+            foreach(Item item in player.Inventory.Items) {
                 itemList.Add(item.Name);
             }
 
