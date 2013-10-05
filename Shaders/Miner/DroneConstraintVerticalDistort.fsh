@@ -35,10 +35,9 @@ void main()
     distort += normalize(vec2(distance(vWorldPos.xz, vRef1.xz), distance(vWorldPos.y, vRef1.y))) * a1;
     distort += normalize(vec2(distance(vWorldPos.xz, vRef2.xz), distance(vWorldPos.y, vRef2.y))) * a2;
 
-    float modY = 1 - abs(vObjPos.y);
     float modX1 = max(uXAlphaMin, 1 - dis1 / uScale2);
     float modX2 = max(uXAlphaMin, 1 - dis2 / uScale2);
-    distort *= min(modY, max(modX1, modX2));
+    distort *= max(modX1, modX2);
 
     //distort = vec2(cos(uRuntime), sin(uRuntime)) * 20;
     distort *= 20;
