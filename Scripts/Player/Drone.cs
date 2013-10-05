@@ -52,7 +52,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Scale of the drone.
         /// </summary>
-        private const float DroneScale = 2f;
+        private const float DroneScale = 1.3f;
 
         /// <summary>
         /// Total lifetime of the drone.

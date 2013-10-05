@@ -232,8 +232,8 @@
     Texture: uNoise, Miner/ConstraintsNoise
     Color: uColor1, 0, 1, 1, .8
     Color: uColor2, 0, 0, 0, .8
-    Parameter: uRepX, 2
-    Parameter: uScaleY, 600
+    Parameter: uRepX, 1
+    Parameter: uScaleY, 1200
     Parameter: uHeight, 6
     Parameter: uSpeed, -.01
     Parameter: uOffsetY, -.35

@@ -159,7 +159,7 @@ namespace UpvoidMiner
 			// For now, attach this entity to a simple sphere physics object.
 			physicsComponent = new PhysicsComponent(thisEntity,
                                  character.Body,
-			                     mat4.Translate(new vec3(0, 0.6f, 0)));
+			                     mat4.Translate(new vec3(0, 0.2f, 0)));
 
             physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
 
