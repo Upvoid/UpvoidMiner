@@ -878,23 +878,23 @@
 {
     "Descriptor" : {
         "Collection" : "materials",
-        "Name" : "Particle/Smoke",
+        "Name" : "Particles/Smoke",
         "Type" : "FromCollection"
     },
-    "Name" : "Particle/Smoke",
+    "Name" : "Particles/Smoke",
     "Path" : "~.mat",
     "Type" : "Material"
 },
 {
     "Descriptor" : {
         "Files" : [
-            "Particle/ParticleBillboardSmoke.fsh",
-            "Particle/ParticleBillboard.vsh"
+            "Particles/ParticleBillboardSmoke.fsh",
+            "Particles/ParticleBillboard.vsh"
         ],
-        "Name" : "Particle/Smoke",
+        "Name" : "Particles/Smoke",
         "Type" : "File"
     },
-    "Name" : "Particle/Smoke",
+    "Name" : "Particles/Smoke",
     "Path" : "~.shader",
     "Type" : "Shader"
 },

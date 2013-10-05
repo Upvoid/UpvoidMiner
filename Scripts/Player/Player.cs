@@ -170,7 +170,7 @@ namespace UpvoidMiner
             psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
             pcTorsoSteam = new CpuParticleComponent(thisEntity, psTorsoSteam, mat4.Identity);
             rcTorsoSteam = new RenderComponent(thisEntity, torsoTransform,
-                                               new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("::Particle/SmokeWhite", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
+                                               new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
                                                true);
 
             // This digging controller will perform digging and handle digging constraints for us.

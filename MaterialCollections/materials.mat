@@ -314,8 +314,8 @@
     Parameter: uTexScale, 30
     Parameter: uBlendingCoefficient, 4
 
-[Particle/Smoke] : CpuParticleDefault
-    Shader: Particle/Smoke
+[Particles/Smoke] : CpuParticleDefault
+    Shader: Particles/Smoke
     Texture: uColor, ::Material/Particles/Smoke0369_S
     Color: uColorFilter, 1, 1, 1, 1
     ParticleAttribute: aParticlePosition
@@ -325,6 +325,6 @@
     ParticleAttribute: aParticleLife
     
 [Items/Dummy] : Default
-	Shader: ::Opaque/MeshTextured
-	Texture: uColor, Items/ItemDummy
+    Shader: ::Opaque/MeshTextured
+    Texture: uColor, Items/ItemDummy
     Color: uSpecularColor, .0, .0, .0, 4
