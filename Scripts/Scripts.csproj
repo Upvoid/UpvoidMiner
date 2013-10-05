@@ -49,6 +49,7 @@
     <Compile Include="Items\VolumeItem.cs" />
     <Compile Include="Items\ResourceItem.cs" />
     <Compile Include="Items\MaterialItem.cs" />
+    <Compile Include="Items\CraftingRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
