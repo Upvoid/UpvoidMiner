@@ -74,7 +74,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Configures a renderjob for a vertical constraint between two drones.
         /// </summary>
-        private void configureVerticalConstraint(Drone first, Drone second, MeshRenderJob job1, MeshRenderJob job2, CsgExpression expr)
+        private void configureVerticalConstraint(Drone first, Drone second, MeshRenderJob job1, MeshRenderJob job2)
         {
             vec3 startPos = first.CurrentPosition;
             vec3 endPos = second.CurrentPosition;
@@ -91,10 +91,6 @@ namespace UpvoidMiner
                 );
 
             job1.ModelMatrix = job2.ModelMatrix = mat4.Translate(startPos) * transform * mat4.Scale(.5f) * mat4.Translate(new vec3(1, 0, 0));
-
-            // Configure expression.
-            expr.SetParameterVec3("planePos", startPos);
-            expr.SetParameterVec3("planeNormal", vec3.cross(dir, up));
         }
 
         /// <summary>
@@ -131,14 +127,18 @@ namespace UpvoidMiner
                                                                      Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", LocalScript.ModDomain),
                                                                      Resources.UseMesh("::Debug/Quad", LocalScript.ModDomain),
                                                                      mat4.Identity));
-                            constraintExpression.Add(new CsgExpression(1, "dot(planeNormal, (planePos - vec3(x, y, z))) * invert", LocalScript.ModDomain, "planeNormal:vec3, planePos:vec3, invert:float"));
+
+                            // Vertical drones cause a constraint by the intersection of the planes (i.e. the plane between two drones and the two shadow-planes).
+                            constraintExpression.Add(new CsgExpression(1, "max((dot(plane1Normal, vec3(x, y, z)) - plane1Dis), max( (dot(plane2Normal, vec3(x, y, z)) - plane2Dis), (dot(plane3Normal, vec3(x, y, z)) - plane3Dis)) )", 
+                                                                       LocalScript.ModDomain, 
+                                                                       "plane1Normal:vec3, plane1Dis:float, plane2Normal:vec3, plane2Dis:float, plane3Normal:vec3, plane3Dis:float"));
                             addJob = true;
                         }
                         
                         MeshRenderJob job1 = boundaryIndicators[i];
                         MeshRenderJob job2 = boundaryIndicatorsDistort[i];
 
-                        configureVerticalConstraint(first, second, job1, job2, constraintExpression[i]);
+                        configureVerticalConstraint(first, second, job1, job2);
 
                         if ( addJob )
                         {
@@ -153,39 +153,48 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-        /// Checks if a vertical constraint requires inversion
+        /// Configure the CSG Expression of a vertical constraint (including 'shadow').
         /// </summary>
-        private void checkVerticalConstraintInversion(vec3 refPos, Drone first, Drone second, ref float proInvert, ref float conInvert)
+        private void configureVerticalConstraintExpression(vec3 refPos, Drone first, Drone second, CsgExpression expr)
         {
+            // Calculate primary plane.
             vec3 start = first.CurrentPosition;
             vec3 end = second.CurrentPosition;
+            vec3 mid = (start + end) / 2f;
 
             vec3 up = new vec3(0, 1, 0);
             vec3 dir = end - start;
             vec3 normal = vec3.cross(dir, up);
 
-            vec3 d = refPos - start;
-            bool inside = vec3.dot(d, normal) > 0;
+            vec3 d = refPos - mid;
+            bool invert = vec3.dot(d, normal) < 0;
+            if ( invert ) normal *= -1f;
             
-            float dis1 = vec2.distance(new vec2(start.x, start.z), new vec2(refPos.x, refPos.z));
-            float dis2 = vec2.distance(new vec2(end.x, end.z), new vec2(end.x, end.z));
-            float confidence = 1f / (1f + dis1) + 1f / (1f + dis2);
+            expr.SetParameterVec3("plane1Normal", normal);
+            expr.SetParameterFloat("plane1Dis", vec3.dot(normal, mid));
 
-            if (inside)
-                conInvert += confidence;
-            else
-                proInvert += confidence;
+            // Caluclate first shadow plane
+            vec3 s1Pos = start;
+            vec3 s1Normal = vec3.cross(up, s1Pos - refPos);
+            if ( invert ) s1Normal *= -1f;
+            
+            expr.SetParameterVec3("plane2Normal", s1Normal);
+            expr.SetParameterFloat("plane2Dis", vec3.dot(s1Normal, s1Pos));
+
+            // Caluclate second shadow plane
+            vec3 s2Pos = end;
+            vec3 s2Normal = vec3.cross(s2Pos - refPos, up);
+            if ( invert ) s2Normal *= -1f;
+            
+            expr.SetParameterVec3("plane3Normal", s2Normal);
+            expr.SetParameterFloat("plane3Dis", vec3.dot(s2Normal, s2Pos));
         }
 
         /// <summary>
         /// Adds all csg constraints to a diff node.
         /// </summary>
         public void AddCsgConstraints(CsgOpDiff diffNode, vec3 refPos)
-        {
-            /// Check if csg constraints require inversion.
-            float proInvert = 0;
-            float conInvert = 0;
-            
+        {            
             Drone refDrone = ReferenceDrone;
             switch (refDrone.Type)
             {
@@ -194,18 +203,15 @@ namespace UpvoidMiner
                     {
                         Drone first = drones[i];
                         Drone second = drones[i+1];
+                        CsgExpression expr = constraintExpression[i];
 
-                        checkVerticalConstraintInversion(refPos, first, second, ref proInvert, ref conInvert);
+                        configureVerticalConstraintExpression(refPos, first, second, expr);
+
+                        diffNode.AddNode(expr);
                     }
                     break;
                 default: Debug.Fail("Not implemented/Invalid");
                     break;
-            }
-
-            foreach (var expr in constraintExpression)
-            {
-                expr.SetParameterFloat("invert", proInvert > conInvert ? 1f : -1f);
-                diffNode.AddNode(expr);
             }
         }
     }
