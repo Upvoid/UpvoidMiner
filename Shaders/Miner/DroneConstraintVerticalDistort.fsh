@@ -7,7 +7,7 @@ uniform float uScale = 20;
 uniform float uScale2 = 5;
 uniform float uSpeed = 1;
 uniform float uSineOffset = -.4;
-uniform float uXAlphaMin = .3;
+uniform float uXAlphaMin = .0;
 
 in vec3 vObjPos;
 in vec3 vWorldPos;

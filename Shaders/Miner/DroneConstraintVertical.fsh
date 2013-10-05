@@ -2,18 +2,22 @@
 
 #include <Common/Lighting.fsh>
 
-uniform vec4 uColor = vec4(1);
-uniform float uScale = 20;
-uniform float uScale2 = 5;
-uniform float uSpeed = 1;
-uniform float uSineOffset = -.4;
-uniform float uXAlphaMin = .3;
+uniform sampler2D uPattern;
+uniform sampler2D uNoise;
+uniform vec4 uColor1 = vec4(1);
+uniform vec4 uColor2 = vec4(0);
+uniform float uScaleY;
+uniform float uNoiseScale;
+uniform float uSpeed;
+uniform float uRepX;
+uniform float uOffsetY;
 
 in vec3 vObjPos;
 in vec3 vWorldPos;
 
 in vec3 vRef1;
 in vec3 vRef2;
+in float vScaleX;
 
 OUTPUT_CHANNEL_TransparentColor(vec4)
 
@@ -21,23 +25,29 @@ void main()
 {
     INIT_CHANNELS;
 
-    vec4 transColor = uColor;
+    vec4 transColor = vec4(0);
 
-    float dis1 = distance(vWorldPos, vRef1);
-    float dis2 = distance(vWorldPos, vRef2);
-    //float dis1 = distance(vWorldPos.xz, vRef1.xz) + distance(vWorldPos.y, vRef1.y);
-    //float dis2 = distance(vWorldPos.xz, vRef2.xz) + distance(vWorldPos.y, vRef2.y);
+    // hexagrid
+    float disY = vObjPos.y * uScaleY;
+    float disX = distance(vWorldPos.xz, vRef1.xz) * vScaleX / uRepX;
 
-    const float phase = .982;
-    float a1 = cos(dis1 * uScale + uRuntime * uSpeed + phase) + uSineOffset;
-    float a2 = cos(dis2 * uScale + uRuntime * uSpeed + phase) + uSineOffset;
-    transColor.a *= min(1, max(0, max(a1, a2)) * 1.5 );
-    //transColor.a *= cos(vObjPos.y * vObjPos.y * uScale + uRuntime * uSpeed);
-    //transColor.a *= transColor.a;
-    float modY = 1 - abs(vObjPos.y);
-    float modX1 = max(uXAlphaMin, 1 - dis1 / uScale2);
-    float modX2 = max(uXAlphaMin, 1 - dis2 / uScale2);
-    transColor.a *= min(modY, max(modX1, modX2));
+    vec2 texCoord = vec2(disX, disY + uOffsetY);
+    vec4 grid = texture(uPattern, vec2(disX, disY + uOffsetY));
+
+    vec3 color1 = uColor1.rgb;
+    vec3 color2 = uColor2.rgb;
+
+    transColor = vec4(color1,1 * smoothstep(.3, .6, grid.a));
+
+    transColor = mix(transColor, vec4(color2, 1), smoothstep(.5, .8, grid.a));
+
+    // vertical fade-out
+    vec4 roughNoise = texture(uNoise, texCoord * uNoiseScale + vec2(0, uSpeed * uRuntime * sign(vObjPos.y)));
+    transColor.a *= 1 - smoothstep(.3, 1.0, abs(vObjPos.y) + roughNoise.x * .7 - .2);
+
+
+
+    transColor.a *= .5;
 
     OUTPUT_TransparentColor(transColor);
 }

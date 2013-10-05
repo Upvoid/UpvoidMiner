@@ -79,7 +79,7 @@ namespace UpvoidMiner
             vec3 startPos = first.CurrentPosition;
             vec3 endPos = second.CurrentPosition;
 
-            vec3 up = new vec3(0, 14, 0);
+            vec3 up = new vec3(0, 14 * 2, 0);
             vec3 dir = endPos - startPos;
 
             // This transforms x from start to end and y from -up to up.
@@ -111,6 +111,14 @@ namespace UpvoidMiner
                     {
                         Drone first = drones[i];
                         Drone second = drones[i+1];
+
+                        // Swap every other drone.
+                        if ( i % 2 == 1 )
+                        {
+                            Drone tmp  = first;
+                            first = second;
+                            second = tmp;
+                        }
 
                         bool addJob = false;
                         if ( boundaryIndicators.Count <= i )

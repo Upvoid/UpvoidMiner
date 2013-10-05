@@ -323,6 +323,25 @@
     "Path" : "~.png",
     "Type" : "Texture"
 },
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false,
+        "PremultipliedAlpha": true
+    },
+    "Name" : "Miner/Constraints",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "Miner/ConstraintsNoise",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
 
 {
     "Descriptor" : {
