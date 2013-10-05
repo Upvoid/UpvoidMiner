@@ -10,6 +10,8 @@ namespace UpvoidMiner
 {
     public class DiggingController
     {
+        private static Random random = new Random();
+
         public enum DigMode
         {
             Substract,
@@ -30,12 +32,30 @@ namespace UpvoidMiner
         /// </summary>
         CsgExpression sphereNode;
 
+        /// <summary>
+        /// Particle system for 3D stones due to digging.
+        /// </summary>
+        static CpuParticleSystemBase particlesStones;
+        RenderComponent particlesStonesRC;
+        CpuParticleComponent particlesStonesPC;
+
         public DiggingController(World world, Player player)
         {
             this.world = world;
             this.player = player;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
             sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
+
+            // Create particle systems.
+            particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
+            particlesStonesPC = new CpuParticleComponent(LocalScript.ParticleEntity, particlesStones, mat4.Identity);
+            particlesStonesRC = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity, 
+                                                    new CpuParticleRenderJob(particlesStones, 
+                                                        Renderer.Opaque.CpuParticles, 
+                                                        Resources.UseMaterial("::Particle/Rock", null), 
+                                                        Resources.UseMesh("::Particles/Rock", null), 
+                                                        mat4.Identity), 
+                                                    true);
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode = DigMode.Substract)
@@ -65,6 +85,7 @@ namespace UpvoidMiner
             // Callback for statistical purposes.
             CsgStatCallback finalNode = new CsgStatCallback(digNode, 4, 4);
             finalNode.AddSimpleVolumeCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
+            finalNode.AddVolumeChangePointCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
 
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
@@ -80,6 +101,28 @@ namespace UpvoidMiner
         public static void StatCallback(int mat, float volume, int lod)
         {
             Console.WriteLine("Mat " + mat + " changed by " + volume + " m^3");
+        }
+
+        private static vec3 RandomDir()
+        {
+            return new vec3(
+                (float)random.NextDouble() - .5f,
+                (float)random.NextDouble() - .5f,
+                (float)random.NextDouble() - .5f
+                ).Normalized;
+        }
+
+        public static void PointCallback(float x, float y, float z, int matPrev, int matNow, int lod)
+        {
+            if ( matPrev != 0 && matNow == 0 )
+                particlesStones.AddParticle3D(new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
+                                              RandomDir() * (float)random.NextDouble() * .4f,
+                                              new vec4(1),
+                                              .2f + (float)random.NextDouble() * .3f,
+                                              .2f + (float)random.NextDouble() * .3f,
+                                              RandomDir(),
+                                              RandomDir(),
+                                              new vec3(0));
         }
 
         /*
