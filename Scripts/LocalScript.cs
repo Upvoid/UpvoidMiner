@@ -49,6 +49,12 @@ namespace UpvoidMiner
 		/// </summary>
         public static World world;
 
+        /// <summary>
+        /// A global entity that is located in the origin and can be used to spawn particles.
+        /// This is more or less a workaround so that particles behave more plausible.
+        /// </summary>
+        public static AnonymousEntity ParticleEntity;
+
 		/// <summary>
 		/// The main camera that renders to the screen.
 		/// </summary>
@@ -92,6 +98,9 @@ namespace UpvoidMiner
 			world.AttachCamera(camera);
 			if(Rendering.ActiveMainPipeline != null)
 				Rendering.ActiveMainPipeline.SetCamera(camera);
+
+            // Create particle entity.
+            ParticleEntity = new AnonymousEntity(world, mat4.Identity);
 
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.

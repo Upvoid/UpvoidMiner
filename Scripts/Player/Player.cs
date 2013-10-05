@@ -129,9 +129,12 @@ namespace UpvoidMiner
                    new mat4(left, up, Direction, new vec3()) * torsoTransform;
             }
 
-            rcTorsoSteam.Transform = rcTorso.Transform * torsoSteamOffset;
-            psTorsoSteam.SetSpawner2D(.2f, new BoundingSphere(new vec3(0), .01f), 
-                                      new vec3(.13f, 0.05f, 0), new vec3(.16f, 0.07f, 0),
+            mat4 steamTransform = thisEntity.Transform * rcTorso.Transform * torsoSteamOffset; 
+            vec3 steamOrigin = new vec3(steamTransform * new vec4(0,0,0,1));
+            vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
+            vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
+            psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
+                                      steamVeloMin, steamVeloMax,
                                       new vec4(new vec3(.9f), .8f), new vec4(new vec3(.99f), .9f),
                                       2.0f, 3.4f,
                                       .1f, .2f,
@@ -168,8 +171,8 @@ namespace UpvoidMiner
 			                                    new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
 			                                    true);
             psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
-            pcTorsoSteam = new CpuParticleComponent(thisEntity, psTorsoSteam, mat4.Identity);
-            rcTorsoSteam = new RenderComponent(thisEntity, torsoTransform,
+            pcTorsoSteam = new CpuParticleComponent(LocalScript.ParticleEntity, psTorsoSteam, mat4.Identity);
+            rcTorsoSteam = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
                                                new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
                                                true);
 
