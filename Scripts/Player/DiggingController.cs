@@ -63,9 +63,10 @@ namespace UpvoidMiner
             }
 
             // Callback for statistical purposes.
-            digNode = new CsgStatCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback", digNode, 4, 4);
+            CsgStatCallback finalNode = new CsgStatCallback(digNode, 4, 4);
+            finalNode.AddSimpleVolumeCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
 
-            world.Terrain.ModifyTerrain(shapeBoundary, digNode);
+            world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
         public void DigSphere(vec3 position, float radius, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
