@@ -182,7 +182,28 @@ namespace UpvoidMiner
             gui = new PlayerGui(this);
 
             AddTriggerSlot("AddItem");
+
+            generateInitialItems();
 		}
+
+        /// <summary>
+        /// Populates the inventory with a list of items that we start with.
+        /// </summary>
+        void generateInitialItems()
+        {
+            TerrainMaterial dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
+            TerrainMaterial stone03 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.03"); 
+
+            Inventory.AddResource(dirt, 10);
+            Inventory.AddItem(new ResourceItem(dirt, 3f));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Sphere, new vec3(1)));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Sphere, new vec3(1), 2));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Cylinder, new vec3(1,2,2)));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Sphere, new vec3(2)));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Cube, new vec3(2)));
+            Inventory.AddItem(new MaterialItem(stone03, MaterialShape.Cylinder, new vec3(1,2,2)));
+            Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));
+        }
 
 		void HandleAxisInput (object sender, InputAxisArgs e)
 		{

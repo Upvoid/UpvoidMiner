@@ -13,10 +13,23 @@ namespace UpvoidMiner
         /// </summary>
         public readonly TerrainMaterial Material;
         
-        public ResourceItem(TerrainMaterial material) :
-            base(material.Name, "The terrain resource " + material.Name, 1.0f, false, ItemCategory.Resources)
+        public ResourceItem(TerrainMaterial material, float volume = 0f) :
+            base(material.Name, "The terrain resource " + material.Name, 1.0f, false, ItemCategory.Resources, volume)
         {
             Material = material;
+        }
+
+        /// <summary>
+        /// This can be merged with resource items of the same resource
+        /// </summary>
+        public override bool TryMerge(Item rhs)
+        {
+            ResourceItem item = rhs as ResourceItem;
+            if ( item == null ) return false;
+            if ( item.Material.MaterialIndex != Material.MaterialIndex ) return false;
+
+            Volume += item.Volume;
+            return true;
         }
     }
 }

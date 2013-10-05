@@ -46,7 +46,7 @@ namespace UpvoidMiner
 
             {
                 // For now, register a single ground material.
-                MatGround = terr.RegisterMaterial("Ground");
+                MatGround = terr.RegisterMaterial("Dirt");
 
                 // Add Gras attribute for LoD 4 (= MinLoD).
                 MatGround.AddAttributeFloat("aGras", 0, 0, 4);

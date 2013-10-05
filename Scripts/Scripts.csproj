@@ -48,6 +48,7 @@
     <Compile Include="Items\DiscreteItem.cs" />
     <Compile Include="Items\VolumeItem.cs" />
     <Compile Include="Items\ResourceItem.cs" />
+    <Compile Include="Items\MaterialItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

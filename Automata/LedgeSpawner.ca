@@ -10,13 +10,13 @@ cells
   0,0,1  as Back
 
 pre
-  this.material   is "Ground"
-  Top.material    is "Ground"
-  Bottom.material is "Ground"
-  Left.material   is in {"Ground", void}
-  Right.material  is in {"Ground", void}
-  Front.material  is in {"Ground", void}
-  Back.material   is in {"Ground", void}
+  this.material   is "Dirt"
+  Top.material    is "Dirt"
+  Bottom.material is "Dirt"
+  Left.material   is in {"Dirt", void}
+  Right.material  is in {"Dirt", void}
+  Front.material  is in {"Dirt", void}
+  Back.material   is in {"Dirt", void}
 
 body
 

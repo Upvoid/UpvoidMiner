@@ -11,6 +11,7 @@
                 "Items/Inventory.cs",
                 "Items/ItemEntity.cs",
                 "Items/DiscreteItem.cs",
+                "Items/MaterialItem.cs",
                 "Items/VolumeItem.cs",
                 "Items/ResourceItem.cs",
                 "Player/Player.cs",

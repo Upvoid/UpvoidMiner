@@ -19,11 +19,16 @@ namespace UpvoidMiner
         /// The item's name. Does not have to be unique.
         /// </summary>
         public virtual string Name { get; protected set; }
-
+        
         /// <summary>
         /// A short description of the item.
         /// </summary>
         public virtual string Description { get; protected set; }
+
+        /// <summary>
+        /// A textual description of the stack size. Empty string equals "one".
+        /// </summary>
+        public virtual string StackDescription { get { return "";} }
 
         /// <summary>
         /// The physical weight of the item in kilograms.
@@ -93,6 +98,15 @@ namespace UpvoidMiner
                 );
             itemEntity.AddRenderComponent(new RenderComponent(entity, mat4.Identity, renderJobShadow, true));
 
+        }
+
+        /// <summary>
+        /// Tries to merge this item with the given item.
+        /// Returns true, if merge was successful.
+        /// </summary>
+        public virtual bool TryMerge(Item rhs)
+        {
+            return false;
         }
     }
 }

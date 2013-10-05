@@ -71,9 +71,18 @@ namespace UpvoidMiner
         public void AddItem(Item item)
         {
             Debug.Assert(item != null);
+
+            // Try to merge with already possessed item.
+            foreach (var it in Items)
+                if ( it.TryMerge(item) )
+                    return;
+
+            // If unsuccessful: add item
             Items.Add(item);
 
-            for (int i = 0; i < quickAccessItems.Length; ++i)
+            // And if enough space, also add it to quickAccess
+            // Caution: highest quick access is only temporary
+            for (int i = 0; i < quickAccessItems.Length - 1; ++i)
             {
                 if (quickAccessItems[i] == null)
                 {

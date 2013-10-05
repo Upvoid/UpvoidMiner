@@ -5,7 +5,7 @@ cells
   0, 1, 0 as Top
 
 pre
-  this.material is "Ground"
+  this.material is "Dirt"
   Top.material is void
 
 body
