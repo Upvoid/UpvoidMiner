@@ -1,5 +1,5 @@
 using System;
-
+using System.Diagnostics;
 using Engine;
 using Engine.Universe;
 using Engine.Resources;
@@ -11,6 +11,11 @@ namespace UpvoidMiner
     public class DiggingController
     {
         private static Random random = new Random();
+
+        /// <summary>
+        /// Singleton for this controller.
+        /// </summary>
+        private static DiggingController instance;
 
         public enum DigMode
         {
@@ -35,12 +40,14 @@ namespace UpvoidMiner
         /// <summary>
         /// Particle system for 3D stones due to digging.
         /// </summary>
-        static CpuParticleSystemBase particlesStones;
+        CpuParticleSystemBase particlesStones;
         RenderComponent particlesStonesRC;
         CpuParticleComponent particlesStonesPC;
 
         public DiggingController(World world, Player player)
         {
+            Debug.Assert(instance == null, "Singleton is violated");
+            instance = this;
             this.world = world;
             this.player = player;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
@@ -98,11 +105,26 @@ namespace UpvoidMiner
             Dig(sphereNode, new BoundingSphere(position, radius*1.25f), digMode);
         }
 
+        /// <summary>
+        /// This callback is called once per changed material in a chunk and reports the amount of volume changed (in m^3).
+        /// </summary>
         public static void StatCallback(int mat, float volume, int lod)
         {
-            Console.WriteLine("Mat " + mat + " changed by " + volume + " m^3");
+            if ( mat != 0 )
+            {
+                // Resolve terrain material.
+                TerrainMaterial material = instance.world.Terrain.QueryMaterialFromIndex(mat);
+                Debug.Assert(material != null, "Invalid terrain material");
+
+                // Add proper amount of material to player inventory.
+                // If the material changed by a negative volume we want to collect a positive amount.
+                instance.player.Inventory.AddResource(material, -volume);
+            }
         }
 
+        /// <summary>
+        /// Returns a random direction (currently biased towards cube edges).
+        /// </summary>
         private static vec3 RandomDir()
         {
             return new vec3(
@@ -112,17 +134,21 @@ namespace UpvoidMiner
                 ).Normalized;
         }
 
+        /// <summary>
+        /// This callback is called for every point that changes materials in a digging operation.
+        /// </summary>
         public static void PointCallback(float x, float y, float z, int matPrev, int matNow, int lod)
         {
+            // If material was changed from non-air to air: add a particle animation.
             if ( matPrev != 0 && matNow == 0 )
-                particlesStones.AddParticle3D(new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
-                                              RandomDir() * (float)random.NextDouble() * .4f,
-                                              new vec4(1),
-                                              .2f + (float)random.NextDouble() * .3f,
-                                              .2f + (float)random.NextDouble() * .3f,
-                                              RandomDir(),
-                                              RandomDir(),
-                                              new vec3(0));
+                instance.particlesStones.AddParticle3D(new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
+                                                       RandomDir() * (float)random.NextDouble() * .4f,
+                                                       new vec4(1),
+                                                       .2f + (float)random.NextDouble() * .3f,
+                                                       .2f + (float)random.NextDouble() * .3f,
+                                                       RandomDir(),
+                                                       RandomDir(),
+                                                       new vec3(0));
         }
 
         /*
