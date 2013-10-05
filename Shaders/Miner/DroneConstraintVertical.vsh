@@ -10,6 +10,7 @@ in vec3 aNormal;
 
 out vec3 vObjPos;
 out vec3 vWorldPos;
+out vec4 vScreenPos;
 out vec3 vRef1;
 out vec3 vRef2;
 out float vScaleX;
@@ -31,6 +32,8 @@ void main()
 
     // projected vertex position used for the interpolation
     vec4 eyePos = uViewMatrix * vec4(vWorldPos, 1.0);
-    eyePos.z += .01; // Workaround for z-Fighting with terrain.
-    gl_Position  = uProjectionMatrix * eyePos;
+    eyePos.z += .02; // Workaround for z-Fighting with terrain.
+    vec4 screenPos  = uProjectionMatrix * eyePos;
+    vScreenPos = screenPos;
+    gl_Position = screenPos;
 }

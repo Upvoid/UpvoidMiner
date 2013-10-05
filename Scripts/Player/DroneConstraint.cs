@@ -79,7 +79,7 @@ namespace UpvoidMiner
             vec3 startPos = first.CurrentPosition;
             vec3 endPos = second.CurrentPosition;
 
-            vec3 up = new vec3(0, 14 * 2, 0);
+            vec3 up = new vec3(0, 14 * 2 * 100, 0);
             vec3 dir = endPos - startPos;
 
             // This transforms x from start to end and y from -up to up.
