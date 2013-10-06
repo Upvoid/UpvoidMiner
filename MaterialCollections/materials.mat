@@ -220,6 +220,66 @@
     Parameter: uTexScale, .8
     Parameter: uBlendingCoefficient, 4
 
+[Terrain/Coal] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Stones/Stones10.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Stones/Stones10.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Stones/Stones10.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 2.8
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Iron] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Manmade/Chainlinks.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Manmade/Chainlinks.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Manmade/Chainlinks.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 0.5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Gold] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/GoldBars.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 3.5
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/Copper] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Goods/Coins.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Goods/Coins.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Goods/Coins.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/Coins.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Goods/Coins.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Goods/Coins.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 1.3
+    Parameter: uBlendingCoefficient, 4
+
+[Terrain/AoiCrystal] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/Gems01.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Goods/Gems01.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Goods/Gems01.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, 3.0
+    Parameter: uBlendingCoefficient, 4
+
 [Miner/Torso] : Default
     Shader: Miner/Metal
     Texture: uColorXZ, Metal.Diffuse

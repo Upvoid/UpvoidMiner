@@ -887,6 +887,56 @@
 {
     "Descriptor" : {
         "Collection" : "materials",
+        "Name" : "Terrain/Coal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Coal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Iron",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Iron",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Gold",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Gold",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/AoiCrystal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/AoiCrystal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Terrain/Copper",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Copper",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
         "Name" : "Miner/Torso",
         "Type" : "FromCollection"
     },

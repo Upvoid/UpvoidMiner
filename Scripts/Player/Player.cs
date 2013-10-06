@@ -264,7 +264,7 @@ namespace UpvoidMiner
 							digging.DigSphere(_position, diggingSphereRadius);
                         } else if (e.Key == InputKey.MouseMiddle) {
                             // TODO: proper terrain material index.
-                            digging.DigSphere(_position, diggingSphereRadius, ContainingWorld.Terrain.QueryMaterialFromName("Wood").MaterialIndex, DiggingController.DigMode.Add);
+                            digging.DigSphere(_position, diggingSphereRadius, ContainingWorld.Terrain.QueryMaterialFromName("Dirt").MaterialIndex, DiggingController.DigMode.Add);
                         }
 
                     }

@@ -110,6 +110,46 @@ namespace UpvoidMiner
                 mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Wood", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
 
+            // Register coal materials.
+            {
+                var mat = terr.RegisterMaterial("Coal");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Coal", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
+            // Register iron materials.
+            {
+                var mat = terr.RegisterMaterial("Iron");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Iron", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
+            // Register gold materials.
+            {
+                var mat = terr.RegisterMaterial("Gold");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Gold", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
+            // Register crystal materials.
+            {
+                var mat = terr.RegisterMaterial("AoiCrystal");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/AoiCrystal", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
+            // Register copper materials.
+            {
+                var mat = terr.RegisterMaterial("Copper");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Copper", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
             return base.init();
         }
 
