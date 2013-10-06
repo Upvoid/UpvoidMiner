@@ -425,3 +425,12 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
+    
+[Items/ResourcePreviewIndicator] : Default
+    Shader: ::Transparent/MeshFresnelColored
+    Color: uColor, 0,1,1, .2
+    Color: uSpecularColor, .0, .0, .0, 4
+    Color: uColorFilter, 1, 1, 1, 1
+    Parameter: uFresnelMin, .2
+    Parameter: uFresnelPower, 1
+    Parameter: uLighting, 0

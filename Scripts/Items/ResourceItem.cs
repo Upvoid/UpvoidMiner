@@ -16,6 +16,7 @@ namespace UpvoidMiner
         /// </summary>
         private MeshRenderJob previewSphere;
         private MeshRenderJob previewSphereLimited;
+        private MeshRenderJob previewSphereIndicator;
         /// <summary>
         /// Radius of terrain material that is placed if "use"d.
         /// </summary>
@@ -75,6 +76,9 @@ namespace UpvoidMiner
             // And a second one in case we are limited by the volume at hand.
             previewSphereLimited = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewLimited", LocalScript.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewSphereLimited);
+            // And a third one for indicating the center.
+            previewSphereIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", LocalScript.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewSphereIndicator);
         }
 
         public override void OnUseParameterChange(float _delta) 
@@ -96,6 +100,8 @@ namespace UpvoidMiner
 
             // Radius of the primary preview is always use-radius.
             previewSphere.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            // Indicator is always in the center and relatively small.
+            previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }
 
         public override void OnDeselect()
@@ -103,6 +109,7 @@ namespace UpvoidMiner
             // Remove and delete it on deselect.
             LocalScript.world.RemoveRenderJob(previewSphere);
             LocalScript.world.RemoveRenderJob(previewSphereLimited);
+            LocalScript.world.RemoveRenderJob(previewSphereIndicator);
             previewSphere = null;
         }
     }
