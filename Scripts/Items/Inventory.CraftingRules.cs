@@ -23,11 +23,25 @@ namespace UpvoidMiner
             TerrainMaterial gold = player.ContainingWorld.Terrain.QueryMaterialFromName("Gold");
             TerrainMaterial copper = player.ContainingWorld.Terrain.QueryMaterialFromName("Copper");
             TerrainMaterial aoicrystal = player.ContainingWorld.Terrain.QueryMaterialFromName("AoiCrystal");
-            //TerrainMaterial stone03 = player.ContainingWorld.Terrain.QueryMaterialFromName("Stone.03"); 
 
             /*craftingRules.Add(new ExplicitCraftingRule(new MaterialItem(dirt, MaterialShape.Cube, new vec3(1)),
                                                        new [] { new ResourceItem(dirt, 1f) } ,
                                                        new [] { new ResourceItem(dirt, .5f) } ));*/
+
+            // Tools
+            
+            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.Pickaxe),
+                                                       (new [] { new ResourceItem(iron, 1f), new ResourceItem(wood, 1f) }),
+                                                       (new [] { new ResourceItem(iron, .1f), new ResourceItem(wood, .2f) })));
+            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.Axe),
+                                                       (new [] { new ResourceItem(iron, 1f), new ResourceItem(wood, 1f) }),
+                                                       (new [] { new ResourceItem(iron, .1f), new ResourceItem(wood, .2f) })));
+            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.Shovel),
+                                                       (new [] { new ResourceItem(iron, 1f), new ResourceItem(wood, 1f) }),
+                                                       (new [] { new ResourceItem(iron, .1f), new ResourceItem(wood, .2f) })));
+            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.SteamHammer),
+                                                       (new [] { new ResourceItem(iron, 4f), new ResourceItem(wood, 2f) }),
+                                                       (new [] { new ResourceItem(iron, .2f), new ResourceItem(wood, .3f) })));
 
             // MaterialItems
             List<TerrainMaterial> craftMaterials = new List<TerrainMaterial>();
