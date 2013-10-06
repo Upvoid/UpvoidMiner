@@ -22,8 +22,8 @@ namespace UpvoidMiner
         /// </summary>
         public override bool IsEmpty { get { return StackSize <= 0; } }
 
-        public DiscreteItem(string name, string description, float weight, bool isUsable, ItemCategory category, int stackSize = 1) :
-            base(name, description, weight, isUsable, category)
+        public DiscreteItem(string name, string description, float weight, ItemCategory category, int stackSize = 1) :
+            base(name, description, weight, category)
         {
             StackSize = stackSize;
         }

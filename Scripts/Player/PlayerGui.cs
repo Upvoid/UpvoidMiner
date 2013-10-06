@@ -23,6 +23,14 @@ namespace UpvoidMiner
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "Inventory", webInventory);
         }
 
+        /// <summary>
+        /// Is called when GUI changes for the player occurred.
+        /// </summary>
+        public void OnUpdate()
+        {
+            // TODO: notify the websocket that new data is available!
+        }
+
         void webInventory(WebRequest request, WebResponse response)
         {
             // For now, the inventory is displayed as a list of the item names.

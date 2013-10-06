@@ -27,7 +27,7 @@ namespace UpvoidMiner
         public readonly ToolType ToolType;
 
         public ToolItem(ToolType type, int stackSize = 1) :
-            base("", "", 1.0f, true, ItemCategory.Tools, stackSize)
+            base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {
             ToolType = type;
             switch (ToolType)

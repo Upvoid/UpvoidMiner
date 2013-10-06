@@ -22,8 +22,8 @@ namespace UpvoidMiner
         /// </summary>
         public override bool IsEmpty { get { return Volume <= .0001f; } }
 
-        public VolumeItem(string name, string description, float weight, bool isUsable, ItemCategory category, float volume = 0f) :
-            base(name, description, weight, isUsable, category)
+        public VolumeItem(string name, string description, float weight, ItemCategory category, float volume = 0f) :
+            base(name, description, weight, category)
         {
             Volume = volume;
         }

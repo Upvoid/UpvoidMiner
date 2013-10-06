@@ -39,12 +39,16 @@ namespace UpvoidMiner
         /// Category that this item belongs to.
         /// </summary>
         public virtual ItemCategory Category { get; protected set; }
-
+        
         /// <summary>
         /// True iff the item is usable.
         /// Examples for usable items are potions and weapons.
         /// </summary>
         public virtual bool IsUsable { get; protected set; }
+        /// <summary>
+        /// True iff the item has a preview when it is selected.
+        /// </summary>
+        public virtual bool HasPreview { get; protected set; }
 
         /// <summary>
         /// True iff the item represents an empty (or negative) amount of the item.
@@ -54,19 +58,31 @@ namespace UpvoidMiner
         /// <summary>
         /// If IsUsable is true, this executes the "use" action of the item. Does nothing otherwise.
         /// </summary>
-        public virtual void Use() {}
+        public virtual void OnUse() { }
+        /// <summary>
+        /// Is executed when this item is selected by a player.
+        /// </summary>
+        public virtual void OnSelect() { }
+        /// <summary>
+        /// Is executed when this item is de-selected by a player.
+        /// </summary>
+        public virtual void OnDeselect() { }
+        /// <summary>
+        /// Is executed when this item is selected and a preview ray point was found.
+        /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at.
+        /// </summary>
+        public virtual void OnPreview(vec3 _worldPos, bool _visible) { }
 
         /// <summary>
         /// Index for quickaccess, -1 for none.
         /// </summary>
         public int QuickAccessIndex { get; set; }
 
-        public Item(string name, string description, float weight, bool isUsable, ItemCategory category)
+        public Item(string name, string description, float weight, ItemCategory category)
         {
             Name = name;
             Description = description;
             Weight = weight;
-            IsUsable = isUsable;
             Category = category;
             QuickAccessIndex = -1;
         }

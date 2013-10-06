@@ -72,7 +72,7 @@ namespace UpvoidMiner
         }
 
         public MaterialItem(TerrainMaterial material, MaterialShape shape, vec3 size, int stackSize = 1):
-            base(material.Name + " " + shape, null, 1.0f, false, ItemCategory.Material, stackSize)
+            base(material.Name + " " + shape, null, 1.0f, ItemCategory.Material, stackSize)
         {
             Material = material;
             Shape = shape;

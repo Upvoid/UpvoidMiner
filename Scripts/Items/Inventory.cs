@@ -55,7 +55,14 @@ namespace UpvoidMiner
         public void Select(int idx)
         {
             Debug.Assert(0 <= idx && idx <= 9);
+
+            if ( idx == selectedItem ) return;
+
+            if ( quickAccessItems[selectedItem] != null )
+                quickAccessItems[selectedItem].OnDeselect();
             selectedItem = idx;
+            if ( quickAccessItems[selectedItem] != null )
+                quickAccessItems[selectedItem].OnSelect();
         }
 
         private void setDefaultQuickAccess(Item item)
@@ -86,12 +93,20 @@ namespace UpvoidMiner
             Debug.Assert(0 <= idx && idx <= 9);
 
             if (quickAccessItems[idx] != null)
+            {
+                if ( idx == selectedItem )
+                    quickAccessItems[idx].OnDeselect();
                 quickAccessItems[idx].QuickAccessIndex = -1;
+            }
 
             quickAccessItems[idx] = item;
 
             if ( item != null )
-                item.QuickAccessIndex = idx;
+            {
+                item.QuickAccessIndex = idx;                
+                if ( idx == selectedItem )
+                    item.OnSelect();
+            }
         }
 
         /// <summary>

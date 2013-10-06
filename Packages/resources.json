@@ -1006,6 +1006,16 @@
     "Name" : "Items/Dummy",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/ResourcePreview",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ResourcePreview",
+    "Path" : "~.mat",
+    "Type" : "Material"
 }
 
 ]

@@ -140,6 +140,26 @@ namespace UpvoidMiner
                                       .1f, .2f,
                                       0, 360,
                                       -.2f, .2f);
+
+            // Update item preview.
+            if ( Inventory.Selection != null && Inventory.Selection.HasPreview )
+            {
+                // Send a ray query to find the position on the terrain we are looking at.
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                    Item selection = Inventory.Selection;
+                    // Receiving the async ray query result here
+                    if(_hit)
+                    {
+                        /// Subtract a few cm toward camera to increase stability near constraints.
+                        _position -= camera.ForwardDirection * .04f;
+
+                        if ( selection != null )
+                            selection.OnPreview(_position, true);
+                    }
+                    else if ( selection != null )
+                        selection.OnPreview(vec3.Zero, false);
+                });
+            }
         }
 
         /// <summary>
@@ -175,6 +195,8 @@ namespace UpvoidMiner
             rcTorsoSteam = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
                                                new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
                                                true);
+            Debug.Assert(rcTorsoSteam.IsValid);
+            Debug.Assert(pcTorsoSteam.IsValid);
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
@@ -204,6 +226,9 @@ namespace UpvoidMiner
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
             Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));
+
+            Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+            gui.OnUpdate();
         }
 
 		void HandleAxisInput (object sender, InputAxisArgs e)
