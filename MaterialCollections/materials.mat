@@ -208,6 +208,18 @@
     Parameter: uTexScale, 5
     Parameter: uBlendingCoefficient, 4
 
+[Terrain/Wood] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Wood/Wood21.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Wood/Wood21.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Wood/Wood21.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScale, .8
+    Parameter: uBlendingCoefficient, 4
+
 [Miner/Torso] : Default
     Shader: Miner/Metal
     Texture: uColorXZ, Metal.Diffuse

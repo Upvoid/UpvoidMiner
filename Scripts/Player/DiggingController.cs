@@ -99,6 +99,7 @@ namespace UpvoidMiner
 
         public void DigSphere(vec3 position, float radius, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
         {
+            sphereNode.MaterialIndex = terrainMaterialId;
             sphereNode.SetParameterFloat("sphereRadius", radius);
             sphereNode.SetParameterVec3("spherePosition", position);
 

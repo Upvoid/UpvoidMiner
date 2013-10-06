@@ -877,6 +877,16 @@
 {
     "Descriptor" : {
         "Collection" : "materials",
+        "Name" : "Terrain/Wood",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Wood",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
         "Name" : "Miner/Torso",
         "Type" : "FromCollection"
     },

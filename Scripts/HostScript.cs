@@ -35,7 +35,6 @@ namespace UpvoidMiner
     public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
     {
         TerrainMaterial MatGround;
-        TerrainMaterial MatStone;
 
         /// <summary>
         /// Initializes the terrain materials and settings.
@@ -85,22 +84,30 @@ namespace UpvoidMiner
             // Register some simple stone materials.
             for (int i = 1; i <= 14; ++i)
             {
-                MatStone = terr.RegisterMaterial("Stone." + i.ToString("00"));
-                int pipeline = MatStone.AddDefaultPipeline(0);
-                MatStone.AddDefaultShadowAndZPre(pipeline);
-                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock" + i.ToString("00"), HostScript.ModDomain), Renderer.Opaque.Mesh);
+                var mat = terr.RegisterMaterial("Stone." + i.ToString("00"));
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Rock" + i.ToString("00"), HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
             {
-                MatStone = terr.RegisterMaterial("FireRock");
-                int pipeline = MatStone.AddDefaultPipeline(0);
-                MatStone.AddDefaultShadowAndZPre(pipeline);
-                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/FireRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                var mat = terr.RegisterMaterial("FireRock");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/FireRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
             {
-                MatStone = terr.RegisterMaterial("AlienRock");
-                int pipeline = MatStone.AddDefaultPipeline(0);
-                MatStone.AddDefaultShadowAndZPre(pipeline);
-                MatStone.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/AlienRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                var mat = terr.RegisterMaterial("AlienRock");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/AlienRock", HostScript.ModDomain), Renderer.Opaque.Mesh);
+            }
+
+            // Register wood materials.
+            {
+                var mat = terr.RegisterMaterial("Wood");
+                int pipeline = mat.AddDefaultPipeline(0);
+                mat.AddDefaultShadowAndZPre(pipeline);
+                mat.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/Wood", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
 
             return base.init();
