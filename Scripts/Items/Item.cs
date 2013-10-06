@@ -57,8 +57,9 @@ namespace UpvoidMiner
 
         /// <summary>
         /// If IsUsable is true, this executes the "use" action of the item. Does nothing otherwise.
+        /// _worldPos is the world position that the player points at.
         /// </summary>
-        public virtual void OnUse() { }
+        public virtual void OnUse(Player player, vec3 _worldPos) { }
         /// <summary>
         /// Is executed when this item is selected by a player.
         /// </summary>
@@ -67,6 +68,10 @@ namespace UpvoidMiner
         /// Is executed when this item is de-selected by a player.
         /// </summary>
         public virtual void OnDeselect() { }
+        /// <summary>
+        /// If selected and the user scrolls with the mouse wheel, this function is called with the delta. It should be used to modify 'OnUse' parameter.
+        /// </summary>
+        public virtual void OnUseParameterChange(float _delta) { }
         /// <summary>
         /// Is executed when this item is selected and a preview ray point was found.
         /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at.

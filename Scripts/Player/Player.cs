@@ -214,9 +214,9 @@ namespace UpvoidMiner
         /// </summary>
         void generateInitialItems()
         {
-            TerrainMaterial dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
+            // Testing resource/material items.
+            /*TerrainMaterial dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
             TerrainMaterial stone06 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.06"); 
-
             Inventory.AddResource(dirt, 10);
             Inventory.AddItem(new ResourceItem(dirt, 3f));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1)));
@@ -225,9 +225,14 @@ namespace UpvoidMiner
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(2)));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
-            Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));
+            Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
 
+            // Tools
+            Inventory.AddItem(new ToolItem(ToolType.Shovel));
+            Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
+            Inventory.AddItem(new ToolItem(ToolType.Axe));
             Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+
             gui.OnUpdate();
         }
 
@@ -235,6 +240,10 @@ namespace UpvoidMiner
 		{
 			if(e.Axis == AxisType.MouseWheelY) 
 			{
+                Item selection = Inventory.Selection;
+                if ( selection != null ) 
+                    selection.OnUseParameterChange(e.RelativeChange);
+
 				diggingSphereRadius = Math.Max(1.0f, diggingSphereRadius + e.RelativeChange);
 			}
 		}
@@ -260,6 +269,21 @@ namespace UpvoidMiner
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition));
         }
 
+        /// <summary>
+        /// Places a sphere of a given material
+        /// </summary>
+        public void PlaceSphere(TerrainMaterial material, vec3 position, float radius)
+        {
+            digging.DigSphere(position, radius, material.MaterialIndex, DiggingController.DigMode.Add);
+        }
+        /// <summary>
+        /// Digs a sphere at a given position with a given radius.
+        /// </summary>
+        public void DigSphere(vec3 position, float radius)
+        {
+            digging.DigSphere(position, radius);
+        }
+
         void HandlePressInput (object sender, InputPressArgs e)
         {
 
@@ -278,9 +302,9 @@ namespace UpvoidMiner
                     Inventory.Select(9); // Special '0'.
             }
 
-            // We don't have tools or items yet, so we hard-code digging on left mouse click here.
-            if((e.Key == InputKey.MouseLeft || e.Key == InputKey.MouseMiddle || e.Key == InputKey.C || e.Key == InputKey.V) && e.PressType == InputPressArgs.KeyPressType.Down) {
-
+            // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
+            if ( Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down ) 
+            {
                 // Send a ray query to find the position on the terrain we are looking at.
                 ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
                     // Receiving the async ray query result here
@@ -289,14 +313,13 @@ namespace UpvoidMiner
                         /// Subtract a few cm toward camera to increase stability near constraints.
                         _position -= camera.ForwardDirection * .04f;
 
-                        if (e.Key == InputKey.MouseLeft)
+                        // Use currently selected item.
+                        if ( e.Key == InputKey.MouseLeft )
                         {
-							digging.DigSphere(_position, diggingSphereRadius);
-                        } else if (e.Key == InputKey.MouseMiddle) {
-                            // TODO: proper terrain material index.
-                            digging.DigSphere(_position, diggingSphereRadius, ContainingWorld.Terrain.QueryMaterialFromName("Dirt").MaterialIndex, DiggingController.DigMode.Add);
+                            Item selection = Inventory.Selection;
+                            if ( selection != null )
+                                selection.OnUse(this, _position);
                         }
-
                     }
                 });
             }

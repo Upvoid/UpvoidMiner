@@ -1016,6 +1016,16 @@
     "Name" : "Items/ResourcePreview",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/ResourcePreviewLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ResourcePreviewLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
 }
 
 ]

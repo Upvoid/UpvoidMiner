@@ -77,6 +77,12 @@ namespace UpvoidMiner
         {
             return new ToolItem(ToolType, StackSize);
         }
+
+        public override void OnUse(Player player, Engine.vec3 _worldPos)
+        {
+            // For now: Every tool just digs a sphere.
+            player.DigSphere(_worldPos, 1f);
+        }
     }
 }
 
