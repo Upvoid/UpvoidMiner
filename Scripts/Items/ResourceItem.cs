@@ -28,21 +28,7 @@ namespace UpvoidMiner
             if ( item == null ) return false;
             if ( item.Material.MaterialIndex != Material.MaterialIndex ) return false;
 
-            if ( subtract )
-            {
-                if ( !force && Volume + .0001f < item.Volume )
-                    return false;
-
-                if ( !dryrun )
-                    Volume -= item.Volume;
-            }
-            else
-            {
-                if ( !dryrun )
-                    Volume += item.Volume;
-            }
-
-            return true;
+            return Merge(item, subtract, force, dryrun);
         }
 
         /// <summary>

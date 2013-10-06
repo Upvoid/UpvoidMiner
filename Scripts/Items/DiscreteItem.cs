@@ -27,6 +27,28 @@ namespace UpvoidMiner
         {
             StackSize = stackSize;
         }
+
+        /// <summary>
+        /// Helper for implementing TryMerge for discrete items
+        /// </summary>
+        protected bool Merge(DiscreteItem item, bool subtract, bool force, bool dryrun)
+        {
+            if ( subtract )
+            {
+                if ( !force && StackSize < item.StackSize )
+                    return false;
+
+                if ( !dryrun )
+                    StackSize -= item.StackSize;
+            }
+            else 
+            {
+                if ( !dryrun )
+                    StackSize += item.StackSize;
+            }
+
+            return true;
+        }
     }
 }
 

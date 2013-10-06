@@ -54,6 +54,7 @@
     <Compile Include="Items\ExplicitCraftingRule.cs" />
     <Compile Include="Items\MaterialCraftingRule.cs" />
     <Compile Include="Items\Inventory.CraftingRules.cs" />
+    <Compile Include="Items\ToolItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

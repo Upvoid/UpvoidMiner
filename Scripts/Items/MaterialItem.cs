@@ -91,21 +91,7 @@ namespace UpvoidMiner
             if ( item.Shape != Shape ) return false;
             if ( item.Size != Size ) return false;
 
-            if ( subtract )
-            {
-                if ( !force && StackSize < item.StackSize )
-                    return false;
-
-                if ( !dryrun )
-                    StackSize -= item.StackSize;
-            }
-            else 
-            {
-                if ( !dryrun )
-                    StackSize += item.StackSize;
-            }
-
-            return true;
+            return Merge(item, subtract, force, dryrun);
         }
 
         /// <summary>

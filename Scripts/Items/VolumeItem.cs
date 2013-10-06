@@ -27,6 +27,28 @@ namespace UpvoidMiner
         {
             Volume = volume;
         }
+
+        /// <summary>
+        /// Helper for implementing TryMerge for discrete items
+        /// </summary>
+        protected bool Merge(VolumeItem item, bool subtract, bool force, bool dryrun)
+        {
+            if ( subtract )
+            {
+                if ( !force && Volume + .0001f < item.Volume )
+                    return false;
+
+                if ( !dryrun )
+                    Volume -= item.Volume;
+            }
+            else
+            {
+                if ( !dryrun )
+                    Volume += item.Volume;
+            }
+
+            return true;
+        }
     }
 }
 
