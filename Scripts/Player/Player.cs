@@ -246,6 +246,11 @@ namespace UpvoidMiner
 				if ( e.Key == InputKey.F8 )
 					Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
 
+                // Quickaccess items.
+                if ( InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9 )
+                    Inventory.Select((int)e.Key - (int)InputKey.Key1);
+                if ( e.Key == InputKey.Key0 )
+                    Inventory.Select(9); // Special '0'.
             }
 
             // We don't have tools or items yet, so we hard-code digging on left mouse click here.

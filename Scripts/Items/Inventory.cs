@@ -50,6 +50,7 @@ namespace UpvoidMiner
 
         /// <summary>
         /// Sets the currently selected item
+        /// CAUTION: '1'-'9' is mapped to 0-8, '0' to 9
         /// </summary>
         public void Select(int idx)
         {

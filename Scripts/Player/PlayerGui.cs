@@ -60,8 +60,13 @@ namespace UpvoidMiner
                 options += ", Drop"; // droppable
                 if ( options.StartsWith(", ") ) options = " [" + options.Substring(2) + "]";
 
+                // Selection.
+                string selectStr = "";
+                if ( item == player.Inventory.Selection )
+                    selectStr = ">>> ";
+
                 // Actual name assembly
-                itemList.Add(shortCut + item.Name + stackSize + " (" + item.Description + ")" + options);
+                itemList.Add(selectStr + shortCut + item.Name + stackSize + " (" + item.Description + ")" + options);
             }
 
             // Also display items that could be crafted or are discovered
