@@ -111,8 +111,9 @@ namespace UpvoidMiner
         /// Returns true, if merge was successful.
         /// If substract, rhs is removed from this item (no negatives allowed).
         /// If force and subtract, the "can-remove" check will be ignored.
+        /// If dryrun, actual merge will not be executed even if possible.
         /// </summary>
-        public abstract bool TryMerge(Item rhs, bool substract, bool force);
+        public abstract bool TryMerge(Item rhs, bool substract, bool force, bool dryrun = false);
         /// <summary>
         /// Creates a copy of this item.
         /// </summary>

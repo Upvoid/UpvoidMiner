@@ -22,7 +22,7 @@ namespace UpvoidMiner
         /// <summary>
         /// This can be merged with resource items of the same resource
         /// </summary>
-        public override bool TryMerge(Item rhs, bool subtract, bool force)
+        public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
             ResourceItem item = rhs as ResourceItem;
             if ( item == null ) return false;
@@ -32,11 +32,14 @@ namespace UpvoidMiner
             {
                 if ( !force && Volume + .0001f < item.Volume )
                     return false;
-                Volume -= item.Volume;
+
+                if ( !dryrun )
+                    Volume -= item.Volume;
             }
             else
             {
-                Volume += item.Volume;
+                if ( !dryrun )
+                    Volume += item.Volume;
             }
 
             return true;

@@ -83,7 +83,7 @@ namespace UpvoidMiner
         /// <summary>
         /// This can be merged with material items of the same resource and shape and size.
         /// </summary>
-        public override bool TryMerge(Item rhs, bool subtract, bool force)
+        public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
             MaterialItem item = rhs as MaterialItem;
             if ( item == null ) return false;
@@ -95,11 +95,14 @@ namespace UpvoidMiner
             {
                 if ( !force && StackSize < item.StackSize )
                     return false;
-                StackSize -= item.StackSize;
+
+                if ( !dryrun )
+                    StackSize -= item.StackSize;
             }
             else 
             {
-                StackSize += item.StackSize;
+                if ( !dryrun )
+                    StackSize += item.StackSize;
             }
 
             return true;

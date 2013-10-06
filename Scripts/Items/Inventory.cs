@@ -6,9 +6,9 @@ using Engine.Universe;
 namespace UpvoidMiner
 {
     /// <summary>
-    /// Class for managing an Inventory.
+    /// Class for managing an Inventory for a player.
     /// </summary>
-    public class Inventory
+    public partial class Inventory
     {
         /// <summary>
         /// Backref to player.
@@ -24,6 +24,11 @@ namespace UpvoidMiner
         /// Quick access items (indices 1-9 indicate user-definable quick access 1-9, 0 is special for selected item)
         /// </summary>
         private Item[] quickAccessItems = new Item[10];
+
+        /// <summary>
+        /// List of all crafting rules, discovered or undiscovered.
+        /// </summary>
+        private List<CraftingRule> craftingRules = new List<CraftingRule>();
 
         /// <summary>
         /// Index of the selected item (index points into quickAccessItems array)
@@ -120,6 +125,29 @@ namespace UpvoidMiner
                 AddItem(new ResourceItem(mat, amount));
             else
                 RemoveItem(new ResourceItem(mat, -amount));
+        }
+
+        /// <summary>
+        /// Gets a list of all discovered rules.
+        /// Can implicitly discover applicable rules.
+        /// </summary>
+        public List<CraftingRule> DiscoveredRules
+        {
+            get
+            {
+                List<CraftingRule> rules = new List<CraftingRule>();
+                foreach (var rule in craftingRules)
+                {
+                    if ( rule.Discovered ) rules.Add(rule);
+                    else if ( rule.IsCraftable(Items) )
+                    {
+                        // Implicit discover.
+                        rule.Discover();
+                        rules.Add(rule);
+                    }
+                }
+                return rules;
+            }
         }
     }
 }

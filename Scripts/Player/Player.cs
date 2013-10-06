@@ -183,6 +183,7 @@ namespace UpvoidMiner
 
             AddTriggerSlot("AddItem");
 
+            Inventory.InitCraftingRules();
             generateInitialItems();
 		}
 
