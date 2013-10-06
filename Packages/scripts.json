@@ -16,6 +16,7 @@
                 "Items/MaterialItem.cs",
                 "Items/VolumeItem.cs",
                 "Items/ResourceItem.cs",
+                "Items/ToolItem.cs",
                 "Items/CraftingRule.cs",
                 "Items/ExplicitCraftingRule.cs",
                 "Items/MaterialCraftingRule.cs",
