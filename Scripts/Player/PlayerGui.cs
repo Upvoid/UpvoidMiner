@@ -47,7 +47,7 @@ namespace UpvoidMiner
                     if ( rule.CouldBeCraftable(item) )
                     {
                         dismantleable = rule.CouldBeDismantled(item);
-                        craftable = rule.IsCraftable(player.Inventory.Items);
+                        craftable = rule.IsCraftable(item, player.Inventory.Items);
                         newRules.Remove(rule);
                         break;
                     }
@@ -75,7 +75,7 @@ namespace UpvoidMiner
 
                 // Options
                 string options = "";
-                if ( rule.IsCraftable(player.Inventory.Items) ) options += ", Craft"; // craftable
+                if ( rule.IsCraftable(null, player.Inventory.Items) ) options += ", Craft"; // craftable
                 if ( options.StartsWith(", ") ) options = " [" + options.Substring(2) + "]";
 
                 // Actual name assembly

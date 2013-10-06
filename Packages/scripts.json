@@ -18,6 +18,7 @@
                 "Items/ResourceItem.cs",
                 "Items/CraftingRule.cs",
                 "Items/ExplicitCraftingRule.cs",
+                "Items/MaterialCraftingRule.cs",
                 "Player/Player.cs",
                 "Player/Drone.cs",
                 "Player/DroneConstraint.cs",

@@ -101,6 +101,14 @@ namespace UpvoidMiner
             Debug.Assert(item != null);
 
             Items.AddItem(item);
+
+            // Check if new rules were discovered
+            foreach (var rule in craftingRules) 
+            {
+                if ( rule.Discovered ) continue;
+                else if ( rule.CouldBeDismantled(item) ) rule.Discover();
+                else if ( rule.IsCraftable(item, Items) ) rule.Discover();
+            }
         }
 
         /// <summary>
@@ -137,15 +145,8 @@ namespace UpvoidMiner
             {
                 List<CraftingRule> rules = new List<CraftingRule>();
                 foreach (var rule in craftingRules)
-                {
-                    if ( rule.Discovered ) rules.Add(rule);
-                    else if ( rule.IsCraftable(Items) )
-                    {
-                        // Implicit discover.
-                        rule.Discover();
+                    if ( rule.Discovered ) 
                         rules.Add(rule);
-                    }
-                }
                 return rules;
             }
         }

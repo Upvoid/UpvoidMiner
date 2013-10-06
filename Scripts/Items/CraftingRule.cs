@@ -59,8 +59,9 @@ namespace UpvoidMiner
 
         /// <summary>
         /// Checks if this rule is applicable on the given items
+        /// The refItem is used as a reference for special rules (e.g. material ones) and can be null
         /// </summary>
-        public bool IsCraftable(ItemCollection _items)
+        public virtual bool IsCraftable(Item refItem, ItemCollection _items)
         {
             // Copy items.
             ItemCollection items = new ItemCollection(_items);
@@ -78,10 +79,11 @@ namespace UpvoidMiner
         /// Applies this rule on the given item collection.
         /// A clone of the result is added to the items.
         /// Craftability has to be checked before calling this function!
+        /// The refItem is used as a reference for special rules (e.g. material ones) and can be null
         /// </summary>
-        public void Craft(ItemCollection items)
+        public virtual void Craft(Item refItem, ItemCollection items)
         {
-            Debug.Assert(IsCraftable(items), "Not craftable!");
+            Debug.Assert(IsCraftable(refItem, items), "Not craftable!");
             
             // Remove each ingredient.
             foreach (var item in Ingredients)
