@@ -47,6 +47,14 @@ namespace UpvoidMiner
         /// Gets the selected item, may be null.
         /// </summary>
         public Item Selection { get { return quickAccessItems[selectedItem]; } }
+        /// <summary>
+        /// Gets the selected quick access index. Between 0 and 9 (inclusive).
+        /// </summary>
+        public int SelectionIndex { get { return selectedItem; } }
+        /// <summary>
+        /// Gets the number of quickaccess slots.
+        /// </summary>
+        public int QuickaccessSlots { get { return quickAccessItems.Length; } }
 
         /// <summary>
         /// Sets the currently selected item

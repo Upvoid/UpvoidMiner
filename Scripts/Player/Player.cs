@@ -68,12 +68,22 @@ namespace UpvoidMiner
 		/// </summary>
 		CharacterController character;
 
+        /// <summary>
+        /// Controller for digging and its constraints.
+        /// </summary>
         DiggingController digging;
 
+        /// <summary>
+        /// GUI for player values.
+        /// </summary>
         PlayerGui gui;
 
-		// Radius of digging/building sphere
-		float diggingSphereRadius = 1.0f;
+        // Flags for modifier keys.
+#pragma warning disable 0414 // Disable "field assigned but not used" as Shift and Alt may be used in future versions.
+        bool keyModifierShift = false;
+        bool keyModifierControl = false;
+        bool keyModifierAlt = false;
+#pragma warning restore 0414
 
         /// <summary>
         /// A list of items representing the inventory of the player.
@@ -240,11 +250,19 @@ namespace UpvoidMiner
 		{
 			if(e.Axis == AxisType.MouseWheelY) 
 			{
-                Item selection = Inventory.Selection;
-                if ( selection != null ) 
-                    selection.OnUseParameterChange(e.RelativeChange);
-
-				diggingSphereRadius = Math.Max(1.0f, diggingSphereRadius + e.RelativeChange);
+                // Control + Wheel to cycle through quick access.
+                if ( keyModifierControl )
+                {
+                    int newIdx = Inventory.SelectionIndex + (int)(e.RelativeChange);
+                    while ( newIdx < 0 ) newIdx += Inventory.QuickaccessSlots;
+                    Inventory.Select(newIdx % Inventory.QuickaccessSlots);
+                }
+                else // Otherwise used to change 'use-parameter'.
+                {
+                    Item selection = Inventory.Selection;
+                    if ( selection != null ) 
+                        selection.OnUseParameterChange(e.RelativeChange);
+                }
 			}
 		}
 
@@ -286,20 +304,50 @@ namespace UpvoidMiner
 
         void HandlePressInput (object sender, InputPressArgs e)
         {
-
             // Scale the area using + and - keys.
             // Translate it using up down left right (x, z)
             // and PageUp PageDown (y).
             if(e.PressType == InputPressArgs.KeyPressType.Down) {
 
-				if ( e.Key == InputKey.F8 )
-					Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
+                switch ( e.Key )
+                {
+                    case InputKey.Shift: 
+                        keyModifierShift = true;
+                        break;
+                    case InputKey.Control: 
+                        keyModifierControl = true;
+                        break;
+                    case InputKey.Alt: 
+                        keyModifierAlt = true;
+                        break;
+
+                    case InputKey.F8:
+                        Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
+                        break;
+
+                    default: break;
+                }
 
                 // Quickaccess items.
                 if ( InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9 )
                     Inventory.Select((int)e.Key - (int)InputKey.Key1);
                 if ( e.Key == InputKey.Key0 )
                     Inventory.Select(9); // Special '0'.
+            }
+            else if(e.PressType == InputPressArgs.KeyPressType.Up) 
+            {
+                switch ( e.Key )
+                {
+                    case InputKey.Shift: 
+                        keyModifierShift = false;
+                        break;
+                    case InputKey.Control: 
+                        keyModifierControl = false;
+                        break;
+                    case InputKey.Alt: 
+                        keyModifierAlt = false;
+                        break;
+                }
             }
 
             // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
