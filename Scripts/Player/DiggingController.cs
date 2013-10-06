@@ -70,7 +70,10 @@ namespace UpvoidMiner
                                                         Resources.UseMaterial("::Particle/Shadow/Mesh", null), 
                                                         Resources.UseMesh("::Particles/Rock", null), 
                                                         mat4.Identity), 
-                                                    true);
+                                                          true);
+            Debug.Assert(particlesStonesPC.IsValid);
+            Debug.Assert(particlesStonesRC.IsValid);
+            Debug.Assert(particlesStonesRCShadow.IsValid);
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode = DigMode.Substract)

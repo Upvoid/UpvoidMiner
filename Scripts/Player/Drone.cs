@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Engine;
 using Engine.Universe;
 using Engine.Rendering;
@@ -136,6 +137,14 @@ namespace UpvoidMiner
                                                            mat4.Scale(new vec3(.03f,7,.03f)),
                                                            new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Miner/DroneIndicator", HostScript.ModDomain), Resources.UseMesh("Miner/DroneIndicator", HostScript.ModDomain), mat4.Identity),
                                                            true);
+            
+            Debug.Assert(renderComponentBodyOpaque.IsValid);
+            Debug.Assert(renderComponentBodyShadow.IsValid);
+            Debug.Assert(renderComponentWing1Opaque.IsValid);
+            Debug.Assert(renderComponentWing1Shadow.IsValid);
+            Debug.Assert(renderComponentWing2Opaque.IsValid);
+            Debug.Assert(renderComponentWing2Shadow.IsValid);
+            Debug.Assert(renderComponentIndicator.IsValid);
         }
     }
 }
