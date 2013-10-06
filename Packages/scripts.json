@@ -10,7 +10,7 @@
                 "Items/ItemCollection.cs",
                 "Items/ItemCategory.cs",
                 "Items/Inventory.cs",
-                "Items/Inventory - CraftingRules.cs",
+                "Items/Inventory.CraftingRules.cs",
                 "Items/ItemEntity.cs",
                 "Items/DiscreteItem.cs",
                 "Items/MaterialItem.cs",
