@@ -15,6 +15,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 using System;
+using System.Diagnostics;
 using Engine;
 using Engine.Universe;
 using Engine.Modding;
@@ -149,14 +150,9 @@ namespace UpvoidMiner
 
             for (int i = 0; i<3; ++i)
             {
-
-                Item testItem = new Item(
-                    "TestItem",
-                    "A test item.",
-                    1f,
-                    false,
-                    ItemCategory.Resources
-                );
+                TerrainMaterial mat = world.Terrain.QueryMaterialFromName("Stone." + (i+1).ToString("00"));
+                Debug.Assert(mat != null, "Invalid material");
+                MaterialItem testItem = new MaterialItem(mat, MaterialShape.Cube, new vec3(1), 1);
 
                 world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i * 2f, ((i % 3) * 2f))));
             }

@@ -18,7 +18,7 @@ namespace UpvoidMiner
         /// <summary>
         /// A list of all items.
         /// </summary>
-        public readonly List<Item> Items = new List<Item>();
+        public readonly ItemCollection Items = new ItemCollection();
 
         /// <summary>
         /// Quick access items (indices 1-9 indicate user-definable quick access 1-9, 0 is special for selected item)
@@ -33,6 +33,9 @@ namespace UpvoidMiner
         public Inventory(Player player)
         {
             this.player = player;
+
+            Items.OnAdd += setDefaultQuickAccess;
+            Items.OnRemove += removeFromQuickAccess;
         }
 
         /// <summary>
@@ -47,6 +50,26 @@ namespace UpvoidMiner
         {
             Debug.Assert(0 <= idx && idx <= 9);
             selectedItem = idx;
+        }
+
+        private void setDefaultQuickAccess(Item item)
+        {
+            // If appended and enough space, also add it to quickAccess.
+            // Caution: highest quick access idx is only temporary.
+            for (int i = 0; i < quickAccessItems.Length - 1; ++i)
+            {
+                if (quickAccessItems[i] == null)
+                {
+                    SetQuickAccess(item, i);
+                    break;
+                }
+            }
+        }
+
+        private void removeFromQuickAccess(Item item)
+        {
+            if (item.QuickAccessIndex >= 0)
+                SetQuickAccess(null, item.QuickAccessIndex);
         }
 
         /// <summary>
@@ -72,24 +95,7 @@ namespace UpvoidMiner
         {
             Debug.Assert(item != null);
 
-            // Try to merge with already possessed item.
-            foreach (var it in Items)
-                if ( it.TryMerge(item) )
-                    return;
-
-            // If unsuccessful: add item
-            Items.Add(item);
-
-            // And if enough space, also add it to quickAccess
-            // Caution: highest quick access is only temporary
-            for (int i = 0; i < quickAccessItems.Length - 1; ++i)
-            {
-                if (quickAccessItems[i] == null)
-                {
-                    SetQuickAccess(item, i);
-                    break;
-                }
-            }
+            Items.AddItem(item);
         }
 
         /// <summary>
@@ -99,17 +105,8 @@ namespace UpvoidMiner
         {
             Debug.Assert(item != null);
 
-            for (int i = 0; i < Items.Count; ++i)
-            {
-                if (Items[i] == item)
-                {
-                    Items.RemoveAt(i);
-                    break;
-                }
-            }
-
-            if (item.QuickAccessIndex >= 0)
-                SetQuickAccess(null, item.QuickAccessIndex);
+            // Inventory remove is always with force.
+            Items.RemoveItem(item, true);
         }
 
         /// <summary>
@@ -117,28 +114,12 @@ namespace UpvoidMiner
         /// </summary>
         public void AddResource(TerrainMaterial mat, float amount)
         {
-            foreach (var item in Items)
-            {
-                if ( item is ResourceItem )
-                {
-                    ResourceItem ritem = item as ResourceItem;
-                    if ( ritem.Material.MaterialIndex == mat.MaterialIndex )
-                    {
-                        ritem.Volume += amount;
-                        if ( ritem.Volume < .001f )
-                            RemoveItem(ritem);
-                        return;
-                    }
-                }
-            }
+            Debug.Assert(mat != null);
 
-            // We have not found this resource so far: create a new one.
-            if (amount > 0)
-            {
-                ResourceItem newItem = new ResourceItem(mat);
-                newItem.Volume += amount;
-                AddItem(newItem);
-            }
+            if ( amount > 0 )
+                AddItem(new ResourceItem(mat, amount));
+            else
+                RemoveItem(new ResourceItem(mat, -amount));
         }
     }
 }

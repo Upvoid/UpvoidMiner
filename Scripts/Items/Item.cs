@@ -13,7 +13,7 @@ namespace UpvoidMiner
     /// Base class for items.
     /// Can be derive for custom items or instantiated for generic items.
     /// </summary>
-    public class Item
+    public abstract class Item
     {
         /// <summary>
         /// The item's name. Does not have to be unique.
@@ -47,6 +47,11 @@ namespace UpvoidMiner
         public virtual bool IsUsable { get; protected set; }
 
         /// <summary>
+        /// True iff the item represents an empty (or negative) amount of the item.
+        /// </summary>
+        public virtual bool IsEmpty { get { return false; } }
+
+        /// <summary>
         /// If IsUsable is true, this executes the "use" action of the item. Does nothing otherwise.
         /// </summary>
         public virtual void Use() {}
@@ -63,6 +68,7 @@ namespace UpvoidMiner
             Weight = weight;
             IsUsable = isUsable;
             Category = category;
+            QuickAccessIndex = -1;
         }
 
         /// <summary>
@@ -103,11 +109,14 @@ namespace UpvoidMiner
         /// <summary>
         /// Tries to merge this item with the given item.
         /// Returns true, if merge was successful.
+        /// If substract, rhs is removed from this item (no negatives allowed).
+        /// If force and subtract, the "can-remove" check will be ignored.
         /// </summary>
-        public virtual bool TryMerge(Item rhs)
-        {
-            return false;
-        }
+        public abstract bool TryMerge(Item rhs, bool substract, bool force);
+        /// <summary>
+        /// Creates a copy of this item.
+        /// </summary>
+        public abstract Item Clone();
     }
 }
 

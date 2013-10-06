@@ -83,7 +83,7 @@ namespace UpvoidMiner
         /// <summary>
         /// This can be merged with material items of the same resource and shape and size.
         /// </summary>
-        public override bool TryMerge(Item rhs)
+        public override bool TryMerge(Item rhs, bool subtract, bool force)
         {
             MaterialItem item = rhs as MaterialItem;
             if ( item == null ) return false;
@@ -91,8 +91,26 @@ namespace UpvoidMiner
             if ( item.Shape != Shape ) return false;
             if ( item.Size != Size ) return false;
 
-            StackSize += item.StackSize;
+            if ( subtract )
+            {
+                if ( !force && StackSize < item.StackSize )
+                    return false;
+                StackSize -= item.StackSize;
+            }
+            else 
+            {
+                StackSize += item.StackSize;
+            }
+
             return true;
+        }
+
+        /// <summary>
+        /// Creates a copy of this item.
+        /// </summary>
+        public override Item Clone()
+        {
+            return new MaterialItem(Material, Shape, Size, StackSize);
         }
     }
 }

@@ -22,14 +22,32 @@ namespace UpvoidMiner
         /// <summary>
         /// This can be merged with resource items of the same resource
         /// </summary>
-        public override bool TryMerge(Item rhs)
+        public override bool TryMerge(Item rhs, bool subtract, bool force)
         {
             ResourceItem item = rhs as ResourceItem;
             if ( item == null ) return false;
             if ( item.Material.MaterialIndex != Material.MaterialIndex ) return false;
 
-            Volume += item.Volume;
+            if ( subtract )
+            {
+                if ( !force && Volume + .0001f < item.Volume )
+                    return false;
+                Volume -= item.Volume;
+            }
+            else
+            {
+                Volume += item.Volume;
+            }
+
             return true;
+        }
+
+        /// <summary>
+        /// Creates a copy of this item.
+        /// </summary>
+        public override Item Clone()
+        {
+            return new ResourceItem(Material, Volume);
         }
     }
 }

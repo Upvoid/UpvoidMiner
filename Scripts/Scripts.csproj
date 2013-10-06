@@ -50,6 +50,7 @@
     <Compile Include="Items\ResourceItem.cs" />
     <Compile Include="Items\MaterialItem.cs" />
     <Compile Include="Items\CraftingRule.cs" />
+    <Compile Include="Items\ItemCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

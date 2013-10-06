@@ -30,7 +30,9 @@ namespace UpvoidMiner
             List<string> itemList = new List<string>();
             foreach(Item item in player.Inventory.Items) {
                 string stackSize = item.StackDescription;
-                itemList.Add(item.Name + (stackSize == "" ? "" : " " + stackSize) + " (" + item.Description + ")");
+                if ( stackSize != "" ) stackSize = " " + stackSize;
+                string shortCut = item.QuickAccessIndex < 0 ? "" : "[" + ((item.QuickAccessIndex + 1) % 10) + "] ";
+                itemList.Add(shortCut + item.Name + stackSize + " (" + item.Description + ")");
             }
 
             
