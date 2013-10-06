@@ -42,6 +42,7 @@ namespace UpvoidMiner
         /// </summary>
         CpuParticleSystemBase particlesStones;
         RenderComponent particlesStonesRC;
+        RenderComponent particlesStonesRCShadow;
         CpuParticleComponent particlesStonesPC;
 
         public DiggingController(World world, Player player)
@@ -60,6 +61,13 @@ namespace UpvoidMiner
                                                     new CpuParticleRenderJob(particlesStones, 
                                                         Renderer.Opaque.CpuParticles, 
                                                         Resources.UseMaterial("::Particle/Rock", null), 
+                                                        Resources.UseMesh("::Particles/Rock", null), 
+                                                        mat4.Identity), 
+                                                    true);
+            particlesStonesRCShadow = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity, 
+                                                    new CpuParticleRenderJob(particlesStones, 
+                                                        Renderer.Shadow.CpuParticles, 
+                                                        Resources.UseMaterial("::Particle/Shadow/Mesh", null), 
                                                         Resources.UseMesh("::Particles/Rock", null), 
                                                         mat4.Identity), 
                                                     true);
