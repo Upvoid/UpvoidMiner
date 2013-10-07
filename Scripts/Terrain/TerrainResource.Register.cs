@@ -12,50 +12,6 @@ namespace UpvoidMiner
     public partial class TerrainResource
     {
         /// <summary>
-        /// The associated terrain engine
-        /// </summary>
-        private static TerrainEngine terrain;
-        /// <summary>
-        /// Mapping from material index to terrain resource.
-        /// </summary>
-        private static Dictionary<int, TerrainResource> indexToResource = new Dictionary<int, TerrainResource>();
-        /// <summary>
-        /// Mapping from material name to terrain resource.
-        /// </summary>
-        private static Dictionary<string, TerrainResource> nameToResource = new Dictionary<string, TerrainResource>();
-        /// <summary>
-        /// Gets a terrain resource based on material index
-        /// </summary>
-        public static TerrainResource FromIndex(int idx) 
-        {
-            TerrainResource res;
-            if (indexToResource.TryGetValue(idx, out res))
-                return res;
-            else
-                return null;
-        }
-        /// <summary>
-        /// Gets a terrain resource based on material name
-        /// </summary>
-        public static TerrainResource FromName(string name) 
-        {
-            TerrainResource res;
-            if (nameToResource.TryGetValue(name, out res))
-                return res;
-            else
-                return null;
-        }
-
-        /// <summary>
-        /// Adds a resource to the global dictionary.
-        /// </summary>
-        private static void addResource(TerrainResource res)
-        {
-            indexToResource.Add(res.Index, res);
-            nameToResource.Add(res.Name, res);
-        }
-
-        /// <summary>
         /// Registers all the resources.
         /// Currently only implemented for Host.
         /// </summary>
@@ -94,6 +50,50 @@ namespace UpvoidMiner
                 // TODO: implement client-side
                 throw new NotImplementedException();
             }
+        }
+
+        /// <summary>
+        /// The associated terrain engine
+        /// </summary>
+        private static TerrainEngine terrain;
+        /// <summary>
+        /// Mapping from material index to terrain resource.
+        /// </summary>
+        private static Dictionary<int, TerrainResource> indexToResource = new Dictionary<int, TerrainResource>();
+        /// <summary>
+        /// Mapping from material name to terrain resource.
+        /// </summary>
+        private static Dictionary<string, TerrainResource> nameToResource = new Dictionary<string, TerrainResource>();
+        /// <summary>
+        /// Gets a terrain resource based on material index
+        /// </summary>
+        public static TerrainResource FromIndex(int idx) 
+        {
+            TerrainResource res;
+            if (indexToResource.TryGetValue(idx, out res))
+                return res;
+            else
+                return null;
+        }
+        /// <summary>
+        /// Gets a terrain resource based on material name
+        /// </summary>
+        public static TerrainResource FromName(string name) 
+        {
+            TerrainResource res;
+            if (nameToResource.TryGetValue(name, out res))
+                return res;
+            else
+                return null;
+        }
+        
+        /// <summary>
+        /// Adds a resource to the global dictionary.
+        /// </summary>
+        private static void addResource(TerrainResource res)
+        {
+            indexToResource.Add(res.Index, res);
+            nameToResource.Add(res.Name, res);
         }
     }
 }
