@@ -33,7 +33,7 @@ void main()
 
     transColor.a *= softParticleFactor(vScreenPos, uOpaqueDepth, 1.0);
 
-    transColor.a *= 1-smoothstep(0.5, 1, vLife);
+    transColor.a *= 1-smoothstep(0.7, 1, vLife);
     transColor.a *= smoothstep(0.0, .2, vLife);
 
     // DEBUG: no illumination!

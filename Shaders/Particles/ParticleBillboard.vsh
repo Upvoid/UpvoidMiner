@@ -41,8 +41,13 @@ void main()
                 -tangent.y,
                 tangent.x
                 );
-    eyePos.xy += tangent * (aPosition.x * aParticleSize)
-                + normal * (aPosition.y * aParticleSize);
+
+    float size = aParticleSize * (0.25 + 0.75 * smoothstep(0.0, 0.7, aParticleLife));
+
+    size *= 1 + 1 * smoothstep(0.7, 1.0, aParticleLife);
+
+    eyePos.xy += tangent * (aPosition.x * size)
+                + normal * (aPosition.y * size);
 
     vNormal = vec3(uInverseViewMatrix * vec4(0, 0, -1, 0));
 
