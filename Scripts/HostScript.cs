@@ -52,7 +52,7 @@ namespace UpvoidMiner
 
             for (int i = 0; i<3; ++i)
             {
-                TerrainMaterial mat = world.Terrain.QueryMaterialFromName("Stone." + (i+1).ToString("00"));
+                TerrainResource mat = TerrainResource.FromName("Stone." + (i+1).ToString("00"));
                 Debug.Assert(mat != null, "Invalid material");
                 MaterialItem testItem = new MaterialItem(mat, MaterialShape.Cube, new vec3(1), 1);
 

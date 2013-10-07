@@ -29,6 +29,16 @@ namespace UpvoidMiner
                 return new vec3(Body.GetTransformation().col3); 
             }
         }
+        /// <summary>
+        /// Gets the transformation matrix of the controlled character.
+        /// </summary>
+        public mat4 Transformation
+        {
+            get
+            {
+                return Body.GetTransformation(); 
+            }
+        }
 
         /// <summary>
         /// The height that the controller tries to keep between the body and the ground.

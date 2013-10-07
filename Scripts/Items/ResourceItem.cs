@@ -12,22 +12,11 @@ namespace UpvoidMiner
     public class ResourceItem : VolumeItem
     {
         /// <summary>
-        /// Renderjob for the preview sphere
-        /// </summary>
-        private MeshRenderJob previewSphere;
-        private MeshRenderJob previewSphereLimited;
-        private MeshRenderJob previewSphereIndicator;
-        /// <summary>
-        /// Radius of terrain material that is placed if "use"d.
-        /// </summary>
-        private float useRadius = 1f;
-
-        /// <summary>
         /// The terrain material that this resource represents.
         /// </summary>
-        public readonly TerrainMaterial Material;
+        public readonly TerrainResource Material;
         
-        public ResourceItem(TerrainMaterial material, float volume = 0f) :
+        public ResourceItem(TerrainResource material, float volume = 0f) :
             base(material.Name, "The terrain resource " + material.Name, 1.0f, ItemCategory.Resources, volume)
         {
             Material = material;
@@ -40,7 +29,7 @@ namespace UpvoidMiner
         {
             ResourceItem item = rhs as ResourceItem;
             if ( item == null ) return false;
-            if ( item.Material.MaterialIndex != Material.MaterialIndex ) return false;
+            if ( item.Material != Material ) return false;
 
             return Merge(item, subtract, force, dryrun);
         }
@@ -53,10 +42,22 @@ namespace UpvoidMiner
             return new ResourceItem(Material, Volume);
         }
 
+        #region Inventory Logic
+        /// <summary>
+        /// Renderjob for the preview sphere
+        /// </summary>
+        private MeshRenderJob previewSphere;
+        private MeshRenderJob previewSphereLimited;
+        private MeshRenderJob previewSphereIndicator;
+        /// <summary>
+        /// Radius of terrain material that is placed if "use"d.
+        /// </summary>
+        private float useRadius = 1f;
+
         /// <summary>
         /// Yes, we have a preview for resources.
         /// </summary>
-        public override bool HasPreview { get { return true; } }
+        public override bool HasRayPreview { get { return true; } }
 
         public override void OnUse(Player player, vec3 _worldPos)
         {
@@ -87,7 +88,7 @@ namespace UpvoidMiner
             useRadius = Math.Max(0.5f, Math.Min(5f, useRadius + _delta / 5f));
         }
 
-        public override void OnPreview(vec3 _worldPos, bool _visible)
+        public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
             // If the indicated volume is greater than the available volume, show limitation sphere.
             float useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
@@ -111,7 +112,10 @@ namespace UpvoidMiner
             LocalScript.world.RemoveRenderJob(previewSphereLimited);
             LocalScript.world.RemoveRenderJob(previewSphereIndicator);
             previewSphere = null;
+            previewSphereLimited = null;
+            previewSphereIndicator = null;
         }
+        #endregion
     }
 }
 

@@ -57,19 +57,19 @@ namespace UpvoidMiner
             // Create particle systems.
             particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
             particlesStonesPC = new CpuParticleComponent(LocalScript.ParticleEntity, particlesStones, mat4.Identity);
-            particlesStonesRC = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity, 
-                                                    new CpuParticleRenderJob(particlesStones, 
-                                                        Renderer.Opaque.CpuParticles, 
-                                                        Resources.UseMaterial("::Particle/Rock", null), 
-                                                        Resources.UseMesh("::Particles/Rock", null), 
-                                                        mat4.Identity), 
+            particlesStonesRC = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
+                                                    new CpuParticleRenderJob(particlesStones,
+                                                        Renderer.Opaque.CpuParticles,
+                                                        Resources.UseMaterial("::Particle/Rock", null),
+                                                        Resources.UseMesh("::Particles/Rock", null),
+                                                        mat4.Identity),
                                                     true);
-            particlesStonesRCShadow = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity, 
-                                                    new CpuParticleRenderJob(particlesStones, 
-                                                        Renderer.Shadow.CpuParticles, 
-                                                        Resources.UseMaterial("::Particle/Shadow/Mesh", null), 
-                                                        Resources.UseMesh("::Particles/Rock", null), 
-                                                        mat4.Identity), 
+            particlesStonesRCShadow = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
+                                                    new CpuParticleRenderJob(particlesStones,
+                                                        Renderer.Shadow.CpuParticles,
+                                                        Resources.UseMaterial("::Particle/Shadow/Mesh", null),
+                                                        Resources.UseMesh("::Particles/Rock", null),
+                                                        mat4.Identity),
                                                           true);
             Debug.Assert(particlesStonesPC.IsValid);
             Debug.Assert(particlesStonesRC.IsValid);
@@ -80,7 +80,7 @@ namespace UpvoidMiner
         {
             CsgNode digShape = null;
 
-            // constraintDiffNode performs the constraint as a CSG operation 
+            // constraintDiffNode performs the constraint as a CSG operation
             // by cutting away anything of thge digging shape not inside the allowed area.
             CsgOpDiff constraintDiffNode = new CsgOpDiff();
             // Assemble difference operation by applying all drone constraints.
@@ -125,7 +125,7 @@ namespace UpvoidMiner
             if ( mat != 0 )
             {
                 // Resolve terrain material.
-                TerrainMaterial material = instance.world.Terrain.QueryMaterialFromIndex(mat);
+                TerrainResource material = TerrainResource.FromIndex(mat);
                 Debug.Assert(material != null, "Invalid terrain material");
 
                 // Add proper amount of material to player inventory.

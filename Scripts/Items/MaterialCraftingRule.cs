@@ -18,7 +18,7 @@ namespace UpvoidMiner
         /// <summary>
         /// The material.
         /// </summary>
-        public readonly TerrainMaterial Material;
+        public readonly TerrainResource Material;
 
         /// <summary>
         /// The shape of the material.
@@ -30,7 +30,7 @@ namespace UpvoidMiner
         /// </summary>
         public vec3 Size;
 
-        public MaterialCraftingRule(TerrainMaterial material, MaterialShape shape, vec3 size)
+        public MaterialCraftingRule(TerrainResource material, MaterialShape shape, vec3 size)
         {
             Material = material;
             Shape = shape;
@@ -75,7 +75,7 @@ namespace UpvoidMiner
         {
             MaterialItem item = refItem as MaterialItem;
             if ( item != null &&
-                item.Material.MaterialIndex == Material.MaterialIndex &&
+                item.Material.Material == Material.Material &&
                 item.Shape == Shape )
                 Size = item.Size;
         }
@@ -109,7 +109,7 @@ namespace UpvoidMiner
         {
             MaterialItem item = _item as MaterialItem;
             if ( item != null &&
-                item.Material.MaterialIndex == Material.MaterialIndex &&
+                item.Material.Material == Material.Material &&
                 item.Shape == Shape )
                 return true;
             else return false;
@@ -121,7 +121,7 @@ namespace UpvoidMiner
         {
             MaterialItem item = _item as MaterialItem;
             if ( item != null &&
-                item.Material.MaterialIndex == Material.MaterialIndex &&
+                item.Material.Material == Material.Material &&
                 item.Shape == Shape )
                 return !item.IsEmpty;
             else return false;

@@ -149,7 +149,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Adds a resource of a given terrain material type. Amount can be negative.
         /// </summary>
-        public void AddResource(TerrainMaterial mat, float amount)
+        public void AddResource(TerrainResource mat, float amount)
         {
             Debug.Assert(mat != null);
 

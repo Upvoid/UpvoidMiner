@@ -16,13 +16,13 @@ namespace UpvoidMiner
         {
             Debug.Assert(craftingRules.Count == 0, "Expected empty ruleset");
             
-            TerrainMaterial dirt = player.ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
-            TerrainMaterial wood = player.ContainingWorld.Terrain.QueryMaterialFromName("Wood");
-            TerrainMaterial iron = player.ContainingWorld.Terrain.QueryMaterialFromName("Iron");
-            TerrainMaterial coal = player.ContainingWorld.Terrain.QueryMaterialFromName("Coal");
-            TerrainMaterial gold = player.ContainingWorld.Terrain.QueryMaterialFromName("Gold");
-            TerrainMaterial copper = player.ContainingWorld.Terrain.QueryMaterialFromName("Copper");
-            TerrainMaterial aoicrystal = player.ContainingWorld.Terrain.QueryMaterialFromName("AoiCrystal");
+            TerrainResource dirt = TerrainResource.FromName("Dirt");
+            TerrainResource wood = TerrainResource.FromName("Wood");
+            TerrainResource iron = TerrainResource.FromName("Iron");
+            TerrainResource coal = TerrainResource.FromName("Coal");
+            TerrainResource gold = TerrainResource.FromName("Gold");
+            TerrainResource copper = TerrainResource.FromName("Copper");
+            TerrainResource aoicrystal = TerrainResource.FromName("AoiCrystal");
 
             /*craftingRules.Add(new ExplicitCraftingRule(new MaterialItem(dirt, MaterialShape.Cube, new vec3(1)),
                                                        new [] { new ResourceItem(dirt, 1f) } ,
@@ -44,7 +44,7 @@ namespace UpvoidMiner
                                                        (new [] { new ResourceItem(iron, .2f), new ResourceItem(wood, .3f) })));
 
             // MaterialItems
-            List<TerrainMaterial> craftMaterials = new List<TerrainMaterial>();
+            List<TerrainResource> craftMaterials = new List<TerrainResource>();
             craftMaterials.Add(dirt);
             craftMaterials.Add(wood);
             craftMaterials.Add(coal);
@@ -53,7 +53,7 @@ namespace UpvoidMiner
             craftMaterials.Add(aoicrystal);
             craftMaterials.Add(copper);
             for (int i = 1; i <= 14; ++i)
-                craftMaterials.Add(player.ContainingWorld.Terrain.QueryMaterialFromName("Stone." + i.ToString("00")));
+                craftMaterials.Add(TerrainResource.FromName("Stone." + i.ToString("00")));
 
             foreach (var mat in craftMaterials) 
             {

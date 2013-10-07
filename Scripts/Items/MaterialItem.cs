@@ -2,6 +2,8 @@ using System;
 using System.Diagnostics;
 using Engine;
 using Engine.Universe;
+using Engine.Rendering;
+using Engine.Resources;
 
 namespace UpvoidMiner
 {
@@ -24,7 +26,7 @@ namespace UpvoidMiner
         /// <summary>
         /// The resource that his item is made of.
         /// </summary>
-        public readonly TerrainMaterial Material;
+        public readonly TerrainResource Material;
         /// <summary>
         /// The shape of this item.
         /// </summary>
@@ -32,7 +34,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Size of this item:
         /// Cube: width, height, depth
-        /// Cylinder: height, radius, (z = radius)
+        /// Cylinder: radius, height, radius
         /// Sphere: radius, (y/z = radius)
         /// </summary>
         public readonly vec3 Size;
@@ -64,14 +66,14 @@ namespace UpvoidMiner
                 switch (Shape)
                 {
                     case MaterialShape.Cube: return "size " + Size.x.ToString("0.0") + " m x " + Size.y.ToString("0.0") + " m x " + Size.z.ToString("0.0") + " m";
-                    case MaterialShape.Cylinder: return Size.y.ToString("0.0") + " m radius and " + Size.x.ToString("0.0") + " m height";
+                    case MaterialShape.Cylinder: return Size.x.ToString("0.0") + " m radius and " + Size.y.ToString("0.0") + " m height";
                     case MaterialShape.Sphere: return Size.x.ToString("0.0") + " m radius";
                     default: Debug.Fail("Invalid shape"); return "<invalid>";
                 }
             }
         }
 
-        public MaterialItem(TerrainMaterial material, MaterialShape shape, vec3 size, int stackSize = 1):
+        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1):
             base(material.Name + " " + shape, null, 1.0f, ItemCategory.Material, stackSize)
         {
             Material = material;
@@ -87,7 +89,7 @@ namespace UpvoidMiner
         {
             MaterialItem item = rhs as MaterialItem;
             if ( item == null ) return false;
-            if ( item.Material.MaterialIndex != Material.MaterialIndex ) return false;
+            if ( item.Material != Material ) return false;
             if ( item.Shape != Shape ) return false;
             if ( item.Size != Size ) return false;
 
@@ -101,6 +103,137 @@ namespace UpvoidMiner
         {
             return new MaterialItem(Material, Shape, Size, StackSize);
         }
+
+        
+        
+        #region Inventory Logic
+        /// <summary>
+        /// Renderjob for the preview material
+        /// </summary>
+        private MeshRenderJob previewMaterial;
+        private MeshRenderJob previewMaterialPlaced;
+        private MeshRenderJob previewMaterialPlacedIndicator;
+        
+        /// <summary>
+        /// Yes, we have a preview for materials (ray for placement, update for holding).
+        /// </summary>
+        public override bool HasRayPreview { get { return true; } }
+        public override bool HasUpdatePreview { get { return true; } }
+        
+        public override void OnUse(Player player, vec3 _worldPos)
+        {
+            // TODO: place item
+        }
+        
+        public override void OnSelect()
+        {
+            MeshResource mesh;
+            switch (Shape)
+            {
+                case MaterialShape.Cube: mesh = Resources.UseMesh("::Debug/Box", null); break;
+                case MaterialShape.Sphere: mesh = Resources.UseMesh("::Debug/Sphere", null); break;
+                case MaterialShape.Cylinder: mesh = Resources.UseMesh("::Debug/Cylinder", null); break;
+                default: throw new NotImplementedException("Invalid shape");
+            }
+
+            MaterialResource material;
+            if (Material is SolidTerrainResource)
+                material = (Material as SolidTerrainResource).RenderMaterial;
+            else
+                throw new NotImplementedException("Unknown terrain resource");
+            
+            // Create a solid object for 'holding'.
+            previewMaterial = new MeshRenderJob(Renderer.Opaque.Mesh, material, mesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewMaterial);
+            
+            // Create a transparent object as 'placement-indicator'.
+            previewMaterialPlaced = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreview", LocalScript.ModDomain), mesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewMaterialPlaced);
+            // And a second one for indicating the center.
+            previewMaterialPlacedIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", LocalScript.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewMaterialPlacedIndicator);
+        }
+        
+        public override void OnUseParameterChange(float _delta) 
+        {
+            // TODO: maybe rotate?
+        }
+        
+        public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
+        {
+            // Hide if not visible.
+            if (!_visible)
+            {
+                previewMaterialPlaced.ModelMatrix = mat4.Scale(0f);
+                previewMaterialPlacedIndicator.ModelMatrix = mat4.Scale(0f);
+                return;
+            }
+
+            vec3 dir = _player.CameraDirection;
+            vec3 up = _worldNormal;
+            vec3 left = vec3.cross(up, dir).Normalized;
+            dir = vec3.cross(left, up);
+
+            mat4 scaling;
+            float offset;
+            switch (Shape)
+            {
+                case MaterialShape.Cube: 
+                    scaling = mat4.Scale(Size / 2f);
+                    offset = Size.y / 2f;
+                    break;
+                case MaterialShape.Sphere: 
+                    scaling = mat4.Scale(Size);
+                    offset = Size.y;
+                    break;
+                case MaterialShape.Cylinder: 
+                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
+                    offset = Size.y / 2f;
+                    break;
+                default: throw new NotImplementedException("Invalid shape");
+            }
+            mat4 transform = new mat4(
+                left, up, dir, _worldPos + offset * _worldNormal);
+
+            // The placed object is scaled accordingly
+            previewMaterialPlaced.ModelMatrix = transform * scaling;
+            // Indicator is always in the center and relatively small.
+            previewMaterialPlacedIndicator.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(.1f);
+        }
+
+        public override void OnUpdatePreview(Player _player, float _elapsedSeconds)
+        {
+            mat4 scaling;
+            switch (Shape)
+            {
+                case MaterialShape.Cube: scaling = mat4.Scale(.15f); break;
+                case MaterialShape.Sphere: scaling = mat4.Scale(.2f); break;
+                case MaterialShape.Cylinder: scaling = mat4.Scale(.2f); break;
+                default: throw new NotImplementedException("Invalid shape");
+            }
+
+            // Position the item preview in the right-lower corner of the screen.
+            // FIXME: find proper alignment, current one is quite empirical.
+            vec3 dir = _player.CameraDirection;
+            vec3 up = _player.CameraUp;
+            vec3 left = vec3.cross(up, dir).Normalized;
+            vec3 offset = up * -.15f + left * -.7f + dir * 0.6f;
+            mat4 transform = _player.Transformation * mat4.Translate(offset);
+
+            previewMaterial.ModelMatrix = transform * scaling;
+        }
+        
+        public override void OnDeselect()
+        {
+            // Remove and delete it on deselect.
+            LocalScript.world.RemoveRenderJob(previewMaterial);
+            LocalScript.world.RemoveRenderJob(previewMaterialPlaced);
+            LocalScript.world.RemoveRenderJob(previewMaterialPlacedIndicator);
+            previewMaterial = null;
+            previewMaterialPlaced = null;
+            previewMaterialPlacedIndicator = null;
+        }
+        #endregion
     }
 }
 

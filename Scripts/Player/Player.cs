@@ -56,7 +56,15 @@ namespace UpvoidMiner
         /// The direction in which this player is facing.
         /// Is not the same as the camera, but follows it.
         /// </summary>
-        private vec3 Direction = new vec3(1,0,0);
+        public vec3 Direction { get; private set; }
+        /// <summary>
+        /// Gets the camera direction of the player camera.
+        /// </summary>
+        public vec3 CameraDirection { get { return camera.ForwardDirection; } }
+        /// <summary>
+        /// Gets the camera up direction of the player camera.
+        /// </summary>
+        public vec3 CameraUp { get { return camera.UpDirection; } }
 
 		/// <summary>
 		/// This is the camera that is used to show the perspective of the player.
@@ -106,9 +114,17 @@ namespace UpvoidMiner
         {
             get { return character.Position; }
         }
+        /// <summary>
+        /// Character transformation matrix.
+        /// </summary>
+        public mat4 Transformation
+        {
+            get { return character.Transformation; }
+        }
 
 		public Player(GenericCamera _camera)
 		{
+            Direction = new vec3(1,0,0);
 			camera = _camera;
             Input.OnPressInput += HandlePressInput;
 			Input.OnAxisInput += HandleAxisInput;
@@ -128,9 +144,10 @@ namespace UpvoidMiner
                 // Update direction.
                 float mix = (float)Math.Pow(0.02, elapsedSeconds);
                 vec3 camDir = camera.ForwardDirection;
-                Direction.x = Direction.x * mix + camDir.x * (1 - mix);
-                Direction.z = Direction.z * mix + camDir.z * (1 - mix);
-                Direction = Direction.Normalized;
+                vec3 dir = Direction;
+                dir.x = dir.x * mix + camDir.x * (1 - mix);
+                dir.z = dir.z * mix + camDir.z * (1 - mix);
+                Direction = dir.Normalized;
 
                 // Update player model.
                 vec3 up = new vec3(0, 1, 0);
@@ -152,7 +169,7 @@ namespace UpvoidMiner
                                       -.2f, .2f);
 
             // Update item preview.
-            if ( Inventory.Selection != null && Inventory.Selection.HasPreview )
+            if ( Inventory.Selection != null && Inventory.Selection.HasRayPreview )
             {
                 // Send a ray query to find the position on the terrain we are looking at.
                 ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
@@ -164,12 +181,14 @@ namespace UpvoidMiner
                         _position -= camera.ForwardDirection * .04f;
 
                         if ( selection != null )
-                            selection.OnPreview(_position, true);
+                            selection.OnRayPreview(this, _position, _normal, true);
                     }
                     else if ( selection != null )
-                        selection.OnPreview(vec3.Zero, false);
+                        selection.OnRayPreview(this, vec3.Zero, vec3.Zero, false);
                 });
             }
+            if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
+                Inventory.Selection.OnUpdatePreview(this, elapsedSeconds);
         }
 
         /// <summary>
@@ -224,9 +243,15 @@ namespace UpvoidMiner
         /// </summary>
         void generateInitialItems()
         {
+            // Tools
+            Inventory.AddItem(new ToolItem(ToolType.Shovel));
+            Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
+            Inventory.AddItem(new ToolItem(ToolType.Axe));
+            Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+
             // Testing resource/material items.
-            /*TerrainMaterial dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
-            TerrainMaterial stone06 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.06"); 
+            /*TerrainResource dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
+            TerrainResource stone06 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.06"); 
             Inventory.AddResource(dirt, 10);
             Inventory.AddItem(new ResourceItem(dirt, 3f));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1)));
@@ -236,12 +261,9 @@ namespace UpvoidMiner
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
             Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
             Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
-
-            // Tools
-            Inventory.AddItem(new ToolItem(ToolType.Shovel));
-            Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
-            Inventory.AddItem(new ToolItem(ToolType.Axe));
-            Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AoiCrystal"), MaterialShape.Sphere, new vec3(1)));
+            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1)));
+            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1)));
 
             gui.OnUpdate();
         }
@@ -290,9 +312,9 @@ namespace UpvoidMiner
         /// <summary>
         /// Places a sphere of a given material
         /// </summary>
-        public void PlaceSphere(TerrainMaterial material, vec3 position, float radius)
+        public void PlaceSphere(TerrainResource material, vec3 position, float radius)
         {
-            digging.DigSphere(position, radius, material.MaterialIndex, DiggingController.DigMode.Add);
+            digging.DigSphere(position, radius, material.Index, DiggingController.DigMode.Add);
         }
         /// <summary>
         /// Digs a sphere at a given position with a given radius.

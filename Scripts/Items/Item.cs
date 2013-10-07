@@ -46,9 +46,13 @@ namespace UpvoidMiner
         /// </summary>
         public virtual bool IsUsable { get; protected set; }
         /// <summary>
-        /// True iff the item has a preview when it is selected.
+        /// True iff the item has a preview based on raycasting position when it is selected.
         /// </summary>
-        public virtual bool HasPreview { get; protected set; }
+        public virtual bool HasRayPreview { get; protected set; }
+        /// <summary>
+        /// True iff the item has a preview based on continuous updating when it is selected.
+        /// </summary>
+        public virtual bool HasUpdatePreview { get; protected set; }
 
         /// <summary>
         /// True iff the item represents an empty (or negative) amount of the item.
@@ -74,9 +78,13 @@ namespace UpvoidMiner
         public virtual void OnUseParameterChange(float _delta) { }
         /// <summary>
         /// Is executed when this item is selected and a preview ray point was found.
-        /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at.
+        /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at (with _worldNormal being the surface normal at that position).
         /// </summary>
-        public virtual void OnPreview(vec3 _worldPos, bool _visible) { }
+        public virtual void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible) { }
+        /// <summary>
+        /// Is executed continuously when this item is selected.
+        /// </summary>
+        public virtual void OnUpdatePreview(Player _player, float _elapsedSeconds) { }
 
         /// <summary>
         /// Index for quickaccess, -1 for none.
