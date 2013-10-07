@@ -716,7 +716,16 @@
 {
     "Descriptor" : {
     "Collection" : "materials",
-    "Name" : "Terrain/Rock03",
+    	"Name" : "Terrain/Dirt",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Dirt",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+    "Collection" : "materials",
         "Name" : "Terrain/Rock01",
         "Type" : "FromCollection"
     },

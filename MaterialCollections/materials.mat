@@ -14,6 +14,18 @@
     Shader: ::Opaque/MeshPseudoTransparent
     Color: uSpecularColor, 1.0, .0, .0, 0.001
     Culling: None
+    
+[Terrain/Dirt] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
+    Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+    Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
+    Texture: uNormalXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Normal
+    Texture: uNormalXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+    Texture: uNormalZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Normal
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScale, 30
+    Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock01] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap

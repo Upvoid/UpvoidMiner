@@ -25,7 +25,12 @@
                 "Player/DroneConstraint.cs",
                 "Player/PlayerGui.cs",
                 "Player/CharacterController.cs",
-                "Player/DiggingController.cs"
+                "Player/DiggingController.cs",
+                "Terrain/UpvoidMinerWorldGenerator.cs",
+                "Terrain/TerrainResource.cs",
+                "Terrain/SolidTerrainResource.cs",
+                "Terrain/VegetatedTerrainResource.cs",
+                "Terrain/TerrainResource.Register.cs"
             ],
             "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local", "Mods/Upvoid/Common.JSON/0.0.1::Newtonsoft.Json" ]
         },
