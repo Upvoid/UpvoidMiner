@@ -4,6 +4,7 @@ using Engine;
 using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
+using Engine.Physics;
 
 namespace UpvoidMiner
 {
@@ -232,6 +233,73 @@ namespace UpvoidMiner
             previewMaterial = null;
             previewMaterialPlaced = null;
             previewMaterialPlacedIndicator = null;
+        }
+        #endregion
+
+        #region Item Entity        
+        /// <summary>
+        /// Is called when an entity is created for this item (e.g. if dropped).
+        /// This function is supposed to add renderjobs and physicscomponents.
+        /// Don't forget to add components to the item entity!
+        /// </summary>
+        public override void SetupItemEntity(ItemEntity itemEntity, Entity entity)
+        {
+            // Create an appropriate physics shape.
+            CollisionShape collShape;
+            MeshResource mesh;
+            mat4 scaling;
+            switch (Shape)
+            {
+                case MaterialShape.Cube: 
+                    collShape = new BoxShape(Size / 2f);
+                    scaling = mat4.Scale(Size / 2f);
+                    mesh = Resources.UseMesh("::Debug/Box", null);
+                    break;
+                case MaterialShape.Sphere: 
+                    collShape = new SphereShape(Size.x);
+                    scaling = mat4.Scale(Size);
+                    mesh = Resources.UseMesh("::Debug/Sphere", null);
+                    break;
+                case MaterialShape.Cylinder: 
+                    collShape = new CylinderShape(Size.x, Size.y);
+                    mesh = Resources.UseMesh("::Debug/Cylinder", null);
+                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
+                    break;
+                default: throw new NotImplementedException("Invalid Shape");
+            }
+
+            // Create the physical representation of the item.
+            RigidBody body = itemEntity.ContainingWorld.Physics.CreateAndAddRigidBody(
+                50f,
+                mat4.Translate(entity.Position),
+                collShape
+                );
+            
+            itemEntity.AddPhysicsComponent(new PhysicsComponent(entity, body, mat4.Identity));
+            
+            MaterialResource material;
+            if (Material is SolidTerrainResource)
+                material = (Material as SolidTerrainResource).RenderMaterial;
+            else
+                throw new NotImplementedException("Unknown terrain resource");
+            
+            // Create the graphical representation of the item.
+            MeshRenderJob renderJob = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                material,
+                mesh,
+                mat4.Identity
+                );
+            itemEntity.AddRenderComponent(new RenderComponent(entity, scaling, renderJob, true));
+            
+            MeshRenderJob renderJobShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh, 
+                Resources.UseMaterial("::Shadow", HostScript.ModDomain), 
+                mesh,
+                mat4.Identity
+                );
+            itemEntity.AddRenderComponent(new RenderComponent(entity, scaling, renderJobShadow, true));
+            
         }
         #endregion
     }

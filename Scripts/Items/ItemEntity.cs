@@ -27,6 +27,17 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Applies an impulse to all physics components.
+        /// </summary>
+        public void ApplyImpulse(vec3 impulse, vec3 relPos)
+        {
+            foreach (var pc in physicsComponents)
+            {
+                pc.RigidBody.ApplyImpulse(impulse, relPos);
+            }
+        }
+
+        /// <summary>
         /// Adds a physics component to this entity.
         /// </summary>
         public void AddPhysicsComponent(PhysicsComponent comp)

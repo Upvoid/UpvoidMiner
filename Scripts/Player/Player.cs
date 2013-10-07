@@ -192,6 +192,18 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Drops an item.
+        /// </summary>
+        void DropItem(Item item)
+        {
+            Inventory.RemoveItem(item);
+
+            ItemEntity itemEntity = new ItemEntity(item);
+            ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + CameraUp * 1f + CameraDirection * 1f));
+            itemEntity.ApplyImpulse(CameraDirection * 200f, new vec3(0, .3f, 0));
+        }
+
+        /// <summary>
         /// Adds all active drone constraints to a Csg Diff Node.
         /// </summary>
         public void AddDroneConstraints(CsgOpDiff diffNode, vec3 refPos)
@@ -268,26 +280,6 @@ namespace UpvoidMiner
             gui.OnUpdate();
         }
 
-		void HandleAxisInput (object sender, InputAxisArgs e)
-		{
-			if(e.Axis == AxisType.MouseWheelY) 
-			{
-                // Control + Wheel to cycle through quick access.
-                if ( keyModifierControl )
-                {
-                    int newIdx = Inventory.SelectionIndex + (int)(e.RelativeChange);
-                    while ( newIdx < 0 ) newIdx += Inventory.QuickaccessSlots;
-                    Inventory.Select(newIdx % Inventory.QuickaccessSlots);
-                }
-                else // Otherwise used to change 'use-parameter'.
-                {
-                    Item selection = Inventory.Selection;
-                    if ( selection != null ) 
-                        selection.OnUseParameterChange(e.RelativeChange);
-                }
-			}
-		}
-
         void AddDrone(vec3 position)
         {
             Drone d = new Drone(position + new vec3(0, 1, 0), this, DroneType.Chain);
@@ -323,6 +315,26 @@ namespace UpvoidMiner
         {
             digging.DigSphere(position, radius);
         }
+        
+        void HandleAxisInput (object sender, InputAxisArgs e)
+        {
+            if(e.Axis == AxisType.MouseWheelY) 
+            {
+                // Control + Wheel to cycle through quick access.
+                if ( keyModifierControl )
+                {
+                    int newIdx = Inventory.SelectionIndex + (int)(e.RelativeChange);
+                    while ( newIdx < 0 ) newIdx += Inventory.QuickaccessSlots;
+                    Inventory.Select(newIdx % Inventory.QuickaccessSlots);
+                }
+                else // Otherwise used to change 'use-parameter'.
+                {
+                    Item selection = Inventory.Selection;
+                    if ( selection != null ) 
+                        selection.OnUseParameterChange(e.RelativeChange);
+                }
+            }
+        }
 
         void HandlePressInput (object sender, InputPressArgs e)
         {
@@ -345,6 +357,11 @@ namespace UpvoidMiner
 
                     case InputKey.F8:
                         Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
+                        break;
+
+                    case InputKey.Q:
+                        if ( Inventory.Selection != null )
+                            DropItem(Inventory.Selection);
                         break;
 
                     default: break;

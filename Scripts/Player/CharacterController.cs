@@ -251,7 +251,7 @@ namespace UpvoidMiner
                     IsRunning = true;
                 else
                     IsRunning = false;
-            } else if(e.Key == InputKey.Q) {
+            } else if(e.Key == InputKey.O) {
                 Body.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * Body.GetTransformation());
                 Body.SetVelocity(vec3.Zero);
             }
