@@ -16,7 +16,7 @@
     Culling: None
     
 [Terrain/Dirt] : Default
-    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapColorModulated
     Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Diffuse
     Texture: uColorXY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse
     Texture: uColorZY, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Rock/Rock04.Diffuse

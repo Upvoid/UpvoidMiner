@@ -10,34 +10,41 @@ namespace UpvoidMiner
     public class VegetatedTerrainResource : SolidTerrainResource
     {
         public VegetatedTerrainResource(string name, string renderMaterial, string particleMaterial) :
-            base(name, renderMaterial, particleMaterial)
+            base(name, renderMaterial, particleMaterial, false)
         {
             // For now: just use the setup from our default dirt:
             
             // Add Gras attribute for LoD 4 (= MinLoD).
             Material.AddAttributeFloat("aGras", 0, 0, 4);
+
+            // Color modulated geometry pipeline for more variance.
+            {
+                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", HostScript.ModDomain), "Input", "Input");
+                Material.AddDefaultShadowAndZPre(pipeline);
+                Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+            }
             
             // Spawn Grass
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "Input", 0, 4);
+                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
             /*
             // Spawn Grass
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField2", HostScript.ModDomain), "Input", "Input", 0, 4);
+                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField2", HostScript.ModDomain), "Input", "", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
             
             // Spawn Herbs
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField", HostScript.ModDomain), "Input", "Input", 0, 4);
+                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField", HostScript.ModDomain), "Input", "", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs17", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
             
             // Spawn Herbs
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField2", HostScript.ModDomain), "Input", "Input", 0, 4);
+                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField2", HostScript.ModDomain), "Input", "", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs18", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }*/
             

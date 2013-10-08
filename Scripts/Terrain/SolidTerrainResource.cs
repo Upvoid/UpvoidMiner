@@ -19,16 +19,19 @@ namespace UpvoidMiner
         /// </summary>
         public readonly MaterialResource DigParticleMaterial;
 
-        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial) :
+        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial, bool defaultPipeline = true) :
             base(name)
         {
             RenderMaterial = Resources.UseMaterial(renderMaterial, HostScript.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, HostScript.ModDomain);
 
             // Add a default pipeline. (Solid material with zPre and Shadow pass)
-            int pipe = Material.AddDefaultPipeline();
-            Material.AddDefaultShadowAndZPre(pipe);
-            Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+            if ( defaultPipeline )
+            {
+                int pipe = Material.AddDefaultPipeline();
+                Material.AddDefaultShadowAndZPre(pipe);
+                Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+            }
         }
     }
 }
