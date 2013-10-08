@@ -14,11 +14,16 @@ namespace UpvoidMiner
         /// Material used for rendering the solid terrain.
         /// </summary>
         public readonly MaterialResource RenderMaterial;
+        /// <summary>
+        /// Material used for particle effect when digging.
+        /// </summary>
+        public readonly MaterialResource DigParticleMaterial;
 
-        public SolidTerrainResource(string name, string renderMaterial) :
+        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial) :
             base(name)
         {
             RenderMaterial = Resources.UseMaterial(renderMaterial, HostScript.ModDomain);
+            DigParticleMaterial = Resources.UseMaterial(particleMaterial, HostScript.ModDomain);
 
             int pipe = Material.AddDefaultPipeline();
             Material.AddDefaultShadowAndZPre(pipe);

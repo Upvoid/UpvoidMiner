@@ -9,8 +9,8 @@ namespace UpvoidMiner
     /// </summary>
     public class VegetatedTerrainResource : SolidTerrainResource
     {
-        public VegetatedTerrainResource(string name, string renderMaterial) :
-            base(name, renderMaterial)
+        public VegetatedTerrainResource(string name, string renderMaterial, string particleMaterial) :
+            base(name, renderMaterial, particleMaterial)
         {
             // For now: just use the setup from our default dirt:
             

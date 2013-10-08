@@ -24,25 +24,25 @@ namespace UpvoidMiner
                 // Register some simple solid materials.
 
                 // Dirt
-                addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt"));
+                addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "::Particle/Rock"));
 
                 // Stones
                 for (int i = 1; i <= 14; ++i) 
-                    addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00")));
+                    addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "::Particle/Rock"));
 
                 // Wood
-                addResource(new SolidTerrainResource("Wood", "Terrain/Wood"));
+                addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "::Particle/Rock"));
 
                 // Ores + Metals
-                addResource(new SolidTerrainResource("Coal", "Terrain/Coal"));
-                addResource(new SolidTerrainResource("Copper", "Terrain/Copper"));
-                addResource(new SolidTerrainResource("Iron", "Terrain/Iron"));
-                addResource(new SolidTerrainResource("Gold", "Terrain/Gold"));
+                addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "::Particle/Rock"));
 
                 // Rares
-                addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal"));
-                addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock"));
-                addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock"));
+                addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "::Particle/Rock"));
 
             }
             else

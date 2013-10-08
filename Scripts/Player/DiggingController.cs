@@ -5,6 +5,7 @@ using Engine.Universe;
 using Engine.Resources;
 using Engine.Rendering;
 using Engine.Physics;
+using System.Collections.Generic;
 
 namespace UpvoidMiner
 {
@@ -40,10 +41,40 @@ namespace UpvoidMiner
         /// <summary>
         /// Particle system for 3D stones due to digging.
         /// </summary>
-        CpuParticleSystemBase particlesStones;
-        RenderComponent particlesStonesRC;
-        RenderComponent particlesStonesRCShadow;
-        CpuParticleComponent particlesStonesPC;
+        class StoneParticles
+        {
+            public SolidTerrainResource resource;
+            public CpuParticleSystemBase particlesStones;
+            public RenderComponent particlesStonesRC;
+            public RenderComponent particlesStonesRCShadow;
+            public CpuParticleComponent particlesStonesPC;
+
+            public StoneParticles(SolidTerrainResource res, World world)
+            {
+                resource = res;
+                
+                particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
+                particlesStonesPC = new CpuParticleComponent(LocalScript.ParticleEntity, particlesStones, mat4.Identity);
+                particlesStonesRC = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
+                                                        new CpuParticleRenderJob(particlesStones,
+                                                             Renderer.Opaque.CpuParticles,
+                                                             Resources.UseMaterial("::Particle/Rock", null),
+                                                             Resources.UseMesh("::Particles/Rock", null),
+                                                             mat4.Identity),
+                                                        true);
+                particlesStonesRCShadow = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
+                                                              new CpuParticleRenderJob(particlesStones,
+                                                                     Renderer.Shadow.CpuParticles,
+                                                                     Resources.UseMaterial("::Particle/Shadow/Mesh", null),
+                                                                     Resources.UseMesh("::Particles/Rock", null),
+                                                                     mat4.Identity),
+                                                              true);
+                Debug.Assert(particlesStonesPC.IsValid);
+                Debug.Assert(particlesStonesRC.IsValid);
+                Debug.Assert(particlesStonesRCShadow.IsValid);
+            }
+        };
+        private Dictionary<int, StoneParticles> stoneParticles = new Dictionary<int, StoneParticles>();
 
         public DiggingController(World world, Player player)
         {
@@ -53,27 +84,6 @@ namespace UpvoidMiner
             this.player = player;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
             sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
-
-            // Create particle systems.
-            particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
-            particlesStonesPC = new CpuParticleComponent(LocalScript.ParticleEntity, particlesStones, mat4.Identity);
-            particlesStonesRC = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
-                                                    new CpuParticleRenderJob(particlesStones,
-                                                        Renderer.Opaque.CpuParticles,
-                                                        Resources.UseMaterial("::Particle/Rock", null),
-                                                        Resources.UseMesh("::Particles/Rock", null),
-                                                        mat4.Identity),
-                                                    true);
-            particlesStonesRCShadow = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
-                                                    new CpuParticleRenderJob(particlesStones,
-                                                        Renderer.Shadow.CpuParticles,
-                                                        Resources.UseMaterial("::Particle/Shadow/Mesh", null),
-                                                        Resources.UseMesh("::Particles/Rock", null),
-                                                        mat4.Identity),
-                                                          true);
-            Debug.Assert(particlesStonesPC.IsValid);
-            Debug.Assert(particlesStonesRC.IsValid);
-            Debug.Assert(particlesStonesRCShadow.IsValid);
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode = DigMode.Substract)
@@ -152,15 +162,30 @@ namespace UpvoidMiner
         public static void PointCallback(float x, float y, float z, int matPrev, int matNow, int lod)
         {
             // If material was changed from non-air to air: add a particle animation.
-            if ( matPrev != 0 && matNow == 0 )
-                instance.particlesStones.AddParticle3D(new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
-                                                       RandomDir() * (float)random.NextDouble() * .4f,
-                                                       new vec4(1),
-                                                       .2f + (float)random.NextDouble() * .3f,
-                                                       .2f + (float)random.NextDouble() * .3f,
-                                                       RandomDir(),
-                                                       RandomDir(),
-                                                       new vec3(0));
+            if (matPrev != 0 && matNow == 0)
+            {
+                // Create particle systems on demand.
+                if ( !instance.stoneParticles.ContainsKey(matPrev) )
+                {
+                    SolidTerrainResource res = TerrainResource.FromIndex(matPrev) as SolidTerrainResource;
+                    if ( res != null )
+                        instance.stoneParticles.Add(matPrev, new StoneParticles(res, LocalScript.world));
+                    else instance.stoneParticles.Add(matPrev, null);
+                }
+
+                // Add particle.
+                StoneParticles particles = instance.stoneParticles[matPrev];
+                if ( particles != null ) 
+                    instance.stoneParticles[matPrev].particlesStones.AddParticle3D(
+                        new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
+                        RandomDir() * (float)random.NextDouble() * .4f,
+                        new vec4(1),
+                        .2f + (float)random.NextDouble() * .3f,
+                        .2f + (float)random.NextDouble() * .3f,
+                        RandomDir(),
+                        RandomDir(),
+                        new vec3(0));
+            }
         }
 
         /*
