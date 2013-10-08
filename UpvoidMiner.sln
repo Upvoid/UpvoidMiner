@@ -13,6 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expressions", "Expressions"
 	ProjectSection(SolutionItems) = preProject
 		Expressions\Hills.json = Expressions\Hills.json
 		Expressions\TreeDensity.json = Expressions\TreeDensity.json
+		Expressions\GrassDensity.json = Expressions\GrassDensity.json
+		Expressions\GrassDensity2.json = Expressions\GrassDensity2.json
+		Expressions\HerbDensity.json = Expressions\HerbDensity.json
+		Expressions\HerbDensity2.json = Expressions\HerbDensity2.json
+		Expressions\Hills.json = Expressions\Hills.json
+		Expressions\Perlin.json = Expressions\Perlin.json
+		Expressions\TreeDensity.json = Expressions\TreeDensity.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MaterialCollections", "MaterialCollections", "{C723C33C-2A85-4C6F-9557-00ED0AC5F824}"

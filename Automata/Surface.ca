@@ -12,7 +12,7 @@ body
 
   # === Gras ===
 
-  this.aGras = 0 #perlin(x,y,z) $= Perlin; max(0, perlin(x / 20, y / 20, z / 20))
+  this.aGras = perlin(x,y,z) $= ::Perlin; max(0, perlin(this.x / 20, this.y / 20, this.z / 20))
 
   # === Stones ===
 

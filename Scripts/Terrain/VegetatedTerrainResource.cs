@@ -22,7 +22,7 @@ namespace UpvoidMiner
                 int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "Input", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
-            
+            /*
             // Spawn Grass
             {
                 int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField2", HostScript.ModDomain), "Input", "Input", 0, 4);
@@ -39,7 +39,7 @@ namespace UpvoidMiner
             {
                 int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField2", HostScript.ModDomain), "Input", "Input", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs18", HostScript.ModDomain), Renderer.Opaque.Mesh);
-            }
+            }*/
             
             // Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
             {

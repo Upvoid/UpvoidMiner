@@ -25,6 +25,7 @@ namespace UpvoidMiner
             RenderMaterial = Resources.UseMaterial(renderMaterial, HostScript.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, HostScript.ModDomain);
 
+            // Add a default pipeline. (Solid material with zPre and Shadow pass)
             int pipe = Material.AddDefaultPipeline();
             Material.AddDefaultShadowAndZPre(pipe);
             Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
