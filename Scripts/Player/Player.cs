@@ -407,10 +407,8 @@ namespace UpvoidMiner
                     if(_body != null && _body.RefComponent != null)
                     {
                         Entity entity = _body.RefComponent.Entity;
-                        Console.WriteLine("HIT!!!");
                         if(entity != null)
                         {
-                            Console.WriteLine("HIT and Trigger!!!");
                             TriggerId trigger = TriggerId.getIdByName("Interaction");
                             entity[trigger] |= new InteractionMessage(thisEntity);
                         }

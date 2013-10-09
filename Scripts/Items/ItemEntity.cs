@@ -65,8 +65,6 @@ namespace UpvoidMiner
 
         public void Interaction(object msg)
         {
-            Console.WriteLine("INTERACT!!!");
-
             // Make sure we get the message type we are expecting.
             InteractionMessage interactionMsg = msg as InteractionMessage;
             if(interactionMsg == null)
