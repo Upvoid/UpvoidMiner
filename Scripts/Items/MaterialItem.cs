@@ -275,7 +275,7 @@ namespace UpvoidMiner
                 collShape
                 );
             
-            itemEntity.AddPhysicsComponent(new PhysicsComponent(entity, body, mat4.Identity));
+            itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
             
             MaterialResource material;
             if (Material is SolidTerrainResource)
@@ -290,7 +290,7 @@ namespace UpvoidMiner
                 mesh,
                 mat4.Identity
                 );
-            itemEntity.AddRenderComponent(new RenderComponent(entity, scaling, renderJob, true));
+            itemEntity.AddRenderComponent(new RenderComponent(renderJob, scaling, true));
             
             MeshRenderJob renderJobShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh, 
@@ -298,7 +298,7 @@ namespace UpvoidMiner
                 mesh,
                 mat4.Identity
                 );
-            itemEntity.AddRenderComponent(new RenderComponent(entity, scaling, renderJobShadow, true));
+            itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, scaling, true));
             
         }
         #endregion

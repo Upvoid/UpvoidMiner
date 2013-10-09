@@ -43,6 +43,7 @@ namespace UpvoidMiner
         public void AddPhysicsComponent(PhysicsComponent comp)
         {
             physicsComponents.Add(comp);
+            thisEntity.AddComponent(comp);
         }
         /// <summary>
         /// Adds a render component to this entity.
@@ -50,6 +51,7 @@ namespace UpvoidMiner
         public void AddRenderComponent(RenderComponent comp)
         {
             renderComponents.Add(comp);
+            thisEntity.AddComponent(comp);
         }
 
         protected override void Init()
@@ -63,6 +65,8 @@ namespace UpvoidMiner
 
         public void Interaction(object msg)
         {
+            Console.WriteLine("INTERACT!!!");
+
             // Make sure we get the message type we are expecting.
             InteractionMessage interactionMsg = msg as InteractionMessage;
             if(interactionMsg == null)
@@ -71,11 +75,8 @@ namespace UpvoidMiner
             // Interacting with an item means picking it up. Answer by sending the item to the sender.
             interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(RepresentedItem);
 
-            // For now, simply hide this entity (entity deletion is not yet possible)
-            foreach (RenderComponent comp in renderComponents)
-                comp.Visible = false;
-            foreach (PhysicsComponent comp in physicsComponents)
-                comp.Transform = mat4.Scale(0f);
+            // And remove this entity.
+            ContainingWorld.RemoveEntity(thisEntity);
         }
     }
 }

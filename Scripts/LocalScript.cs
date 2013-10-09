@@ -100,7 +100,8 @@ namespace UpvoidMiner
 				Rendering.ActiveMainPipeline.SetCamera(camera);
 
             // Create particle entity.
-            ParticleEntity = new AnonymousEntity(world, mat4.Identity);
+            ParticleEntity = new AnonymousEntity(mat4.Identity);
+            world.AddEntity(ParticleEntity);
 
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.

@@ -35,17 +35,10 @@ namespace UpvoidMiner
 	public class Player: EntityScript
 	{
 		/// <summary>
-		/// The physical representation of the player. For now, this is a simple uncontrollable sphere.
-		/// </summary>
-		private PhysicsComponent physicsComponent;
-
-		/// <summary>
 		/// The render component for the torso.
 		/// </summary>
 		private RenderComponent rcTorso, rcTorsoShadow;
-        private RenderComponent rcTorsoSteam;
         private CpuParticleSystemBase psTorsoSteam;
-        private CpuParticleComponent pcTorsoSteam;
         private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
         /// Relative torso transformation.
@@ -218,26 +211,23 @@ namespace UpvoidMiner
             character = new CharacterController(camera, ContainingWorld);
 
 			// For now, attach this entity to a simple sphere physics object.
-			physicsComponent = new PhysicsComponent(thisEntity,
-                                 character.Body,
-			                     mat4.Translate(new vec3(0, 0.2f, 0)));
-
-            physicsComponent.RigidBody.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
+            character.Body.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
+            thisEntity.AddComponent(new PhysicsComponent(
+                                         character.Body,
+        			                     mat4.Translate(new vec3(0, 0.2f, 0))));
 
 			// Add Torso mesh.
-			rcTorso = new RenderComponent(thisEntity, torsoTransform,
-                                          new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                              true);
-			rcTorsoShadow = new RenderComponent(thisEntity, torsoTransform,
-			                                    new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
-			                                    true);
+            thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+                                                                  torsoTransform,
+                                                                  true));
+            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+                                                                        torsoTransform,
+                                                                        true));
             psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
-            pcTorsoSteam = new CpuParticleComponent(LocalScript.ParticleEntity, psTorsoSteam, mat4.Identity);
-            rcTorsoSteam = new RenderComponent(LocalScript.ParticleEntity, mat4.Identity,
-                                               new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
-                                               true);
-            Debug.Assert(rcTorsoSteam.IsValid);
-            Debug.Assert(pcTorsoSteam.IsValid);
+            LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));
+            LocalScript.ParticleEntity.AddComponent(new RenderComponent(new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
+                                                                        mat4.Identity,
+                                                                        true));
 
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
@@ -414,11 +404,13 @@ namespace UpvoidMiner
             if(e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down) {
                 ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
                     // Receiving the async ray query result here
-                    if(_body != null)
+                    if(_body != null && _body.RefComponent != null)
                     {
-                        Entity entity = _body.AttachedEntity;
+                        Entity entity = _body.RefComponent.Entity;
+                        Console.WriteLine("HIT!!!");
                         if(entity != null)
                         {
+                            Console.WriteLine("HIT and Trigger!!!");
                             TriggerId trigger = TriggerId.getIdByName("Interaction");
                             entity[trigger] |= new InteractionMessage(thisEntity);
                         }

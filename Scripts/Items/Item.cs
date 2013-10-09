@@ -114,7 +114,7 @@ namespace UpvoidMiner
                 new BoxShape(new vec3(1))
                 );
             
-            itemEntity.AddPhysicsComponent(new PhysicsComponent(entity, body, mat4.Identity));
+            itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
             
             // Create the graphical representation of the item.
             MeshRenderJob renderJob = new MeshRenderJob(
@@ -123,7 +123,7 @@ namespace UpvoidMiner
                 Resources.UseMesh("::Debug/Box", HostScript.ModDomain),
                 mat4.Identity
                 );
-            itemEntity.AddRenderComponent(new RenderComponent(entity, mat4.Identity, renderJob, true));
+            itemEntity.AddRenderComponent(new RenderComponent(renderJob, mat4.Identity, true));
             
             MeshRenderJob renderJobShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh, 
@@ -131,7 +131,7 @@ namespace UpvoidMiner
                 Resources.UseMesh("::Debug/Box", HostScript.ModDomain),
                 mat4.Identity
                 );
-            itemEntity.AddRenderComponent(new RenderComponent(entity, mat4.Identity, renderJobShadow, true));
+            itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, mat4.Identity, true));
 
         }
 

@@ -61,13 +61,10 @@ namespace UpvoidMiner
         private float lifetime = 0f;
 
         // Render Components.
-        private RenderComponent renderComponentBodyOpaque;
-        private RenderComponent renderComponentBodyShadow;
         private RenderComponent renderComponentWing1Opaque;
         private RenderComponent renderComponentWing1Shadow;
         private RenderComponent renderComponentWing2Opaque;
         private RenderComponent renderComponentWing2Shadow;
-        private RenderComponent renderComponentIndicator;
 
         /// <summary>
         /// Creates a new drone.
@@ -106,45 +103,37 @@ namespace UpvoidMiner
         protected override void Init()
         {
             // Add Torso mesh.
-            renderComponentBodyOpaque = new RenderComponent(thisEntity,
-                                                            mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneBody", HostScript.ModDomain), mat4.Identity),
-                                                            true);
-            renderComponentBodyShadow = new RenderComponent(thisEntity,
-                                                            mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneBody", HostScript.ModDomain), mat4.Identity),
-                                                            true);
+            thisEntity.AddComponent(new RenderComponent(
+                new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneBody", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(DroneScale),
+                true));
+            thisEntity.AddComponent(new RenderComponent(
+                new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneBody", HostScript.ModDomain), mat4.Identity),                                                        
+                mat4.Scale(DroneScale),
+                true));
 
-            renderComponentWing1Opaque = new RenderComponent(thisEntity,
-                                                             mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing1", HostScript.ModDomain), mat4.Identity),
-                                                            true);
-            renderComponentWing1Shadow = new RenderComponent(thisEntity,
-                                                             mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing1", HostScript.ModDomain), mat4.Identity),
-                                                            true);
+            thisEntity.AddComponent(renderComponentWing1Opaque = new RenderComponent(
+                new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing1", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(DroneScale),
+                true));
+            thisEntity.AddComponent(renderComponentWing1Shadow = new RenderComponent(
+                new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing1", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(DroneScale),
+                true));
 
-            renderComponentWing2Opaque = new RenderComponent(thisEntity,
-                                                             mat4.Scale(DroneScale),
-                                                            new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
-                                                             true);
-            renderComponentWing2Shadow = new RenderComponent(thisEntity,
-                                                             mat4.Scale(DroneScale),
-                                                             new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
-                                                             true);
+            thisEntity.AddComponent(renderComponentWing2Opaque = new RenderComponent(
+                new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(DroneScale),
+                true));
+            thisEntity.AddComponent(renderComponentWing2Shadow = new RenderComponent(
+                new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/DroneWing2", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(DroneScale),
+                true));
 
-            renderComponentIndicator = new RenderComponent(thisEntity,
-                                                           mat4.Scale(new vec3(.03f,7,.03f)),
-                                                           new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Miner/DroneIndicator", HostScript.ModDomain), Resources.UseMesh("Miner/DroneIndicator", HostScript.ModDomain), mat4.Identity),
-                                                           true);
-            
-            Debug.Assert(renderComponentBodyOpaque.IsValid);
-            Debug.Assert(renderComponentBodyShadow.IsValid);
-            Debug.Assert(renderComponentWing1Opaque.IsValid);
-            Debug.Assert(renderComponentWing1Shadow.IsValid);
-            Debug.Assert(renderComponentWing2Opaque.IsValid);
-            Debug.Assert(renderComponentWing2Shadow.IsValid);
-            Debug.Assert(renderComponentIndicator.IsValid);
+            thisEntity.AddComponent(new RenderComponent(
+                new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Miner/DroneIndicator", HostScript.ModDomain), Resources.UseMesh("Miner/DroneIndicator", HostScript.ModDomain), mat4.Identity),
+                mat4.Scale(new vec3(.03f,7,.03f)),
+                true));
         }
     }
 }
