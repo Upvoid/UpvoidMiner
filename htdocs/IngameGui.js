@@ -16,48 +16,47 @@ function setupGui()
 
 function buildInventory(items)
 {
-    inventoryList = $('#inventory-list')
-    inventoryList.html("");
-    
+    var html = "";
     for(var i = 0; i < items.length; ++i)
     {
         var item = items[i];
-        inventoryList.append("<li class=\"item\"><img src=\""+item.icon+"\" alt=\""+item.name+"\"> <span class=\"item-details\">"+item.name+"</span> </li>")
+        html += "<li class=\"item\"><img src=\""+item.icon+"\" alt=\""+item.name+"\"> <span class=\"item-details\">"+item.name+"</span> </li>";
     }
+    
+    $('#inventory-list').html("");
 }
 
 function buildQuickAccessBar(quickAccessItems, selection)
-{
-    var quickaccessList = $('#quickaccess-list');
-    quickaccessList.html("");
+{   
+    var html = "";
     
     for(var i = 0; i < quickAccessItems.length; ++i)
     {
         if(quickAccessItems[i] === null)
         {
-            quickaccessList.append("<li class=\"item empty\"><div class=\"slot-number\">"+(i+1)%10+"</div></li>");
+            html += "<li class=\"item empty\"><div class=\"slot-number\">"+(i+1)%10+"</div></li>";
         }
         else
         {
             var item = quickAccessItems[i];
-            
-            var itemHtml = "";
+
             if(i == selection)
-                itemHtml += "<li class=\"item active\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item active\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
             else
-                itemHtml += "<li class=\"item\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
                 
-            itemHtml += "<div class=\"slot-number\">"+(i+1)%10+"</div>";
+            html += "<div class=\"slot-number\">"+(i+1)%10+"</div>";
             if(item.quantity != 1 || item.isVolumetric)
             {
                 if(item.isVolumetric)
-                    itemHtml += "<div class=\"quantity\">"+item.quantity+"m³</div>";
+                    html += "<div class=\"quantity\">"+item.quantity+"m³</div>";
                 else
-                    itemHtml += "<div class=\"quantity\">x"+item.quantity+"</div>";
+                    html += "<div class=\"quantity\">x"+item.quantity+"</div>";
             }
-            itemHtml += "</li>";
-            
-            quickaccessList.append(itemHtml);
+            html += "</li>";
         }
     }
+    
+    $('#quickaccess-list').html(html);
+    
 }
