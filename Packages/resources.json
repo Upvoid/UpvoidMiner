@@ -745,7 +745,7 @@
 {
     "Descriptor" : {
     "Collection" : "materials",
-    	"Name" : "Terrain/Dirt",
+        "Name" : "Terrain/Dirt",
         "Type" : "FromCollection"
     },
     "Name" : "Terrain/Dirt",
@@ -1017,6 +1017,32 @@
 },
 {
     "Descriptor" : {
+        "Files" : [
+            "Particles/NormalmapColorMultiply.fsh",
+            "Particles/ParticleMeshTextured.vsh"
+        ],
+        "Name" : "Particles/Opaque/Mesh",
+        "Type" : "File"
+    },
+    "Name" : "Particles/Opaque/Mesh",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Particles/Shadow.fsh",
+            "Particles/ParticleMeshShadow.vsh"
+        ],
+        "Name" : "Particles/Shadow/Mesh",
+        "Type" : "File"
+    },
+    "Name" : "Particles/Shadow/Mesh",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
         "Collection" : "materials",
         "Name" : "Miner/DroneConstraintVertical",
         "Type" : "FromCollection"
@@ -1072,6 +1098,26 @@
         "Type" : "FromCollection"
     },
     "Name" : "Items/ResourcePreviewIndicator",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Particles/Rock",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Rock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Particles/Shadow/Mesh",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Shadow/Mesh",
     "Path" : "~.mat",
     "Type" : "Material"
 }

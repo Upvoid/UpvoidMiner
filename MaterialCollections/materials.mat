@@ -14,7 +14,7 @@
     Shader: ::Opaque/MeshPseudoTransparent
     Color: uSpecularColor, 1.0, .0, .0, 0.001
     Culling: None
-    
+
 [Terrain/Dirt] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmapColorModulated
     Texture: uColorXZ, Mods/Upvoid/Resources.TerrainMaterials/1.0.0::Vegetated/Vegetated04.Harmonized2.Diffuse
@@ -123,7 +123,7 @@
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock07.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock07.Normal
     Color: uSpecularColor, .02, .02, .02, 9
-    
+
     Parameter: uBlendingCoefficient, 4
 
 [Terrain/Rock08] : Default
@@ -466,12 +466,33 @@
     ParticleAttribute: aParticleSize
     ParticleAttribute: aParticleAngle
     ParticleAttribute: aParticleLife
-    
+
+[Particles/Shadow/Mesh] : CpuParticleDefault
+    Shader: Particles/Shadow/Mesh
+    ParticleAttribute: aParticlePosition
+    ParticleAttribute: aParticleSize
+    ParticleAttribute: aParticleTangent
+    ParticleAttribute: aParticleBitangent
+    ParticleAttribute: aParticleLife
+    Culling: None
+
+[Particles/Rock] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, ::compatibility/terrain/RockRough0008_2_S
+    Texture: uNormal, ::compatibility/terrain/RockRough0008_2_S.normals
+    Color: uSpecularColor, .5, .5, .5, 8
+    ParticleAttribute: aParticlePosition
+    ParticleAttribute: aParticleSize
+    ParticleAttribute: aParticleTangent
+    ParticleAttribute: aParticleBitangent
+    ParticleAttribute: aParticleColor
+    ParticleAttribute: aParticleLife
+
 [Items/Dummy] : Default
     Shader: ::Opaque/MeshTextured
     Texture: uColor, Items/ItemDummy
     Color: uSpecularColor, .0, .0, .0, 4
-    
+
 [Items/ResourcePreview] : Default
     Shader: ::Transparent/MeshFresnelColored
     Color: uColor, 1,1,1, .2
@@ -480,7 +501,7 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
-    
+
 [Items/ResourcePreviewLimited] : Default
     Shader: ::Transparent/MeshFresnelColored
     Color: uColor, 1,0,0, .3
@@ -489,7 +510,7 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
-    
+
 [Items/ResourcePreviewIndicator] : Default
     Shader: ::Transparent/MeshFresnelColored
     Color: uColor, 0,1,1, .2
