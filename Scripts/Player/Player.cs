@@ -435,7 +435,6 @@ namespace UpvoidMiner
                     }
                 });
             }
-
         }
 
         /// <summary>
