@@ -14,13 +14,74 @@ namespace UpvoidMiner
         Player player;
 
         JsonSerializer json = new JsonSerializer();
+        WebSocketHandler updateSocket;
+
+        // Container class for the data we send to the GUI client.
+        [Serializable]
+        class GuiInfo
+        {
+            [Serializable]
+            public class GuiItem {
+                public GuiItem(Item item)
+                {
+                    icon = "Icons/ItemDummy.png";
+                    name = item.Name;
+                    quantity = 1.0f;
+                    isVolumetric = false;
+
+                    VolumeItem volumeItem = item as VolumeItem;
+                    if(volumeItem != null)
+                    {
+                        isVolumetric = true;
+                        quantity = volumeItem.Volume;
+                    }
+
+                    DiscreteItem discreteItem = item as DiscreteItem;
+                    if(discreteItem != null)
+                    {
+                        quantity = discreteItem.StackSize;
+                    }
+                }
+
+                public string icon;
+                public string name;
+                public float quantity;
+                public bool isVolumetric;
+
+                public static List<GuiItem> FromItemCollection(IEnumerable<Item> items)
+                {
+                    List<GuiItem> guiItems = new List<GuiItem>();
+                    foreach(Item item in items)
+                    {
+                        if (item != null)
+                            guiItems.Add(new GuiItem(item));
+                        else
+                            guiItems.Add(null);
+                    }
+
+                    return guiItems;
+                }
+            }
+
+            public List<GuiItem> inventory;
+            public List<GuiItem> quickAccess;
+            public int selection;
+        }
 
         public PlayerGui(Player player)
         {
             // The index.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
             // These dynamic content handlers provide that information.
             this.player = player;
-            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "Inventory", webInventory);
+            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "IngameGuiData", webInventory);
+            updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(LocalScript.ModDomain, "InventoryUpdate");
+
+            // On all relevant changes in the inventory, we order the GUI client to update itself.
+            player.Inventory.OnSelectionChanged += (arg1, arg2) => OnUpdate();
+            player.Inventory.OnQuickAccessChanged += (arg1, arg2) => OnUpdate();
+            player.Inventory.Items.OnAdd += arg1 => OnUpdate();
+            player.Inventory.Items.OnRemove += arg1 => OnUpdate();
+            player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
         }
 
         /// <summary>
@@ -28,79 +89,23 @@ namespace UpvoidMiner
         /// </summary>
         public void OnUpdate()
         {
-            // TODO: notify the websocket that new data is available!
+            // This sends a message via our update socket to the GUI client, which will then update itself.
+            updateSocket.SendMessage("Update");
         }
 
         void webInventory(WebRequest request, WebResponse response)
         {
-            // For now, the inventory is displayed as a list of the item names.
+            //Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
+            GuiInfo info = new GuiInfo();
+            info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
+            info.quickAccess = GuiInfo.GuiItem.FromItemCollection(player.Inventory.QuickAccessItems);
+            info.selection = player.Inventory.SelectionIndex;
 
-            List<CraftingRule> craftingRules = player.Inventory.DiscoveredRules;
-            List<CraftingRule> newRules = new List<CraftingRule>(craftingRules);
-
-            List<string> itemList = new List<string>();
-            foreach(Item item in player.Inventory.Items) {
-                // Stack size
-                string stackSize = item.StackDescription;
-                if ( stackSize != "" ) stackSize = " " + stackSize;
-
-                // Shortcut
-                string shortCut = item.QuickAccessIndex < 0 ? "" : "[" + ((item.QuickAccessIndex + 1) % 10) + "] ";
-
-                // Crafting
-                bool craftable = false;
-                bool dismantleable = false;
-                foreach (var rule in craftingRules) 
-                {
-                    if ( rule.CouldBeCraftable(item) )
-                    {
-                        dismantleable = rule.CouldBeDismantled(item);
-                        craftable = rule.IsCraftable(item, player.Inventory.Items);
-                        newRules.Remove(rule);
-                        break;
-                    }
-                }
-
-                // Options
-                string options = "";
-                if ( craftable ) options += ", Craft"; // craftable
-                if ( dismantleable ) options += ", Dismantle"; // dismantleable
-                options += ", Drop"; // droppable
-                if ( options.StartsWith(", ") ) options = " [" + options.Substring(2) + "]";
-
-                // Selection.
-                string selectStr = "";
-                if ( item == player.Inventory.Selection )
-                    selectStr = ">>> ";
-
-                // Actual name assembly
-                itemList.Add(selectStr + shortCut + item.Name + stackSize + " (" + item.Description + ")" + options);
-            }
-
-            // Also display items that could be crafted or are discovered
-            foreach (var rule in newRules)
-            {
-                Item item = rule.Result;
-
-                // Stack size
-                string stackSize = item.StackDescription;
-                if ( stackSize != "" ) stackSize = " " + stackSize;
-
-                // Options
-                string options = "";
-                if ( rule.IsCraftable(null, player.Inventory.Items) ) options += ", Craft"; // craftable
-                if ( options.StartsWith(", ") ) options = " [" + options.Substring(2) + "]";
-
-                // Actual name assembly
-                itemList.Add("~?~ " + item.Name + stackSize + " (" + item.Description + ")" + options);
-            }
-            
             StringWriter writer = new StringWriter();
             JsonTextWriter jsonWriter = new JsonTextWriter(writer);
 
-            json.Serialize(jsonWriter, itemList);
+            json.Serialize(jsonWriter, info);
             response.AppendBody(writer.GetStringBuilder().ToString());
-
         }
 
     }

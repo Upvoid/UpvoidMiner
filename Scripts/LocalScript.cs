@@ -113,7 +113,7 @@ namespace UpvoidMiner
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
 
-            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/");
+            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
 
 			// Configure the camera to receive user input.
 			Input.RootGroup.AddListener(cameraControl);

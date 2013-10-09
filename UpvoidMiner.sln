@@ -33,6 +33,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		htdocs\index.html = htdocs\index.html
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{AD0A6DBF-2CAC-4D84-8BD7-C7F138A8801D}"
+	ProjectSection(SolutionItems) = preProject
+		Shaders\Foliage.fsh = Shaders\Foliage.fsh
+		Shaders\Foliage.vsh = Shaders\Foliage.vsh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htdocs", "htdocs", "{C46CDCE0-655B-45E8-AE57-0E8C34023B12}"
+	ProjectSection(SolutionItems) = preProject
+		htdocs\index.html = htdocs\index.html
+		htdocs\IngameGui.css = htdocs\IngameGui.css
+		htdocs\IngameGui.js = htdocs\IngameGui.js
+		htdocs\IngameGui.html = htdocs\IngameGui.html
+		htdocs\index.html = htdocs\index.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

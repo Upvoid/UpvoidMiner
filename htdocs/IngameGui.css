@@ -1,0 +1,94 @@
+
+body {
+    background: transparent;
+    padding: 0.5em;
+}
+
+.clear-float {
+    float: clear;
+}
+
+#inventory {
+    display: none;
+}
+
+#inventory-list {
+    list-style-type: none;
+    width: 270px;
+    padding: 0;
+    margin: 0;
+}
+
+#quickaccess-list {
+    list-style-type: none;
+    height: 54px;
+    width: 540px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.item {
+    float: left;
+    position: relative;
+    padding: 5px;
+    height: 44px;
+    width: 44px;
+    margin: 5px;
+
+    color: #fff;
+
+    background: rgba(100, 100, 100, 0.75);
+    border: 1px solid rgba(100,100,100,0);
+    border-radius: 2px;
+}
+
+.item.empty {
+    background: rgba(100, 100, 100, 0.2);
+    border: 1px solid rgba(100,100,100,0);
+}
+
+.item.active {
+    background: rgba(255, 0, 0, 0.9);
+    border: 1px solid #f00;
+}
+
+.item:hover {
+    background: rgba(100,100,100,1);
+    border: 1px solid rgba(100,100,100,1);
+}
+
+.item.active:hover {
+    background: rgba(255, 0, 0, 1);
+    border: 1px solid #f00;
+}
+
+.item img {
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+}
+
+.item .slot-number {
+    position: absolute;
+    top: -2px;
+    right: 0px;
+    padding: 1px;
+    
+    font-size: 11px;
+    text-shadow: 0px 0px 4px #000;
+}
+
+.item .quantity {
+    position: absolute;
+    bottom: -2px;
+    left: 0px;
+    padding: 1px;
+    
+    font-size: 9px;
+    text-shadow: 0px 0px 3px #000;
+}
+
+.item .item-details {
+    display: none;
+    
+}

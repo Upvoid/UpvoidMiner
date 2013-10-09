@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="IngameGui.css">
+  </head>
+  <body>
+
+    <!-- Crosshair -->
+    <div style="width: 2px; height: 2px; background: #000; position: fixed; top: 50%; left: 50%; margin: -1px; border: 1px solid #fff;"></div>
+
+    <!-- Inventory -->
+    <div id="quickaccess"><ul id="quickaccess-list"></ul><div class="clear-float"></div></div>
+    <div id="inventory"><h2>All Items</h2><ul id="inventory-list"></ul></div>
+
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
+    <script src="IngameGui.js"></script>
+    <script>
+        $(function() {
+            setupGui();
+        });
+    </script>
+  </body>
+</html>
