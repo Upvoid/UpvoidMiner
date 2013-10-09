@@ -10,6 +10,9 @@ namespace UpvoidMiner
     /// </summary>
     public partial class Inventory
     {
+        public event Action<int, Item> OnQuickAccessChanged;
+        public event Action<int, Item> OnSelectionChanged;
+
         /// <summary>
         /// Backref to player.
         /// </summary>
@@ -56,6 +59,8 @@ namespace UpvoidMiner
         /// </summary>
         public int QuickaccessSlots { get { return quickAccessItems.Length; } }
 
+        public Item[] QuickAccessItems { get { return quickAccessItems; } }
+
         /// <summary>
         /// Sets the currently selected item
         /// CAUTION: '1'-'9' is mapped to 0-8, '0' to 9
@@ -71,6 +76,11 @@ namespace UpvoidMiner
             selectedItem = idx;
             if ( quickAccessItems[selectedItem] != null )
                 quickAccessItems[selectedItem].OnSelect();
+
+            if (OnSelectionChanged != null)
+            {
+                OnSelectionChanged(idx, Selection);
+            }
         }
 
         private void setDefaultQuickAccess(Item item)
@@ -115,6 +125,10 @@ namespace UpvoidMiner
                 if ( idx == selectedItem )
                     item.OnSelect();
             }
+
+            if (OnQuickAccessChanged != null)
+                OnQuickAccessChanged(idx, item);
+
         }
 
         /// <summary>

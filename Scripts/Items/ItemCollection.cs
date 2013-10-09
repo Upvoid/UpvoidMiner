@@ -23,6 +23,10 @@ namespace UpvoidMiner
         /// Occurs when an item is removed from the list.
         /// </summary>
         public event Action<Item> OnRemove;
+        /// <summary>
+        /// Occurs when the quantity of an item changed.
+        /// </summary>
+        public event Action<Item> OnQuantityChange;
 
         /// <summary>
         /// Creates a new item collection.
@@ -43,8 +47,12 @@ namespace UpvoidMiner
         {
             // Try to merge with already possessed item.
             foreach (var it in Items)
-                if ( it.TryMerge(item, false, false) )
+                if (it.TryMerge(item, false, false))
+                {
+                    if (OnQuantityChange != null)
+                        OnQuantityChange(it);
                     return false;
+                }
 
             // If unsuccessful: add item
             Items.Add(item);
@@ -69,11 +77,16 @@ namespace UpvoidMiner
             {
                 if ( it.TryMerge(item, true, force) )
                 {
-                    if ( it.IsEmpty )
+                    if (it.IsEmpty)
                     {
                         Items.Remove(it);
-                        if ( OnRemove != null )
+                        if (OnRemove != null)
                             OnRemove(it);
+                    }
+                    else
+                    {
+                        if (OnQuantityChange != null)
+                            OnQuantityChange(it);
                     }
                     return true;
                 }
