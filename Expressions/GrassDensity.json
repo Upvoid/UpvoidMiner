@@ -5,7 +5,7 @@
   "nodes" : [
     {
       "id" : 0,
-      "identifier" : "mesh::aGras",
+      "identifier" : "mesh::aGrass",
       "inputs" : [
       ],
       "nodetype" : "Input",
@@ -13,14 +13,14 @@
       ]
     },
     {
-      "function" : "mesh::aGras * 25",
+      "function" : "mesh::aGrass * 25",
       "id" : 1,
       "inputs" : [
         0
       ],
       "nodetype" : "Function",
       "varMapping" : {
-        "mesh::aGras" : {
+        "mesh::aGrass" : {
           "index" : 0,
           "type" : [
           ]

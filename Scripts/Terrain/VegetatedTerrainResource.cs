@@ -15,7 +15,7 @@ namespace UpvoidMiner
             // For now: just use the setup from our default dirt:
             
             // Add Gras attribute for LoD 4 (= MinLoD).
-            Material.AddAttributeFloat("aGras", 0, 0, 4);
+            Material.AddAttributeFloat("aGrass", 0, 0, 4);
 
             // Color modulated geometry pipeline for more variance.
             {
