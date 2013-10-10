@@ -9,10 +9,9 @@ function setupGui()
     $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGuiData", "", updateGui, "json");
 
     WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/InventoryUpdate", function(data) {
+
         if(data == "Update")
-        {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGuiData", "", updateGui, "json");
-        }
         else if(data == "ToggleInventory")
             $("#inventory").toggle();
     });
@@ -23,7 +22,7 @@ function formatQuantity(quantity, isVolumetric)
     if(!isVolumetric)
         return "x"+Math.round(quantity);
     else
-        return Math.round10(quantity, -1)+"m³";
+        return (Math.round(quantity*10, -1)/10)+"m³";
 }
 
 function formatItem(item, active, quickAccessSlot)
