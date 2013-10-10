@@ -41,9 +41,16 @@ function buildQuickAccessBar(quickAccessItems, selection)
             var item = quickAccessItems[i];
 
             if(i == selection)
-                html += "<li class=\"item active\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item active\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\">";
             else
-                html += "<li class=\"item\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\">";
+                
+            icons = item.icon.split(",");
+            
+            for(var j = 0; j < icons.length; j++)
+            {
+                html += "<img src=\"/Resource/Texture/Items/Icons/"+icons[j]+"\" alt=\""+item.name+"\" title=\""+item.name+"\">"
+            }
                 
             html += "<div class=\"slot-number\">"+(i+1)%10+"</div>";
             if(item.quantity != 1 || item.isVolumetric)

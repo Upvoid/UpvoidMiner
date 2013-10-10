@@ -24,7 +24,7 @@ namespace UpvoidMiner
             public class GuiItem {
                 public GuiItem(Item item)
                 {
-                    icon = "Icons/ItemDummy.png";
+                    icon = item.Icon;
                     name = item.Name;
                     quantity = 1.0f;
                     isVolumetric = false;
