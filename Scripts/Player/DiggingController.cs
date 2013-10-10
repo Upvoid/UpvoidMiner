@@ -109,8 +109,12 @@ namespace UpvoidMiner
                 digNode = new CsgOpUnion(digShape);
             }
 
+            // Float elimination
+            CsgOpConcat collapser = new CsgOpConcat(digNode);
+            collapser.AddNode(new CsgCollapseNode());
+
             // Callback for statistical purposes.
-            CsgStatCallback finalNode = new CsgStatCallback(digNode, 4, 4);
+            CsgStatCallback finalNode = new CsgStatCallback(collapser, 4, 4);
             finalNode.AddSimpleVolumeCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
             finalNode.AddVolumeChangePointCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
 
