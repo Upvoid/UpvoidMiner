@@ -11,7 +11,7 @@ namespace UpvoidMiner
         Pickaxe,
         Shovel,
         Axe,
-        SteamHammer,
+        Hammer,
 
         DroneChain
     }
@@ -30,6 +30,7 @@ namespace UpvoidMiner
             base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {
             ToolType = type;
+            Icon = ToolType.ToString();
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
@@ -44,8 +45,8 @@ namespace UpvoidMiner
                     Name = "Axe";
                     Description = "Tool used for chopping trees.";
                     break;
-                case ToolType.SteamHammer:
-                    Name = "Steam Hammer";
+                case ToolType.Hammer:
+                    Name = "Hammer";
                     Description = "Tool used for crafting mechanics.";
                     break;
 

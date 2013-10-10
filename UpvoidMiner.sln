@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{22
 	ProjectSection(SolutionItems) = preProject
 		Packages\resources.json = Packages\resources.json
 		Packages\scripts.json = Packages\scripts.json
+		Packages\icons.json = Packages\icons.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expressions", "Expressions", "{3794FABE-57C0-41F6-9FC3-C734B330CE58}"

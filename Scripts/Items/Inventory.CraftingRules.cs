@@ -39,7 +39,7 @@ namespace UpvoidMiner
             craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.Shovel),
                                                        (new [] { new ResourceItem(iron, 1f), new ResourceItem(wood, 1f) }),
                                                        (new [] { new ResourceItem(iron, .1f), new ResourceItem(wood, .2f) })));
-            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.SteamHammer),
+            craftingRules.Add(new ExplicitCraftingRule(new ToolItem(ToolType.Hammer),
                                                        (new [] { new ResourceItem(iron, 4f), new ResourceItem(wood, 2f) }),
                                                        (new [] { new ResourceItem(iron, .2f), new ResourceItem(wood, .3f) })));
 

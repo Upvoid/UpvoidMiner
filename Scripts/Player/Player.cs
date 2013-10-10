@@ -249,6 +249,7 @@ namespace UpvoidMiner
             Inventory.AddItem(new ToolItem(ToolType.Shovel));
             Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
             Inventory.AddItem(new ToolItem(ToolType.Axe));
+            Inventory.AddItem(new ToolItem(ToolType.Hammer));
             Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
 
             // Testing resource/material items.
@@ -313,7 +314,7 @@ namespace UpvoidMiner
                 // Control + Wheel to cycle through quick access.
                 if ( keyModifierControl )
                 {
-                    int newIdx = Inventory.SelectionIndex + (int)(e.RelativeChange);
+                    int newIdx = Inventory.SelectionIndex - (int)(e.RelativeChange);
                     while ( newIdx < 0 ) newIdx += Inventory.QuickaccessSlots;
                     Inventory.Select(newIdx % Inventory.QuickaccessSlots);
                 }
