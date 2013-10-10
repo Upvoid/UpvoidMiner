@@ -42,6 +42,15 @@ body {
     border-radius: 2px;
 }
 
+.item a:link,
+.item a:hover,
+.item a:visited,
+.item a:active
+{
+    color: #fff;
+    text-decoration: none;
+}
+
 .item.empty {
     background: rgba(100, 100, 100, 0.2);
     border: 1px solid rgba(100,100,100,0);

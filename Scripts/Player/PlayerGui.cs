@@ -74,6 +74,7 @@ namespace UpvoidMiner
             // These dynamic content handlers provide that information.
             this.player = player;
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "IngameGuiData", webInventory);
+            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
             updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(LocalScript.ModDomain, "InventoryUpdate");
 
             // On all relevant changes in the inventory, we order the GUI client to update itself.
@@ -95,7 +96,7 @@ namespace UpvoidMiner
 
         void webInventory(WebRequest request, WebResponse response)
         {
-            //Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
+            // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
             info.quickAccess = GuiInfo.GuiItem.FromItemCollection(player.Inventory.QuickAccessItems);
@@ -108,6 +109,12 @@ namespace UpvoidMiner
             response.AppendBody(writer.GetStringBuilder().ToString());
         }
 
+        void webSelectQuickAccessSlot(WebRequest request, WebResponse response)
+        {
+            // The GUI client calls this when a quick access slot is selected. Get the selected index and pass it to the player inventory.
+            int selectedIndex = Convert.ToInt32(request.GetQuery("selectedIndex"));
+            player.Inventory.Select(selectedIndex);
+        }
     }
 }
 
