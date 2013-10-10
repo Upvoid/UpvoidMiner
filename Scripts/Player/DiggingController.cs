@@ -50,7 +50,7 @@ namespace UpvoidMiner
             {
                 resource = res;
 
-                particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f * 0, 0), world);
+                particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
                 LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(particlesStones, mat4.Identity));
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                                                         (new CpuParticleRenderJob(particlesStones,
@@ -177,10 +177,9 @@ namespace UpvoidMiner
                 StoneParticles particles = instance.stoneParticles[matPrev];
                 if (particles != null)
                 {
-                    vec3 dir = (instance.player.Position - new vec3(0,1,0) - new vec3(x,y,z)).Normalized;
                     instance.stoneParticles[matPrev].particlesStones.AddParticle3D(
                         new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
-                        RandomDir() * (float)random.NextDouble() * .4f + dir * (3.0f + (float)random.NextDouble() * 1.5f),
+                        RandomDir() * (float)random.NextDouble() * .4f,
                         new vec4(1),
                         .4f + (float)random.NextDouble() * .3f,
                         .2f + (float)random.NextDouble() * .3f,
