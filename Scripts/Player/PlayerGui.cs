@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Engine.Webserver;
+using Engine.Input;
 
 namespace UpvoidMiner
 {
@@ -83,6 +84,9 @@ namespace UpvoidMiner
             player.Inventory.Items.OnAdd += arg1 => OnUpdate();
             player.Inventory.Items.OnRemove += arg1 => OnUpdate();
             player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
+
+            // Workaround for missing keyboard input in the WebGui: Toggle the inventory from here
+            Input.OnPressInput += (object sender, InputPressArgs e) => { if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) updateSocket.SendMessage("ToggleInventory"); };
         }
 
         /// <summary>
