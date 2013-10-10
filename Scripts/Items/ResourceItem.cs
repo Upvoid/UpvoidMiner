@@ -20,6 +20,7 @@ namespace UpvoidMiner
             base(material.Name, "The terrain resource " + material.Name, 1.0f, ItemCategory.Resources, volume)
         {
             Material = material;
+            Icon = material.Name;
         }
 
         /// <summary>

@@ -24,6 +24,11 @@ namespace UpvoidMiner
         /// A short description of the item.
         /// </summary>
         public virtual string Description { get; protected set; }
+        
+        /// <summary>
+        /// A comma-separated list of resources used as icons.
+        /// </summary>
+        public virtual string Icon { get; protected set; }
 
         /// <summary>
         /// A textual description of the stack size. Empty string equals "one".
@@ -98,6 +103,7 @@ namespace UpvoidMiner
             Weight = weight;
             Category = category;
             QuickAccessIndex = -1;
+            Icon = "Dummy";
         }
 
         /// <summary>

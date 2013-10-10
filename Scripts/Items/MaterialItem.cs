@@ -81,6 +81,7 @@ namespace UpvoidMiner
             Shape = shape;
             Size = size;
             Description = "A " + shape + " made of " + material.Name + " with " + DimensionString;
+            Icon = material.Name + "," + shape;
         }
 
         /// <summary>
