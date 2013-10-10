@@ -3,7 +3,7 @@
   "Name" : "UpvoidMiner",
   "Description" : "Techdemo mod for the Upvoid Engine",
   "Date" : "2013-07-12",
-  "Resources" : [ "scripts", "resources" ],
+    "Resources" : [ "scripts", "resources", "icons" ],
   "Standalone" : true,
   "Version" : {
     "Major" : 0,
@@ -13,7 +13,7 @@
 
   "Dependencies" : [
     { "Name": "Resources.TerrainMaterials", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } },
-  	{ "Name": "Resources.Vegetation", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } },
+    { "Name": "Resources.Vegetation", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } },
     { "Name": "Common.Cameras", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
     { "Name": "Common.JSON", "Author": "Upvoid", "Version": { "Major": 0, "Minor": 0, "Revision": 1 } },
     { "Name": "Web.Tools.Common", "Author": "Upvoid", "Version": { "Major": 1, "Minor": 0, "Revision": 0 } },

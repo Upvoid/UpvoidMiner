@@ -1,0 +1,27 @@
+[
+{ "Name" : "Items/Icons/Dummy", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
+{ "Name" : "Items/Icons/AlienRock", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/FireRock", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/AoiCrystal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
+{ "Name" : "Items/Icons/Rock.01", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.02", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.03", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.04", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.06", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.07", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.08", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.09", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.13", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Rock.14", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
+{ "Name" : "Items/Icons/Gold", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Copper", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Iron", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Coal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
+{ "Name" : "Items/Icons/Sphere", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Cylinder", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Cube", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" }
+]
