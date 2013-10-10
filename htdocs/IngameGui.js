@@ -41,9 +41,9 @@ function buildQuickAccessBar(quickAccessItems, selection)
             var item = quickAccessItems[i];
 
             if(i == selection)
-                html += "<li class=\"item active\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item active\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
             else
-                html += "<li class=\"item\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
+                html += "<li class=\"item\" id=\"quick-access-slot-"+i+"\"><a href=\"javascript:selectQuickAcessSlot("+i+")\"><img src=\""+item.icon+"\" alt=\""+item.name+"\" title=\""+item.name+"\">";
                 
             html += "<div class=\"slot-number\">"+(i+1)%10+"</div>";
             if(item.quantity != 1 || item.isVolumetric)
@@ -53,10 +53,16 @@ function buildQuickAccessBar(quickAccessItems, selection)
                 else
                     html += "<div class=\"quantity\">x"+item.quantity+"</div>";
             }
-            html += "</li>";
+            html += "</a></li>";
         }
     }
     
     $('#quickaccess-list').html(html);
-    
+}
+
+function selectQuickAcessSlot(index)
+{
+    $(".item.active").removeClass("active");
+    $("#quick-access-slot-"+index).addClass("active");
+    $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SelectQuickAccessSlot", {"selectedIndex": index});
 }
