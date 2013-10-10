@@ -26,6 +26,7 @@ namespace UpvoidMiner
                 public GuiItem(Item item)
                 {
                     icon = item.Icon;
+                    id = item.Id;
                     name = item.Name;
                     quantity = 1.0f;
                     isVolumetric = false;
@@ -45,6 +46,7 @@ namespace UpvoidMiner
                 }
 
                 public string icon;
+                public long id;
                 public string name;
                 public float quantity;
                 public bool isVolumetric;
@@ -76,6 +78,7 @@ namespace UpvoidMiner
             this.player = player;
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "IngameGuiData", webInventory);
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
+            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectItem", webSelectItem);
             updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(LocalScript.ModDomain, "InventoryUpdate");
 
             // On all relevant changes in the inventory, we order the GUI client to update itself.
@@ -118,6 +121,22 @@ namespace UpvoidMiner
             // The GUI client calls this when a quick access slot is selected. Get the selected index and pass it to the player inventory.
             int selectedIndex = Convert.ToInt32(request.GetQuery("selectedIndex"));
             player.Inventory.Select(selectedIndex);
+        }
+
+        void webSelectItem(WebRequest request, WebResponse response)
+        {
+            // The GUI client calls this when a item in the inventory is selected.
+
+            // Get the selected item
+            int selectedItemId = Convert.ToInt32(request.GetQuery("selectedItem"));
+            Item item = player.Inventory.Items.ItemById(selectedItemId);
+
+            if (item == null)
+                return;
+
+            // Place the item in the quick access bar at position 9 (bound to key 0) and select it.
+            player.Inventory.SetQuickAccess(item, 9);
+            player.Inventory.Select(9);
         }
     }
 }

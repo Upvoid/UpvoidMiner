@@ -96,6 +96,9 @@ namespace UpvoidMiner
         /// </summary>
         public int QuickAccessIndex { get; set; }
 
+        public readonly long Id;
+        static long IdCounter = 0;
+
         public Item(string name, string description, float weight, ItemCategory category)
         {
             Name = name;
@@ -104,6 +107,8 @@ namespace UpvoidMiner
             Category = category;
             QuickAccessIndex = -1;
             Icon = "Dummy";
+
+            Id = IdCounter++;
         }
 
         /// <summary>

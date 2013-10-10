@@ -29,6 +29,20 @@ namespace UpvoidMiner
         public event Action<Item> OnQuantityChange;
 
         /// <summary>
+        /// Returns the item with the given id or null if no such item exists in this collection.
+        /// </summary>
+        public Item ItemById(long id)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.Id == id)
+                    return item;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Creates a new item collection.
         /// </summary>
         /// <param name="cloneFrom">if non-null, creates a deep copy of the item.</param>

@@ -1,6 +1,6 @@
 function updateGui(data)
 {
-    buildInventory(data.inventory);
+    buildInventory(data.inventory, data.quickAccess, data.selection);
     buildQuickAccessBar(data.quickAccess, data.selection);
 }
 
@@ -31,21 +31,21 @@ function formatItem(item, active, quickAccessSlot)
     
     if(item === null)
     {
-        if(quickAccessSlot === null)
+        if(quickAccessSlot < 0)
             html += "<li class=\"item empty\"></li>";
         else
             html += "<li class=\"item empty\"><div class=\"slot-number\">"+(quickAccessSlot+1)%10+"</div></li>";
     }
     else
     {
-        if(quickAccessSlot === null)
-            html += "<li class=\"item\"><a href=\"#\">";
+        if(quickAccessSlot < 0)
+            html += "<li class=\"item\" id=\"item-"+item.id+"\"><a href=\"javascript:selectItem("+item.id+")\">";
         else
         {
             if(active)
-                html += "<li class=\"item active\" id=\"quick-access-slot-"+quickAccessSlot+"\"><a href=\"javascript:selectQuickAcessSlot("+quickAccessSlot+")\">";
+                html += "<li class=\"item active\" id=\"quick-access-slot-"+quickAccessSlot+"\"><a href=\"javascript:selectQuickAccessSlot("+quickAccessSlot+")\">";
             else
-                html += "<li class=\"item\" id=\"quick-access-slot-"+quickAccessSlot+"\"><a href=\"javascript:selectQuickAcessSlot("+quickAccessSlot+")\">";
+                html += "<li class=\"item\" id=\"quick-access-slot-"+quickAccessSlot+"\"><a href=\"javascript:selectQuickAccessSlot("+quickAccessSlot+")\">";
         }
         
         icons = item.icon.split(",");
@@ -55,7 +55,7 @@ function formatItem(item, active, quickAccessSlot)
             html += "<img src=\"/Resource/Texture/Items/Icons/"+icons[j]+"\" alt=\""+item.name+"\" title=\""+item.name+"\">"
         }
         
-        if(!(quickAccessSlot === null))
+        if(!(quickAccessSlot < 0))
             html += "<div class=\"slot-number\">"+(quickAccessSlot+1)%10+"</div>";
 
         if(item.quantity != 1 || item.isVolumetric)
@@ -69,12 +69,28 @@ function formatItem(item, active, quickAccessSlot)
     return html;
 }
 
-function buildInventory(items)
+function findQuickAccessSlot(item, quickAccessItems)
+{
+    for(var i = 0; i < quickAccessItems.length; i++)
+    {
+        if(quickAccessItems[i] === null)
+            continue;
+
+        if(quickAccessItems[i].id == item.id)
+            return i;
+    }
+
+    return -1;
+}
+
+function buildInventory(items, quickAccessItems, selection)
 {
     var html = "";
     for(var i = 0; i < items.length; ++i)
     {
-        html += formatItem(items[i], false, null);
+        var item = items[i];
+        var quickAccessSlot = findQuickAccessSlot(item, quickAccessItems);
+        html += formatItem(item, quickAccessSlot == selection, quickAccessSlot);
     }
     
     $('#inventory-list').html(html);
@@ -92,9 +108,16 @@ function buildQuickAccessBar(quickAccessItems, selection)
     $('#quickaccess-list').html(html);
 }
 
-function selectQuickAcessSlot(index)
+function selectQuickAccessSlot(index)
 {
     $(".item.active").removeClass("active");
     $("#quick-access-slot-"+index).addClass("active");
     $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SelectQuickAccessSlot", {"selectedIndex": index});
+}
+
+function selectItem(itemId)
+{
+    $(".item.active").removeClass("active");
+    $("#item-"+itemId).addClass("active");
+    $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SelectItem", {"selectedItem": itemId});
 }
