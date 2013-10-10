@@ -217,7 +217,7 @@ namespace UpvoidMiner
             // Position the item preview in the right-lower corner of the screen.
             // FIXME: find proper alignment, current one is quite empirical.
             vec3 dir = _player.CameraDirection;
-            vec3 up = _player.CameraUp;
+            vec3 up = vec3.UnitY;
             vec3 left = vec3.cross(up, dir).Normalized;
             vec3 offset = up * -.15f + left * -.7f + dir * 0.6f;
             mat4 transform = _player.Transformation * mat4.Translate(offset);

@@ -14,7 +14,6 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,15 +28,15 @@ using Engine.Input;
 
 namespace UpvoidMiner
 {
-	/// <summary>
-	/// Contains the game logic and the internal state of the player character.
-	/// </summary>
-	public class Player: EntityScript
-	{
-		/// <summary>
-		/// The render component for the torso.
-		/// </summary>
-		private RenderComponent rcTorso, rcTorsoShadow;
+    /// <summary>
+    /// Contains the game logic and the internal state of the player character.
+    /// </summary>
+    public class Player: EntityScript
+    {
+        /// <summary>
+        /// The render component for the torso.
+        /// </summary>
+        private RenderComponent rcTorso, rcTorsoShadow;
         private CpuParticleSystemBase psTorsoSteam;
         private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
@@ -51,23 +50,41 @@ namespace UpvoidMiner
         /// </summary>
         public vec3 Direction { get; private set; }
         /// <summary>
-        /// Gets the camera direction of the player camera.
+        /// Azimuth angle in degree (around y-axis).
         /// </summary>
-        public vec3 CameraDirection { get { return camera.ForwardDirection; } }
+        private float AngleAzimuth = 0;
         /// <summary>
-        /// Gets the camera up direction of the player camera.
+        /// Elevation angle in degree (0 = horizontal)
         /// </summary>
-        public vec3 CameraUp { get { return camera.UpDirection; } }
+        private float AngleElevation = 0;
+        /// <summary>
+        /// Gets the camera direction.
+        /// </summary>
+        public vec3 CameraDirection
+        {
+            get
+            {
+                float sinAzi = (float)Math.Sin(AngleAzimuth / 180.0 * Math.PI);
+                float cosAzi = (float)Math.Cos(AngleAzimuth / 180.0 * Math.PI);
+                float sinEle = (float)Math.Sin(AngleElevation / 180.0 * Math.PI);
+                float cosEle = (float)Math.Cos(AngleElevation / 180.0 * Math.PI);
+                return new vec3(sinAzi * cosEle, sinEle, cosAzi * cosEle).Normalized;
+            }
+        }
 
-		/// <summary>
-		/// This is the camera that is used to show the perspective of the player.
-		/// </summary>
-		GenericCamera camera;
+        /// <summary>
+        /// This is the camera that is used to show the perspective of the player.
+        /// </summary>
+        GenericCamera camera;
+        /// <summary>
+        /// Component used for synchronizing camera to player
+        /// </summary>
+        CameraComponent cameraComponent;
 
-		/// <summary>
-		/// This takes control of the rigid body attached to this entity and lets us walk around.
-		/// </summary>
-		CharacterController character;
+        /// <summary>
+        /// This takes control of the rigid body attached to this entity and lets us walk around.
+        /// </summary>
+        CharacterController character;
 
         /// <summary>
         /// Controller for digging and its constraints.
@@ -115,14 +132,14 @@ namespace UpvoidMiner
             get { return character.Transformation; }
         }
 
-		public Player(GenericCamera _camera)
-		{
-            Direction = new vec3(1,0,0);
-			camera = _camera;
+        public Player(GenericCamera _camera)
+        {
+            Direction = new vec3(1, 0, 0);
+            camera = _camera;
             Input.OnPressInput += HandlePressInput;
-			Input.OnAxisInput += HandleAxisInput;
+            Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
-		}
+        }
 
         public void Update(float elapsedSeconds)
         {
@@ -135,22 +152,37 @@ namespace UpvoidMiner
             if (!LocalScript.NoclipEnabled)
             {
                 // Update direction.
-                float mix = (float)Math.Pow(0.02, elapsedSeconds);
-                vec3 camDir = camera.ForwardDirection;
+                vec3 camDir = CameraDirection;
+                vec3 camLeft = vec3.cross(vec3.UnitY, camDir).Normalized;
+                vec3 camUp = vec3.cross(camDir, camLeft);
+
+                float mix = (float)Math.Pow(0.01, elapsedSeconds);
+                vec3 targetDir = -camDir;
                 vec3 dir = Direction;
-                dir.x = dir.x * mix + camDir.x * (1 - mix);
-                dir.z = dir.z * mix + camDir.z * (1 - mix);
+                dir.x = dir.x * mix + targetDir.x * (1 - mix);
+                dir.z = dir.z * mix + targetDir.z * (1 - mix);
                 Direction = dir.Normalized;
 
                 // Update player model.
                 vec3 up = new vec3(0, 1, 0);
                 vec3 left = vec3.cross(up, Direction);
+                mat4 viewMat = new mat4(left, up, Direction, new vec3());
                 rcTorso.Transform = rcTorsoShadow.Transform =
-                   new mat4(left, up, Direction, new vec3()) * torsoTransform;
+                   viewMat * torsoTransform;
+
+                // Update camera component.
+                cameraComponent.Camera = camera;
+                
+                // Also add 10cm of forward.xz direction for a "head offset"
+                vec3 forward = Direction;
+                forward.y = 0;
+                cameraComponent.Transform = new mat4(camLeft, camUp, camDir, new vec3(forward.Normalized * .1f));
             }
+            else
+                cameraComponent.Camera = null;
 
             mat4 steamTransform = thisEntity.Transform * rcTorso.Transform * torsoSteamOffset; 
-            vec3 steamOrigin = new vec3(steamTransform * new vec4(0,0,0,1));
+            vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
             vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
             psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
@@ -162,21 +194,22 @@ namespace UpvoidMiner
                                       -.2f, .2f);
 
             // Update item preview.
-            if ( Inventory.Selection != null && Inventory.Selection.HasRayPreview )
+            if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
             {
                 // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                {
                     Item selection = Inventory.Selection;
                     // Receiving the async ray query result here
-                    if(_hit)
+                    if (_hit)
                     {
                         /// Subtract a few cm toward camera to increase stability near constraints.
                         _position -= camera.ForwardDirection * .04f;
 
-                        if ( selection != null )
+                        if (selection != null)
                             selection.OnRayPreview(this, _position, _normal, true);
                     }
-                    else if ( selection != null )
+                    else if (selection != null)
                         selection.OnRayPreview(this, vec3.Zero, vec3.Zero, false);
                 });
             }
@@ -192,7 +225,7 @@ namespace UpvoidMiner
             Inventory.RemoveItem(item);
 
             ItemEntity itemEntity = new ItemEntity(item);
-            ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + CameraUp * 1f + CameraDirection * 1f));
+            ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + vec3.UnitY * 1f + CameraDirection * 1f));
             itemEntity.ApplyImpulse(CameraDirection * 200f, new vec3(0, .3f, 0));
         }
 
@@ -206,17 +239,17 @@ namespace UpvoidMiner
         }
 
         protected override void Init()
-		{
+        {
             // Create a character controller that allows us to walk around.
             character = new CharacterController(camera, ContainingWorld);
 
-			// For now, attach this entity to a simple sphere physics object.
+            // For now, attach this entity to a simple sphere physics object.
             character.Body.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
             thisEntity.AddComponent(new PhysicsComponent(
                                          character.Body,
-        			                     mat4.Translate(new vec3(0, 0.2f, 0))));
+                                         mat4.Translate(new vec3(0, 0.2f, 0))));
 
-			// Add Torso mesh.
+            // Add Torso mesh.
             thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
                                                                   torsoTransform,
                                                                   true));
@@ -229,6 +262,9 @@ namespace UpvoidMiner
                                                                         mat4.Identity,
                                                                         true));
 
+            // Add camera component.
+            thisEntity.AddComponent(cameraComponent = new CameraComponent(camera, mat4.Identity));
+
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
 
@@ -238,7 +274,7 @@ namespace UpvoidMiner
 
             Inventory.InitCraftingRules();
             generateInitialItems();
-		}
+        }
 
         /// <summary>
         /// Populates the inventory with a list of items that we start with.
@@ -279,14 +315,14 @@ namespace UpvoidMiner
             bool foundConstraint = false;
             foreach (var dc in DroneConstraints)
             {
-                if ( dc.IsAddable(d) )
+                if (dc.IsAddable(d))
                 {
                     dc.AddDrone(d);
                     foundConstraint = true;
                     break;
                 }
             }
-            if ( !foundConstraint )
+            if (!foundConstraint)
                 DroneConstraints.Add(new DroneConstraint(d));
             
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition));
@@ -307,34 +343,48 @@ namespace UpvoidMiner
             digging.DigSphere(position, radius);
         }
         
-        void HandleAxisInput (object sender, InputAxisArgs e)
+        void HandleAxisInput(object sender, InputAxisArgs e)
         {
-            if(e.Axis == AxisType.MouseWheelY) 
+            if (e.Axis == AxisType.MouseWheelY)
             {
                 // Control + Wheel to cycle through quick access.
-                if ( keyModifierControl )
+                if (keyModifierControl)
                 {
                     int newIdx = Inventory.SelectionIndex - (int)(e.RelativeChange);
-                    while ( newIdx < 0 ) newIdx += Inventory.QuickaccessSlots;
+                    while (newIdx < 0)
+                        newIdx += Inventory.QuickaccessSlots;
                     Inventory.Select(newIdx % Inventory.QuickaccessSlots);
                 }
                 else // Otherwise used to change 'use-parameter'.
                 {
                     Item selection = Inventory.Selection;
-                    if ( selection != null ) 
+                    if (selection != null) 
                         selection.OnUseParameterChange(e.RelativeChange);
                 }
             }
+            else if (e.Axis == AxisType.MouseX)
+            {
+                const float rotAzimuthSpeed = -.5f;
+                AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
+            }
+            else if (e.Axis == AxisType.MouseY)
+            {
+                const float rotElevationSpeed = .5f;
+                AngleElevation += e.RelativeChange * rotElevationSpeed;
+                if ( AngleElevation < -80 ) AngleElevation = -80;
+                if ( AngleElevation > 80 ) AngleElevation = 80;
+            }
         }
 
-        void HandlePressInput (object sender, InputPressArgs e)
+        void HandlePressInput(object sender, InputPressArgs e)
         {
             // Scale the area using + and - keys.
             // Translate it using up down left right (x, z)
             // and PageUp PageDown (y).
-            if(e.PressType == InputPressArgs.KeyPressType.Down) {
+            if (e.PressType == InputPressArgs.KeyPressType.Down)
+            {
 
-                switch ( e.Key )
+                switch (e.Key)
                 {
                     case InputKey.Shift: 
                         keyModifierShift = true;
@@ -351,22 +401,23 @@ namespace UpvoidMiner
                         break;
 
                     case InputKey.Q:
-                        if ( Inventory.Selection != null )
+                        if (Inventory.Selection != null)
                             DropItem(Inventory.Selection);
                         break;
 
-                    default: break;
+                    default:
+                        break;
                 }
 
                 // Quickaccess items.
-                if ( InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9 )
+                if (InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9)
                     Inventory.Select((int)e.Key - (int)InputKey.Key1);
-                if ( e.Key == InputKey.Key0 )
+                if (e.Key == InputKey.Key0)
                     Inventory.Select(9); // Special '0'.
             }
-            else if(e.PressType == InputPressArgs.KeyPressType.Up) 
+            else if (e.PressType == InputPressArgs.KeyPressType.Up)
             {
-                switch ( e.Key )
+                switch (e.Key)
                 {
                     case InputKey.Shift: 
                         keyModifierShift = false;
@@ -381,34 +432,37 @@ namespace UpvoidMiner
             }
 
             // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
-            if ( Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down ) 
+            if (Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
             {
                 // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                {
                     // Receiving the async ray query result here
-                    if(_hit)
+                    if (_hit)
                     {
                         /// Subtract a few cm toward camera to increase stability near constraints.
                         _position -= camera.ForwardDirection * .04f;
 
                         // Use currently selected item.
-                        if ( e.Key == InputKey.MouseLeft )
+                        if (e.Key == InputKey.MouseLeft)
                         {
                             Item selection = Inventory.Selection;
-                            if ( selection != null )
+                            if (selection != null)
                                 selection.OnUse(this, _position);
                         }
                     }
                 });
             }
             
-            if(e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down) {
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+            if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
+            {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                {
                     // Receiving the async ray query result here
-                    if(_body != null && _body.RefComponent != null)
+                    if (_body != null && _body.RefComponent != null)
                     {
                         Entity entity = _body.RefComponent.Entity;
-                        if(entity != null)
+                        if (entity != null)
                         {
                             TriggerId trigger = TriggerId.getIdByName("Interaction");
                             entity[trigger] |= new InteractionMessage(thisEntity);
@@ -417,10 +471,12 @@ namespace UpvoidMiner
                 });
             }
             
-            if(e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down) {
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision) {
+            if (e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down)
+            {
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                {
                     // Receiving the async ray query result here
-                    if(_hit)
+                    if (_hit)
                     {
                         AddDrone(_position);
                     }
@@ -437,7 +493,7 @@ namespace UpvoidMiner
         {
             // Make sure we get the message type we are expecting.
             AddItemMessage addItemMsg = msg as AddItemMessage;
-            if(addItemMsg == null)
+            if (addItemMsg == null)
                 return;
 
             // Add the received item to the inventory.
@@ -445,6 +501,6 @@ namespace UpvoidMiner
 
         }
 
-	}
+    }
 }
 

@@ -143,18 +143,8 @@ namespace UpvoidMiner
 		/// </summary>
 		public static void Update(float _elapsedSeconds)
         {
-			cameraControl.Update(_elapsedSeconds);
-
-			// Set the camera to the player position if free camera movement is disabled.
-			if(!NoclipEnabled && playerEntity != null) {
-                if(!playerEntity.Position.IsFinite)
-                    return;
-                
-                // Also add 10cm of forward.xz direction for a "head offset"
-                vec3 forward = camera.ForwardDirection;
-                forward.y = 0;
-                camera.Position = playerEntity.Position + forward.Normalized * 0.1f;
-			}
+            if ( NoclipEnabled )
+			    cameraControl.Update(_elapsedSeconds);
 
             player.Update(_elapsedSeconds);
 		}
