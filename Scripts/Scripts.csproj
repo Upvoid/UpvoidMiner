@@ -22,7 +22,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <CustomCommands>
       <CustomCommands>
-        <Command type="Execute" command="../../../../../UpvoidEngine -m /UpvoidMiner" workingdir="../../../../../" />
+        <Command type="BeforeExecute" command="../../../../../../scripts/startEngineBG.sh" workingdir="../../../../../" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
