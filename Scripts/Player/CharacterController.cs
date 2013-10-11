@@ -5,6 +5,7 @@ using Engine.Physics;
 using Engine.Input;
 using Engine.Scripting;
 using Engine.Webserver;
+using Engine.Rendering;
 
 namespace UpvoidMiner
 {
@@ -217,7 +218,9 @@ namespace UpvoidMiner
 		/// Called on keyboard input. Updates the walking directions of the character.
 		/// </summary>
 		protected void HandleInput(object sender, InputPressArgs e)
-		{
+        {
+            if (!Rendering.MainViewport.HasFocus)
+                return;
             if (LocalScript.NoclipEnabled)
                 return;
 

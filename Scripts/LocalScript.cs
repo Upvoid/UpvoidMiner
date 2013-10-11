@@ -125,7 +125,9 @@ namespace UpvoidMiner
 		/// Performs some basic input handling.
 		/// </summary>
 		private static void HandlePressInput(object sender, InputPressArgs e)
-		{
+        {
+            if (!Rendering.MainViewport.HasFocus)
+                return;
 			// For now, gameplay and debug actions are bound to static keys.
 
 			// N toggles noclip.

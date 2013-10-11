@@ -359,6 +359,9 @@ namespace UpvoidMiner
         
         void HandleAxisInput(object sender, InputAxisArgs e)
         {
+            if (!Rendering.MainViewport.HasFocus)
+                return;
+
             // CAUTION: this is currently in the wrong thread, isn't it?
 
             if (e.Axis == AxisType.MouseWheelY)
@@ -401,6 +404,9 @@ namespace UpvoidMiner
 
         void HandlePressInput(object sender, InputPressArgs e)
         {
+            if (!Rendering.MainViewport.HasFocus)
+                return;
+
             // Scale the area using + and - keys.
             // Translate it using up down left right (x, z)
             // and PageUp PageDown (y).
