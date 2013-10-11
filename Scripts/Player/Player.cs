@@ -180,9 +180,13 @@ namespace UpvoidMiner
 
                 // Re-Center mouse
                 Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
+                Rendering.MainViewport.SetMouseVisibility(false);
             }
             else
+            {
                 cameraComponent.Camera = null;
+                Rendering.MainViewport.SetMouseVisibility(true);
+            }
 
             mat4 steamTransform = thisEntity.Transform * rcTorso.Transform * torsoSteamOffset; 
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
@@ -348,6 +352,8 @@ namespace UpvoidMiner
         
         void HandleAxisInput(object sender, InputAxisArgs e)
         {
+            // CAUTION: this is currently in the wrong thread, isn't it?
+
             if (e.Axis == AxisType.MouseWheelY)
             {
                 // Control + Wheel to cycle through quick access.
@@ -373,9 +379,10 @@ namespace UpvoidMiner
             else if (e.Axis == AxisType.MouseY)
             {
                 const float rotElevationSpeed = .8f;
-                AngleElevation += e.RelativeChange * rotElevationSpeed;
-                if ( AngleElevation < -80 ) AngleElevation = -80;
-                if ( AngleElevation > 80 ) AngleElevation = 80;
+                float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
+                if ( newAngle < -80 ) newAngle = -80;
+                if ( newAngle > 80 ) newAngle = 80;
+                AngleElevation = newAngle;
             }
         }
 
