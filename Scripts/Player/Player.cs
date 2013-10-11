@@ -177,6 +177,9 @@ namespace UpvoidMiner
                 vec3 forward = Direction;
                 forward.y = 0;
                 cameraComponent.Transform = new mat4(camLeft, camUp, camDir, new vec3(forward.Normalized * .1f));
+
+                // Re-Center mouse
+                Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
             }
             else
                 cameraComponent.Camera = null;
@@ -364,12 +367,12 @@ namespace UpvoidMiner
             }
             else if (e.Axis == AxisType.MouseX)
             {
-                const float rotAzimuthSpeed = -.5f;
+                const float rotAzimuthSpeed = -.8f;
                 AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
             }
             else if (e.Axis == AxisType.MouseY)
             {
-                const float rotElevationSpeed = .5f;
+                const float rotElevationSpeed = .8f;
                 AngleElevation += e.RelativeChange * rotElevationSpeed;
                 if ( AngleElevation < -80 ) AngleElevation = -80;
                 if ( AngleElevation > 80 ) AngleElevation = 80;
