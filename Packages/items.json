@@ -53,7 +53,7 @@
 },
 {
     "Descriptor" : {
-        "Collection" : "materials",
+        "Collection" : "item-materials",
         "Name" : "Items/Dummy",
         "Type" : "FromCollection"
     },
@@ -63,7 +63,7 @@
 },
 {
     "Descriptor" : {
-        "Collection" : "materials",
+        "Collection" : "item-materials",
         "Name" : "Items/ResourcePreview",
         "Type" : "FromCollection"
     },
@@ -73,7 +73,7 @@
 },
 {
     "Descriptor" : {
-        "Collection" : "materials",
+        "Collection" : "item-materials",
         "Name" : "Items/ResourcePreviewLimited",
         "Type" : "FromCollection"
     },
@@ -83,7 +83,7 @@
 },
 {
     "Descriptor" : {
-        "Collection" : "materials",
+        "Collection" : "item-materials",
         "Name" : "Items/ResourcePreviewIndicator",
         "Type" : "FromCollection"
     },
