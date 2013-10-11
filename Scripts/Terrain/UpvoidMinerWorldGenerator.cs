@@ -2,6 +2,7 @@ using System;
 using Engine.Universe;
 using Engine.Resources;
 using Engine.Rendering;
+using System.Text;
 
 namespace UpvoidMiner
 {
@@ -15,6 +16,7 @@ namespace UpvoidMiner
         /// Dirt terrain resource.
         /// </summary>
         private TerrainResource terrainDirt;
+        private TerrainResource terrainRock04;
 
         /// <summary>
         /// Initializes the terrain materials and settings.
@@ -29,6 +31,7 @@ namespace UpvoidMiner
 
             // Get handle to dirt for generation.
             terrainDirt = TerrainResource.FromName("Dirt");
+            terrainRock04 = TerrainResource.FromName("Stone.04");
             
             return base.init();
         }
@@ -43,9 +46,23 @@ namespace UpvoidMiner
             CsgOpConcat concat = new CsgOpConcat();
             
             CsgOpUnion union = new CsgOpUnion();
-            
-            ExpressionResource expression = Resources.UseExpression("Hills", HostScript.ModDomain);
-            union.AddNode(new CsgExpression(terrainDirt.Index, expression));
+
+            StringBuilder hillsDefines = new StringBuilder();
+            // Introduce variables.
+            hillsDefines.Append("pos = vec3(x, y, z);");
+            // Import perlin noise.
+            hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
+            hillsDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
+            // Hill structue.
+            //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
+            hillsDefines.Append("Hills = perlins(x / 300, y / 300, z / 300) + perlins(x / 100, y / 100, z / 100) * .5 + perlins(x / 30, y / 30, z / 30) * .25 + perlins(x / 10, y / 10, z / 10) * .05;");
+            hillsDefines.Append("Hills = (Hills + 1).pow2 * 50;");
+            string hillsDef = hillsDefines.ToString();
+
+            Console.WriteLine(hillsDef);
+
+            union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", HostScript.ModDomain));
+            //union.AddNode(new CsgExpression(terrainRock04.Index, hillsDef + "y + Hills", HostScript.ModDomain));
 
             concat.AddNode(union);
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", HostScript.ModDomain), World, 4));
