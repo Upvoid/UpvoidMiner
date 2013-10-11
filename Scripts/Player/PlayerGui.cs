@@ -12,6 +12,11 @@ namespace UpvoidMiner
     /// </summary>
     public class PlayerGui
     {
+        /// <summary>
+        /// Returns true if any form of UI is open (and mouse should be visible and movable).
+        /// </summary>
+        public bool IsGuiOpen { get; private set; }
+
         Player player;
 
         JsonSerializer json = new JsonSerializer();
@@ -89,7 +94,14 @@ namespace UpvoidMiner
             player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
 
             // Workaround for missing keyboard input in the WebGui: Toggle the inventory from here
-            Input.OnPressInput += (object sender, InputPressArgs e) => { if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) updateSocket.SendMessage("ToggleInventory"); };
+            Input.OnPressInput += (object sender, InputPressArgs e) => 
+            { 
+                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
+                {
+                    IsGuiOpen = !IsGuiOpen;
+                    updateSocket.SendMessage("ToggleInventory"); 
+                }
+            };
         }
 
         /// <summary>

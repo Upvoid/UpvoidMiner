@@ -65,11 +65,6 @@ namespace UpvoidMiner
 		/// </summary>
 		static FreeCameraControl cameraControl;
 
-		/// <summary>
-		/// The player entity. Not to confuse with the Player EntityScript.
-		/// </summary>
-		static Entity playerEntity = null;
-
         static Player player;
 
 		/// <summary>
@@ -106,7 +101,7 @@ namespace UpvoidMiner
 			// Create the Player EntityScript and add it to the world.
 			// For now, place him 30 meters above the ground and let him drop to the ground.
             player = new Player(camera);
-			playerEntity = world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
+		    world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
 
             // Create an active region around the player spawn
             // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)

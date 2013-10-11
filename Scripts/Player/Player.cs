@@ -178,9 +178,16 @@ namespace UpvoidMiner
                 forward.y = 0;
                 cameraComponent.Transform = new mat4(camLeft, camUp, camDir, new vec3(forward.Normalized * .1f));
 
-                // Re-Center mouse
-                Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
-                Rendering.MainViewport.SetMouseVisibility(false);
+                // Re-Center mouse if UI is not open.
+                if ( !gui.IsGuiOpen )
+                {
+                    Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
+                    Rendering.MainViewport.SetMouseVisibility(false);
+                }
+                else
+                {
+                    Rendering.MainViewport.SetMouseVisibility(true);
+                }
             }
             else
             {
@@ -371,18 +378,24 @@ namespace UpvoidMiner
                         selection.OnUseParameterChange(e.RelativeChange);
                 }
             }
-            else if (e.Axis == AxisType.MouseX)
+            else if ( e.Axis == AxisType.MouseX)
             {
-                const float rotAzimuthSpeed = -.8f;
-                AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
+                if ( !gui.IsGuiOpen )
+                {
+                    const float rotAzimuthSpeed = -.8f;
+                    AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
+                }
             }
             else if (e.Axis == AxisType.MouseY)
             {
-                const float rotElevationSpeed = .8f;
-                float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
-                if ( newAngle < -80 ) newAngle = -80;
-                if ( newAngle > 80 ) newAngle = 80;
-                AngleElevation = newAngle;
+                if ( !gui.IsGuiOpen )
+                {
+                    const float rotElevationSpeed = .8f;
+                    float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
+                    if ( newAngle < -80 ) newAngle = -80;
+                    if ( newAngle > 80 ) newAngle = 80;
+                    AngleElevation = newAngle;
+                }
             }
         }
 
@@ -441,56 +454,61 @@ namespace UpvoidMiner
                 }
             }
 
-            // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
-            if (Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
+            // Following interactions are only possible if UI is not open.
+            if (!gui.IsGuiOpen)
             {
-                // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
-                {
-                    // Receiving the async ray query result here
-                    if (_hit)
-                    {
-                        /// Subtract a few cm toward camera to increase stability near constraints.
-                        _position -= camera.ForwardDirection * .04f;
 
-                        // Use currently selected item.
-                        if (e.Key == InputKey.MouseLeft)
-                        {
-                            Item selection = Inventory.Selection;
-                            if (selection != null)
-                                selection.OnUse(this, _position);
-                        }
-                    }
-                });
-            }
-            
-            if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
-            {
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
+                if (Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
-                    // Receiving the async ray query result here
-                    if (_body != null && _body.RefComponent != null)
+                    // Send a ray query to find the position on the terrain we are looking at.
+                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
                     {
-                        Entity entity = _body.RefComponent.Entity;
-                        if (entity != null)
+                        // Receiving the async ray query result here
+                        if (_hit)
                         {
-                            TriggerId trigger = TriggerId.getIdByName("Interaction");
-                            entity[trigger] |= new InteractionMessage(thisEntity);
+                            /// Subtract a few cm toward camera to increase stability near constraints.
+                            _position -= camera.ForwardDirection * .04f;
+
+                            // Use currently selected item.
+                            if (e.Key == InputKey.MouseLeft)
+                            {
+                                Item selection = Inventory.Selection;
+                                if (selection != null)
+                                    selection.OnUse(this, _position);
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
             
-            if (e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down)
-            {
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
-                    // Receiving the async ray query result here
-                    if (_hit)
+                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
                     {
-                        AddDrone(_position);
-                    }
-                });
+                        // Receiving the async ray query result here
+                        if (_body != null && _body.RefComponent != null)
+                        {
+                            Entity entity = _body.RefComponent.Entity;
+                            if (entity != null)
+                            {
+                                TriggerId trigger = TriggerId.getIdByName("Interaction");
+                                entity[trigger] |= new InteractionMessage(thisEntity);
+                            }
+                        }
+                    });
+                }
+            
+                if (e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down)
+                {
+                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                    {
+                        // Receiving the async ray query result here
+                        if (_hit)
+                        {
+                            AddDrone(_position);
+                        }
+                    });
+                }
             }
         }
 
