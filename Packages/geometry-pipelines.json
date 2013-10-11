@@ -1,0 +1,254 @@
+[
+
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "PineField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "PineLeaves" :
+            {
+                "Type" : "Resource",
+                "Resource": "PineLeaves"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "TreeDensity",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "PineSpawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["PineLeaves", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "ColoredTerrain",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Output":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Input"],
+                "Copy": ["aPosition", "aNormal"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .3,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    }
+                }
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "GrassField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Grass" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "GrassDensity",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Grass", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "GrassField2",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Grass" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "GrassDensity2",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Grass", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "HerbField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Herbs" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "HerbDensity",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Herbs", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "HerbField2",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Herbs" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "HerbDensity2",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Herbs", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "PineImpostorField",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "PineImpostor" :
+            {
+                "Type" : "Resource",
+                "Resource": "PineImpostor"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "TreeDensity",
+                "overrideUpVector": true,
+                "gridSize": 2.0,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "PineSpawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["PineImpostor", "Seeds"]
+            }
+        }
+    }
+}
+]

@@ -3,7 +3,7 @@
   "Name" : "UpvoidMiner",
   "Description" : "Techdemo mod for the Upvoid Engine",
   "Date" : "2013-07-12",
-    "Resources" : [ "scripts", "resources", "icons" ],
+    "Resources" : [ "scripts", "resources", "items", "terrain-resources", "geometry-pipelines" ],
   "Standalone" : true,
   "Version" : {
     "Major" : 0,

@@ -31,5 +31,65 @@
 
 { "Name" : "Items/Icons/Sphere", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Cylinder", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
-{ "Name" : "Items/Icons/Cube", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" }
+{ "Name" : "Items/Icons/Cube", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
+
+{
+    "Descriptor" : "File",
+    "Name" : "item-materials",
+    "Path" : "~.mat",
+    "Type" : "MaterialCollection"
+},
+
+
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "Items/ItemDummy",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/Dummy",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/Dummy",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/ResourcePreview",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ResourcePreview",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/ResourcePreviewLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ResourcePreviewLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Items/ResourcePreviewIndicator",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ResourcePreviewIndicator",
+    "Path" : "~.mat",
+    "Type" : "Material"
+}
+
 ]
