@@ -121,7 +121,7 @@ namespace UpvoidMiner
             // Create the physical representation of the item.
             RigidBody body = itemEntity.ContainingWorld.Physics.CreateAndAddRigidBody(
                 50f,
-                mat4.Translate(entity.Position),
+                entity.Transform,
                 new BoxShape(new vec3(1))
                 );
             

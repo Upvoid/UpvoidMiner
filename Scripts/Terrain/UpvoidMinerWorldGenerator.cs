@@ -59,8 +59,6 @@ namespace UpvoidMiner
             hillsDefines.Append("Hills = (Hills + 1).pow2 * 50;");
             string hillsDef = hillsDefines.ToString();
 
-            Console.WriteLine(hillsDef);
-
             union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", HostScript.ModDomain));
             //union.AddNode(new CsgExpression(terrainRock04.Index, hillsDef + "y + Hills", HostScript.ModDomain));
 

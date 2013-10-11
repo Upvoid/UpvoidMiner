@@ -115,6 +115,8 @@ namespace UpvoidMiner
         private MeshRenderJob previewMaterial;
         private MeshRenderJob previewMaterialPlaced;
         private MeshRenderJob previewMaterialPlacedIndicator;
+        private bool previewPlacable = false;
+        private mat4 previewPlaceMatrix;
         
         /// <summary>
         /// Yes, we have a preview for materials (ray for placement, update for holding).
@@ -124,7 +126,14 @@ namespace UpvoidMiner
         
         public override void OnUse(Player player, vec3 _worldPos)
         {
-            // TODO: place item
+            if (!previewPlacable || player == null)
+                return;
+
+            Item droppedItem = new MaterialItem(Material, Shape, Size);
+            player.Inventory.RemoveItem(droppedItem);
+            
+            ItemEntity itemEntity = new ItemEntity(droppedItem);
+            player.ContainingWorld.AddEntity(itemEntity, previewPlaceMatrix);
         }
         
         public override void OnSelect()
@@ -168,6 +177,7 @@ namespace UpvoidMiner
             {
                 previewMaterialPlaced.ModelMatrix = mat4.Scale(0f);
                 previewMaterialPlacedIndicator.ModelMatrix = mat4.Scale(0f);
+                previewPlacable = false;
                 return;
             }
 
@@ -195,10 +205,13 @@ namespace UpvoidMiner
                 default: throw new NotImplementedException("Invalid shape");
             }
             mat4 transform = new mat4(
-                left, up, dir, _worldPos + offset * _worldNormal);
+                left, up, dir, _worldPos + (offset + .03f) * _worldNormal);
+            
+            previewPlacable = true;
+            previewPlaceMatrix = transform;
 
             // The placed object is scaled accordingly
-            previewMaterialPlaced.ModelMatrix = transform * scaling;
+            previewMaterialPlaced.ModelMatrix = previewPlaceMatrix * scaling;
             // Indicator is always in the center and relatively small.
             previewMaterialPlacedIndicator.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(.1f);
         }
@@ -272,7 +285,7 @@ namespace UpvoidMiner
             // Create the physical representation of the item.
             RigidBody body = itemEntity.ContainingWorld.Physics.CreateAndAddRigidBody(
                 50f,
-                mat4.Translate(entity.Position),
+                entity.Transform,
                 collShape
                 );
             
