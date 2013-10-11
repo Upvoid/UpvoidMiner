@@ -166,7 +166,7 @@ namespace UpvoidMiner
                 // Update player model.
                 vec3 up = new vec3(0, 1, 0);
                 vec3 left = vec3.cross(up, Direction);
-                mat4 viewMat = new mat4(-left, up, -Direction, new vec3());
+                mat4 viewMat = new mat4(left, up, Direction, new vec3());
                 rcTorso.Transform = rcTorsoShadow.Transform =
                    viewMat * torsoTransform;
 
@@ -176,7 +176,7 @@ namespace UpvoidMiner
                 // Also add 10cm of forward.xz direction for a "head offset"
                 vec3 forward = Direction;
                 forward.y = 0;
-                cameraComponent.Transform = new mat4(camLeft, camUp, camDir, new vec3()) * mat4.Translate(forward * -.1f);
+                cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
 
                 // Re-Center mouse if UI is not open.
                 if ( !gui.IsGuiOpen )
@@ -393,7 +393,7 @@ namespace UpvoidMiner
             {
                 if ( !gui.IsGuiOpen )
                 {
-                    const float rotElevationSpeed = .8f;
+                    const float rotElevationSpeed = -.8f;
                     float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
                     if ( newAngle < -80 ) newAngle = -80;
                     if ( newAngle > 80 ) newAngle = 80;
