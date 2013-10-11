@@ -55,7 +55,7 @@ namespace UpvoidMiner
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                                                         (new CpuParticleRenderJob(particlesStones,
                                                              Renderer.Opaque.CpuParticles,
-                                                             Resources.UseMaterial("Particles/Rock", HostScript.ModDomain),
+                                                             res.DigParticleMaterial,
                                                              Resources.UseMesh("::Particles/Rock", null),
                                                              mat4.Identity)),
                                                         mat4.Identity,

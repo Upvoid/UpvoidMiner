@@ -20,29 +20,29 @@ namespace UpvoidMiner
             terrain = _terrain;
 
             if ( Scripting.IsHost )
-            {            
+            {
                 // Register some simple solid materials.
 
                 // Dirt
-                addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "::Particle/Rock"));
+                addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
 
                 // Stones
-                for (int i = 1; i <= 14; ++i) 
-                    addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "::Particle/Rock"));
+                for (int i = 1; i <= 14; ++i)
+                    addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00")));
 
                 // Wood
-                addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood"));
 
                 // Ores + Metals
-                addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "::Particle/Rock"));
-                addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "::Particle/Rock"));
-                addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "::Particle/Rock"));
-                addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));
+                addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper"));
+                addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron"));
+                addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
 
                 // Rares
-                addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "::Particle/Rock"));
-                addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "::Particle/Rock"));
-                addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "::Particle/Rock"));
+                addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "Particles/Terrain/AoiCrystal"));
+                addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock"));
+                addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock"));
 
             }
             else
@@ -67,7 +67,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Gets a terrain resource based on material index
         /// </summary>
-        public static TerrainResource FromIndex(int idx) 
+        public static TerrainResource FromIndex(int idx)
         {
             TerrainResource res;
             if (indexToResource.TryGetValue(idx, out res))
@@ -78,7 +78,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Gets a terrain resource based on material name
         /// </summary>
-        public static TerrainResource FromName(string name) 
+        public static TerrainResource FromName(string name)
         {
             TerrainResource res;
             if (nameToResource.TryGetValue(name, out res))
@@ -86,7 +86,7 @@ namespace UpvoidMiner
             else
                 return null;
         }
-        
+
         /// <summary>
         /// Adds a resource to the global dictionary.
         /// </summary>

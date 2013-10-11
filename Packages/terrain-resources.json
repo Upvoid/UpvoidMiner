@@ -40,6 +40,16 @@
 {
     "Descriptor" : {
     "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Dirt",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Dirt",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+    "Collection" : "terrain-materials",
         "Name" : "Terrain/Rock01",
         "Type" : "FromCollection"
     },
@@ -267,6 +277,227 @@
     "Name" : "Particles/Rock",
     "Path" : "~.mat",
     "Type" : "Material"
-}
+},
+
+{
+    "Descriptor" : {
+    "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock01",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock01",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock02",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock02",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+         "Name" : "Particles/Terrain/Rock03",
+         "Type" : "FromCollection"
+     },
+     "Name" : "Particles/Terrain/Rock03",
+     "Path" : "~.mat",
+     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock04",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock04",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock05",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock05",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock06",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock06",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock07",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock07",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock08",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock08",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock09",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock09",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock10",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock10",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock11",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock11",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock12",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock12",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock13",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock13",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Rock14",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Rock14",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/FireRock",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/FireRock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/AlienRock",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/AlienRock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Wood",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Wood",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Coal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Coal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Iron",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Iron",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Gold",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Gold",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/AoiCrystal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/AoiCrystal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Copper",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Copper",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ }
 
 ]
