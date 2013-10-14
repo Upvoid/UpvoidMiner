@@ -109,8 +109,14 @@ namespace UpvoidMiner
                 digNode = new CsgOpUnion(digShape);
             }
 
+            // Filter for tools
+            CsgFilterNode filter = new CsgFilterNode(true, digNode);
+            // TODO: proper filter settings.
+            filter.AddMaterial(TerrainResource.FromName("Dirt").Index);
+            filter.AddMaterial(0); // Air must be white-listed, too!
+
             // Float elimination
-            CsgOpConcat collapser = new CsgOpConcat(digNode);
+            CsgOpConcat collapser = new CsgOpConcat(filter);
             collapser.AddNode(new CsgCollapseNode());
 
             // Callback for statistical purposes.
