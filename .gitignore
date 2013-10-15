@@ -10,6 +10,7 @@
 *.pidb
 *.exe
 *.mdb
+Scripts/obj
 
 # Monodevelop
 bin

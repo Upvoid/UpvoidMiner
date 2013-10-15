@@ -82,7 +82,7 @@ namespace UpvoidMiner
             sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
         }
 
-        public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode = DigMode.Substract)
+        public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
         {
             CsgNode digShape = null;
 
@@ -110,13 +110,18 @@ namespace UpvoidMiner
             }
 
             // Filter for tools
-            CsgFilterNode filter = new CsgFilterNode(true, digNode);
-            // TODO: proper filter settings.
-            filter.AddMaterial(TerrainResource.FromName("Dirt").Index);
-            filter.AddMaterial(0); // Air must be white-listed, too!
+            CsgNode filterNode = digNode;
+            if ( materialFilter != null )
+            {
+                CsgFilterNode filter = new CsgFilterNode(true, digNode);
+                    foreach (int mat in materialFilter)
+                        filter.AddMaterial(mat);
+                filter.AddMaterial(0); // Air must be white-listed, too!
+                filterNode = filter;
+            }
 
             // Float elimination
-            CsgOpConcat collapser = new CsgOpConcat(filter);
+            CsgOpConcat collapser = new CsgOpConcat(filterNode);
             collapser.AddNode(new CsgCollapseNode());
 
             // Callback for statistical purposes.
@@ -127,13 +132,13 @@ namespace UpvoidMiner
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
-        public void DigSphere(vec3 position, float radius, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
         {
             sphereNode.MaterialIndex = terrainMaterialId;
             sphereNode.SetParameterFloat("sphereRadius", radius);
             sphereNode.SetParameterVec3("spherePosition", position);
 
-            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode);
+            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
         }
 
         /// <summary>

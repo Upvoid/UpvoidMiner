@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace UpvoidMiner
 {
@@ -81,8 +82,25 @@ namespace UpvoidMiner
 
         public override void OnUse(Player player, Engine.vec3 _worldPos)
         {
-            // For now: Every tool just digs a sphere.
-            player.DigSphere(_worldPos, 1f);
+            switch (ToolType)
+            {
+                // Dig items
+                case ToolType.Pickaxe:
+                    // Pickaxe has small radius but can dig everywhere
+                    player.DigSphere(_worldPos, .6f, null);
+                    return;
+
+                case ToolType.Shovel:
+                    // Shovel has big radius but can only dig dirt
+                    player.DigSphere(_worldPos, 1.4f, new [] { TerrainResource.FromName("Dirt").Index });
+                    return;
+
+                // Non-dig items
+                case ToolType.Axe:
+                case ToolType.DroneChain:
+                case ToolType.Hammer:
+                default: return;
+            }
         }
     }
 }

@@ -348,14 +348,14 @@ namespace UpvoidMiner
         /// </summary>
         public void PlaceSphere(TerrainResource material, vec3 position, float radius)
         {
-            digging.DigSphere(position, radius, material.Index, DiggingController.DigMode.Add);
+            digging.DigSphere(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
         }
         /// <summary>
         /// Digs a sphere at a given position with a given radius.
         /// </summary>
-        public void DigSphere(vec3 position, float radius)
+        public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
-            digging.DigSphere(position, radius);
+            digging.DigSphere(position, radius, filterMaterials);
         }
         
         void HandleAxisInput(object sender, InputAxisArgs e)
