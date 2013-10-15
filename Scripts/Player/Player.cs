@@ -259,10 +259,10 @@ namespace UpvoidMiner
             character = new CharacterController(camera, ContainingWorld);
 
             // For now, attach this entity to a simple sphere physics object.
-            character.Body.SetTransformation(mat4.Translate(new vec3(0, 30f, 0)));
+            character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
             thisEntity.AddComponent(new PhysicsComponent(
                                          character.Body,
-                                         mat4.Translate(new vec3(0, 0.2f, 0))));
+                                         mat4.Translate(new vec3(0, character.EyeOffset, 0))));
 
             // Add Torso mesh.
             thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),

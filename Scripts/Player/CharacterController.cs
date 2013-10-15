@@ -58,6 +58,16 @@ namespace UpvoidMiner
         public float CharacterHeight { get; protected set; }
 
         /// <summary>
+        /// The height of the body, equals CharacterHeight - HoverHeight.
+        /// </summary>
+        public float BodyHeight { get { return CharacterHeight - HoverHeight; } }
+
+        /// <summary>
+        /// The y offset from Position to the position of the character's eyes. This assumes the eyes are 10cm below the character's top. Can be used to position a camera.
+        /// </summary>
+        public float EyeOffset { get { return 0.5f*BodyHeight - 0.1f; } }
+
+        /// <summary>
         /// The diameter of the character's body.
         /// </summary>
         public float CharacterDiameter { get; protected set; }
@@ -132,12 +142,12 @@ namespace UpvoidMiner
 		/// </summary>
 		float distanceToGround = 0;
 
-        public CharacterController(GenericCamera _camera, World _containingWorld, float _bodyHeight = 1.25f, float _bodyDiameter = 0.55f, float _bodyMass = 70f)
+        public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.55f, float _bodyMass = 70f)
 		{
 			camera = _camera;
 			ContainingWorld = _containingWorld;
 
-            CharacterHeight = _bodyHeight;
+            CharacterHeight = _characterHeight;
             CharacterDiameter = _bodyDiameter;
 
 			// Initialize default values for auto properties
@@ -146,7 +156,7 @@ namespace UpvoidMiner
 			WalkSpeedRunning = 4f;
 
             // Create a capsule shaped rigid body representing the character in the physics world.
-            Body = ContainingWorld.Physics.CreateAndAddRigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, CharacterHeight - HoverHeight));
+            Body = ContainingWorld.Physics.CreateAndAddRigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, BodyHeight));
 
             // Prevent the rigid body from falling to the ground by simply disabling any rotation
             Body.SetAngularFactor(vec3.Zero);
@@ -185,18 +195,18 @@ namespace UpvoidMiner
 
             // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.5 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
-            if(distanceToGround < HoverHeight+0.5f) {
+            if(distanceToGround < HoverHeight+0.1f) {
 
                 vec3 velocity = Body.GetVelocity();
 
                 // Never move down when more than 5cm below the desired height.
-                if(distanceToGround < HoverHeight-0.05f && velocity.y < 0f) {
-                    velocity.y = 0;
-                    Body.SetVelocity(velocity);
+                if(distanceToGround < HoverHeight && velocity.y < 0f) {
+                    Body.ApplyImpulse(Body.Mass * new vec3(0, -velocity.y, 0), vec3.Zero);
                 }
 
                 float customGravity = HoverHeight - distanceToGround;
                 Body.SetGravity(new vec3(0, customGravity, 0));
+
             }
             else
                 Body.SetGravity(new vec3(0, -9.807f, 0));
@@ -206,8 +216,10 @@ namespace UpvoidMiner
 
         protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
         {
-            if(hasCollision)
-                distanceToGround = Position.y - hitPosition.y - 1f;
+            if (hasCollision)
+            {
+                distanceToGround = Position.y - BodyHeight*0.5f - hitPosition.y;
+            }
             else
                 distanceToGround = 5f;
 
