@@ -66,6 +66,9 @@ namespace UpvoidMiner
         private RenderComponent renderComponentWing2Opaque;
         private RenderComponent renderComponentWing2Shadow;
 
+        // Trigger for drone collection.
+        TriggerId AddItemTrigger;
+
         /// <summary>
         /// Creates a new drone.
         /// </summary>
@@ -134,6 +137,26 @@ namespace UpvoidMiner
                 new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Miner/DroneIndicator", HostScript.ModDomain), Resources.UseMesh("Miner/DroneIndicator", HostScript.ModDomain), mat4.Identity),
                 mat4.Scale(new vec3(.03f,7,.03f)),
                 true));
+
+            // Set up the triggers.
+            AddItemTrigger = TriggerId.getIdByName("AddItem");
+            AddTriggerSlot("Interaction");
+        }
+
+        void Interaction(object msg)
+        {
+            // Make sure we get the message type we are expecting.
+            InteractionMessage interactionMsg = msg as InteractionMessage;
+            if(interactionMsg == null)
+                return;
+
+            // Interacting with an item means picking it up. Answer by sending the item to the sender.
+            interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(new ToolItem(ToolType.DroneChain));
+
+            // Remove drone from drone constraints.
+            Owner.RemoveDrone(this);
+            // And remove this entity.
+            ContainingWorld.RemoveEntity(thisEntity);
         }
     }
 }

@@ -61,6 +61,14 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Removes a drone from the constraint.
+        /// </summary>
+        public void RemoveDrone(Drone drone)
+        {
+            drones.Remove(drone);
+        }
+
+        /// <summary>
         /// Adds the drone to this constraint.
         /// Drone must be addable (check with IsAddable).
         /// </summary>
@@ -145,6 +153,16 @@ namespace UpvoidMiner
                             LocalScript.world.AddRenderJob(job1);
                             LocalScript.world.AddRenderJob(job2);
                         }
+                    }
+
+                    // Remove old ones.
+                    while ( boundaryIndicators.Count > drones.Count )
+                    {
+                        LocalScript.world.RemoveRenderJob(boundaryIndicators[boundaryIndicators.Count - 1]);
+                        LocalScript.world.RemoveRenderJob(boundaryIndicatorsDistort[boundaryIndicators.Count - 1]);
+                        boundaryIndicators.RemoveAt(boundaryIndicators.Count - 1);
+                        boundaryIndicatorsDistort.RemoveAt(boundaryIndicatorsDistort.Count - 1);
+                        constraintExpression.RemoveAt(constraintExpression.Count - 1);
                     }
                     break;
                 default: Debug.Fail("Not implemented/Invalid");

@@ -84,7 +84,6 @@ namespace UpvoidMiner
         {
             switch (ToolType)
             {
-                // Dig items
                 case ToolType.Pickaxe:
                     // Pickaxe has small radius but can dig everywhere
                     player.DigSphere(_worldPos, .6f, null);
@@ -95,11 +94,23 @@ namespace UpvoidMiner
                     player.DigSphere(_worldPos, 1.4f, new [] { TerrainResource.FromName("Dirt").Index });
                     return;
 
-                // Non-dig items
                 case ToolType.Axe:
+                    // TODO
+                    return;
+
                 case ToolType.DroneChain:
+                    // Add a drone to the use-position.
+                    player.AddDrone(_worldPos);
+                    // Remove that dron from inventory.
+                    player.Inventory.RemoveItem(new ToolItem(ToolType));
+                    return;
+
                 case ToolType.Hammer:
-                default: return;
+                    // TODO
+                    return;
+
+                default: 
+                    throw new InvalidOperationException("Unknown tool");
             }
         }
     }

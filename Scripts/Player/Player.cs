@@ -234,7 +234,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Drops an item.
         /// </summary>
-        void DropItem(Item item)
+        private void DropItem(Item item)
         {
             Item droppedItem = item.Clone();
             Inventory.RemoveItem(item);
@@ -322,7 +322,11 @@ namespace UpvoidMiner
             gui.OnUpdate();
         }
 
-        void AddDrone(vec3 position)
+        /// <summary>
+        /// Adds a drone at the given position.
+        /// Does not remove any drone from the inventory.
+        /// </summary>
+        public void AddDrone(vec3 position)
         {
             Drone d = new Drone(position + new vec3(0, 1, 0), this, DroneType.Chain);
             Drones.Add(d);
@@ -341,6 +345,15 @@ namespace UpvoidMiner
                 DroneConstraints.Add(new DroneConstraint(d));
             
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition));
+        }
+        /// <summary>
+        /// Removes a drone from drone contraints.
+        /// </summary>
+        public void RemoveDrone(Drone drone)
+        {
+            foreach (var dc in DroneConstraints)
+                dc.RemoveDrone(drone);
+            Drones.Remove(drone);
         }
 
         /// <summary>
@@ -501,18 +514,6 @@ namespace UpvoidMiner
                                 TriggerId trigger = TriggerId.getIdByName("Interaction");
                                 entity[trigger] |= new InteractionMessage(thisEntity);
                             }
-                        }
-                    });
-                }
-            
-                if (e.Key == InputKey.T && e.PressType == InputPressArgs.KeyPressType.Down)
-                {
-                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
-                    {
-                        // Receiving the async ray query result here
-                        if (_hit)
-                        {
-                            AddDrone(_position);
                         }
                     });
                 }
