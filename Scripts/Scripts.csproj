@@ -65,6 +65,8 @@
     <Compile Include="Terrain\TerrainResource.Register.cs" />
     <Compile Include="Terrain\SolidTerrainResource.cs" />
     <Compile Include="Terrain\VegetatedTerrainResource.cs" />
+    <Compile Include="Vegetation\Tree.cs" />
+    <Compile Include="Vegetation\TreeGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
@@ -84,6 +86,7 @@
     <Folder Include="Player\" />
     <Folder Include="Items\" />
     <Folder Include="Terrain\" />
+    <Folder Include="Vegetation\" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
