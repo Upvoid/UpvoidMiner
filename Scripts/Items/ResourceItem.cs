@@ -15,6 +15,14 @@ namespace UpvoidMiner
         /// The terrain material that this resource represents.
         /// </summary>
         public readonly TerrainResource Material;
+
+        public override string Identifier
+        {
+            get
+            {
+                return "01-Resources." + Material.Index.ToString("00") + "-" + Material.Name;
+            }
+        }
         
         public ResourceItem(TerrainResource material, float volume = 0f) :
             base(material.Name, "The terrain resource " + material.Name, 1.0f, ItemCategory.Resources, volume)

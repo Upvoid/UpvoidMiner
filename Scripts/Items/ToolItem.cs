@@ -27,6 +27,14 @@ namespace UpvoidMiner
         /// </summary>
         public readonly ToolType ToolType;
 
+        public override string Identifier
+        {
+            get
+            {
+                return "00-Tools." + ((int)ToolType).ToString("00") + "-" + Name;
+            }
+        }
+
         public ToolItem(ToolType type, int stackSize = 1) :
             base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {

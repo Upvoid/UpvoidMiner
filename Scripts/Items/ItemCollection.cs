@@ -42,6 +42,17 @@ namespace UpvoidMiner
             return null;
         }
 
+        public Item ItemFromIdentifier(string identifier)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.Identifier == identifier)
+                    return item;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Creates a new item collection.
         /// </summary>
@@ -107,6 +118,18 @@ namespace UpvoidMiner
             }
 
             // Unable to remove.
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true iff the given item is contained in this collection.
+        /// </summary>
+        public bool ContainsItem(Item item)
+        {
+            foreach (var it in Items) {
+                if (it.TryMerge(item, true, false, true))
+                    return true;
+            }
             return false;
         }
 

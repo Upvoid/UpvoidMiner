@@ -40,6 +40,14 @@ namespace UpvoidMiner
         /// </summary>
         public readonly vec3 Size;
 
+        public override string Identifier
+        {
+            get
+            {
+                return "02-Materials." + ((int)Shape).ToString("00") + "-" + Shape + "." + Material.Index.ToString("00") + "-" + Material.Name + "." + Size.ToString();
+            }
+        }
+
         /// <summary>
         /// Volume of this material item.
         /// </summary>
