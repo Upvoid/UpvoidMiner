@@ -32,7 +32,9 @@ namespace UpvoidMiner
                 {
                     icon = item.Icon;
                     id = item.Id;
+                    identifier = item.Identifier;
                     name = item.Name;
+                    quickAccessSlot = item.QuickAccessIndex;
                     quantity = 1.0f;
                     isVolumetric = false;
 
@@ -50,29 +52,32 @@ namespace UpvoidMiner
                     }
                 }
 
-                public string icon;
-                public long id;
-                public string name;
-                public float quantity;
-                public bool isVolumetric;
+                public string icon = "";
+                public long id = -1;
+                public string name = "";
+                public string identifier = "";
+                public int quickAccessSlot = -1;
+                public float quantity = 0;
+                public bool isVolumetric = false;
+                public bool hasDiscoveredCraftingRule = false;
+                public bool canBeCrafted = false;
+                public bool canBeDismantled = false;
+                public List<GuiItem> craftingIngredients = new List<GuiItem>();
 
-                public static List<GuiItem> FromItemCollection(IEnumerable<Item> items)
+                public static Dictionary<string, GuiItem> FromItemCollection(IEnumerable<Item> items)
                 {
-                    List<GuiItem> guiItems = new List<GuiItem>();
+                    Dictionary<string, GuiItem> guiItems = new Dictionary<string, GuiItem>();
                     foreach(Item item in items)
                     {
-                        if (item != null)
-                            guiItems.Add(new GuiItem(item));
-                        else
-                            guiItems.Add(null);
+                        guiItems.Add(item.Identifier, new GuiItem(item));
                     }
 
                     return guiItems;
                 }
             }
 
-            public List<GuiItem> inventory;
-            public List<GuiItem> quickAccess;
+            public Dictionary<string, GuiItem> inventory = new Dictionary<string, GuiItem>();
+            public List<string> quickAccess = new List<string>();
             public int selection;
         }
 
@@ -84,6 +89,7 @@ namespace UpvoidMiner
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "IngameGuiData", webInventory);
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
             Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectItem", webSelectItem);
+            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "DropItem", webDropItem);
             updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(LocalScript.ModDomain, "InventoryUpdate");
 
             // On all relevant changes in the inventory, we order the GUI client to update itself.
@@ -118,13 +124,54 @@ namespace UpvoidMiner
             // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
-            info.quickAccess = GuiInfo.GuiItem.FromItemCollection(player.Inventory.QuickAccessItems);
+
+            foreach (var item in player.Inventory.QuickAccessItems)
+            {
+                if (item != null)
+                    info.quickAccess.Add(item.Identifier);
+                else
+                    info.quickAccess.Add("");
+            }
+
             info.selection = player.Inventory.SelectionIndex;
+
+            foreach (CraftingRule cr in player.Inventory.DiscoveredRules)
+            {
+                if (info.inventory.ContainsKey(cr.Result.Identifier))
+                {
+                    GuiInfo.GuiItem item = info.inventory[cr.Result.Identifier];
+                    item.hasDiscoveredCraftingRule = true;
+                    if (cr.CanBeDismantled)
+                        item.canBeDismantled = true;
+                    if (cr.IsCraftable(player.Inventory.Items.ItemFromIdentifier(item.identifier), player.Inventory.Items))
+                    {
+                        item.canBeCrafted = true;
+                    }
+
+                    item.craftingIngredients = new List<GuiInfo.GuiItem>(GuiInfo.GuiItem.FromItemCollection(cr.Ingredients).Values);
+                }
+                else
+                {
+                    GuiInfo.GuiItem virtualItem = new GuiInfo.GuiItem(cr.Result);
+                    virtualItem.quantity = 0;
+                    virtualItem.hasDiscoveredCraftingRule = true;
+
+                    if (cr.IsCraftable(null, player.Inventory.Items))
+                    {
+                        virtualItem.canBeCrafted = true;
+                    }
+
+                    virtualItem.craftingIngredients = new List<GuiInfo.GuiItem>(GuiInfo.GuiItem.FromItemCollection(cr.Ingredients).Values);
+
+                    info.inventory.Add(cr.Result.Identifier, virtualItem);
+                }
+            }
 
             StringWriter writer = new StringWriter();
             JsonTextWriter jsonWriter = new JsonTextWriter(writer);
-
+            json.Formatting = Formatting.Indented;
             json.Serialize(jsonWriter, info);
+            response.AddHeader("Content-Type", "application/json");
             response.AppendBody(writer.GetStringBuilder().ToString());
         }
 
@@ -140,7 +187,7 @@ namespace UpvoidMiner
             // The GUI client calls this when a item in the inventory is selected.
 
             // Get the selected item
-            int selectedItemId = Convert.ToInt32(request.GetQuery("selectedItem"));
+            int selectedItemId = Convert.ToInt32(request.GetQuery("itemId"));
             Item item = player.Inventory.Items.ItemById(selectedItemId);
 
             if (item == null)
@@ -149,6 +196,59 @@ namespace UpvoidMiner
             // Place the item in the quick access bar at position 9 (bound to key 0) and select it.
             player.Inventory.SetQuickAccess(item, 9);
             player.Inventory.Select(9);
+        }
+
+        void webDropItem(WebRequest request, WebResponse response)
+        {
+            // The GUI client calls this when an item is droppped from the inventory.
+
+            int itemId = Convert.ToInt32(request.GetQuery("itemId"));
+            Item item = player.Inventory.Items.ItemById(itemId);
+
+            if (item == null)
+                return;
+
+            player.DropItem(item);
+        }
+
+        void webDismantleItem(WebRequest request, WebResponse response)
+        {
+            // The GUI client calls this when an item is droppped from the inventory.
+
+            int itemId = Convert.ToInt32(request.GetQuery("itemId"));
+            Item item = player.Inventory.Items.ItemById(itemId);
+
+            if (item == null)
+                return;
+
+            // For dismantling, we need a crafting rule that results in the given item
+            foreach (var cr in player.Inventory.DiscoveredRules) {
+                if (cr.Result.Identifier == item.Identifier)
+                {
+                    //TODO: perform dismantling
+                    break;
+                }
+            }
+        }
+
+        void webCraftItem(WebRequest request, WebResponse response)
+        {
+            // The GUI client calls this when the player crafts an item.
+
+            string itemIdentifier = request.GetQuery("itemIdentifier");
+            Item item = player.Inventory.Items.ItemFromIdentifier(itemIdentifier);
+
+            if (item == null)
+                return;
+
+            // For crafting, we need a crafting rule that results in the given item
+            foreach (var cr in player.Inventory.DiscoveredRules) {
+                if (cr.Result.Identifier == item.Identifier)
+                {
+                    cr.Craft(item, player.Inventory.Items);
+                    break;
+                }
+            }
         }
     }
 }

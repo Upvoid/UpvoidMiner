@@ -234,7 +234,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Drops an item.
         /// </summary>
-        private void DropItem(Item item)
+        public void DropItem(Item item)
         {
             Item droppedItem = item.Clone();
             Inventory.RemoveItem(item);

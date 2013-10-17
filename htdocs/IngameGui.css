@@ -10,18 +10,49 @@ body {
 
 #inventory {
     display: none;
+    position: absolute;
+    left: 0px;
+    top: 70px;
 }
 
-#inventory-list {
+#workbench {
+    display: none;
+    margin-left: 360px;
+}
+
+#workbench h2 {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+#workbench .crafting-info {
+    padding: 1em 0;
+}
+
+.item-row {
     list-style-type: none;
-    width: 270px;
+    height: 54px;
     padding: 0;
     margin: 0;
+
+    transition: height 0.3s linear;
+    -webkit-transition: height 0.3s linear;
+}
+
+.item-row li.icon {
+    float: left;
+    line-height: 44px;
+    height: 44px;
+    margin: 5px;
+}
+
+#inventory-list .item-row:hover {
+    height: 78px;
 }
 
 #quickaccess-list {
     list-style-type: none;
-    height: 54px;
+    height: 70px;
     width: 540px;
     margin: 0 auto;
     padding: 0;
@@ -30,43 +61,90 @@ body {
 .item {
     float: left;
     position: relative;
-    padding: 5px;
+    padding: 0;
     height: 44px;
     width: 44px;
     margin: 5px;
+    transition: height 0.3s linear;
+    -webkit-transition: height 0.3s linear;
+}
 
+.item .item-options {
+    display: block;
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.1s linear;
+    -webkit-transition: opacity 0.1s linear;
+    text-align: center;
+    font-size: 10px;
+    bottom: 0px;
+    left: -15px; right: -15px;
+}
+
+.item .item-options i.icon-stack-base {
+    opacity: 0.8;
+}
+.item .item-options a:hover i.icon-stack-base {
+    opacity: 1;
+}
+
+.item .item-options i.icon-green {
+    color: #5cb85c;
+}
+.item .item-options i.icon-red {
+    color: #d9534f;
+}
+.item .item-options i.icon-purple {
+    color: #5800cc;
+}
+.item .item-options i.icon-disabled {
+    color: #ccc;
+}
+
+
+#inventory-list .item-row:hover .item {
+    height: 68px;
+}
+
+#inventory-list .item-row .item:hover .item-options {
+    display: block;
+    opacity: 1;
+}
+
+.item > a,
+.item > a:hover,
+.item > a:visited,
+.item > a:active
+{
+    display: block;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 5px;
     color: #fff;
+    text-decoration: none;
 
     background: rgba(100, 100, 100, 0.75);
     border: 1px solid rgba(100,100,100,0);
     border-radius: 2px;
 }
 
-.item a:link,
-.item a:hover,
-.item a:visited,
-.item a:active
-{
-    color: #fff;
-    text-decoration: none;
-}
-
-.item.empty {
+.item.empty > a {
     background: rgba(100, 100, 100, 0.2);
     border: 1px solid rgba(100,100,100,0);
 }
 
-.item.active {
+.item.active > a {
     background: rgba(255, 0, 0, 0.9);
     border: 1px solid #f00;
 }
 
-.item:hover {
+.item:hover > a {
     background: rgba(100,100,100,1);
     border: 1px solid rgba(100,100,100,1);
 }
 
-.item.active:hover {
+.item.active:hover > a {
     background: rgba(255, 0, 0, 1);
     border: 1px solid #f00;
 }
@@ -94,11 +172,6 @@ body {
     left: 0px;
     padding: 1px;
     
-    font-size: 9px;
+    font-size: 11px;
     text-shadow: 0px 0px 3px #000;
-}
-
-.item .item-details {
-    display: none;
-    
 }
