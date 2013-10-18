@@ -1,9 +1,25 @@
 
 var inventoryItemsPerRow = 6;
+var virtualItemSelection = null;
+var playerItems = [];
+
+function findItemById(itemId)
+{
+    for(var identifier in playerItems)
+    {
+        if(playerItems[identifier].id === itemId)
+        {
+            return playerItems[identifier];
+        }
+    }
+    return null;
+}
 
 function updateGui(data)
 {
     buildInventory(data.inventory, data.quickAccess, data.selection);
+
+    playerItems = data.inventory;
 
     var quickAccessItems = [];
 
@@ -225,9 +241,28 @@ function selectQuickAccessSlot(index)
 
 function selectItem(itemId)
 {
+    virtualItemSelection = null;
+
+    item = findItemById(itemId);
+
+    if(item == null)
+        return;
+
     $(".item.active").removeClass("active");
     $("#item-"+itemId).addClass("active");
-    $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SelectItem", {"itemId": itemId});
+
+    // If the item is non-virtual (i.e. the player really has some of it in the inventory),
+    // tell the player to actually select this item.
+    if(item.quantity > 0)
+    {
+        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SelectItem", {"itemId": itemId});
+    }
+    else
+    {
+        //Selecting a virtual item here
+        virtualItemSelection = item;
+        buildItemInfo(item);
+    }
 }
 
 function dropItem(itemId)
