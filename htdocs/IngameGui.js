@@ -204,13 +204,13 @@ function buildItemInfo(item)
     }
 
     if(item.canBeCrafted)
-        html += " <button class=\"btn btn-success\"><i class='icon-plus'></i> Craft</button>";
+        html += " <button onclick=\"craftItem('"+item.identifier+"')\" class=\"btn btn-success\"><i class='icon-plus'></i> Craft</button>";
     else if(item.hasDiscoveredCraftingRule)
         html += " <button class=\"btn btn-default disabled\"><i class='icon-plus'></i> Craft</button>";
     if(item.canBeDismantled)
-        html += " <button class=\"btn btn-danger\"><i class='icon-minus'></i> Dismantle</button>";
+        html += " <button onclick=\"dismantleItem('"+item.id+"')\" class=\"btn btn-danger\"><i class='icon-minus'></i> Dismantle</button>";
     if(item.quantity > 0)
-        html += " <button class=\"btn btn-primary\"><i class='icon-arrow-down'></i> Drop</button>";
+        html += " <button onclick=\"dropItem('"+item.id+"')\" class=\"btn btn-primary\"><i class='icon-arrow-down'></i> Drop</button>";
 
     $('#item-info').html(html);
 
