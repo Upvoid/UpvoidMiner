@@ -223,7 +223,7 @@ namespace UpvoidMiner
 
             // For dismantling, we need a crafting rule that results in the given item
             foreach (var cr in player.Inventory.DiscoveredRules) {
-                if (cr.Result.Identifier == item.Identifier)
+                if (cr.CouldBeDismantled(item))
                 {
                     //TODO: perform dismantling
                     break;
@@ -243,7 +243,7 @@ namespace UpvoidMiner
 
             // For crafting, we need a crafting rule that results in the given item
             foreach (var cr in player.Inventory.DiscoveredRules) {
-                if (cr.Result.Identifier == item.Identifier)
+                if (cr.CouldBeCraftable(item))
                 {
                     cr.Craft(item, player.Inventory.Items);
                     break;
