@@ -1,11 +1,13 @@
 
 [PineLeaves] : Default
+	Culling: none
     Shader: ::Opaque/MeshNormalmapInstancedDiscard
     Texture: uColor, PineLeaves
     Texture: uNormalmap, PineLeaves.normals
     Color: uSpecularColor, .0, .0, .0, 1
 
 [PineImpostor] : Default
+	Culling: none
     Shader: ::Opaque/MeshTexturedInstancedDiscard
     Texture: uColor, PineImpostor
     Color: uSpecularColor, .0, .0, .0, 1
@@ -57,6 +59,7 @@
     Culling: None
 
 [Grass01] : Default
+	Culling: None
     Shader: ::Foliage
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
@@ -65,6 +68,7 @@
     Parameter: uDiscardBias, .9
 
 [Herbs17] : Default
+	Culling: None
     Shader: ::Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Normal
@@ -73,6 +77,7 @@
     Parameter: uDiscardBias, .9
 
 [Herbs18] : Default
+	Culling: None
     Shader: ::Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Normal
@@ -81,16 +86,19 @@
     Parameter: uDiscardBias, .9
 
 [Grass01.zPre] : Default
+	Culling: None
     Shader: ::ZPre/Foliage
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
 
 [Herbs17.zPre] : Default
+	Culling: None
     Shader: ::ZPre/Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs17.Diffuse
     Parameter: uDiscardBias, .9
 
 [Herbs18.zPre] : Default
+	Culling: None
     Shader: ::ZPre/Foliage
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Herbs/Herbs18.Diffuse
     Parameter: uDiscardBias, .9
