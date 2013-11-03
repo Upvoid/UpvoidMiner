@@ -56,7 +56,7 @@
     ParticleAttribute: aParticleLife
 
 [Terrain/Dirt] : Default
-    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapColorModulated
+    Shader: Terrain/MinerTerrain
     Texture: uColorXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Harmonized2.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
@@ -64,10 +64,13 @@
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Color: uSpecularColor, .0, .0, .0, 4
-    Parameter: uTexScaleXY, 18
-    Parameter: uTexScaleXZ, 5
-    Parameter: uTexScaleZY, 18
+    Parameter: uTexScaleXY, 2
+    Parameter: uTexScaleXZ, 4
+    Parameter: uTexScaleZY, 2
     Parameter: uBlendingCoefficient, 4
+    Parameter: uLodRefDist, 2
+    Parameter: uLodFactor, 4
+    Parameter: uLodTransitionPart, .4
 
 [Particles/Terrain/Dirt] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh

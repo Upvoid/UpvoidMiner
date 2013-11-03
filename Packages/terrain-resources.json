@@ -1,5 +1,18 @@
 [
 {
+    "Descriptor" : {
+        "Files" : [
+            "Terrain/MinerTerrain.fsh",
+            "Terrain/MinerTerrain.vsh"
+        ],
+        "Name" : "Terrain/MinerTerrain",
+        "Type" : "File"
+    },
+    "Name" : "Terrain/MinerTerrain",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
     "Descriptor" : "File",
     "Name" : "terrain-materials",
     "Path" : "~.mat",
