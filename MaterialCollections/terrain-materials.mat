@@ -57,10 +57,10 @@
 
 [Terrain/Dirt] : Default
     Shader: Terrain/MinerTerrain
-    Texture: uColorXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Harmonized2.Diffuse
+    Texture: uColorXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
-    Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Harmonized2.Normal
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Color: uSpecularColor, .0, .0, .0, 4
