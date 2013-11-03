@@ -28,6 +28,7 @@ namespace UpvoidMiner
             {
                 int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "", 0, 4);
                 Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01.Transparent", HostScript.ModDomain), Renderer.Transparent.Mesh);
             }
             /*
             // Spawn Grass

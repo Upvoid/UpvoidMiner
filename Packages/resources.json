@@ -259,7 +259,8 @@
     "Descriptor" : {
         "Type": "File",
         "sRGB": true,
-        "PremultipliedAlpha": true
+        "PremultipliedAlpha": true,
+        "Wrap": "clamp"
     },
     "Name" : "GrassTest.Low",
     "Path" : "~.png",
@@ -379,6 +380,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Grass01",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Grass01.Transparent",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Grass01.Transparent",
     "Path" : "~.mat",
     "Type" : "Material"
 },

@@ -59,13 +59,22 @@
     Culling: None
 
 [Grass01] : Default
-	Culling: None
     Shader: ::Foliage
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
     Texture: uTranslucency, GrassTest.Translucency
     Color: uSpecularColor, .0, .0, .0, 0.1
     Parameter: uDiscardBias, .9
+    Culling: None
+
+[Grass01.Transparent] : Default
+    Shader: ::Foliage.Transparent
+    Texture: uColor, GrassTest.Low
+    Texture: uNormal, GrassTest.Normal
+    Texture: uTranslucency, GrassTest.Translucency
+    Color: uSpecularColor, .0, .0, .0, 0.1
+    Parameter: uDiscardBias, .9
+    Culling: None
 
 [Herbs17] : Default
 	Culling: None
