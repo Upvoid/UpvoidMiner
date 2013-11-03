@@ -19,6 +19,7 @@ uniform float uBlendingCoefficient;
 uniform float uLodRefDist;
 uniform float uLodFactor;
 uniform float uLodTransitionPart;
+uniform float uColorModulation;
 
 uniform float uBlackness = 1.0;
 
@@ -93,15 +94,12 @@ void main()
     }
 
     // color modulation
-    baseColor *= vColor;
+    if ( uColorModulation > .5 )
+        baseColor *= vColor;
 
     // illumination
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
-
-    color *= uBlackness;
-
-    //color.r += fract(lod);
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normal);
