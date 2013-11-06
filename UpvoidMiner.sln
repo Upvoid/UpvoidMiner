@@ -5,9 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{2245AFD9-6A82-4FA3-BB55-478E4BDD6EC6}"
 	ProjectSection(SolutionItems) = preProject
+		Packages\geometry-pipelines.json = Packages\geometry-pipelines.json
+		Packages\items.json = Packages\items.json
 		Packages\resources.json = Packages\resources.json
 		Packages\scripts.json = Packages\scripts.json
-		Packages\icons.json = Packages\icons.json
+		Packages\terrain-resources.json = Packages\terrain-resources.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expressions", "Expressions", "{3794FABE-57C0-41F6-9FC3-C734B330CE58}"

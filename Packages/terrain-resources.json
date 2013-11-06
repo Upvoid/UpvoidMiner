@@ -13,6 +13,32 @@
             "Type" : "Shader"
 },
 {
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Foliage.Opaque.fsh",
+            "Vegetation/Foliage.Opaque.vsh"
+        ],
+        "Name" : "Vegetation/Foliage.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/Foliage.Opaque",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Foliage.Transparent.fsh",
+            "Vegetation/Foliage.Transparent.vsh"
+        ],
+        "Name" : "Vegetation/Foliage.Transparent",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/Foliage.Transparent",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
     "Descriptor" : "File",
     "Name" : "terrain-materials",
     "Path" : "~.mat",

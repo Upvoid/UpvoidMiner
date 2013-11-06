@@ -99,6 +99,18 @@
             {
                 "Type" : "Instancing",
                 "Nodes" : ["Grass", "Seeds"]
+            },
+            "ColoredSpawns":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Spawns"],
+                "Copy": ["aPosition", "aNormal", "aTangent"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .5,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    }
+                }
             }
         }
     }

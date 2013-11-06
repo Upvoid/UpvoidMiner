@@ -59,7 +59,7 @@
     Culling: None
 
 [Grass01] : Default
-    Shader: ::Foliage
+    Shader: Vegetation/Foliage.Opaque
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
     Texture: uTranslucency, GrassTest.Translucency
@@ -68,7 +68,7 @@
     Culling: None
 
 [Grass01.Transparent] : Default
-    Shader: ::Foliage.Transparent
+    Shader: Vegetation/Foliage.Transparent
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
     Texture: uTranslucency, GrassTest.Translucency

@@ -62,6 +62,30 @@
 },
 {
     "Type": "Mesh",
+    "Name": "Vegetation/Trunk-1.0.obj",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Trunk-0.9.obj",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Trunk-0.95.obj",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Trunk-0.8.obj",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
     "Name": "Stone",
     "Path": "~.obj",
     "Descriptor": "File"

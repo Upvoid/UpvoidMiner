@@ -27,8 +27,8 @@ namespace UpvoidMiner
             // Spawn Grass
             {
                 int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", HostScript.ModDomain), "Input", "", 0, 4);
-                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
-                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01.Transparent", HostScript.ModDomain), Renderer.Transparent.Mesh);
+                Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Grass01", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Grass01.Transparent", HostScript.ModDomain), Renderer.Transparent.Mesh);
             }
             /*
             // Spawn Grass
@@ -51,14 +51,14 @@ namespace UpvoidMiner
             
             // Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", "", 5, 8);
-                Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                //int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", HostScript.ModDomain), "Input", "", 5, 8);
+                //Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
 
             // For terrain LoDs 0-4, spawn "real" tree models instead of the impostors.
             {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineField", HostScript.ModDomain), "Input", "", 0, 4);
-                Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
+                //int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineField", HostScript.ModDomain), "Input", "", 0, 4);
+                //Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", HostScript.ModDomain), Renderer.Opaque.Mesh);
             }
         }
     }
