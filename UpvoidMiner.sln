@@ -28,6 +28,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MaterialCollections", "MaterialCollections", "{C723C33C-2A85-4C6F-9557-00ED0AC5F824}"
 	ProjectSection(SolutionItems) = preProject
 		MaterialCollections\materials.mat = MaterialCollections\materials.mat
+		MaterialCollections\item-materials.mat = MaterialCollections\item-materials.mat
+		MaterialCollections\terrain-materials.mat = MaterialCollections\terrain-materials.mat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F64BB5CD-2C7D-48B9-8C6E-DF452740E4D1}"
@@ -37,10 +39,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{AD0A6DBF-2CAC-4D84-8BD7-C7F138A8801D}"
-	ProjectSection(SolutionItems) = preProject
-		Shaders\Foliage.fsh = Shaders\Foliage.fsh
-		Shaders\Foliage.vsh = Shaders\Foliage.vsh
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htdocs", "htdocs", "{C46CDCE0-655B-45E8-AE57-0E8C34023B12}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,6 +47,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htdocs", "htdocs", "{C46CDC
 		htdocs\IngameGui.js = htdocs\IngameGui.js
 		htdocs\IngameGui.html = htdocs\IngameGui.html
 		htdocs\index.html = htdocs\index.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automata", "Automata", "{3FAB2059-F76F-4A4E-8D78-E8A8C5A713D7}"
+	ProjectSection(SolutionItems) = preProject
+		Automata\LedgeSpawner.ca = Automata\LedgeSpawner.ca
+		Automata\Surface.ca = Automata\Surface.ca
+		Automata\Trees.ca = Automata\Trees.ca
 	EndProjectSection
 EndProject
 Global

@@ -1,0 +1,30 @@
+// Tree spawning Automaton
+automaton TreeTon
+
+cells
+  0, 1, 0 as Top1
+  0, 2, 0 as Top2
+  0, 3, 0 as Top3
+
+  1,0,0  as Left
+  -1,0,0 as Right
+  0,0,-1 as Front
+  0,0,1  as Back
+
+pre
+  this.material is "Dirt"
+  Left.material  is "Dirt"
+  Right.material is "Dirt"
+  Front.material is "Dirt"
+  Back.material  is "Dirt"
+  Top1.material is void
+  Top2.material is void
+  Top3.material is void
+
+body
+
+  spawnProbability = 0; perlin(x,y,z) $= ::Perlin; p = this.position / 100; spawnProbability = perlin(p.x, p.y, p.z) * 1 / 100
+
+  if random(0,1) < spawnProbability
+    call $UpvoidMiner UpvoidMiner.UpvoidMinerWorldGenerator.TreeCallback
+      pos = this.position

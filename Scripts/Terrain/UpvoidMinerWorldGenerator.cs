@@ -3,6 +3,7 @@ using Engine.Universe;
 using Engine.Resources;
 using Engine.Rendering;
 using System.Text;
+using Engine;
 
 namespace UpvoidMiner
 {
@@ -12,6 +13,15 @@ namespace UpvoidMiner
     /// </summary>
     public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
     {
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        private static UpvoidMinerWorldGenerator Instance;
+        /// <summary>
+        /// Random
+        /// </summary>
+        private static Random random = new Random();
+
         /// <summary>
         /// Dirt terrain resource.
         /// </summary>
@@ -23,6 +33,7 @@ namespace UpvoidMiner
         /// </summary>
         public override bool init()
         {
+            Instance = this;
             World world = World;
             TerrainEngine terr = world.Terrain;
 
@@ -63,8 +74,22 @@ namespace UpvoidMiner
             //union.AddNode(new CsgExpression(terrainRock04.Index, hillsDef + "y + Hills", HostScript.ModDomain));
 
             concat.AddNode(union);
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", HostScript.ModDomain), World, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", HostScript.ModDomain), World, 4));
             return concat;
+        }
+
+        public static void TreeCallback(vec3 pos)
+        {
+            World world = Instance.World;
+
+            vec3 up = new vec3((float)random.NextDouble() * .05f - .025f, 1, (float)random.NextDouble() * .05f - .025f).Normalized;
+            vec3 left = vec3.cross(up, vec3.UnitZ).Normalized;
+            vec3 front = vec3.cross(left, up);
+
+            mat4 transform = new mat4(left, up, front, pos);
+
+            world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f), transform);
         }
     }
 }

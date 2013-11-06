@@ -62,25 +62,31 @@
 },
 {
     "Type": "Mesh",
-    "Name": "Vegetation/Trunk-1.0.obj",
+    "Name": "Vegetation/Trunk-1.0",
     "Path": "~.obj",
     "Descriptor": "File"
 },
 {
     "Type": "Mesh",
-    "Name": "Vegetation/Trunk-0.9.obj",
+    "Name": "Vegetation/Trunk-0.9",
     "Path": "~.obj",
     "Descriptor": "File"
 },
 {
     "Type": "Mesh",
-    "Name": "Vegetation/Trunk-0.95.obj",
+    "Name": "Vegetation/Trunk-0.95",
     "Path": "~.obj",
     "Descriptor": "File"
 },
 {
     "Type": "Mesh",
-    "Name": "Vegetation/Trunk-0.8.obj",
+    "Name": "Vegetation/Trunk-0.8",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Leaves",
     "Path": "~.obj",
     "Descriptor": "File"
 },
@@ -223,6 +229,12 @@
 {
     "Type": "Automaton",
     "Name": "Surface",
+    "Path": "~.ca",
+    "Descriptor": "File"
+},
+{
+    "Type": "Automaton",
+    "Name": "Trees",
     "Path": "~.ca",
     "Descriptor": "File"
 },
@@ -400,6 +412,27 @@
 {
     "Descriptor" : {
         "Collection" : "materials",
+        "Name" : "BirchLeaves",
+        "Type" : "FromCollection"
+    },
+    "Name" : "BirchLeaves",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "BirchLeaves.Transparent",
+        "Type" : "FromCollection"
+    },
+    "Name" : "BirchLeaves.Transparent",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
         "Name" : "Grass01",
         "Type" : "FromCollection"
     },
@@ -447,6 +480,17 @@
         "Type" : "FromCollection"
     },
     "Name" : "Herbs17",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Vegetation/BirchLog",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Vegetation/BirchLog",
     "Path" : "~.mat",
     "Type" : "Material"
 },
