@@ -24,6 +24,8 @@ void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
 
+    texColor.rgb /= texColor.a;
+
     if(texColor.a < uDiscardBias)
         discard;
 

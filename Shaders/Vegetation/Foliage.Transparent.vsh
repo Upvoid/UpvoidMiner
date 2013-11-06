@@ -24,7 +24,7 @@ void main()
 {
     vColor = aInstColor;
 
-    vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent));
+    vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent)) * length(aInstTangent);
     vec3 instTangent = cross(instBitangent, aInstNormal);
     mat3 instRot = mat3(
                 instBitangent,
