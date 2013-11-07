@@ -83,8 +83,25 @@ namespace UpvoidMiner
                 float h = (float)((1 - random.NextDouble() * random.NextDouble()) * hsum) * .8f + .1f;
                 vec3 dir = new vec3((float)random.NextDouble() * 2  - 1, .3f + (float)random.NextDouble() * .6f, (float)random.NextDouble() * 2 - 1).Normalized;
                 vec3 front = vec3.cross(dir, vec3.UnitY).Normalized;
+                vec3 left = vec3.cross(front, dir);
                 float r = radius * (0.2f + (float)random.NextDouble() * .4f);
-                t.Logs.Add(CreateLog(t, new vec3(0, h, 0), dir, front, unitHeight * (.8f + (float)random.NextDouble() * .4f + .4f), r, mat, "Vegetation/Trunk-0.8")); 
+                vec3 basePos = new vec3(0, h, 0);
+                float branchLength = unitHeight * (.8f + (float)random.NextDouble() * .4f + .4f);
+                t.Logs.Add(CreateLog(t, basePos, dir, front, branchLength, r, mat, "Vegetation/Trunk-0.8")); 
+                
+                int leaves = (int)(4 + random.Next(0, 3));
+                for (int j = 0; j < leaves * 4; ++j)
+                {
+                    vec3 rad = (((float)random.NextDouble() - .5f) * left + ((float)random.NextDouble() - .5f) * front).Normalized;
+
+                    vec3 pos = basePos + dir * branchLength * (float)random.NextDouble() + rad * r * .9f;
+                    vec3 normal = (rad + new vec3(0,.3f - (float)random.NextDouble() * .6f,0)).Normalized * (1 + (float)random.NextDouble() * (.2f + hsum/height * .3f));
+                    vec3 tangent = vec3.cross(normal, new vec3((float)random.NextDouble() - .5f, (float)random.NextDouble() - .5f, (float)random.NextDouble() - .5f)).Normalized * (1 + (float)random.NextDouble() * (.2f + hsum/height * .3f));
+                    vec3 color = new vec3(.9f + (float)random.NextDouble() * .4f, 1, 1);
+
+                    foliageJob.AddSeed(pos, normal, tangent, color);
+                    foliageJob2.AddSeed(pos, normal, tangent, color);
+                }
             }
             
             foliageJob.FinalizeSeeds();
