@@ -1,6 +1,7 @@
 #version 140
 
 #include <Common/Camera.csh>
+#include <Common/Lighting.fsh>
 
 in vec3 aPosition;
 in vec2 aTexCoord;
@@ -45,6 +46,8 @@ void main()
     float size = aParticleSize * (0.25 + 0.75 * smoothstep(0.0, 0.7, aParticleLife));
 
     size *= 1 + 1 * smoothstep(0.7, 1.0, aParticleLife);
+
+    vParticleColor.rgb *= shadowFactor(worldPos.xyz);
 
     eyePos.xy += tangent * (aPosition.x * size)
                 + normal * (aPosition.y * size);
