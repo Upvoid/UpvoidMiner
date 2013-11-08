@@ -128,17 +128,17 @@ namespace UpvoidMiner
                         if ( boundaryIndicators.Count <= i )
                         {
                             boundaryIndicators.Add(new MeshRenderJob(Renderer.Transparent.Mesh, 
-                                                                     Resources.UseMaterial("Miner/DroneConstraintVertical", LocalScript.ModDomain),
-                                                                     Resources.UseMesh("::Debug/Quad", LocalScript.ModDomain),
+                                                                     Resources.UseMaterial("Miner/DroneConstraintVertical", UpvoidMiner.ModDomain),
+                                                                     Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
                                                                      mat4.Identity));
                             boundaryIndicatorsDistort.Add(new MeshRenderJob(Renderer.Distortion.Mesh, 
-                                                                     Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", LocalScript.ModDomain),
-                                                                     Resources.UseMesh("::Debug/Quad", LocalScript.ModDomain),
+                                                                     Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", UpvoidMiner.ModDomain),
+                                                                     Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
                                                                      mat4.Identity));
 
                             // Vertical drones cause a constraint by the intersection of the planes (i.e. the plane between two drones and the two shadow-planes).
                             constraintExpression.Add(new CsgExpression(1, "max((dot(plane1Normal, vec3(x, y, z)) - plane1Dis), max( (dot(plane2Normal, vec3(x, y, z)) - plane2Dis), (dot(plane3Normal, vec3(x, y, z)) - plane3Dis)) )", 
-                                                                       LocalScript.ModDomain, 
+                                                                       UpvoidMiner.ModDomain, 
                                                                        "plane1Normal:vec3, plane1Dis:float, plane2Normal:vec3, plane2Dis:float, plane3Normal:vec3, plane3Dis:float"));
                             addJob = true;
                         }

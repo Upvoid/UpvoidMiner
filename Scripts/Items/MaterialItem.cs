@@ -166,10 +166,10 @@ namespace UpvoidMiner
             LocalScript.world.AddRenderJob(previewMaterial);
             
             // Create a transparent object as 'placement-indicator'.
-            previewMaterialPlaced = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreview", LocalScript.ModDomain), mesh, mat4.Scale(0f));
+            previewMaterialPlaced = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreview", UpvoidMiner.ModDomain), mesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlaced);
             // And a second one for indicating the center.
-            previewMaterialPlacedIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", LocalScript.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            previewMaterialPlacedIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlacedIndicator);
         }
         
@@ -316,7 +316,7 @@ namespace UpvoidMiner
             
             MeshRenderJob renderJobShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh, 
-                Resources.UseMaterial("::Shadow", HostScript.ModDomain), 
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), 
                 mesh,
                 mat4.Identity
                 );

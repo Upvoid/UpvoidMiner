@@ -265,15 +265,15 @@ namespace UpvoidMiner
                                          mat4.Translate(new vec3(0, character.EyeOffset, 0))));
 
             // Add Torso mesh.
-            thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+            thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
                                                                   torsoTransform,
                                                                   true));
-            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", HostScript.ModDomain), Resources.UseMesh("Miner/Torso", HostScript.ModDomain), mat4.Identity),
+            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
                                                                         torsoTransform,
                                                                         true));
             psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
             LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));
-            LocalScript.ParticleEntity.AddComponent(new RenderComponent(new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", HostScript.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
+            LocalScript.ParticleEntity.AddComponent(new RenderComponent(new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
                                                                         mat4.Identity,
                                                                         true));
 

@@ -24,7 +24,7 @@ namespace UpvoidMiner
 
             vec3 left = vec3.cross(dir, front);
             mat4 transform = new mat4(left, dir, front, start) * mat4.Scale(new vec3(radius, height, radius));
-            var mesh = Resources.UseMesh(meshName, HostScript.ModDomain);
+            var mesh = Resources.UseMesh(meshName, UpvoidMiner.ModDomain);
             
             log.RenderComps.Add(new RenderComponent( new MeshRenderJob(Renderer.Opaque.Mesh, material, mesh, mat4.Identity), transform));
             log.RenderComps.Add(new RenderComponent( new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", null), mesh, mat4.Identity), transform));
@@ -43,18 +43,18 @@ namespace UpvoidMiner
             
             SeedPointMeshRenderJob foliageJob = new SeedPointMeshRenderJob(
                 Renderer.Opaque.Mesh,
-                Resources.UseMaterial("BirchLeaves", HostScript.ModDomain),
-                Resources.UseMesh("Vegetation/Leaves", HostScript.ModDomain),
+                Resources.UseMaterial("BirchLeaves", UpvoidMiner.ModDomain),
+                Resources.UseMesh("Vegetation/Leaves", UpvoidMiner.ModDomain),
                 mat4.Identity);
             SeedPointMeshRenderJob foliageJob2 = new SeedPointMeshRenderJob(
                 Renderer.Transparent.Mesh,
-                Resources.UseMaterial("BirchLeaves.Transparent", HostScript.ModDomain),
-                Resources.UseMesh("Vegetation/Leaves", HostScript.ModDomain),
+                Resources.UseMaterial("BirchLeaves.Transparent", UpvoidMiner.ModDomain),
+                Resources.UseMesh("Vegetation/Leaves", UpvoidMiner.ModDomain),
                 mat4.Identity);
 
             float hsum = 0;
             float unitHeight = radius * 2 * (float)Math.PI * 2 * .6f;
-            MaterialResource mat = Resources.UseMaterial("Vegetation/BirchLog", HostScript.ModDomain);
+            MaterialResource mat = Resources.UseMaterial("Vegetation/BirchLog", UpvoidMiner.ModDomain);
             while (hsum < height)
             {
                 float h = unitHeight * (.8f + (float)random.NextDouble() * .4f);
@@ -86,7 +86,7 @@ namespace UpvoidMiner
                 vec3 left = vec3.cross(front, dir);
                 float r = radius * (0.2f + (float)random.NextDouble() * .4f);
                 vec3 basePos = new vec3(0, h, 0);
-                float branchLength = unitHeight * (.8f + (float)random.NextDouble() * .4f + .4f);
+                float branchLength = unitHeight * (.8f + (float)random.NextDouble() * .4f + .1f) * .7f;
                 t.Logs.Add(CreateLog(t, basePos, dir, front, branchLength, r, mat, "Vegetation/Trunk-0.8")); 
                 
                 int leaves = (int)(4 + random.Next(0, 3));

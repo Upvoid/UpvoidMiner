@@ -132,16 +132,16 @@ namespace UpvoidMiner
             // Create the graphical representation of the item.
             MeshRenderJob renderJob = new MeshRenderJob(
                 Renderer.Opaque.Mesh,
-                Resources.UseMaterial("Items/Dummy", HostScript.ModDomain),
-                Resources.UseMesh("::Debug/Box", HostScript.ModDomain),
+                Resources.UseMaterial("Items/Dummy", UpvoidMiner.ModDomain),
+                Resources.UseMesh("::Debug/Box", UpvoidMiner.ModDomain),
                 mat4.Identity
                 );
             itemEntity.AddRenderComponent(new RenderComponent(renderJob, mat4.Identity, true));
             
             MeshRenderJob renderJobShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh, 
-                Resources.UseMaterial("::Shadow", HostScript.ModDomain), 
-                Resources.UseMesh("::Debug/Box", HostScript.ModDomain),
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), 
+                Resources.UseMesh("::Debug/Box", UpvoidMiner.ModDomain),
                 mat4.Identity
                 );
             itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, mat4.Identity, true));

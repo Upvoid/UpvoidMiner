@@ -67,6 +67,7 @@
     <Compile Include="Terrain\VegetatedTerrainResource.cs" />
     <Compile Include="Vegetation\Tree.cs" />
     <Compile Include="Vegetation\TreeGenerator.cs" />
+    <Compile Include="UpvoidMiner.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

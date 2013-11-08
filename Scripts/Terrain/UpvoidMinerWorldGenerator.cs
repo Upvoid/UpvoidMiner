@@ -26,7 +26,7 @@ namespace UpvoidMiner
         /// Dirt terrain resource.
         /// </summary>
         private TerrainResource terrainDirt;
-        private TerrainResource terrainRock04;
+        private TerrainResource terrainRock;
 
         /// <summary>
         /// Initializes the terrain materials and settings.
@@ -42,7 +42,7 @@ namespace UpvoidMiner
 
             // Get handle to dirt for generation.
             terrainDirt = TerrainResource.FromName("Dirt");
-            terrainRock04 = TerrainResource.FromName("Stone.04");
+            terrainRock = TerrainResource.FromName("Stone.09");
             
             return base.init();
         }
@@ -55,27 +55,48 @@ namespace UpvoidMiner
         {
             // Load and return a CsgNode based on the "Hills" expression resource. This will create some generic perlin-based hills.
             CsgOpConcat concat = new CsgOpConcat();
-            
-            CsgOpUnion union = new CsgOpUnion();
 
-            StringBuilder hillsDefines = new StringBuilder();
-            // Introduce variables.
-            hillsDefines.Append("pos = vec3(x, y, z);");
-            // Import perlin noise.
-            hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
-            hillsDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
-            // Hill structue.
-            //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
-            hillsDefines.Append("Hills = perlins(x / 300, y / 300, z / 300) + perlins(x / 100, y / 100, z / 100) * .5 + perlins(x / 30, y / 30, z / 30) * .25 + perlins(x / 10, y / 10, z / 10) * .05;");
-            hillsDefines.Append("Hills = (Hills + 1).pow2 * 50;");
-            string hillsDef = hillsDefines.ToString();
+            {
+                CsgOpUnion union = new CsgOpUnion();
+                StringBuilder hillsDefines = new StringBuilder();
+                // Introduce variables.
+                hillsDefines.Append("pos = vec3(x, y, z);");
+                // Import perlin noise.
+                hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
+                hillsDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
+                // Hill structue.
+                //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
+                hillsDefines.Append("Hills = perlins(x / 300, y / 300, z / 300) + perlins(x / 100, y / 100, z / 100) * .5 + perlins(x / 30, y / 30, z / 30) * .25 + perlins(x / 10, y / 10, z / 10) * .05;");
+                hillsDefines.Append("Hills = (Hills + 1).pow2 * 50;");
+                string hillsDef = hillsDefines.ToString();
 
-            union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", HostScript.ModDomain));
-            //union.AddNode(new CsgExpression(terrainRock04.Index, hillsDef + "y + Hills", HostScript.ModDomain));
+                union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", UpvoidMiner.ModDomain));
+                union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 20, z / 21, y / 22) * 3)", UpvoidMiner.ModDomain));
+                concat.AddNode(union);
+            }
 
-            concat.AddNode(union);
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", HostScript.ModDomain), World, 4));
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", HostScript.ModDomain), World, 4));
+            {
+                CsgOpDiff diff = new CsgOpDiff();
+                StringBuilder caveDefines = new StringBuilder();
+                // Introduce variables.
+                caveDefines.Append("pos = vec3(x, y, z);");
+                // Import perlin noise.
+                caveDefines.Append("perlins(x,y,z) $= ::Perlin;");
+                caveDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
+                // Cave structue.
+                //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
+                caveDefines.Append("CaveDensity = clamp(perlins(x / 30, y / 30, z / 30) * 4, 0, 1);");
+                caveDefines.Append("CaveDensity = CaveDensity * clamp((y + 100) * .2, 0, 1);");
+                caveDefines.Append("Caves = (perlins(x / 17, y / 17, z / 17) + perlins(x / 6, y / 6, z / 6) * .5 - .2) + (5 - CaveDensity * 5);");
+                string caveDef = caveDefines.ToString();
+
+                diff.AddNode(new CsgExpression(1, caveDef + "Caves", UpvoidMiner.ModDomain));
+                concat.AddNode(diff);
+            }
+
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), World, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), World, 4));
+
             return concat;
         }
 

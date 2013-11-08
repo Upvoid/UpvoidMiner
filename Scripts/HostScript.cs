@@ -34,17 +34,14 @@ namespace UpvoidMiner
     /// </summary>
     public class HostScript
     {
-        public static Module Mod;
-        public static ResourceDomain ModDomain;
-
         /// <summary>
         /// Starts
         /// </summary>
         public static void Startup(IntPtr _unmanagedModule)
         {
             // Get and save the resource domain of the mod, needed for loading resources.
-            Mod = Module.FromHandle(_unmanagedModule);
-            ModDomain = Mod.ResourceDomain;
+            UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
+            UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
             // Create the world. Multiple worlds could be created here, but we only want one.
             // Use the UpvoidMinerWorldGenerator, which will create a simple terrain with some vegetation.

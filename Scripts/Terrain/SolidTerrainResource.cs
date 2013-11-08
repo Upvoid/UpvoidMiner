@@ -22,8 +22,8 @@ namespace UpvoidMiner
         public SolidTerrainResource(string name, string renderMaterial, string particleMaterial, bool defaultPipeline = true) :
             base(name)
         {
-            RenderMaterial = Resources.UseMaterial(renderMaterial, HostScript.ModDomain);
-            DigParticleMaterial = Resources.UseMaterial(particleMaterial, HostScript.ModDomain);
+            RenderMaterial = Resources.UseMaterial(renderMaterial, UpvoidMiner.ModDomain);
+            DigParticleMaterial = Resources.UseMaterial(particleMaterial, UpvoidMiner.ModDomain);
 
             // Add a default pipeline. (Solid material with zPre and Shadow pass)
             if ( defaultPipeline )

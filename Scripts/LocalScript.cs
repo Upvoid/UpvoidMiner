@@ -34,16 +34,7 @@ namespace UpvoidMiner
 	/// Main class for the local scripting domain.
 	/// </summary>
 	public class LocalScript
-	{
-		/// <summary>
-		/// Resource domain
-		/// </summary>
-		public static ResourceDomain ModDomain;
-		/// <summary>
-		/// Mod
-		/// </summary>
-		public static Module Mod;
-		
+	{		
 		/// <summary>
 		/// The main world. We will use this to create new entities or query information about the environment.
 		/// </summary>
@@ -78,8 +69,8 @@ namespace UpvoidMiner
 		public static void Startup(IntPtr _unmanagedModule)
 		{
 			// Get and save the resource domain of the mod, needed for loading resources.
-			Mod = Module.FromHandle(_unmanagedModule);
-			ModDomain = Mod.ResourceDomain;
+			UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
+            UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
 			// Create a simple camera that allows free movement.
 			camera = new GenericCamera();

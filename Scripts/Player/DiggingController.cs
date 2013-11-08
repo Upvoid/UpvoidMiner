@@ -63,7 +63,7 @@ namespace UpvoidMiner
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                   (new CpuParticleRenderJob(particlesStones,
                          Renderer.Shadow.CpuParticles,
-                         Resources.UseMaterial("Particles/Shadow/Mesh", HostScript.ModDomain),
+                         Resources.UseMaterial("Particles/Shadow/Mesh", UpvoidMiner.ModDomain),
                          Resources.UseMesh("::Particles/Rock", null),
                                       mat4.Identity)),
                     mat4.Identity,
@@ -79,7 +79,7 @@ namespace UpvoidMiner
             this.world = world;
             this.player = player;
             string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
-            sphereNode = new CsgExpression(1, sphereExpression, HostScript.ModDomain, "sphereRadius:float, spherePosition:vec3");
+            sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "sphereRadius:float, spherePosition:vec3");
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
@@ -126,8 +126,8 @@ namespace UpvoidMiner
 
             // Callback for statistical purposes.
             CsgStatCallback finalNode = new CsgStatCallback(collapser, 4, 4);
-            finalNode.AddSimpleVolumeCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
-            finalNode.AddVolumeChangePointCallback("UpvoidMiner", HostScript.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
+            finalNode.AddSimpleVolumeCallback("UpvoidMiner", UpvoidMiner.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
+            finalNode.AddVolumeChangePointCallback("UpvoidMiner", UpvoidMiner.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
 
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }

@@ -86,11 +86,11 @@ namespace UpvoidMiner
             // The index.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
             // These dynamic content handlers provide that information.
             this.player = player;
-            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "IngameGuiData", webInventory);
-            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
-            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "SelectItem", webSelectItem);
-            Webserver.DefaultWebserver.RegisterDynamicContent(LocalScript.ModDomain, "DropItem", webDropItem);
-            updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(LocalScript.ModDomain, "InventoryUpdate");
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IngameGuiData", webInventory);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectItem", webSelectItem);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "DropItem", webDropItem);
+            updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "InventoryUpdate");
 
             // On all relevant changes in the inventory, we order the GUI client to update itself.
             player.Inventory.OnSelectionChanged += (arg1, arg2) => OnUpdate();
