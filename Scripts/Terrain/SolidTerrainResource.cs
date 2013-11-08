@@ -2,6 +2,7 @@ using System;
 using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
+using Engine.Scripting;
 
 namespace UpvoidMiner
 {
@@ -25,12 +26,15 @@ namespace UpvoidMiner
             RenderMaterial = Resources.UseMaterial(renderMaterial, UpvoidMiner.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, UpvoidMiner.ModDomain);
 
-            // Add a default pipeline. (Solid material with zPre and Shadow pass)
-            if ( defaultPipeline )
+            if (Scripting.IsHost)
             {
-                int pipe = Material.AddDefaultPipeline();
-                Material.AddDefaultShadowAndZPre(pipe);
-                Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+                // Add a default pipeline. (Solid material with zPre and Shadow pass)
+                if (defaultPipeline)
+                {
+                    int pipe = Material.AddDefaultPipeline();
+                    Material.AddDefaultShadowAndZPre(pipe);
+                    Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+                }
             }
         }
     }
