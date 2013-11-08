@@ -19,37 +19,28 @@ namespace UpvoidMiner
         {
             terrain = _terrain;
 
-            if ( Scripting.IsHost )
-            {
-                // Register some simple solid materials.
+            // Register some simple solid materials.
 
-                // Dirt
-                addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
+            // Dirt
+            addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
 
-                // Stones
-                for (int i = 1; i <= 14; ++i)
-                    addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00")));
+            // Stones
+            for (int i = 1; i <= 14; ++i)
+                addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00")));
 
-                // Wood
-                addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood"));
+            // Wood
+            addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood"));
 
-                // Ores + Metals
-                addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));
-                addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper"));
-                addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron"));
-                addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
+            // Ores + Metals
+            addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));
+            addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper"));
+            addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron"));
+            addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
 
-                // Rares
-                addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "Particles/Terrain/AoiCrystal"));
-                addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock"));
-                addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock"));
-
-            }
-            else
-            {
-                // TODO: implement client-side
-                throw new NotImplementedException();
-            }
+            // Rares
+            addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "Particles/Terrain/AoiCrystal"));
+            addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock"));
+            addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock"));
         }
 
         /// <summary>

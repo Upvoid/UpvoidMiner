@@ -2,6 +2,7 @@ using System;
 using Engine.Universe;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Engine.Scripting;
 
 namespace UpvoidMiner
 {
@@ -25,7 +26,10 @@ namespace UpvoidMiner
 
         public TerrainResource(string name, bool translucent = false)
         {
-            Material = terrain.RegisterMaterial(name, translucent);
+            if (Scripting.IsHost)
+                Material = terrain.RegisterMaterial(name, translucent);
+            else 
+                Material = terrain.QueryMaterialFromName(name);
             Index = Material.MaterialIndex;
             Name = name;
         }

@@ -80,6 +80,10 @@ namespace UpvoidMiner
 			// Get the world (created by the host script).
 			world = Universe.GetWorldByName("UpvoidMinerWorld");
 
+            // Client-only: register terrain materials
+            if (Scripting.IsLocal)
+                TerrainResource.RegisterResources(world.Terrain);
+
 			// Place the camera in the world.
 			world.AttachCamera(camera);
 			if(Rendering.ActiveMainPipeline != null)
