@@ -31,7 +31,7 @@ namespace UpvoidMiner
                 // Add a default pipeline. (Solid material with zPre and Shadow pass)
                 if (defaultPipeline)
                 {
-                    int pipe = Material.AddDefaultPipeline();
+                    int pipe = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredRock", UpvoidMiner.ModDomain), "Input", "Decimate");
                     Material.AddDefaultShadowAndZPre(pipe);
                     Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                 }

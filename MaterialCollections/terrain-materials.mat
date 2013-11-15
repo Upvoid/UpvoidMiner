@@ -95,7 +95,7 @@
     Parameter: uLodRefDist, 3
     Parameter: uLodFactor, 4
     Parameter: uLodTransitionPart, .4
-    Parameter: uColorModulation, 0
+    Parameter: uColorModulation, 1
 
 [Terrain/Rock01] : Terrain/BaseRock
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock01.Diffuse

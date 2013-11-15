@@ -22,7 +22,7 @@ namespace UpvoidMiner
 
                 // Color modulated geometry pipeline for more variance.
                 {
-                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Input");
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Decimate");
                     Material.AddDefaultShadowAndZPre(pipeline);
                     Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                 }

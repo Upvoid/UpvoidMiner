@@ -275,16 +275,16 @@ namespace UpvoidMiner
                 case MaterialShape.Cube: 
                     collShape = new BoxShape(Size / 2f);
                     scaling = mat4.Scale(Size / 2f);
-                    mesh = Resources.UseMesh("::Debug/Box", null);
+                    mesh = Resources.UseMesh("Box", UpvoidMiner.ModDomain);
                     break;
                 case MaterialShape.Sphere: 
                     collShape = new SphereShape(Size.x);
                     scaling = mat4.Scale(Size);
-                    mesh = Resources.UseMesh("::Debug/Sphere", null);
+                    mesh = Resources.UseMesh("Sphere", UpvoidMiner.ModDomain);
                     break;
                 case MaterialShape.Cylinder: 
                     collShape = new CylinderShape(Size.x, Size.y);
-                    mesh = Resources.UseMesh("::Debug/Cylinder", null);
+                    mesh = Resources.UseMesh("Cylinder", UpvoidMiner.ModDomain);
                     scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
                     break;
                 default: throw new NotImplementedException("Invalid Shape");

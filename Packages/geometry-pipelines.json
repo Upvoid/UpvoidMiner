@@ -51,6 +51,19 @@
             {
                 "Type" : "Input"
             },
+            "NormalRepair" :
+            {
+                "Type" : "NormalRepair",
+                "Nodes" : ["Decimate"]
+            },
+            "Decimate" :
+            {
+            	"Type" : "Decimate",
+            	"Nodes" : ["Input"],
+                "errorTarget" : 0.001,
+            	"faceTarget" : 2,
+            	"constrainBoundaries" : true
+            },
             "Output":
             {
                 "Type": "Attribute",
@@ -263,6 +276,169 @@
             {
                 "Type" : "Instancing",
                 "Nodes" : ["PineImpostor", "Seeds"]
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "ColoredBox",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Resource",
+                "Resource": "::Debug/Box"
+            },
+            "Output":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Input"],
+                "Copy": ["aPosition", "aNormal"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "vec3(1,1,1)",
+                        "Inputs": [ ]
+                    }
+                }
+            }
+        }
+    }
+},
+{
+    "Type": "Mesh",
+    "Name": "Box",
+    "Path": "~.obj",
+    "Descriptor":
+    {
+        "Type": "FromPipeline",
+        "Pipeline": "ColoredBox",
+        "Output": "Output"
+    }
+},
+{
+    "Type": "GeometryPipeline",
+    "Name": "ColoredCylinder",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Resource",
+                "Resource": "::Debug/Cylinder"
+            },
+            "Output":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Input"],
+                "Copy": ["aPosition", "aNormal"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "vec3(1,1,1)",
+                        "Inputs": [ ]
+                    }
+                }
+            }
+        }
+    }
+},
+{
+    "Type": "Mesh",
+    "Name": "Cylinder",
+    "Path": "~.obj",
+    "Descriptor":
+    {
+        "Type": "FromPipeline",
+        "Pipeline": "ColoredCylinder",
+        "Output": "Output"
+    }
+},
+{
+    "Type": "GeometryPipeline",
+    "Name": "ColoredSphere",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Resource",
+                "Resource": "::Debug/Sphere"
+            },
+            "Output":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Input"],
+                "Copy": ["aPosition", "aNormal"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "vec3(1,1,1)",
+                        "Inputs": [ ]
+                    }
+                }
+            }
+        }
+    }
+},
+{
+    "Type": "Mesh",
+    "Name": "Sphere",
+    "Path": "~.obj",
+    "Descriptor":
+    {
+        "Type": "FromPipeline",
+        "Pipeline": "ColoredSphere",
+        "Output": "Output"
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "ColoredRock",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "NormalRepair" :
+            {
+                "Type" : "NormalRepair",
+                "Nodes" : ["Decimate"]
+            },
+            "Decimate" :
+            {
+            	"Type" : "Decimate",
+            	"Nodes" : ["Input"],
+                "errorTarget" : 0.1,
+            	"faceTarget" : 2,
+            	"constrainBoundaries" : true
+            },
+            "Output":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Input"],
+                "Copy": ["aPosition", "aNormal"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .3,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    }
+                }
             }
         }
     }
