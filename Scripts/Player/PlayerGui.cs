@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
 using Engine.Webserver;
 using Engine.Input;
 
@@ -20,6 +19,7 @@ namespace UpvoidMiner
 
         Player player;
 
+        JsonSerializer json = new JsonSerializer();
         WebSocketHandler updateSocket;
 
         // Container class for the data we send to the GUI client.
@@ -28,6 +28,9 @@ namespace UpvoidMiner
         {
             [Serializable]
             public class GuiItem {
+
+                public GuiItem() { }
+                
                 public GuiItem(Item item)
                 {
                     icon = item.Icon;
@@ -123,9 +126,6 @@ namespace UpvoidMiner
         {
             // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
-
-
-
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
 
             foreach (var item in player.Inventory.QuickAccessItems)
@@ -137,7 +137,7 @@ namespace UpvoidMiner
             }
 
             info.selection = player.Inventory.SelectionIndex;
-            
+
             foreach (CraftingRule cr in player.Inventory.DiscoveredRules)
             {
                 if (info.inventory.ContainsKey(cr.Result.Identifier))
@@ -170,14 +170,12 @@ namespace UpvoidMiner
                 }
             }
 
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(GuiInfo));
-
-            MemoryStream ms = new MemoryStream();
-
-            serializer.WriteObject((Stream)ms, (Object)info);
-
+            StringWriter writer = new StringWriter();
+            JsonTextWriter jsonWriter = new JsonTextWriter(writer);
+            json.Formatting = Formatting.Indented;
+            json.Serialize(jsonWriter, info);
             response.AddHeader("Content-Type", "application/json");
-            response.AppendBody(new StreamReader(ms).ReadToEnd());
+            response.AppendBody(writer.GetStringBuilder().ToString());
         }
 
         void webSelectQuickAccessSlot(WebRequest request, WebResponse response)
