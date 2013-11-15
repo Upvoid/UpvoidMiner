@@ -28,6 +28,9 @@ namespace UpvoidMiner
         {
             [Serializable]
             public class GuiItem {
+
+                public GuiItem() { }
+                
                 public GuiItem(Item item)
                 {
                     icon = item.Icon;
