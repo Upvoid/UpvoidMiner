@@ -20,6 +20,12 @@ out vec3 vTangent;
 out vec3 vWorldPos;
 out vec2 vTexCoord;
 
+vec3 windOffset(float height, vec3 pos)
+{
+    float ws = cos(uRuntime + pos.x + pos.y + pos.z);
+    return vec3(ws * cos(pos.x + pos.z), 0, ws * cos(pos.y + pos.z)) * max(0, height) * .1;
+}
+
 void main()
 {
     vColor = aInstColor;
@@ -45,6 +51,7 @@ void main()
 
     // world space position:
     vec4 worldPos = uModelMatrix * instModel * vec4(aPosition, 1.0);
+    worldPos.xyz += windOffset(aPosition.y, aInstPosition);
     vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
