@@ -25,7 +25,7 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Webserver;
 using Common.Cameras;
-
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace UpvoidMiner
@@ -116,6 +116,27 @@ namespace UpvoidMiner
 			Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
 		}
 
+        /// Bezier Camera Path Feature
+        private static List<vec3> PathPositions = new List<vec3>();
+        private static List<vec3> PathDirections = new List<vec3>();
+        private static List<vec3> PathTmps = new List<vec3>();
+        private static float PathCurrPos = 0;
+        private static bool PathPlaying = false;
+        private static vec3 bezierOf(List<vec3> vecs, List<vec3> tmp, float t)
+        {
+            for (int i = 0; i < vecs.Count; ++i)
+                tmp[i] = vecs[i];
+
+            for (int i = vecs.Count - 1; i >= 1; --i)
+            {
+                for (int j = 0; j < i; ++j)
+                {
+                    tmp[j] = tmp[j] * (1 - t) + tmp[j+1] * t;
+                }
+            }
+            return tmp[0];
+        }
+
 		/// <summary>
 		/// Performs some basic input handling.
 		/// </summary>
@@ -128,6 +149,29 @@ namespace UpvoidMiner
 			// N toggles noclip.
 			if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
 				NoclipEnabled = !NoclipEnabled;
+
+            // Cam Paths
+            if ( NoclipEnabled && e.PressType == InputPressArgs.KeyPressType.Down )
+            {
+                switch (e.Key)
+                {
+                    case InputKey.F9:
+                        PathPositions.Add(camera.Position);
+                        PathDirections.Add(camera.ForwardDirection);
+                        PathTmps.Add(vec3.Zero);
+                        Console.WriteLine("Point recorded");
+                        break;
+                    case InputKey.F12:
+                        PathPositions.Clear();
+                        PathTmps.Clear();
+                        PathDirections.Clear();
+                        Console.WriteLine("Path deleted");
+                        break;
+                    case InputKey.F10:
+                        PathPlaying = !PathPlaying;
+                        break;
+                }
+            }
 		}
 
 		/// <summary>
@@ -136,7 +180,20 @@ namespace UpvoidMiner
 		public static void Update(float _elapsedSeconds)
         {
             if ( NoclipEnabled )
+            {
+                // Bezier Path
+                if ( PathPlaying && PathPositions.Count >= 2 )
+                {
+                    PathCurrPos += _elapsedSeconds;
+                    while ( PathCurrPos > PathPositions.Count )
+                        PathCurrPos -= PathPositions.Count;
+                    vec3 pos = bezierOf(PathPositions, PathTmps, PathCurrPos / (float)PathPositions.Count);
+                    vec3 dir = bezierOf(PathDirections, PathTmps, PathCurrPos / (float)PathPositions.Count);
+                    camera.Position = pos;
+                    camera.SetTarget(pos + dir, vec3.UnitY);
+                }
 			    cameraControl.Update(_elapsedSeconds);
+            }
 
             player.Update(_elapsedSeconds);
 		}
