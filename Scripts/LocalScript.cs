@@ -30,14 +30,14 @@ using System.Runtime.InteropServices;
 
 namespace UpvoidMiner
 {
-	/// <summary>
-	/// Main class for the local scripting domain.
-	/// </summary>
-	public class LocalScript
-	{		
-		/// <summary>
-		/// The main world. We will use this to create new entities or query information about the environment.
-		/// </summary>
+    /// <summary>
+    /// Main class for the local scripting domain.
+    /// </summary>
+    public class LocalScript
+    {		
+        /// <summary>
+        /// The main world. We will use this to create new entities or query information about the environment.
+        /// </summary>
         public static World world;
 
         /// <summary>
@@ -46,75 +46,109 @@ namespace UpvoidMiner
         /// </summary>
         public static AnonymousEntity ParticleEntity;
 
-		/// <summary>
-		/// The main camera that renders to the screen.
-		/// </summary>
-		static GenericCamera camera;
+        /// <summary>
+        /// The main camera that renders to the screen.
+        /// </summary>
+        static GenericCamera camera;
 
-		/// <summary>
-		/// A camera controller for free camera movement. Used when noclipEnabled is true.
-		/// </summary>
-		static FreeCameraControl cameraControl;
+        /// <summary>
+        /// A camera controller for free camera movement. Used when noclipEnabled is true.
+        /// </summary>
+        static FreeCameraControl cameraControl;
 
-        static Player player;
+        static Player player = null;
 
-		/// <summary>
-		/// Set this to true to enable free camera movement.
-		/// </summary>
+        /// <summary>
+        /// Set this to true to enable free camera movement.
+        /// </summary>
         public static bool NoclipEnabled { get; private set; }
 
-		/// <summary>
-		/// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
-		/// </summary>
-		public static void Startup(IntPtr _unmanagedModule)
-		{
-			// Get and save the resource domain of the mod, needed for loading resources.
-			UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
+        /// <summary>
+        /// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
+        /// </summary>
+        public static void Startup(IntPtr _unmanagedModule)
+        {
+            // Get and save the resource domain of the mod, needed for loading resources.
+            UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
-			// Create a simple camera that allows free movement.
-			camera = new GenericCamera();
-			camera.FarClippingPlane = 1750.0;
-			cameraControl = new FreeCameraControl(-10f, camera);
+            // Create a simple camera that allows free movement.
+            camera = new GenericCamera();
+            camera.Position = new vec3(0, 10, 0);
+            camera.FarClippingPlane = 1750.0;
 
-			// Get the world (created by the host script).
-			world = Universe.GetWorldByName("UpvoidMinerWorld");
+            // Get the world (created by the host script).
+            world = Universe.GetWorldByName("UpvoidMinerWorld");
 
             // Client-only: register terrain materials
             if ( !Scripting.IsHost )
                 TerrainResource.RegisterResources(world.Terrain);
 
-			// Place the camera in the world.
-			world.AttachCamera(camera);
-			if(Rendering.ActiveMainPipeline != null)
-				Rendering.ActiveMainPipeline.SetCamera(camera);
-
-            // Create particle entity.
-            ParticleEntity = new AnonymousEntity(mat4.Identity);
-            world.AddEntity(ParticleEntity);
-
-			// Create the Player EntityScript and add it to the world.
-			// For now, place him 30 meters above the ground and let him drop to the ground.
-            player = new Player(camera);
-		    world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
+            // Place the camera in the world.
+            world.AttachCamera(camera);
+            if(Rendering.ActiveMainPipeline != null)
+                Rendering.ActiveMainPipeline.SetCamera(camera);
 
             // Create an active region around the player spawn
             // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
+			// Show a loading screen while generating the world
+            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/LoadingScreen.html");
 
-            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+			// Register a socket for sending progress updates to the loading screen
+			generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgress");
 
-			// Configure the camera to receive user input.
-			Input.RootGroup.AddListener(cameraControl);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => {ActivatePlayer();});
 
-			// Register for input press events.
-			Input.OnPressInput += HandlePressInput;
+            // Register for input press events.
+            Input.OnPressInput += HandlePressInput;
 
-			// Registers the update callback that updates the camera position.
-			Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
-		}
+            world.Terrain.AddVolumeUpdateCallback(VolumeCallback);
+        }
+
+        static bool generationDone = false;
+        static int generatedChunks = 0;
+		static WebSocketHandler generationProgressSocket;
+
+        static void VolumeCallback(int x, int y, int z, int lod, int size)
+        {
+            if (generationDone)
+                return;
+
+            if (lod <= 4)
+            {
+                generatedChunks++;
+                generationProgressSocket.SendMessage(((float)generatedChunks/28f).ToString());
+            }
+            
+			if (generatedChunks >= 28)
+            {
+                generationDone = true;
+            }
+        }
+
+        static void ActivatePlayer()
+        {   
+            // Activate camera movement
+            cameraControl = new FreeCameraControl(-10f, camera);
+
+            // Configure the camera to receive user input.
+            Input.RootGroup.AddListener(cameraControl);
+
+            // Create particle entity.
+            ParticleEntity = new AnonymousEntity(mat4.Identity);
+            world.AddEntity(ParticleEntity);
+
+            // Create the Player EntityScript and add it to the world.
+            // For now, place him 30 meters above the ground and let him drop to the ground.
+            player = new Player(camera);
+            world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
+
+            // Register the update callback that updates the camera position.
+            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
+        }
 
         /// Bezier Camera Path Feature
         private static List<vec3> PathPositions = new List<vec3>();
@@ -137,14 +171,14 @@ namespace UpvoidMiner
             return tmp[0];
         }
 
-		/// <summary>
-		/// Performs some basic input handling.
-		/// </summary>
-		private static void HandlePressInput(object sender, InputPressArgs e)
+        /// <summary>
+        /// Performs some basic input handling.
+        /// </summary>
+        private static void HandlePressInput(object sender, InputPressArgs e)
         {
             if (!Rendering.MainViewport.HasFocus)
                 return;
-			// For now, gameplay and debug actions are bound to static keys.
+            // For now, gameplay and debug actions are bound to static keys.
 
 			// N toggles noclip.
 			if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
@@ -172,14 +206,18 @@ namespace UpvoidMiner
                         break;
                 }
             }
-		}
+            // N toggles noclip.
+            if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
+                NoclipEnabled = !NoclipEnabled;
+        }
 
-		/// <summary>
-		/// Updates the camera position.
-		/// </summary>
-		public static void Update(float _elapsedSeconds)
+
+        /// <summary>
+        /// Updates the camera position.
+        /// </summary>
+        public static void Update(float _elapsedSeconds)
         {
-            if ( NoclipEnabled )
+            if ( NoclipEnabled && cameraControl != null)
             {
                 // Bezier Path
                 if ( PathPlaying && PathPositions.Count >= 2 )
@@ -195,12 +233,15 @@ namespace UpvoidMiner
 			    cameraControl.Update(_elapsedSeconds);
             }
 
-            player.Update(_elapsedSeconds);
-		}
+            if (player != null)
+            {
+                player.Update(_elapsedSeconds);
+            }
+        }
 
-		/// <summary>
-		/// MonoDevelop's debugger requires an executable program, so here is a dummy Main method.
-		/// </summary>
-		private static void Main() { throw new Exception("I'm a mod, don't execute me like that!"); }
-	}
+        /// <summary>
+        /// MonoDevelop's debugger requires an executable program, so here is a dummy Main method.
+        /// </summary>
+        private static void Main() { throw new Exception("I'm a mod, don't execute me like that!"); }
+    }
 }

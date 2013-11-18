@@ -42,11 +42,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{AD0A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htdocs", "htdocs", "{C46CDCE0-655B-45E8-AE57-0E8C34023B12}"
 	ProjectSection(SolutionItems) = preProject
-		htdocs\index.html = htdocs\index.html
 		htdocs\IngameGui.css = htdocs\IngameGui.css
 		htdocs\IngameGui.js = htdocs\IngameGui.js
 		htdocs\IngameGui.html = htdocs\IngameGui.html
-		htdocs\index.html = htdocs\index.html
+		htdocs\LoadingScreen.html = htdocs\LoadingScreen.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automata", "Automata", "{3FAB2059-F76F-4A4E-8D78-E8A8C5A713D7}"

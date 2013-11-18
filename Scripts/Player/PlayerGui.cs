@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Engine.Webserver;
 using Engine.Input;
+using Engine.Rendering;
 
 namespace UpvoidMiner
 {
@@ -17,7 +18,7 @@ namespace UpvoidMiner
         /// </summary>
         public bool IsGuiOpen { get; private set; }
 
-        Player player;
+		Player player;
 
         JsonSerializer json = new JsonSerializer();
         WebSocketHandler updateSocket;
@@ -86,7 +87,7 @@ namespace UpvoidMiner
 
         public PlayerGui(Player player)
         {
-            // The index.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
+            // The IngameGui.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
             // These dynamic content handlers provide that information.
             this.player = player;
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IngameGuiData", webInventory);
