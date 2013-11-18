@@ -181,22 +181,33 @@ namespace UpvoidMiner
 			if (jumpCoolDown < 0f)
 				jumpCoolDown = 0f;
 
-			// When touching the ground, we can walk around.
-			if(TouchesGround) {
+            // When touching the ground, we can walk around with full control over our velocity
+            if (TouchesGround)
+            {
                 
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
                 float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
 
                 // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
-				moveDir.y = 0;
+                moveDir.y = 0;
 
                 vec3 velocity = Body.GetVelocity();
                 velocity.y = 0;
 
-                Body.ApplyImpulse( (moveDir - velocity)  * CharacterMass, vec3.Zero);
+                Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
+            }
+            else // otherwise, we can do some subtile acceleration in air
+            {
+                float forwardSpeed = WalkSpeed * 0.2f;
+                float strafeSpeed = StrafeSpeed * 0.2f;
 
-			}
+                // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
+                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
+                moveDir.y = 0;
+
+                Body.ApplyImpulse(moveDir * CharacterMass * 0.5f, vec3.Zero);
+            }
 
 			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
@@ -249,6 +260,14 @@ namespace UpvoidMiner
                 return;
             if (LocalScript.NoclipEnabled)
                 return;
+
+			if(e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
+			{
+				mat4 transformation = Body.GetTransformation();
+				vec3 pos = new vec3(transformation.col3);
+				pos.y += 20f;
+				Body.SetTransformation(mat4.Translate(pos));
+			}
 
 			// Let the default WASD-keys control the walking directions.
             if(e.Key == InputKey.W) {
