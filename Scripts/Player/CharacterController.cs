@@ -142,6 +142,8 @@ namespace UpvoidMiner
 		/// </summary>
 		float distanceToGround = 0;
 
+		float jumpCoolDown = 0f;
+
         public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.55f, float _bodyMass = 70f)
 		{
 			camera = _camera;
@@ -175,6 +177,9 @@ namespace UpvoidMiner
 		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
 		protected void Update(float _elapsedSeconds)
 		{
+			jumpCoolDown -= _elapsedSeconds;
+			if (jumpCoolDown < 0f)
+				jumpCoolDown = 0f;
 
 			// When touching the ground, we can walk around.
 			if(TouchesGround) {
@@ -193,24 +198,33 @@ namespace UpvoidMiner
 
 			}
 
-            // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.5 meters.
+			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
-            if(distanceToGround < HoverHeight+0.1f) {
+			if(distanceToGround < HoverHeight+0.1f && jumpCoolDown <= 0f) {
 
                 vec3 velocity = Body.GetVelocity();
 
-                // Never move down when more than 5cm below the desired height.
-                if(distanceToGround < HoverHeight && velocity.y < 0f) {
+				// Never move down when more than 10cm below the desired height.
+				if(distanceToGround < HoverHeight-0.1f && velocity.y < 0f) {
                     Body.ApplyImpulse(Body.Mass * new vec3(0, -velocity.y, 0), vec3.Zero);
+					velocity.y = 0f;
                 }
 
-                float customGravity = HoverHeight - distanceToGround;
+				float convergenceSpeed = Math.Max(0.1f, _elapsedSeconds*1.2f);
+				float distanceToHoverHeight = distanceToGround - HoverHeight;
+
+                float customGravity = -2f * (distanceToHoverHeight + velocity.y*convergenceSpeed) / (convergenceSpeed*convergenceSpeed);
+
+				if (customGravity < -20f)
+					customGravity = -20f;
+				else if (customGravity > 20f)
+					customGravity = 20f;
+
                 Body.SetGravity(new vec3(0, customGravity, 0));
 
             }
             else
                 Body.SetGravity(new vec3(0, -9.807f, 0));
-
             ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 5f, 0), ReceiveRayqueryResult);
 		}
 
@@ -258,8 +272,9 @@ namespace UpvoidMiner
                 else
                     walkDirRight++;
             } else if(e.Key == InputKey.Space) { //Space lets the player jump
-                if(TouchesGround) {
+				if(TouchesGround && jumpCoolDown == 0f) {
                     Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
+					jumpCoolDown = 1f;
                 }
             } else if(e.Key == InputKey.Shift) { // Shift controls running
                 if(e.PressType == InputPressArgs.KeyPressType.Down)
