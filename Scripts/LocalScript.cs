@@ -24,6 +24,7 @@ using Engine.Modding;
 using Engine.Resources;
 using Engine.Scripting;
 using Engine.Webserver;
+using Engine.Network;
 using Common.Cameras;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -81,12 +82,12 @@ namespace UpvoidMiner
             world = Universe.GetWorldByName("UpvoidMinerWorld");
 
             // Client-only: register terrain materials
-            if ( !Scripting.IsHost )
+            if (!Scripting.IsHost)
                 TerrainResource.RegisterResources(world.Terrain);
 
             // Place the camera in the world.
             world.AttachCamera(camera);
-            if(Rendering.ActiveMainPipeline != null)
+            if (Rendering.ActiveMainPipeline != null)
                 Rendering.ActiveMainPipeline.SetCamera(camera);
 
             // Create an active region around the player spawn
@@ -94,18 +95,28 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-			// Show a loading screen while generating the world
-            Gui.NavigateTo("http://localhost:8080/Mods/Upvoid/UpvoidMiner/0.0.1/LoadingScreen.html");
+            // No loading screen for clients (since the server generates the world)
+            if (Scripting.IsHost)
+            {
+                // Show a loading screen while generating the world
+                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/LoadingScreen.html");
 
-			// Register a socket for sending progress updates to the loading screen
-			generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgress");
+                // Register a socket for sending progress updates to the loading screen
+                generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgress");
 
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => {ActivatePlayer();});
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => {
+                    ActivatePlayer();}
+                );
+
+                world.Terrain.AddVolumeUpdateCallback(VolumeCallback);
+            }
+            else
+            {
+                ActivatePlayer();
+            }
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;
-
-            world.Terrain.AddVolumeUpdateCallback(VolumeCallback);
         }
 
         static bool generationDone = false;
