@@ -217,9 +217,6 @@ namespace UpvoidMiner
                         break;
                 }
             }
-            // N toggles noclip.
-            if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
-                NoclipEnabled = !NoclipEnabled;
         }
 
 
