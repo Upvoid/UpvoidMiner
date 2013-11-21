@@ -108,7 +108,7 @@ namespace UpvoidMiner
                     ActivatePlayer();}
                 );
 
-                world.Terrain.AddVolumeUpdateCallback(VolumeCallback);
+				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
             }
             else
             {
@@ -125,8 +125,11 @@ namespace UpvoidMiner
 
         static void VolumeCallback(int x, int y, int z, int lod, int size)
         {
-            if (generationDone)
-                return;
+			if (generationDone)
+			{
+				generationProgressSocket.SendMessage(1.0f.ToString());
+				return;
+			}
 
             if (lod <= 4)
             {
