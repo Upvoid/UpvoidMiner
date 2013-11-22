@@ -153,12 +153,12 @@ namespace UpvoidMiner
 
             // Create particle entity.
             ParticleEntity = new AnonymousEntity(mat4.Identity);
-            world.AddEntity(ParticleEntity);
+            world.AddEntity(ParticleEntity, Engine.Network.GameConnectionManager.GetOurUserID());
 
             // Create the Player EntityScript and add it to the world.
             // For now, place him 30 meters above the ground and let him drop to the ground.
             player = new Player(camera);
-            world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)));
+            world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)), Engine.Network.GameConnectionManager.GetOurUserID());
 
             // Register the update callback that updates the camera position.
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);

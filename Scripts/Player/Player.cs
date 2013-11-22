@@ -344,7 +344,7 @@ namespace UpvoidMiner
             if (!foundConstraint)
                 DroneConstraints.Add(new DroneConstraint(d));
             
-            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition));
+            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Engine.Network.GameConnectionManager.GetOurUserID());
         }
         /// <summary>
         /// Removes a drone from drone contraints.
