@@ -20,12 +20,22 @@ namespace UpvoidMiner
                 // Add Gras attribute for LoD 4 (= MinLoD).
                 Material.AddAttributeFloat("aGrass", 0, 0, 4);
 
+                // Lod 0-4
                 // Color modulated geometry pipeline for more variance.
                 {
-                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Decimate");
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Decimate", 0, 4);
                     Material.AddDefaultShadowAndZPre(pipeline);
                     Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                 }
+
+                // Lod 5-max
+                // Color modulated geometry pipeline for more variance.
+                {
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrainLow", UpvoidMiner.ModDomain), "Input", "Decimate", 5);
+                    Material.AddDefaultShadowAndZPre(pipeline);
+                    Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+                }
+
             
                 // Spawn Grass
                 {
