@@ -26,7 +26,7 @@ void main()
     if(texColor.a > uDiscardBias)
         discard;
 
-    texColor.rgb /= texColor.a;
+    texColor.rgb /= texColor.a + 0.001;
 
     vec3 normalFront = vNormal;
 
