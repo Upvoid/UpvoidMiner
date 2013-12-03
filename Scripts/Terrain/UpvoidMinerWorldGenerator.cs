@@ -4,6 +4,7 @@ using Engine.Resources;
 using Engine.Rendering;
 using System.Text;
 using Engine;
+using System.Runtime.InteropServices;
 
 namespace UpvoidMiner
 {
@@ -100,8 +101,10 @@ namespace UpvoidMiner
             return concat;
         }
 
-        public static void TreeCallback(vec3 pos)
+        public static void TreeCallback(IntPtr _pos)
         {
+            vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
+
             World world = Instance.World;
 
             vec3 up = new vec3((float)random.NextDouble() * .05f - .025f, 1, (float)random.NextDouble() * .05f - .025f).Normalized;
