@@ -143,7 +143,7 @@ namespace UpvoidMiner
             AddTriggerSlot("Interaction");
         }
 
-        void Interaction(object msg)
+		public void Interaction(object msg)
         {
             // Make sure we get the message type we are expecting.
             InteractionMessage interactionMsg = msg as InteractionMessage;
