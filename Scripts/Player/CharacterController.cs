@@ -212,7 +212,7 @@ namespace UpvoidMiner
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
             }
-            else // otherwise, we can do some subtile acceleration in air
+			else if (jumpCoolDown <= 0f) // otherwise, we can do some subtile acceleration in air (except right after jumping)
             {
                 float forwardSpeed = WalkSpeed * 0.2f;
                 float strafeSpeed = StrafeSpeed * 0.2f;
@@ -221,7 +221,7 @@ namespace UpvoidMiner
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 moveDir.y = 0;
 
-				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass * 10f, vec3.Zero);
+				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass, vec3.Zero);
             }
 
 			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
