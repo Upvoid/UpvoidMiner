@@ -221,7 +221,7 @@ namespace UpvoidMiner
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 moveDir.y = 0;
 
-                Body.ApplyImpulse(moveDir * CharacterMass * 0.5f, vec3.Zero);
+				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass * 10f, vec3.Zero);
             }
 
 			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
