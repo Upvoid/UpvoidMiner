@@ -54,6 +54,8 @@ function setupGui()
             $("#workbench").toggle();
         }
     });
+
+    WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/ResourceDownloadProgress", handleResourceDownloadProgress);
 }
 
 function formatQuantity(quantity, isVolumetric)
@@ -278,4 +280,29 @@ function craftItem(itemIdentifier)
 function dismantleItem(itemId)
 {
     $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/DismantleItem", {"itemId": itemId});
+}
+
+var lastKnownDownloadProgress = 1;
+function handleResourceDownloadProgress(data)
+{
+    $('#resource-download-progress-bar').css('width', (data*100.0)+"%");
+    //$('#resource-download-progress-bar').css('width', (data*100.0)+"%");
+
+    $('#resource-download-progress').show();
+    $('#resource-download-progress').addClass('active');
+
+    if(data >= 1.0)
+    {
+        lastKnownDownloadProgress = data;
+        $('#resource-download-progress progress').removeClass('active');
+        $('#resource-download-progress progress').removeClass('progress-striped');
+
+        window.setTimeout(function() {
+            if(lastKnownDownloadProgress >= 1.0)
+            {
+                //$('#resource-download-progress').hide();
+                $('#resource-download-progress').removeClass('active');
+            }
+        }, 2000);
+    }
 }

@@ -175,3 +175,20 @@ body {
     font-size: 11px;
     text-shadow: 0px 0px 3px #000;
 }
+
+#resource-download-progress {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 150px;
+
+    opacity: 0;
+    transition: opacity 0.3s linear;
+    -webkit-transition: opacity 0.3s linear;
+}
+
+#resource-download-progress.active {
+    opacity: 1;
+    transition: opacity 0.3s linear;
+    -webkit-transition: opacity 0.3s linear;
+}
