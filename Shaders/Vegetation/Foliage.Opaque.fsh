@@ -24,10 +24,11 @@ void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
 
-    texColor.rgb /= texColor.a;
-
     if(texColor.a < uDiscardBias)
         discard;
+
+    texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
+
 
     vec3 normalFront = vNormal;
 
