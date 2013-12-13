@@ -24,8 +24,22 @@
     <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
     <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
     <script>
-        WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/GenerationProgress", function(data) {
-            $('#world-generation-progress-bar').css('width', (data*100.0)+"%");
+
+        // Query the current generation progress
+        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/GenerationProgressQuery", "", function(data) {
+            $('#world-generation-progress-bar').css('width', (data*data*100.0)+"%");
+            if(data >= 1.0)
+            {
+                $('#world-generation-progress').removeClass('active');
+                $('#world-generation-progress').removeClass('progress-striped');
+                $('#loading-notice').hide();
+                $('#start-button').removeClass("hidden");
+            }
+        });
+
+        // Register the websocket handler for future progress updates
+        WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/GenerationProgressSocket", function(data) {
+            $('#world-generation-progress-bar').css('width', (data*data*100.0)+"%");
             if(data >= 1.0)
             {
                 $('#world-generation-progress').removeClass('active');

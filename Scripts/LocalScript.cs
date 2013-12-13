@@ -93,18 +93,19 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
+			// Show a splash screen in the GUI client.
+			Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
+
             // No loading screen for clients (since the server generates the world)
             if (Scripting.IsHost)
             {
-                // Show a loading screen while generating the world
-                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/LoadingScreen.html");
-
                 // Register a socket for sending progress updates to the loading screen
-                generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgress");
+				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
 
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => {
                     ActivatePlayer();}
                 );
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
 
 				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
             }
@@ -115,6 +116,9 @@ namespace UpvoidMiner
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;
+
+			// Register sockets for resource downloading progress bar
+			resourceDownloadProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "ResourceDownloadProgress");
         }
 
         static bool generationDone = false;
@@ -132,14 +136,27 @@ namespace UpvoidMiner
             if (lod <= 4)
             {
                 generatedChunks++;
-                generationProgressSocket.SendMessage(((float)generatedChunks/28f).ToString());
             }
             
 			if (generatedChunks >= 28)
             {
                 generationDone = true;
             }
+
+			generationProgressSocket.SendMessage(((float)generatedChunks/28f).ToString());
         }
+
+		static void webGenerationProgress(WebRequest request, WebResponse response)
+		{
+			if (generationDone)
+			{
+				response.AppendBody(1.0f.ToString());
+			}
+			else
+			{
+				response.AppendBody(((float)generatedChunks/28f).ToString());
+			}
+		}
 
         static void ActivatePlayer()
         {   
@@ -246,7 +263,31 @@ namespace UpvoidMiner
             {
                 player.Update(_elapsedSeconds);
             }
+
+			UpdateResourceDownloadProgress();
         }
+
+		// This socket notifies the client GUI about progress in the downloading of resources.
+		static WebSocketHandler resourceDownloadProgressSocket;
+		static long resourceDownloadTotalBytes = 0;
+		static long resourceDownloadReceivedBytes = 0;
+
+		static void UpdateResourceDownloadProgress()
+		{
+			if (Resources.BytesDownloading != resourceDownloadTotalBytes || Resources.BytesDownloaded != resourceDownloadReceivedBytes)
+			{
+				double progress = (double)Resources.BytesDownloaded / (double)Resources.BytesDownloading;
+				if(Resources.BytesDownloading == 0)
+					progress = 1.0;
+				else if (progress > 1)
+					progress = 1;
+
+				resourceDownloadProgressSocket.SendMessage(progress.ToString());
+
+				resourceDownloadTotalBytes = Resources.BytesDownloading;
+				resourceDownloadReceivedBytes = Resources.BytesDownloaded;
+			}
+		}
 
         /// <summary>
         /// MonoDevelop's debugger requires an executable program, so here is a dummy Main method.
