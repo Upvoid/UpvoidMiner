@@ -54,15 +54,19 @@
             "NormalRepair" :
             {
                 "Type" : "NormalRepair",
-                "Nodes" : ["Decimate"]
+                "Nodes" : ["Decimate"],
+                "keepExistingBoundaryNormals" : true,
+                "maxRelativeDeviation" : 0.3,
+                "maxAngle" : 30.0,
+                "absoluteDeviation" : 0.25
             },
             "Decimate" :
             {
-            	"Type" : "Decimate",
-            	"Nodes" : ["Input"],
+                "Type" : "Decimate",
+                "Nodes" : ["Input"],
                 "errorTarget" : 0.05,
-            	"faceTarget" : 2,
-            	"constrainBoundaries" : true
+                "faceTarget" : 2,
+                "constrainBoundaries" : true
             },
             "Output":
             {
@@ -93,6 +97,15 @@
             {
                 "Type" : "Input"
             },
+            "NormalRepair" :
+            {
+                "Type" : "NormalRepair",
+                "Nodes" : ["Decimate"],
+                "keepExistingBoundaryNormals" : true,
+                "maxRelativeDeviation" : 0.3,
+                "maxAngle" : 20.0,
+                "absoluteDeviation" : -1
+            },
             "Decimate" :
             {
             	"Type" : "Decimate",
@@ -104,7 +117,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Decimate"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -455,7 +468,11 @@
             "NormalRepair" :
             {
                 "Type" : "NormalRepair",
-                "Nodes" : ["Decimate"]
+                "Nodes" : ["Decimate"],
+                "keepExistingBoundaryNormals" : true,
+                "maxRelativeDeviation" : 0.3,
+                "maxAngle" : 30.0,
+                "absoluteDeviation" : 0.25
             },
             "Decimate" :
             {
@@ -494,6 +511,15 @@
             {
                 "Type" : "Input"
             },
+            "NormalRepair" :
+            {
+                "Type" : "NormalRepair",
+                "Nodes" : ["Decimate"],
+                "keepExistingBoundaryNormals" : true,
+                "maxRelativeDeviation" : 0.3,
+                "maxAngle" : 20.0,
+                "absoluteDeviation" : -1
+            },
             "Decimate" :
             {
             	"Type" : "Decimate",
@@ -505,7 +531,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Decimate"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
