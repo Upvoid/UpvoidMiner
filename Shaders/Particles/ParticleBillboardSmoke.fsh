@@ -11,7 +11,7 @@ uniform sampler2DRect uOpaqueDepth;
 in vec4 vParticleColor;
 
 in vec3 vNormal;
-in vec3 vWorldPos;
+in vec3 vEyePos;
 in vec2 vTexCoord;
 in vec4 vScreenPos;
 in float vLife;

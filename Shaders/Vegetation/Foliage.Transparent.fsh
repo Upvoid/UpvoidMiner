@@ -14,7 +14,7 @@ uniform float uDiscardBias = 0.5;
 in vec2 vTexCoord;
 in vec3 vTangent;
 in vec3 vNormal;
-in vec3 vWorldPos;
+in vec3 vEyePos;
 in vec3 vColor;
 
 OUTPUT_CHANNEL_TransparentColor(vec4)
@@ -39,8 +39,8 @@ void main()
     normalFront = applyNormalmap(normalFront, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));
     vec3 normalBack = applyNormalmap(-normalFront, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));
 
-    vec3 colorFront = lighting(vWorldPos, normalFront, texColor.rgb, vec4(vec3(0),1));
-    vec3 colorBack = lighting(vWorldPos, normalBack, texColor.rgb, vec4(vec3(0),1));
+    vec3 colorFront = lighting(vEyePos, normalFront, texColor.rgb, vec4(vec3(0),1));
+    vec3 colorBack = lighting(vEyePos, normalBack, texColor.rgb, vec4(vec3(0),1));
 
     vec3 translucency = texture(uTranslucency, vTexCoord).rgb;
 

@@ -15,7 +15,7 @@ uniform float uOffsetY;
 uniform float uHeight;
 
 in vec3 vObjPos;
-in vec3 vWorldPos;
+in vec3 vEyePos;
 in vec4 vScreenPos;
 
 in vec3 vRef1;
@@ -29,11 +29,13 @@ void main()
 {
     INIT_CHANNELS;
 
+    vec3 worldPos = vec3(uInverseViewMatrix * vec4(vEyePos, 1.0));
+
     vec4 transColor = vec4(0);
 
     // hexagrid
     float disY = vObjPos.y * uScaleY;
-    float disX = distance(vWorldPos.xz, vRef1.xz) * vScaleX / uRepX;
+    float disX = distance(worldPos.xz, vRef1.xz) * vScaleX / uRepX;
 
     vec2 texCoord = vec2(disX, disY + uOffsetY);
     vec4 grid = texture(uPattern, vec2(disX, disY + uOffsetY));

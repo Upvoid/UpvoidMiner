@@ -7,7 +7,7 @@ uniform mat4 uModelMatrix;
 in vec3 aPosition;
 in vec3 aNormal;
 
-out vec3 vWorldPos;
+out vec3 vEyePos;
 out vec3 vObjectPos;
 out vec3 vObjectNormal;
 
@@ -19,7 +19,7 @@ void main()
 
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
-    vWorldPos = worldPos.xyz;
+    vEyePos = (uViewMatrix * worldPos).xyz;
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;

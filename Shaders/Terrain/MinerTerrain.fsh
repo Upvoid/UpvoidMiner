@@ -26,7 +26,7 @@ uniform float uBlackness = 1.0;
 uniform mat4 uModelMatrix;
 
 in vec3 vColor;
-in vec3 vWorldPos;
+in vec3 vEyePos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
 in mat3 vNormalMatrix;
@@ -70,7 +70,9 @@ void main()
 {
     INIT_CHANNELS;
 
-    float camDis = distance(vWorldPos, uCameraPosition);
+    vec3 worldPos = vec3(uInverseViewMatrix * vec4(vEyePos, 1.0));
+
+    float camDis = distance(worldPos, uCameraPosition);
     float lod = log(1 + camDis / uLodRefDist) / log(uLodFactor);
     float lodScale = pow(2,floor(lod));
     float lodFrac = fract(lod);
@@ -99,10 +101,10 @@ void main()
 
     // illumination
     normal = normalize(mat3(uModelMatrix) * normal);
-    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
+    vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normal);
-    OUTPUT_Position(vWorldPos);
+    OUTPUT_Position(vEyePos);
 }
 

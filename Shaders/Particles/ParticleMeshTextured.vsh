@@ -16,7 +16,7 @@ in float aParticleLife;
 
 out vec3 vNormal;
 out vec3 vTangent;
-out vec3 vWorldPos;
+out vec3 vEyePos;
 out vec2 vTexCoord;
 out vec4 vColor;
 
@@ -36,7 +36,7 @@ void main()
 
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(localModel * aPosition * aParticleSize * (1-aParticleLife*aParticleLife) + aParticlePosition, 1.0);
-    vWorldPos = worldPos.xyz;
+    vEyePos = (uViewMatrix * worldPos).xyz;
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;

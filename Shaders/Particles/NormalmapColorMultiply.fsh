@@ -9,7 +9,7 @@ uniform vec4 uSpecularColor;
 
 in vec3 vNormal;
 in vec3 vTangent;
-in vec3 vWorldPos;
+in vec3 vEyePos;
 in vec2 vTexCoord;
 in vec4 vColor;
 
@@ -27,9 +27,9 @@ void main()
     // illumination
     vec3 baseColor = texture(uColor, vTexCoord).rgb;
     baseColor *= vColor.rgb * vColor.a;
-    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
+    vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normal);
-    OUTPUT_Position(vWorldPos);
+    OUTPUT_Position(vEyePos);
 }
