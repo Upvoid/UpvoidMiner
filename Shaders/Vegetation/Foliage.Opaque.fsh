@@ -30,10 +30,7 @@ void main()
     texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
 
 
-    vec3 normalFront = vNormal;
-
-    if(!gl_FrontFacing)
-        normalFront = -normalFront;
+    vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
 
     // The vertex shader flips the normal so it always points towards the camera
     normalFront = applyNormalmap(normalFront, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));

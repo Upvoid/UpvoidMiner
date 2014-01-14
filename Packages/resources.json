@@ -429,6 +429,16 @@
     "Path" : "~.mat",
     "Type" : "Material"
 },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "BirchLeaves.zPre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "BirchLeaves.zPre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {
@@ -447,6 +457,48 @@
         "Type" : "FromCollection"
     },
     "Name" : "Grass01.Transparent",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "SimpleGrass",
+        "Type" : "FromCollection"
+    },
+    "Name" : "SimpleGrass",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "SimpleGrass.Transparent",
+        "Type" : "FromCollection"
+    },
+    "Name" : "SimpleGrass.Transparent",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "SimpleBirchLeaves",
+        "Type" : "FromCollection"
+    },
+    "Name" : "SimpleBirchLeaves",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "SimpleBirchLeaves.Transparent",
+        "Type" : "FromCollection"
+    },
+    "Name" : "SimpleBirchLeaves.Transparent",
     "Path" : "~.mat",
     "Type" : "Material"
 },

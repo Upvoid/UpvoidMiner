@@ -28,6 +28,32 @@
 {
     "Descriptor" : {
         "Files" : [
+            "Vegetation/SimpleFoliage.Opaque.fsh",
+            "Vegetation/Foliage.Opaque.vsh"
+        ],
+        "Name" : "Vegetation/SimpleFoliage.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/SimpleFoliage.Opaque",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/SimpleFoliage.Transparent.fsh",
+            "Vegetation/Foliage.Transparent.vsh"
+        ],
+        "Name" : "Vegetation/SimpleFoliage.Transparent",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/SimpleFoliage.Transparent",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
             "Vegetation/Foliage.Transparent.fsh",
             "Vegetation/Foliage.Transparent.vsh"
         ],
@@ -35,6 +61,19 @@
         "Type" : "File"
     },
     "Name" : "Vegetation/Foliage.Transparent",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Foliage.zPre.fsh",
+            "Vegetation/Foliage.zPre.vsh"
+        ],
+        "Name" : "Vegetation/Foliage.zPre",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/Foliage.zPre",
             "Path" : "~.shader",
             "Type" : "Shader"
 },
