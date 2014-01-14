@@ -43,6 +43,7 @@ namespace UpvoidMiner
             
             log.RenderComps.Add(new RenderComponent( new MeshRenderJob(Renderer.Opaque.Mesh, material, mesh, mat4.Identity), transform));
             log.RenderComps.Add(new RenderComponent( new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", null), mesh, mat4.Identity), transform));
+            log.RenderComps.Add(new RenderComponent( new MeshRenderJob(Renderer.zPre.Mesh, Resources.UseMaterial("::ZPre", null), mesh, mat4.Identity), transform));
 
             return log;
         }
@@ -58,12 +59,17 @@ namespace UpvoidMiner
             
             SeedPointMeshRenderJob foliageJob = new SeedPointMeshRenderJob(
                 Renderer.Opaque.Mesh,
-                Resources.UseMaterial("BirchLeaves", UpvoidMiner.ModDomain),
+                Resources.UseMaterial("SimpleBirchLeaves", UpvoidMiner.ModDomain),
                 Resources.UseMesh("Vegetation/Leaves", UpvoidMiner.ModDomain),
                 mat4.Identity);
             SeedPointMeshRenderJob foliageJob2 = new SeedPointMeshRenderJob(
                 Renderer.Transparent.Mesh,
-                Resources.UseMaterial("BirchLeaves.Transparent", UpvoidMiner.ModDomain),
+                Resources.UseMaterial("SimpleBirchLeaves.Transparent", UpvoidMiner.ModDomain),
+                Resources.UseMesh("Vegetation/Leaves", UpvoidMiner.ModDomain),
+                mat4.Identity);
+            SeedPointMeshRenderJob foliageJob3 = new SeedPointMeshRenderJob(
+                Renderer.zPre.Mesh,
+                Resources.UseMaterial("BirchLeaves.zPre", UpvoidMiner.ModDomain),
                 Resources.UseMesh("Vegetation/Leaves", UpvoidMiner.ModDomain),
                 mat4.Identity);
 
@@ -87,6 +93,7 @@ namespace UpvoidMiner
                     
                     foliageJob.AddSeed(pos, normal, tangent, color);
                     foliageJob2.AddSeed(pos, normal, tangent, color);
+                    foliageJob3.AddSeed(pos, normal, tangent, color);
                 }
                 
                 hsum += h; 
@@ -116,14 +123,17 @@ namespace UpvoidMiner
 
                     foliageJob.AddSeed(pos, normal, tangent, color);
                     foliageJob2.AddSeed(pos, normal, tangent, color);
+                    foliageJob3.AddSeed(pos, normal, tangent, color);
                 }
             }
             
             foliageJob.FinalizeSeeds();
             foliageJob2.FinalizeSeeds();
+            foliageJob3.FinalizeSeeds();
             Tree.Foliage foliage = new Tree.Foliage();
             foliage.RenderComps.Add(new RenderComponent(foliageJob, mat4.Identity));
             foliage.RenderComps.Add(new RenderComponent(foliageJob2, mat4.Identity));
+            foliage.RenderComps.Add(new RenderComponent(foliageJob3, mat4.Identity));
             t.Leaves.Add(foliage);
 
             return t;

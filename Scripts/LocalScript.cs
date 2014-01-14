@@ -93,12 +93,12 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-			// Show a splash screen in the GUI client.
-			Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
-
             // No loading screen for clients (since the server generates the world)
             if (Scripting.IsHost)
             {
+                // Show a splash screen in the GUI client.
+                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
+
                 // Register a socket for sending progress updates to the loading screen
 				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
 

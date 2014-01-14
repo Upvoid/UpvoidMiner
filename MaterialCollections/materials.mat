@@ -63,7 +63,18 @@
     Texture: uColor, GrassTest.Low
     Texture: uNormal, GrassTest.Normal
     Texture: uTranslucency, GrassTest.Translucency
-    Color: uSpecularColor, .0, .0, .0, 0.1
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[SimpleGrass] : Default
+    Shader: Vegetation/SimpleFoliage.Opaque
+    Texture: uColor, GrassTest.Low
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[SimpleGrass.Transparent] : Default
+    Shader: Vegetation/SimpleFoliage.Transparent
+    Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
     Culling: None
     
@@ -80,6 +91,24 @@
 
 [BirchLeaves.Transparent] : BirchLeaves.Base
     Shader: Vegetation/Foliage.Transparent
+
+[BirchLeaves.zPre] : Default
+    Shader: Vegetation/Foliage.zPre
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[SimpleBirchLeaves] : Default
+    Shader: Vegetation/SimpleFoliage.Opaque
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[SimpleBirchLeaves.Transparent] : Default
+    Shader: Vegetation/SimpleFoliage.Transparent
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
 
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent
@@ -109,10 +138,10 @@
     Parameter: uDiscardBias, .9
 
 [Grass01.zPre] : Default
-        Culling: None
-    Shader: ::ZPre/Foliage
+    Shader: Vegetation/Foliage.zPre
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
+    Culling: None
 
 [Herbs17.zPre] : Default
         Culling: None
