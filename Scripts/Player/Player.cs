@@ -24,6 +24,8 @@ using Engine.Scripting;
 using Engine.Rendering;
 using Engine.Physics;
 using Engine.Input;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace UpvoidMiner
 {
@@ -290,33 +292,160 @@ namespace UpvoidMiner
             generateInitialItems();
         }
 
+        [Serializable]
+        public class InventorySave
+        {
+            [Serializable]
+            public class ResourceItemSave 
+            {
+                public long Id;
+                public string Resource;
+                public float Volume;
+            }
+            [Serializable]
+            public class ToolItemSave 
+            {
+                public long Id;
+                public ToolType Type;
+                public int StackSize;
+            }
+            [Serializable]
+            public class MaterialItemSave 
+            {
+                public long Id;
+                public MaterialShape Shape;
+                public float SizeX;
+                public float SizeY;
+                public float SizeZ;
+                public string Resource;
+                public int StackSize;
+            }
+            
+            public List<ResourceItemSave> resourceItems = new List<ResourceItemSave>();
+            public List<ToolItemSave> toolItems = new List<ToolItemSave>();
+            public List<MaterialItemSave> materialItems = new List<MaterialItemSave>();
+
+            public long[] quickAccess;
+            public int currentQuickAccess;
+        }
+
+        /// <summary>
+        /// Saves the player
+        /// </summary>
+        public void Save()
+        {
+            saveInventory();
+
+            Console.WriteLine("[" + DateTime.Now + "] Player saved.");
+        }
+
+        void saveInventory()
+        {
+            InventorySave save = new InventorySave();
+            foreach (var item in Inventory.Items)
+            {
+                if (item is ToolItem)
+                {
+                    save.toolItems.Add(new InventorySave.ToolItemSave
+                    {
+                        Id = item.Id,
+                        StackSize = (item as ToolItem).StackSize,
+                        Type = (item as ToolItem).ToolType
+                    });
+                }
+                else if (item is MaterialItem)
+                {
+                    save.materialItems.Add(new InventorySave.MaterialItemSave
+                    {
+                        Id = item.Id,
+                        StackSize = (item as MaterialItem).StackSize,
+                        SizeX = (item as MaterialItem).Size.x,
+                        SizeY = (item as MaterialItem).Size.y,
+                        SizeZ = (item as MaterialItem).Size.z,
+                        Shape = (item as MaterialItem).Shape,
+                        Resource = (item as MaterialItem).Material.Name
+                    });
+                }
+                else if (item is ResourceItem)
+                {
+                    save.resourceItems.Add(new InventorySave.ResourceItemSave
+                    {
+                        Id = item.Id,
+                        Volume = (item as ResourceItem).Volume,
+                        Resource = (item as ResourceItem).Material.Name,
+                    });
+                }
+                else
+                    throw new InvalidDataException("Unknown item type: " + item.GetType());
+            }
+
+            save.quickAccess = new long[Inventory.QuickaccessSlots];
+            for (int i = 0; i < Inventory.QuickaccessSlots; ++i)
+                save.quickAccess[i] = Inventory.QuickAccessItems[i] == null ? -1 : Inventory.QuickAccessItems[i].Id;
+            save.currentQuickAccess = Inventory.SelectionIndex;
+
+            Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathInventory).Directory.FullName);
+
+            File.WriteAllText(UpvoidMiner.SavePathInventory, JsonConvert.SerializeObject(save, Formatting.Indented));
+        }
+
         /// <summary>
         /// Populates the inventory with a list of items that we start with.
         /// </summary>
         void generateInitialItems()
         {
-            // Tools
-            Inventory.AddItem(new ToolItem(ToolType.Shovel));
-            Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
-            Inventory.AddItem(new ToolItem(ToolType.Axe));
-            Inventory.AddItem(new ToolItem(ToolType.Hammer));
-            Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+            if (!File.Exists(UpvoidMiner.SavePathInventory))
+            {
+                // Tools
+                Inventory.AddItem(new ToolItem(ToolType.Shovel));
+                Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
+                Inventory.AddItem(new ToolItem(ToolType.Axe));
+                Inventory.AddItem(new ToolItem(ToolType.Hammer));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
 
-            // Testing resource/material items.
-            /*TerrainResource dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
-            TerrainResource stone06 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.06"); 
-            Inventory.AddResource(dirt, 10);
-            Inventory.AddItem(new ResourceItem(dirt, 3f));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1)));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1), 2));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(2)));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
-            Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
-            Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
-            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AoiCrystal"), MaterialShape.Sphere, new vec3(1)));
-            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1)));
-            Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1)));
+                // Testing resource/material items.
+                /*TerrainResource dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
+                TerrainResource stone06 = ContainingWorld.Terrain.QueryMaterialFromName("Stone.06"); 
+                Inventory.AddResource(dirt, 10);
+                Inventory.AddItem(new ResourceItem(dirt, 3f));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1)));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(1), 2));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Sphere, new vec3(2)));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
+                Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
+                Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AoiCrystal"), MaterialShape.Sphere, new vec3(1)));
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1)));
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1)));
+            }
+            else // Load inventory
+            {
+                InventorySave save = JsonConvert.DeserializeObject<InventorySave>(File.ReadAllText(UpvoidMiner.SavePathInventory));
+
+                Dictionary<long, Item> id2item = new Dictionary<long, Item>();
+                foreach (var item in save.toolItems)
+                {
+                    id2item.Add(item.Id, new ToolItem(item.Type, item.StackSize));
+                    Inventory.AddItem(id2item[item.Id]);
+                }
+                foreach (var item in save.materialItems)
+                {
+                    id2item.Add(item.Id, new MaterialItem(TerrainResource.FromName(item.Resource), item.Shape, new vec3(item.SizeX, item.SizeY, item.SizeZ), item.StackSize));
+                    Inventory.AddItem(id2item[item.Id]);
+                }
+                foreach (var item in save.resourceItems)
+                {
+                    id2item.Add(item.Id, new ResourceItem(TerrainResource.FromName(item.Resource), item.Volume));
+                    Inventory.AddItem(id2item[item.Id]);
+                }
+
+                Inventory.ClearQuickAccess();
+                for (int i = 0; i < Inventory.QuickaccessSlots; ++i)
+                    if (id2item.ContainsKey(save.quickAccess[i]))
+                        Inventory.SetQuickAccess(id2item[save.quickAccess[i]], i);
+                Inventory.Select(save.currentQuickAccess);
+            }
 
             gui.OnUpdate();
         }

@@ -119,6 +119,15 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Removes all quick-access items
+        /// </summary>
+        public void ClearQuickAccess()
+        {
+            for (int i = 0; i < QuickaccessSlots; ++i)
+                SetQuickAccess(null, i);
+        }
+
+        /// <summary>
         /// Sets a given item to a given quickaccess slot. Item may be null.
         /// </summary>
         public void SetQuickAccess(Item item, int idx)

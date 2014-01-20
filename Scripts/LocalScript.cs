@@ -26,6 +26,7 @@ using Engine.Network;
 using Common.Cameras;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace UpvoidMiner
 {
@@ -237,6 +238,10 @@ namespace UpvoidMiner
             }
         }
 
+        /// <summary>
+        /// Last time of save
+        /// </summary>
+        private static DateTime lastSave = DateTime.Now;
 
         /// <summary>
         /// Updates the camera position.
@@ -265,6 +270,14 @@ namespace UpvoidMiner
             }
 
 			UpdateResourceDownloadProgress();
+
+            if ((DateTime.Now - lastSave).TotalSeconds > 10)
+            {
+                lastSave = DateTime.Now;
+
+                if (player != null)
+                    player.Save();
+            }
         }
 
 		// This socket notifies the client GUI about progress in the downloading of resources.

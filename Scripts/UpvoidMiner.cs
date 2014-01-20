@@ -32,6 +32,15 @@ namespace UpvoidMiner
         /// Mod Reference
         /// </summary>
         public static Module Mod;
+
+        /// <summary>
+        /// The base save path.
+        /// </summary>
+        public static readonly string SavePathBase = "Savegames/Mods/UpvoidMiner";
+        /// <summary>
+        /// Save path for the inventory.
+        /// </summary>
+        public static readonly string SavePathInventory = SavePathBase + "/Inventory";
     }
 }
 
