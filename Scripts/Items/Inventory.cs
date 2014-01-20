@@ -31,7 +31,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Backref to player.
         /// </summary>
-        private Player player;
+        //private Player player;
 
         /// <summary>
         /// A list of all items.
@@ -55,7 +55,7 @@ namespace UpvoidMiner
 
         public Inventory(Player player)
         {
-            this.player = player;
+            //this.player = player;
 
             Items.OnAdd += setDefaultQuickAccess;
             Items.OnRemove += removeFromQuickAccess;

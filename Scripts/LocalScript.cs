@@ -180,7 +180,11 @@ namespace UpvoidMiner
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
 
             // Register save callback
-            Savegame.OnSave += s => player.Save();
+            Savegame.OnSave += s => 
+            {
+                player.Save();
+                UpvoidMinerWorldGenerator.SaveEntities();
+            };
         }
 
         /// Bezier Camera Path Feature
@@ -280,6 +284,7 @@ namespace UpvoidMiner
 
                 if (player != null)
                     player.Save();
+                UpvoidMinerWorldGenerator.SaveEntities();
             }
         }
 

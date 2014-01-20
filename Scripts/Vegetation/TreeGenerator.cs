@@ -26,8 +26,6 @@ namespace UpvoidMiner
     /// </summary>
     public class TreeGenerator
     {
-        private static Random random = new Random();
-
         /// <summary>
         /// Creates a log.
         /// </summary>
@@ -53,7 +51,7 @@ namespace UpvoidMiner
         /// </summary>
         /// <param name="height">Height in m.</param>
         /// <param name="width">radius in m.</param>
-        public static Tree Birch(float height, float radius)
+        public static Tree Birch(float height, float radius, Random random)
         {
             Tree t = new Tree();
             

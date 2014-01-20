@@ -20,6 +20,9 @@ using Engine.Rendering;
 using System.Text;
 using Engine;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace UpvoidMiner
 {
@@ -44,6 +47,20 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
         private TerrainResource terrainRock;
 
+        [Serializable]
+        public class EntitySave
+        {
+            [Serializable]
+            public class TreeSave
+            {
+                public float x, y, z;
+                public int seed;
+            }
+
+            public List<TreeSave> trees = new List<TreeSave>();
+        }
+        public static EntitySave entitySave = new EntitySave();
+
         /// <summary>
         /// Initializes the terrain materials and settings.
         /// </summary>
@@ -59,6 +76,9 @@ namespace UpvoidMiner
             // Get handle to dirt for generation.
             terrainDirt = TerrainResource.FromName("Dirt");
             terrainRock = TerrainResource.FromName("Stone.09");
+
+            // load entities
+            LoadEntities();
             
             return base.init();
         }
@@ -115,11 +135,33 @@ namespace UpvoidMiner
 
             return concat;
         }
+        
+        public static void SaveEntities()
+        {
+            Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathEntities).Directory.FullName);
+            File.WriteAllText(UpvoidMiner.SavePathEntities, JsonConvert.SerializeObject(entitySave, Formatting.Indented));
+        }
+        public static void LoadEntities()
+        {
+            if (File.Exists(UpvoidMiner.SavePathEntities))
+            {
+                entitySave = JsonConvert.DeserializeObject<EntitySave>(File.ReadAllText(UpvoidMiner.SavePathEntities));
+                foreach (var item in entitySave.trees)
+                    AddTree(new vec3(item.x, item.y, item.z), new Random(item.seed));
+            }
+        }
 
         public static void TreeCallback(IntPtr _pos)
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
 
+            int seed = random.Next();
+            entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed });
+            AddTree(pos, new Random(seed));
+        }
+
+        private static void AddTree(vec3 pos, Random random)
+        {
             World world = Instance.World;
 
             vec3 up = new vec3((float)random.NextDouble() * .05f - .025f, 1, (float)random.NextDouble() * .05f - .025f).Normalized;
@@ -128,7 +170,7 @@ namespace UpvoidMiner
 
             mat4 transform = new mat4(left, up, front, pos);
 
-            world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f), transform);
+            world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
         }
     }
 }

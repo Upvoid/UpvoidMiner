@@ -385,7 +385,6 @@ namespace UpvoidMiner
             save.currentQuickAccess = Inventory.SelectionIndex;
 
             Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathInventory).Directory.FullName);
-
             File.WriteAllText(UpvoidMiner.SavePathInventory, JsonConvert.SerializeObject(save, Formatting.Indented));
         }
 

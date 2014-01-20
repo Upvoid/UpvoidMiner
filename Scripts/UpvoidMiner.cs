@@ -41,6 +41,10 @@ namespace UpvoidMiner
         /// Save path for the inventory.
         /// </summary>
         public static readonly string SavePathInventory = SavePathBase + "/Inventory";
+        /// <summary>
+        /// Save path for entities.
+        /// </summary>
+        public static readonly string SavePathEntities = SavePathBase + "/Entities";
     }
 }
 
