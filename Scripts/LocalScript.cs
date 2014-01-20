@@ -178,6 +178,9 @@ namespace UpvoidMiner
 
             // Register the update callback that updates the camera position.
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
+
+            // Register save callback
+            Savegame.OnSave += s => player.Save();
         }
 
         /// Bezier Camera Path Feature
@@ -271,7 +274,7 @@ namespace UpvoidMiner
 
 			UpdateResourceDownloadProgress();
 
-            if ((DateTime.Now - lastSave).TotalSeconds > 10)
+            if ((DateTime.Now - lastSave).TotalSeconds > 60)
             {
                 lastSave = DateTime.Now;
 
