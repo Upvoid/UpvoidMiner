@@ -9,8 +9,8 @@ uniform float uDiscardBias = 0.5;
 
 in vec2 vTexCoord;
 in vec3 vNormal;
-in vec3 vEyePos;
 in vec3 vColor;
+in vec3 vEyePos;
 
 OUTPUT_CHANNEL_TransparentColor(vec4)
 
@@ -18,7 +18,7 @@ void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
 
-    if(texColor.a > uDiscardBias)
+    if(texColor.a > uDiscardBias || texColor.a < 0.004)
         discard;
 
     texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
