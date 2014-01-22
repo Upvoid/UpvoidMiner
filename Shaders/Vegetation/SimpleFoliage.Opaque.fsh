@@ -14,6 +14,7 @@ in vec3 vColor;
 
 OUTPUT_CHANNEL_Color(vec3)
 OUTPUT_CHANNEL_Normal(vec3)
+OUTPUT_CHANNEL_Position(vec3)
 
 void main()
 {
@@ -38,4 +39,5 @@ void main()
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normalFront);
+    OUTPUT_Position(vEyePos);
 }
