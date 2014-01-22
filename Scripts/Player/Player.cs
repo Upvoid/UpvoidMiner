@@ -37,7 +37,7 @@ namespace UpvoidMiner
         /// <summary>
         /// The render component for the torso.
         /// </summary>
-        private RenderComponent rcTorso, rcTorsoShadow;
+        private RenderComponent rcTorsoShadow;
         private CpuParticleSystemBase psTorsoSteam;
         private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
@@ -168,7 +168,7 @@ namespace UpvoidMiner
                 vec3 up = new vec3(0, 1, 0);
                 vec3 left = vec3.cross(up, Direction);
                 mat4 viewMat = new mat4(left, up, Direction, new vec3());
-                rcTorso.Transform = rcTorsoShadow.Transform =
+                rcTorsoShadow.Transform =
                    viewMat * torsoTransform;
 
                 // Update camera component.
@@ -196,7 +196,7 @@ namespace UpvoidMiner
                 Rendering.MainViewport.SetMouseVisibility(true);
             }
 
-            mat4 steamTransform = thisEntity.Transform * rcTorso.Transform * torsoSteamOffset; 
+            mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset; 
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
             vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
@@ -266,9 +266,6 @@ namespace UpvoidMiner
                                          mat4.Translate(new vec3(0, character.EyeOffset, 0))));
 
             // Add Torso mesh.
-            thisEntity.AddComponent(rcTorso = new RenderComponent(new MeshRenderJob(Renderer.Opaque.Mesh, Resources.UseMaterial("Miner/Torso", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
-                                                                  torsoTransform,
-                                                                  true));
             thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
                                                                         torsoTransform,
                                                                         true));
