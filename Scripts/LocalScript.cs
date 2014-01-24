@@ -103,9 +103,7 @@ namespace UpvoidMiner
                 // Register a socket for sending progress updates to the loading screen
 				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
 
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => {
-                    ActivatePlayer();}
-                );
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
 				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
 
 				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
@@ -114,6 +112,8 @@ namespace UpvoidMiner
             {
                 ActivatePlayer();
             }
+
+			Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;

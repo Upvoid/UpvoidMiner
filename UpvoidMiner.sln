@@ -45,8 +45,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "htdocs", "htdocs", "{C46CDC
 		htdocs\IngameGui.css = htdocs\IngameGui.css
 		htdocs\IngameGui.js = htdocs\IngameGui.js
 		htdocs\IngameGui.html = htdocs\IngameGui.html
-		htdocs\LoadingScreen.html = htdocs\LoadingScreen.html
 		htdocs\SplashScreen.html = htdocs\SplashScreen.html
+		htdocs\MainMenu.html = htdocs\MainMenu.html
+		htdocs\Credits.html = htdocs\Credits.html
+		htdocs\Controls.html = htdocs\Controls.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automata", "Automata", "{3FAB2059-F76F-4A4E-8D78-E8A8C5A713D7}"

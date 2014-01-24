@@ -33,6 +33,8 @@ namespace UpvoidMiner
         /// </summary>
         public bool IsGuiOpen { get; private set; }
 
+		public bool IsMenuOpen { get; private set; }
+
 		Player player;
 
         JsonSerializer json = new JsonSerializer();
@@ -121,11 +123,25 @@ namespace UpvoidMiner
             // Workaround for missing keyboard input in the WebGui: Toggle the inventory from here
             Input.OnPressInput += (object sender, InputPressArgs e) => 
             { 
-                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
-                {
-                    IsGuiOpen = !IsGuiOpen;
-                    updateSocket.SendMessage("ToggleInventory"); 
-                }
+				if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
+				{
+					IsGuiOpen = !IsGuiOpen;
+					updateSocket.SendMessage("ToggleInventory"); 
+				}
+				if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down) 
+				{
+					IsMenuOpen = !IsMenuOpen;
+					if(IsMenuOpen)
+					{
+						Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
+						IsGuiOpen = true;
+					}
+					else
+					{
+						Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+						IsGuiOpen = false;
+					}
+				}
             };
         }
 
