@@ -27,6 +27,7 @@ using Common.Cameras;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Diagnostics;
 
 namespace UpvoidMiner
 {
@@ -105,6 +106,7 @@ namespace UpvoidMiner
 
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
 				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenFeedbackSite", (WebRequest request, WebResponse response) => Process.Start("https://upvoid.com/feedback"));
 
 				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
             }

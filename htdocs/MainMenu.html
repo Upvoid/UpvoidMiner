@@ -21,9 +21,10 @@
             </div>
 
             <ul class="nav nav-pills nav-stacked">
-                <li id="start-button" class="hidden"><a href="javascript: clickStart()">Play</a></li>
+                <li id="start-button" class="hidden active"><a href="javascript: clickStart()">Play</a></li>
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
+                <li><a href="javascript:clickFeedback()"><i class="fa fa-external-link"></i> Give us Feedback / Report Problems</a></li>
                 <li><a id="start-button" href="javascript: clickQuit()">Quit</a></li>
             </ul>
 
@@ -64,6 +65,11 @@
         function clickQuit()
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/QuitGame");
+        }
+
+        function clickFeedback()
+        {
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenFeedbackSite");
         }
 
     </script>
