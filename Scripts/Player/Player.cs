@@ -287,9 +287,7 @@ namespace UpvoidMiner
                                                                         true));
             psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
             LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));
-            LocalScript.ParticleEntity.AddComponent(new RenderComponent(new CpuParticleRenderJob(psTorsoSteam, Renderer.Transparent.CpuParticles, Resources.UseMaterial("Particles/Smoke", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Quad", null), mat4.Identity),
-                                                                        mat4.Identity,
-                                                                        true));
+
 
             // Add camera component.
             thisEntity.AddComponent(cameraComponent = new CameraComponent(camera, mat4.Identity));
