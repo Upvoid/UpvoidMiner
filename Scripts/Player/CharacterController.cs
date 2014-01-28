@@ -159,7 +159,7 @@ namespace UpvoidMiner
 
 		float jumpCoolDown = 0f;
 
-        public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.55f, float _bodyMass = 70f)
+		public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
 		{
 			camera = _camera;
 			ContainingWorld = _containingWorld;
