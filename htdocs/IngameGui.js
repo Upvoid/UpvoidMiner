@@ -121,13 +121,13 @@ function formatItem(item, active, quickAccessSlot, showOptions)
         {
             html += "<div class='item-options'>";
             if(item.canBeCrafted)
-                html += "<a href=\"javascript:craftItem('"+item.identifier+"')\"><span class='icon-stack'><i class='icon-sign-blank icon-stack-base icon-green'></i><i class='icon-plus icon-light'></i></span></a>";
+                html += "<a href=\"javascript:craftItem('"+item.identifier+"')\"><span class='fa-stack'><i class='fa fa-square fa-stack-2x icon-green'></i><i class='fa fa-stack-1x fa-plus'></i></span></a>";
             else if(item.hasDiscoveredCraftingRule)
-                html += "<a><span class='icon-stack'><i class='icon-sign-blank icon-stack-base icon-disabled'></i><i class='icon-plus icon-light'></i></span></a>";
+                html += "<a><span class='fa-stack'><i class='fa fa-square fa-stack-2x icon-disabled'></i><i class='fa fa-stack-1x fa-plus'></i></span></a>";
             if(item.canBeDismantled)
-                html += "<a href=\"javascript:dismantleItem('"+item.id+"')\"><span class='icon-stack'><i class='icon-sign-blank icon-stack-base icon-red'></i><i class='icon-minus icon-light'></i></span></a>";
+                html += "<a href=\"javascript:dismantleItem('"+item.id+"')\"><span class='fa-stack'><i class='fa fa-square fa-stack-2x icon-red'></i><i class='fa fa-stack-1x fa-minus'></i></span></a>";
             if(item.quantity > 0)
-                html += "<a href=\"javascript:dropItem('"+item.id+"')\"><span class='icon-stack'><i class='icon-sign-blank icon-stack-base icon-purple'></i><i class='icon-arrow-down icon-light'></i></span></a>";
+                html += "<a href=\"javascript:dropItem('"+item.id+"')\"><span class='fa-stack'><i class='fa fa-square fa-stack-2x icon-purple'></i><i class='fa fa-stack-1x fa-arrow-down'></i></span></a>";
             html += "</div>";
         }
         
@@ -220,26 +220,26 @@ function buildItemInfo(item)
         html += "<div class=\"crafting-info\">Can be crafted using the following ingredients:<ul class='item-row'>";
 
         html += formatItem(item, false, -1);
-        html += "<li class='icon'><i class='icon-arrow-left'></i></li>";
+        html += "<li class='icon'><i class='fa fa-arrow-left'></i></li>";
 
         for(var i = 0; i < item.craftingIngredients.length; i++)
         {
             html += formatItem(item.craftingIngredients[i], false, -1);
             if(i < item.craftingIngredients.length - 1)
-                html += "<li class='icon'><i class='icon-plus'></i></li>";
+                html += "<li class='icon'><i class='fa fa-plus'></i></li>";
         }
 
         html += "</ul><div class='clearfix'></div></div>";
     }
 
     if(item.canBeCrafted)
-        html += " <button onclick=\"craftItem('"+item.identifier+"')\" class=\"btn btn-success\"><i class='icon-plus'></i> Craft</button>";
+        html += " <button onclick=\"craftItem('"+item.identifier+"')\" class=\"btn btn-success\"><i class='fa fa-plus'></i> Craft</button>";
     else if(item.hasDiscoveredCraftingRule)
-        html += " <button class=\"btn btn-default disabled\"><i class='icon-plus'></i> Craft</button>";
+        html += " <button class=\"btn btn-default disabled\"><i class='fa fa-plus'></i> Craft</button>";
     if(item.canBeDismantled)
-        html += " <button onclick=\"dismantleItem('"+item.id+"')\" class=\"btn btn-danger\"><i class='icon-minus'></i> Dismantle</button>";
+        html += " <button onclick=\"dismantleItem('"+item.id+"')\" class=\"btn btn-danger\"><i class='fa fa-minus'></i> Dismantle</button>";
     if(item.quantity > 0)
-        html += " <button onclick=\"dropItem('"+item.id+"')\" class=\"btn btn-primary\"><i class='icon-arrow-down'></i> Drop</button>";
+        html += " <button onclick=\"dropItem('"+item.id+"')\" class=\"btn btn-primary\"><i class='fa fa-arrow-down'></i> Drop</button>";
 
     $('#item-info').html(html);
 

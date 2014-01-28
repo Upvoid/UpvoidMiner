@@ -81,6 +81,13 @@ body {
     left: -15px; right: -15px;
 }
 
+.item .item-options a:link,
+.item .item-options a:hover,
+.item .item-options a:visited,
+.item .item-options a:active {
+    color: #fff;
+}
+
 .item .item-options i.icon-stack-base {
     opacity: 0.8;
 }
