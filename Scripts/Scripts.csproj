@@ -68,6 +68,7 @@
     <Compile Include="Vegetation\Tree.cs" />
     <Compile Include="Vegetation\TreeGenerator.cs" />
     <Compile Include="UpvoidMiner.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">

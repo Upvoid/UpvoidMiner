@@ -5,6 +5,7 @@
             "ScriptFiles": [
                 "HostScript.cs",
                 "LocalScript.cs",
+                "Settings.cs",
                 "UpvoidMiner.cs",
                 "Messages.cs",
                 "Items/Item.cs",

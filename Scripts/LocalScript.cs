@@ -115,6 +115,8 @@ namespace UpvoidMiner
                 ActivatePlayer();
             }
 
+			Settings.InitSettingsHandlers();
+
 			Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
             // Register for input press events.

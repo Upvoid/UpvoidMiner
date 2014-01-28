@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
+    <title>Settings</title>
+
+    <style>
+        div.checkbox a:link,
+        div.checkbox a:hover,
+        div.checkbox a:active,
+        div.checkbox a:visited {
+            text-decoration: none;
+            color: #000;
+        }
+    </style>
+
+</head>
+<body style="background: transparent; padding: 1em;">
+    <div class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto;">
+        <div class="panel-body text-center">
+            <h1>Settings</h1>
+            <p style="color: #c00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p>
+            <form role="form" style="text-align: left; margin-left: 3em;">
+              <div class="checkbox" id="check-shadows">
+                  <a href="javascript:toggleSetting('shadows')"><i class="fa fa-circle fa-lg"></i> Enable shadows</a>
+              </div>
+              <div class="checkbox" id="check-bloom">
+                  <a href="javascript:toggleSetting('bloom')"><i class="fa fa-circle fa-lg"></i> Enable bloom</a>
+              </div>
+              <div class="checkbox" id="check-lensFlares">
+                  <a href="javascript:toggleSetting('lensFlares')"><i class="fa fa-circle fa-lg"></i> Enable lens flares</a>
+              </div>
+              <div class="checkbox" id="check-noise">
+                  <a href="javascript:toggleSetting('noise')"><i class="fa fa-circle fa-lg"></i> Enable noise</a>
+              </div>
+              <div class="checkbox" id="check-ssao">
+                  <a href="javascript:toggleSetting('ssao')"><i class="fa fa-circle fa-lg"></i> Enable SSAO</a>
+              </div>
+              <div class="checkbox" id="check-tonemapping">
+                  <a href="javascript:toggleSetting('tonemapping')"><i class="fa fa-circle fa-lg"></i> Enable tonemapping</a>
+              </div>
+              <div class="checkbox" id="check-volumetricScattering">
+                  <a href="javascript:toggleSetting('volumetricScattering')"><i class="fa fa-circle fa-lg"></i> Enable volumetric god rays</a>
+              </div>
+              <div class="checkbox" id="check-fog">
+                  <a href="javascript:toggleSetting('fog')"><i class="fa fa-circle fa-lg"></i> Enable fog</a>
+              </div>
+              <div class="checkbox" id="check-afterImage">
+                  <a href="javascript:toggleSetting('afterImage')"><i class="fa fa-circle fa-lg"></i> Enable afterimage effect</a>
+              </div>
+            </form>
+            
+            <a class="btn" href="MainMenu.html">Cancel</a> <a class="btn" href="Settings.html">Reset</a> <a class="btn" href="javascript:clickApply()">Apply</a>
+        </div>
+    </div>
+
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
+    <script>
+
+        var settings = {};
+
+        function updateSettingsForm()
+        {
+            // update the icon classes that are faking the checkboxes
+            for(setting in settings)
+            {
+                if(settings[setting])
+                {
+                    $('#check-'+setting+' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
+                }
+                else
+                {
+                    $('#check-'+setting+' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
+                }
+            }
+        }
+
+        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", "", function(data) {
+            settings = data;
+            updateSettingsForm();
+        });
+
+        function toggleSetting(setting)
+        {
+            if(settings[setting] === undefined)
+                settings[setting] = false;
+
+            settings[setting] = !settings[setting];
+
+            updateSettingsForm();
+        }
+
+        function clickApply()
+        {
+            settings.applySettings = true;
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", settings, function(data) {
+                window.location.href = "MainMenu.html";
+            });
+        }
+
+    </script>
+
+</body>
+</html>
