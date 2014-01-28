@@ -192,3 +192,32 @@ body {
     transition: opacity 0.3s linear;
     -webkit-transition: opacity 0.3s linear;
 }
+
+#generating-world-notice {
+    position: fixed;
+    left: 50%; right: 50%;
+    top: 50%; bottom: 50%;
+
+    text-align: center;
+    z-index: 3;
+
+    width: 150px;
+    height: 40px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 2px;
+    margin: 0;
+    margin-left: -75px;
+    margin-top: -20px;
+}
+#screen-overlay {
+    position: fixed;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+
+    text-align: center;
+    z-index: 2;
+
+    background: rgba(0,0,0,0.4);
+}
+

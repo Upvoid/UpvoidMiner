@@ -19,6 +19,17 @@ function updateGui(data)
 {
     buildInventory(data.inventory, data.quickAccess, data.selection);
 
+    if(data.playerIsFrozen)
+    {
+        $('#generating-world-notice').show();
+        $('#screen-overlay').show();
+    }
+    else
+    {
+        $('#generating-world-notice').hide();
+        $('#screen-overlay').hide();
+    }
+
     playerItems = data.inventory;
 
     var quickAccessItems = [];

@@ -100,6 +100,8 @@ namespace UpvoidMiner
             public Dictionary<string, GuiItem> inventory = new Dictionary<string, GuiItem>();
             public List<string> quickAccess = new List<string>();
             public int selection;
+
+			public bool playerIsFrozen;
         }
 
         public PlayerGui(Player player)
@@ -158,6 +160,9 @@ namespace UpvoidMiner
         {
             // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
+
+			info.playerIsFrozen = player.IsFrozen;
+
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
 
             foreach (var item in player.Inventory.QuickAccessItems)

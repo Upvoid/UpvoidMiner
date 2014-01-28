@@ -118,6 +118,17 @@ namespace UpvoidMiner
         /// </summary>
         public List<DroneConstraint> DroneConstraints = new List<DroneConstraint>();
 
+		/// <summary>
+		/// True iff the player is physically frozen because the world around him is not yet generated.
+		/// </summary>
+		/// <value>The position.</value>
+		public bool IsFrozen { get { return character.Body.IsFrozen; } }
+
+		/// <summary>
+		/// The Value of IsFrozen from the last update frame.
+		/// </summary>
+		bool WasFrozen = false;
+
         /// <summary>
         /// Position of the player.
         /// </summary>
@@ -230,6 +241,11 @@ namespace UpvoidMiner
             }
             if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
                 Inventory.Selection.OnUpdatePreview(this, elapsedSeconds);
+
+			// Notify the gui if the player freezing status has changed since the last update frame.
+			if (WasFrozen != IsFrozen)
+				gui.OnUpdate();
+			WasFrozen = IsFrozen;
         }
 
         /// <summary>
