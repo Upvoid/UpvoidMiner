@@ -251,7 +251,7 @@ namespace UpvoidMiner
             }
             else
                 Body.SetGravity(new vec3(0, -9.807f, 0));
-            ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 5f, 0), ReceiveRayqueryResult);
+			ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 500f, 0), ReceiveRayqueryResult);
 		}
 
         protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
