@@ -156,6 +156,12 @@ namespace UpvoidMiner
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
 
+            // at least 2m distance
+            vec2 pos2D = new vec2(pos.x, pos.z);
+            foreach (var tree in entitySave.trees)
+                if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 2f)
+                    return;
+
             int seed = random.Next();
             entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed });
             AddTree(pos, new Random(seed));
