@@ -14,6 +14,7 @@ out vec3 vColor;
 out vec3 vEyePos;
 out vec3 vObjectPos;
 out vec3 vObjectNormal;
+out vec3 vWorldNormal;
 
 void main()
 {
@@ -23,6 +24,7 @@ void main()
     // object space stuff
     vObjectPos = aPosition;
     vObjectNormal = aNormal;
+    vWorldNormal = mat3(uModelMatrix) * aNormal;
 
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);

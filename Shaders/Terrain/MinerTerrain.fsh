@@ -29,6 +29,7 @@ in vec3 vColor;
 in vec3 vEyePos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
+in vec3 vWorldNormal;
 
 OUTPUT_CHANNEL_Color(vec3)
 OUTPUT_CHANNEL_Normal(vec3)
@@ -99,12 +100,11 @@ void main()
         baseColor *= vColor;
 
     // illumination
-    vec3 objNormal = normal;
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
-    OUTPUT_Normal(objNormal);
+    OUTPUT_Normal(vWorldNormal);
     OUTPUT_Position(vEyePos);
 }
 

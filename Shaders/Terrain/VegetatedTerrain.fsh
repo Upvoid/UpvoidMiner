@@ -30,6 +30,7 @@ in vec3 vColor;
 in vec3 vEyePos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
+in vec3 vWorldNormal;
 in float vGrass;
 
 OUTPUT_CHANNEL_Color(vec3)
@@ -106,12 +107,11 @@ void main()
     //baseColor = mix(vec3(139,69,19) / 255 * .3, baseColor, min(1, vGrass * 2));
 
     // illumination
-    vec3 objNormal = normal;
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
-    OUTPUT_Normal(objNormal);
+    OUTPUT_Normal(vWorldNormal);
     OUTPUT_Position(vEyePos);
 }
 
