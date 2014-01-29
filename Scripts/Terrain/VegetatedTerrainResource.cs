@@ -40,7 +40,7 @@ namespace UpvoidMiner
                 {
                     int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Decimate", 0, 4);
                     Material.AddDefaultShadowAndZPre(pipeline);
-                    Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
+                    Material.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/DirtVegetated", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
 
                 // Lod 5-max

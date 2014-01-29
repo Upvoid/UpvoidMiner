@@ -72,7 +72,7 @@
             {
                 "Type": "Attribute",
                 "Nodes" : ["NormalRepair"],
-                "Copy": ["aPosition", "aNormal"],
+                "Copy": ["aPosition", "aNormal", "aGrass"],
                 "Calculated": {
                     "aColor": {
                         "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .3,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
@@ -108,11 +108,11 @@
             },
             "Decimate" :
             {
-            	"Type" : "Decimate",
-            	"Nodes" : ["Input"],
+                "Type" : "Decimate",
+                "Nodes" : ["Input"],
                 "errorTarget" : 1,
-            	"faceTarget" : 2,
-            	"constrainBoundaries" : true
+                "faceTarget" : 2,
+                "constrainBoundaries" : true
             },
             "Output":
             {
@@ -174,8 +174,8 @@
                         "Inputs": [ "aPosition:vec3" ]
                     },
                     "aNormal": {
-                    	"Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4)",
-                    	"Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
                     }
                 }
             }
@@ -476,11 +476,11 @@
             },
             "Decimate" :
             {
-            	"Type" : "Decimate",
-            	"Nodes" : ["Input"],
+                "Type" : "Decimate",
+                "Nodes" : ["Input"],
                 "errorTarget" : 0.1,
-            	"faceTarget" : 2,
-            	"constrainBoundaries" : true
+                "faceTarget" : 2,
+                "constrainBoundaries" : true
             },
             "Output":
             {
@@ -522,11 +522,11 @@
             },
             "Decimate" :
             {
-            	"Type" : "Decimate",
-            	"Nodes" : ["Input"],
+                "Type" : "Decimate",
+                "Nodes" : ["Input"],
                 "errorTarget" : 2,
-            	"faceTarget" : 2,
-            	"constrainBoundaries" : true
+                "faceTarget" : 2,
+                "constrainBoundaries" : true
             },
             "Output":
             {

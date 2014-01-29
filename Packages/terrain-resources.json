@@ -15,6 +15,19 @@
 {
     "Descriptor" : {
         "Files" : [
+            "Terrain/VegetatedTerrain.fsh",
+            "Terrain/VegetatedTerrain.vsh"
+        ],
+        "Name" : "Terrain/VegetatedTerrain",
+        "Type" : "File"
+    },
+    "Name" : "Terrain/VegetatedTerrain",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
             "Vegetation/Foliage.Opaque.fsh",
             "Vegetation/Foliage.Opaque.vsh"
         ],
@@ -112,6 +125,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Terrain/Dirt",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+    "Collection" : "terrain-materials",
+        "Name" : "Terrain/DirtVegetated",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/DirtVegetated",
     "Path" : "~.mat",
     "Type" : "Material"
 },

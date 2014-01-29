@@ -55,14 +55,34 @@
     ParticleAttribute: aParticleColor
     ParticleAttribute: aParticleLife
 
+[Terrain/DirtVegetated] : Default
+    Shader: Terrain/VegetatedTerrain
+    #Texture: uColorXZDirt, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
+    Texture: uColorXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Diffuse
+    Texture: uColorXZDirt, /Resources.TerrainMaterials::Soil/Soil01.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Soil/Soil01.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Soil/Soil01.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Normal
+    Texture: uNormalXZDirt, /Resources.TerrainMaterials::Soil/Soil01.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil01.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil01.Normal
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScaleXY, 2
+    Parameter: uTexScaleXZ, 4
+    Parameter: uTexScaleZY, 2
+    Parameter: uBlendingCoefficient, 4
+    Parameter: uLodRefDist, 2
+    Parameter: uLodFactor, 3.7
+    Parameter: uLodTransitionPart, .4
+
 [Terrain/Dirt] : Default
     Shader: Terrain/MinerTerrain
     Texture: uColorXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Diffuse
-    Texture: uColorXY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
-    Texture: uColorZY, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Soil/Soil01.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Soil/Soil01.Diffuse
     Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Normal
-    Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock13.Normal
-    Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock13.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil01.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil01.Normal
     Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 2
     Parameter: uTexScaleXZ, 4
