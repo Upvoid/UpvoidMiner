@@ -107,7 +107,7 @@ namespace UpvoidMiner
                 string hillsDef = hillsDefines.ToString();
 
                 union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", UpvoidMiner.ModDomain));
-                union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 20, z / 21, y / 22) * 3)", UpvoidMiner.ModDomain));
+                union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
                 concat.AddNode(union);
             }
 
