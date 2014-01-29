@@ -69,17 +69,34 @@ namespace UpvoidMiner
         /// </summary>
         public static void Startup(IntPtr _unmanagedModule)
         {
-            // Get and save the resource domain of the mod, needed for loading resources.
-            UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
-            UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
+			// Get and save the resource domain of the mod, needed for loading resources.
+			UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
+			UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
-            // Create a simple camera that allows free movement.
-            camera = new GenericCamera();
-            camera.Position = new vec3(0, 10, 0);
-            camera.FarClippingPlane = 1750.0;
+			// Get the world (created by the host script).
+			world = Universe.GetWorldByName("UpvoidMinerWorld");
 
-            // Get the world (created by the host script).
-            world = Universe.GetWorldByName("UpvoidMinerWorld");
+			// No loading screen for clients (since the server generates the world)
+			if (Scripting.IsHost)
+			{
+				// Register a callback for the terrain generation so the GUI can be notified when the world is ready.
+				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
+
+				// Show a splash screen in the GUI client.
+				Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
+
+				// Register a socket for sending progress updates to the loading screen
+				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
+
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenFeedbackSite", (WebRequest request, WebResponse response) => Process.Start("https://upvoid.com/feedback"));
+			}
+
+			// Create a simple camera that allows free movement.
+			camera = new GenericCamera();
+			camera.Position = new vec3(0, 10, 0);
+			camera.FarClippingPlane = 1750.0;
 
             // Client-only: register terrain materials
             if (!Scripting.IsHost)
@@ -95,26 +112,6 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-            // No loading screen for clients (since the server generates the world)
-            if (Scripting.IsHost)
-            {
-                // Show a splash screen in the GUI client.
-                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
-
-                // Register a socket for sending progress updates to the loading screen
-				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
-
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
-				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
-				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenFeedbackSite", (WebRequest request, WebResponse response) => Process.Start("https://upvoid.com/feedback"));
-
-				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
-            }
-            else
-            {
-                ActivatePlayer();
-            }
-
 			Settings.InitSettingsHandlers();
 
 			Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
@@ -124,6 +121,9 @@ namespace UpvoidMiner
 
 			// Register sockets for resource downloading progress bar
 			resourceDownloadProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "ResourceDownloadProgress");
+
+			if(!Scripting.IsHost)
+				ActivatePlayer();
         }
 
         static bool generationDone = false;
@@ -143,12 +143,12 @@ namespace UpvoidMiner
                 generatedChunks++;
             }
             
-			if (generatedChunks >= 28)
+			if (generatedChunks >= 20)
             {
                 generationDone = true;
             }
 
-			generationProgressSocket.SendMessage(((float)generatedChunks/28f).ToString());
+			generationProgressSocket.SendMessage(((float)generatedChunks/20f).ToString());
         }
 
 		static void webGenerationProgress(WebRequest request, WebResponse response)
