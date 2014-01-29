@@ -1,26 +1,55 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
     <title>Credits</title>
 </head>
 <body style="background: transparent; padding: 1em;">
     <div class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto;">
-        <div class="panel-body text-center">
+        <div class="panel-body text-center" style="max-height:500px; overflow-y: auto;">
             <h1>Credits</h1>
-            <p>UpvoidMiner and UpvoidEngine are developed by</p>
+            <p><a class="btn btn-primary" href="MainMenu.html">Back</a></p>
+<p>UpvoidMiner and UpvoidEngine are developed by</p>
             <h3>Philip Trettner</h3>
             <h3>Marc Seebold</h3>
             <h3>Marcus Völker</h3>
             <h3>Tobias Berling</h3>
             <h3>Kersten Schuster</h3>
             <h3>Lukas Boersma</h3>
-            <a class="btn" href="MainMenu.html">Back</a>
+            <div style="text-align: left;">
+                <p>Some of the textures were created by <a href="javascript:clickUrl('http://nobiax.deviantart.com/')"><i class="fa fa-external-link"></i> Nobiax</a></p>
+                <p>UpvoidEngine uses these awesome libraries:</p>
+                <ul>
+                    <li><a href="javascript:clickUrl('http://qt-project.org/')"><i class="fa fa-external-link"></i> Qt</a></li>
+                    <li><a href="javascript:clickUrl('http://bulletphysics.org/')"><i class="fa fa-external-link"></i> Bullet</a></li>
+                    <li><a href="javascript:clickUrl('http://assimp.sourceforge.net/')"><i class="fa fa-external-link"></i> Assimp</a></li>
+                    <li><a href="javascript:clickUrl('http://glew.sourceforge.net/')"><i class="fa fa-external-link"></i> GLEW</a></li>
+                    <li><a href="javascript:clickUrl('http://www.glfw.org/')"><i class="fa fa-external-link"></i> GLFW</a></li>
+                    <li><a href="javascript:clickUrl('http://glm.g-truc.net/')"><i class="fa fa-external-link"></i> GLM</a></li>
+                    <li><a href="javascript:clickUrl('http://code.google.com/p/googletest/')"><i class="fa fa-external-link"></i> Google Test</a></li>
+                    <li><a href="javascript:clickUrl('http://code.google.com/p/asmjit/')"><i class="fa fa-external-link"></i> asmjit</a></li>
+                    <li><a href="javascript:clickUrl('http://eigen.tuxfamily.org/')"><i class="fa fa-external-link"></i> Eigen</a></li>
+                    <li><a href="javascript:clickUrl('http://www.mono-project.com/')"><i class="fa fa-external-link"></i> Mono</a></li>
+                    <li><a href="javascript:clickUrl('http://www.vorbis.com/')"><i class="fa fa-external-link"></i> Ogg Vorbis</a></li>
+                    <li><a href="javascript:clickUrl('http://www.openal.org/')"><i class="fa fa-external-link"></i> OpenAL</a></li>
+                    <li><a href="javascript:clickUrl('http://code.google.com/p/snappy/')"><i class="fa fa-external-link"></i> Snappy</a></li>
+                    <li><a href="javascript:clickUrl('http://tclap.sourceforge.net/')"><i class="fa fa-external-link"></i> TCLAP</a></li>
+                    <li><a href="javascript:clickUrl('http://www.cs.cmu.edu/afs/cs/Web/People/garland/quadrics/qslim.html')"><i class="fa fa-external-link"></i> QSlim</a></li>
+                </ul>
+            </div>
+            <p><a class="btn btn-primary" href="MainMenu.html">Back</a></p>
         </div>
     </div>
 
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+    <script>
+        function clickUrl(url) {
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url="+url);
+        }
+    </script>
 
 </body>
 </html>

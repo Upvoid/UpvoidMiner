@@ -90,7 +90,7 @@ namespace UpvoidMiner
 
 				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
 				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
-				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenFeedbackSite", (WebRequest request, WebResponse response) => Process.Start("https://upvoid.com/feedback"));
+				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Process.Start(request.GetQuery("url")));
 			}
 
 			// Create a simple camera that allows free movement.
