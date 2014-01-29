@@ -586,6 +586,11 @@ namespace UpvoidMiner
                             DropItem(Inventory.Selection);
                         break;
 
+                    // F1 resets the player position
+                    case InputKey.F1:
+                        character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
+                        break;
+
                     default:
                         break;
                 }
