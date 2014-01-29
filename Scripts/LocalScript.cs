@@ -110,7 +110,7 @@ namespace UpvoidMiner
             // Create an active region around the player spawn
             // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
             // In near future it will be updated when the player moves out of it
-            world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
+            //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
 			Settings.InitSettingsHandlers();
 
