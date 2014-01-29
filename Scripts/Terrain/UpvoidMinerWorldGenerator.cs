@@ -132,6 +132,7 @@ namespace UpvoidMiner
 
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), World, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), World, 4));
+            concat.AddNode(new CsgCollapseNode());
 
             return concat;
         }
