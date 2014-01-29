@@ -106,11 +106,12 @@ void main()
     //baseColor = mix(vec3(139,69,19) / 255 * .3, baseColor, min(1, vGrass * 2));
 
     // illumination
+    vec3 objNormal = normal;
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
-    OUTPUT_Normal(normal);
+    OUTPUT_Normal(objNormal);
     OUTPUT_Position(vEyePos);
 }
 
