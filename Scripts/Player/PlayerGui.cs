@@ -31,7 +31,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
         /// </summary>
-        public bool IsGuiOpen { get; private set; }
+        public bool IsGuiOpen { get; set; }
 
 		public bool IsMenuOpen { get; private set; }
 

@@ -88,8 +88,9 @@ namespace UpvoidMiner
 				// Register a socket for sending progress updates to the loading screen
 				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
 
-				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
-				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
 				Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Process.Start(request.GetQuery("url")));
 			}
 
@@ -164,7 +165,14 @@ namespace UpvoidMiner
 		}
 
         static void ActivatePlayer()
-        {   
+        {
+            // Activate player only once.
+            if (player != null)
+            {
+                player.Gui.IsGuiOpen = false;
+                return;
+            }
+
             // Activate camera movement
             cameraControl = new FreeCameraControl(-10f, camera);
 
