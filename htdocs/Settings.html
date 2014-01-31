@@ -8,13 +8,23 @@
     <title>Settings</title>
 
     <style>
-        div.checkbox a:link,
-        div.checkbox a:hover,
-        div.checkbox a:active,
-        div.checkbox a:visited {
-            text-decoration: none;
-            color: #000;
-        }
+      div.checkbox a:link,
+      div.checkbox a:hover,
+      div.checkbox a:active,
+      div.checkbox a:visited {
+      text-decoration: none;
+      color: #000;
+      }
+
+      select {
+        background: #ccc;
+      }
+      
+      select option {
+        background: #fff;
+        border: 1px solid #000;
+      }
+
     </style>
 
 </head>
@@ -28,7 +38,7 @@
                     <a href="javascript:toggleSetting('fullscreen')"><i class="fa fa-circle fa-lg"></i> Fullscreen mode</a>
                 </div>
 
-                <select class="form-control" id="select-resolution" size="1">
+                <select class="form-control" id="select-resolution" size="4">
                     <option>Native Resolution</option>
                 </select>
 
