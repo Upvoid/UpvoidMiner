@@ -163,24 +163,31 @@ namespace UpvoidMiner
             if (File.Exists(UpvoidMiner.SavePathEntities))
             {
                 entitySave = JsonConvert.DeserializeObject<EntitySave>(File.ReadAllText(UpvoidMiner.SavePathEntities));
-                foreach (var item in entitySave.trees)
-                    AddTree(new vec3(item.x, item.y, item.z), new Random(item.seed));
+                var trees = entitySave.trees;
+                entitySave.trees = new List<EntitySave.TreeSave>();
+                foreach (var item in trees)
+                    TreeCreate(new vec3(item.x, item.y, item.z), item.seed);
             }
         }
 
         public static void TreeCallback(IntPtr _pos)
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
+            int seed = random.Next();
+            TreeCreate(pos, seed);
+        }
 
+        public static void TreeCreate(vec3 pos, int seed)
+        {
             // at least 2m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
             foreach (var tree in entitySave.trees)
                 if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 2f)
                     return;
 
-            int seed = random.Next();
+            Random random = new Random(seed);
             entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed });
-            AddTree(pos, new Random(seed));
+            AddTree(pos, random);
         }
 
         private static void AddTree(vec3 pos, Random random)
