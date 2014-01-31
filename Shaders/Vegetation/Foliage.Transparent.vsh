@@ -31,17 +31,18 @@ void main()
 {
     vColor = aInstColor;
 
-    vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent)) * length(aInstTangent);
-    vec3 instTangent = cross(instBitangent, aInstNormal);
+    float tanLength = length(aInstTangent);
+    vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent));
+    vec3 instTangent = normalize(cross(instBitangent, aInstNormal));
     mat3 instRot = mat3(
                 instBitangent,
-                aInstNormal,
+                normalize(aInstNormal),
                 instTangent
                 );
     mat4 instModel = mat4(
-                vec4(instBitangent, 0.0),
+                vec4(instBitangent * tanLength, 0.0),
                 vec4(aInstNormal, 0.0),
-                vec4(instTangent, 0.0),
+                vec4(instTangent * tanLength, 0.0),
                 vec4(aInstPosition, 1.0)
                 );
 
