@@ -56,6 +56,63 @@
 
 {
     "Type": "Mesh",
+    "Name": "Vegetation/Tree01/Trunk",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree01/Leaves_ultra",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree01/Leaves_high",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree01/Leaves_medium",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree02/Trunk",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree02/Leaves",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree03/Trunk",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree03/Leaves_high",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree03/Leaves_ultra",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
+    "Type": "Mesh",
     "Name": "PineTrunk",
     "Path": "~.obj",
     "Descriptor": "File"
@@ -499,6 +556,48 @@
         "Type" : "FromCollection"
     },
     "Name" : "SimpleBirchLeaves.Transparent",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TreeLeaves01",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TreeLeaves01",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TreeLeaves01.Transparent",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TreeLeaves01.Transparent",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TreeLeaves01.zPre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TreeLeaves01.zPre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TreeTrunk",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TreeTrunk",
     "Path" : "~.mat",
     "Type" : "Material"
 },

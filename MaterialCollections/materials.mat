@@ -110,6 +110,30 @@
     Parameter: uDiscardBias, .9
     Culling: None
 
+[TreeLeaves01] : Default
+    Shader: Vegetation/TreeLeaves.Opaque
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[TreeLeaves01.Transparent] : Default
+    Shader: Vegetation/TreeLeaves.Transparent
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[TreeLeaves01.zPre] : Default
+    Shader: Vegetation/TreeLeaves.zPre
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[TreeTrunk] : Default
+    Shader: Vegetation/TreeTrunk
+    Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
+    Color: uSpecularColor, .1, .1, .1, 4
+
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent
     Texture: uColor, GrassTest.Low

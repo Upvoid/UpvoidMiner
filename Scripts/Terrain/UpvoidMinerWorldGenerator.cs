@@ -172,12 +172,48 @@ namespace UpvoidMiner
             World world = Instance.World;
 
             vec3 up = new vec3((float)random.NextDouble() * .05f - .025f, 1, (float)random.NextDouble() * .05f - .025f).Normalized;
-            vec3 left = vec3.cross(up, vec3.UnitZ).Normalized;
+            vec3 randXZ = ((float)random.NextDouble() * 2.0f - 1.0f) * vec3.UnitX + ((float)random.NextDouble() * 2.0f - 1.0f) * vec3.UnitZ;
+            vec3 left = vec3.cross(up, randXZ.Normalized).Normalized;
             vec3 front = vec3.cross(left, up);
+
+            // Scale the trees randomly
+            left.x *= 0.8f + 0.4f * (float)random.NextDouble();
+            up.y *= 0.7f + 0.6f * (float)random.NextDouble();
+            front.z *= 0.8f + 0.4f * (float)random.NextDouble();
 
             mat4 transform = new mat4(left, up, front, pos);
 
-            world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
+            //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
+
+            bool type0 = random.NextDouble() > 0.5;
+
+            MeshRenderJob treeJob = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                Resources.UseMaterial("TreeLeaves01", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                transform);
+
+            MeshRenderJob treeJob2 = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                Resources.UseMaterial("TreeTrunk", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
+                transform);
+
+            MeshRenderJob treeJob3 = new MeshRenderJob(
+                Renderer.zPre.Mesh,
+                Resources.UseMaterial("TreeLeaves01.zPre", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                transform);
+
+            // Add some color variance to trees
+            vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.5f, 0.7f + (float)random.NextDouble() * 0.5f, 1, 1);
+            treeJob.SetColor("uColorModulation", colorModulation);
+
+
+            world.AddRenderJob(treeJob);
+            world.AddRenderJob(treeJob2);
+            world.AddRenderJob(treeJob3);
+
         }
     }
 }

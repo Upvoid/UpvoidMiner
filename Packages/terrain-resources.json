@@ -91,6 +91,58 @@
             "Type" : "Shader"
 },
 {
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/TreeTrunk.fsh",
+            "Vegetation/Tree.vsh"
+        ],
+        "Name" : "Vegetation/TreeTrunk",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeTrunk",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/TreeLeaves.Opaque.fsh",
+            "Vegetation/Tree.vsh"
+        ],
+        "Name" : "Vegetation/TreeLeaves.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeLeaves.Opaque",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/TreeLeaves.Transparent.fsh",
+            "Vegetation/Tree.vsh"
+        ],
+        "Name" : "Vegetation/TreeLeaves.Transparent",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeLeaves.Transparent",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Foliage.zPre.fsh",
+            "Vegetation/Tree.vsh"
+        ],
+        "Name" : "Vegetation/TreeLeaves.zPre",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeLeaves.zPre",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+{
     "Descriptor" : "File",
     "Name" : "terrain-materials",
     "Path" : "~.mat",

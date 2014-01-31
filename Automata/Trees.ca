@@ -38,7 +38,7 @@ pre
 
 body
 
-  spawnProbability = 0; perlin(x,y,z) $= ::Perlin; p = this.position / 100; spawnProbability = perlin(p.x, p.y, p.z) * 1 / 100
+  spawnProbability = 0; perlin(x,y,z) $= ::Perlin; p = this.position / 100; spawnProbability = perlin(p.x, p.y, p.z) * 1 / 10
 
   if random(0,1) < spawnProbability
     call $UpvoidMiner UpvoidMiner.UpvoidMinerWorldGenerator.TreeCallback
