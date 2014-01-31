@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -49,6 +49,13 @@
             }
         }
 
+        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IsPlayerActivated", "", function (data) {
+            if (data === "True")
+                $('#start-button').html("<a href='javascript: clickStart()'><b>Continue</b></a>");
+            updateProgress(1.0)
+        });
+
+
         // Query the current generation progress
         $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/GenerationProgressQuery", "", function(data) {
             updateProgress(data);
@@ -71,7 +78,7 @@
 
         function clickFeedback()
         {
-            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenFeedbackSite");
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=https://upvoid.com/feedback");
         }
 
     </script>

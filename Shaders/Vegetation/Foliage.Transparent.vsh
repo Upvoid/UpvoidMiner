@@ -3,6 +3,7 @@
 #include <Common/Camera.csh>
 
 uniform mat4 uModelMatrix;
+uniform float uFadeDistance = 10000;
 
 in vec3 aPosition;
 in vec3 aNormal;
@@ -49,8 +50,10 @@ void main()
     vTangent = mat3(uModelMatrix) * instRot * aTangent;
     vTexCoord = aTexCoord;
 
+    float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
+
     // world space position:
-    vec4 worldPos = uModelMatrix * instModel * vec4(aPosition, 1.0);
+    vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);
     worldPos.xyz += windOffset(aPosition.y, aInstPosition);
     vEyePos = (uViewMatrix * worldPos).xyz;
 

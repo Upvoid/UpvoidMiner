@@ -31,7 +31,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
         /// </summary>
-        public bool IsGuiOpen { get; private set; }
+        public bool IsGuiOpen { get; set; }
 
 		public bool IsMenuOpen { get; private set; }
 
@@ -174,7 +174,7 @@ namespace UpvoidMiner
             }
 
             info.selection = player.Inventory.SelectionIndex;
-
+            /*
             foreach (CraftingRule cr in player.Inventory.DiscoveredRules)
             {
                 if (info.inventory.ContainsKey(cr.Result.Identifier))
@@ -206,7 +206,7 @@ namespace UpvoidMiner
                     info.inventory.Add(cr.Result.Identifier, virtualItem);
                 }
             }
-
+            */
             StringWriter writer = new StringWriter();
             JsonTextWriter jsonWriter = new JsonTextWriter(writer);
             json.Formatting = Formatting.Indented;

@@ -95,7 +95,7 @@ namespace UpvoidMiner
         /// <summary>
         /// GUI for player values.
         /// </summary>
-        PlayerGui gui;
+        public PlayerGui Gui { get; set; }
 
         // Flags for modifier keys.
 #pragma warning disable 0414 // Disable "field assigned but not used" as Shift and Alt may be used in future versions.
@@ -191,7 +191,7 @@ namespace UpvoidMiner
                 cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
 
                 // Re-Center mouse if UI is not open.
-                if ( !gui.IsGuiOpen )
+                if ( !Gui.IsGuiOpen )
                 {
                     Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
                     Rendering.MainViewport.SetMouseVisibility(false);
@@ -244,7 +244,7 @@ namespace UpvoidMiner
 
 			// Notify the gui if the player freezing status has changed since the last update frame.
 			if (WasFrozen != IsFrozen)
-				gui.OnUpdate();
+				Gui.OnUpdate();
 			WasFrozen = IsFrozen;
         }
 
@@ -295,7 +295,7 @@ namespace UpvoidMiner
             // This digging controller will perform digging and handle digging constraints for us.
             digging = new DiggingController(ContainingWorld, this);
 
-            gui = new PlayerGui(this);
+            Gui = new PlayerGui(this);
 
             AddTriggerSlot("AddItem");
 
@@ -457,7 +457,7 @@ namespace UpvoidMiner
                 Inventory.Select(save.currentQuickAccess);
             }
 
-            gui.OnUpdate();
+            Gui.OnUpdate();
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace UpvoidMiner
             }
             else if ( e.Axis == AxisType.MouseX)
             {
-                if ( !gui.IsGuiOpen )
+                if ( !Gui.IsGuiOpen )
                 {
                     const float rotAzimuthSpeed = -.8f;
                     AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
@@ -543,7 +543,7 @@ namespace UpvoidMiner
             }
             else if (e.Axis == AxisType.MouseY)
             {
-                if ( !gui.IsGuiOpen )
+                if ( !Gui.IsGuiOpen )
                 {
                     const float rotElevationSpeed = -.8f;
                     float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
@@ -586,6 +586,11 @@ namespace UpvoidMiner
                             DropItem(Inventory.Selection);
                         break;
 
+                    // F1 resets the player position
+                    case InputKey.F1:
+                        character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
+                        break;
+
                     default:
                         break;
                 }
@@ -613,7 +618,7 @@ namespace UpvoidMiner
             }
 
             // Following interactions are only possible if UI is not open.
-            if (!gui.IsGuiOpen)
+            if (!Gui.IsGuiOpen)
             {
 
                 // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
