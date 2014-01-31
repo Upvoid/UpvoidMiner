@@ -148,6 +148,12 @@
     Parameter: uDiscardBias, .9
     Culling: None
 
+[TreeLeaves01.Shadow] : Default
+    Shader: Vegetation/TreeLeaves.Shadow
+    Texture: uColor, /Resources.Vegetation::Branches/Branch02.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
 [TreeTrunk] : Default
     Shader: Vegetation/TreeTrunk
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse

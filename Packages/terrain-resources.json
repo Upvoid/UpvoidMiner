@@ -143,6 +143,21 @@
             "Type" : "Shader"
 },
 {
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Trees/TreeLeaves.Shadow.fsh",
+            "Vegetation/Trees/TreeLeaves.Shadow.vsh"
+        ],
+        "Name" : "Vegetation/TreeLeaves.Shadow",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeLeaves.Shadow",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+
+
+{
     "Descriptor" : "File",
     "Name" : "terrain-materials",
     "Path" : "~.mat",

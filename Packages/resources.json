@@ -590,6 +590,16 @@
     "Path" : "~.mat",
     "Type" : "Material"
 },
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TreeLeaves01.Shadow",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TreeLeaves01.Shadow",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {
