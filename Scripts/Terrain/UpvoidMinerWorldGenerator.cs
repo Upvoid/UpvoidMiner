@@ -198,7 +198,7 @@ namespace UpvoidMiner
             front.z *= 0.8f + 0.4f * (float)random.NextDouble();
             
             mat4 transform1 = mat4.Translate(pos);
-            mat4 transform2 = mat4.Identity;// new mat4(left, up, front, vec3.Zero);
+            mat4 transform2 = new mat4(left, up, front, vec3.Zero);
 
             //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
 
