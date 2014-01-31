@@ -28,7 +28,7 @@ void main()
     vTexCoord = aTexCoord;
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
-    worldPos.xyz += windOffset(0.5*length(aPosition.xz), worldPos.xyz/6);
+    worldPos.xyz += windOffset(0.5*length(aPosition.xz)*clamp(aPosition.y-0.2, 0, 1), worldPos.xyz/6);
     vEyePos = (uViewMatrix * worldPos).xyz;
 
     // projected vertex position used for the interpolation
