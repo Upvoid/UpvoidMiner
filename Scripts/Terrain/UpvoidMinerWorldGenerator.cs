@@ -60,6 +60,22 @@ namespace UpvoidMiner
             public List<TreeSave> trees = new List<TreeSave>();
         }
         public static EntitySave entitySave = new EntitySave();
+        public static List<Tree> trees = new List<Tree>();
+
+        public static void UpdateTrees(vec3 refPos)
+        {
+            foreach (Tree t in trees)
+            {
+                float dis = vec3.distance(refPos, t.Position);
+                bool vTrunk = dis < 150;
+                bool vLeaves0 = dis < 350;
+                
+                foreach (var r in t.RjTrunk)
+                    r.Visible = vTrunk;
+                foreach (var r in t.RjLeaves0)
+                    r.Visible = vLeaves0;
+            }
+        }
 
         /// <summary>
         /// Initializes the terrain materials and settings.
@@ -186,8 +202,10 @@ namespace UpvoidMiner
 
             //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
 
-            world.AddEntity(TreeGenerator.OldTree(random, transform1, transform2, world), transform1);
-
+            Tree t = TreeGenerator.OldTree(random, transform1, transform2, world);
+            t.Position = pos;
+            world.AddEntity(t, transform1);
+            trees.Add(t);
         }
     }
 }

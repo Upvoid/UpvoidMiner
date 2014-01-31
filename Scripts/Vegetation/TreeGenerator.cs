@@ -71,11 +71,11 @@ namespace UpvoidMiner
             RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
 
-            l.RenderComps.Add(new RenderComponent(leavesOpaque, transform2));
-            l.RenderComps.Add(new RenderComponent(leavesZPre, transform2));
-            l.RenderComps.Add(new RenderComponent(leavesShadow, transform2));
-            l.RenderComps.Add(new RenderComponent(trunkOpaque, transform2));
-            l.RenderComps.Add(new RenderComponent(trunkShadow, transform2));
+            t.RjLeaves0.Add(new RenderComponent(leavesOpaque, transform2));
+            t.RjLeaves0.Add(new RenderComponent(leavesZPre, transform2));
+            t.RjLeaves0.Add(new RenderComponent(leavesShadow, transform2));
+            t.RjTrunk.Add(new RenderComponent(trunkOpaque, transform2));
+            t.RjTrunk.Add(new RenderComponent(trunkShadow, transform2));
 
             t.Logs.Add(l);
 

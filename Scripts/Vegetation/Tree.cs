@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using Engine.Universe;
+using Engine;
 
 namespace UpvoidMiner
 {
@@ -93,6 +94,11 @@ namespace UpvoidMiner
         /// </summary>
         public readonly List<Foliage> Leaves = new List<Foliage>();
 
+        public vec3 Position;
+        
+        public List<RenderComponent> RjTrunk = new List<RenderComponent>();
+        public List<RenderComponent> RjLeaves0 = new List<RenderComponent>();
+
         /// <summary>
         /// Initializes all components
         /// </summary>
@@ -116,6 +122,11 @@ namespace UpvoidMiner
         protected override void Init()
         {
             base.Init();
+            
+            foreach (var r in RjLeaves0)
+                thisEntity.AddComponent(r);
+            foreach (var r in RjTrunk)
+                thisEntity.AddComponent(r);
 
             InitComps();
         }

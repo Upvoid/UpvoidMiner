@@ -298,6 +298,8 @@ namespace UpvoidMiner
                     player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
             }
+
+            UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);
         }
 
 		// This socket notifies the client GUI about progress in the downloading of resources.
