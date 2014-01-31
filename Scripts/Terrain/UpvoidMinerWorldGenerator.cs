@@ -180,54 +180,13 @@ namespace UpvoidMiner
             left.x *= 0.8f + 0.4f * (float)random.NextDouble();
             up.y *= 0.7f + 0.6f * (float)random.NextDouble();
             front.z *= 0.8f + 0.4f * (float)random.NextDouble();
-
-            mat4 transform = new mat4(left, up, front, pos);
+            
+            mat4 transform1 = mat4.Translate(pos);
+            mat4 transform2 = mat4.Identity;// new mat4(left, up, front, vec3.Zero);
 
             //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
 
-            bool type0 = random.NextDouble() > 0.5;
-
-            MeshRenderJob leavesOpaque = new MeshRenderJob(
-                Renderer.Opaque.Mesh,
-                Resources.UseMaterial("TreeLeaves01", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
-                transform);
-
-            MeshRenderJob leavesZPre = new MeshRenderJob(
-                Renderer.zPre.Mesh,
-                Resources.UseMaterial("TreeLeaves01.zPre", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
-                transform);
-
-            MeshRenderJob leavesShadow = new MeshRenderJob(
-                Renderer.Shadow.Mesh,
-                Resources.UseMaterial("TreeLeaves01.Shadow", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
-                transform);
-
-            MeshRenderJob trunkOpaque = new MeshRenderJob(
-                Renderer.Opaque.Mesh,
-                Resources.UseMaterial("TreeTrunk", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
-                transform);
-
-            MeshRenderJob trunkShadow = new MeshRenderJob(
-                Renderer.Shadow.Mesh,
-                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
-                transform);
-
-
-            // Add some color variance to trees
-            vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.5f, 0.7f + (float)random.NextDouble() * 0.5f, 1, 1);
-            leavesOpaque.SetColor("uColorModulation", colorModulation);
-
-
-            world.AddRenderJob(leavesOpaque);
-            world.AddRenderJob(leavesZPre);
-            world.AddRenderJob(leavesShadow);
-            world.AddRenderJob(trunkOpaque);
-            world.AddRenderJob(trunkShadow);
+            world.AddEntity(TreeGenerator.OldTree(random, transform1, transform2, world), transform1);
 
         }
     }

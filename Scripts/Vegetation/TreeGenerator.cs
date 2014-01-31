@@ -18,6 +18,7 @@ using Engine;
 using Engine.Resources;
 using Engine.Universe;
 using Engine.Rendering;
+using Engine.Physics;
 
 namespace UpvoidMiner
 {
@@ -26,6 +27,61 @@ namespace UpvoidMiner
     /// </summary>
     public class TreeGenerator
     {
+        public static Tree OldTree(Random random, mat4 transform1, mat4 transform2, World world)
+        {
+            bool type0 = random.NextDouble() > 0.5;
+
+            MeshRenderJob leavesOpaque = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                Resources.UseMaterial("TreeLeaves01", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                transform2);
+
+            MeshRenderJob leavesZPre = new MeshRenderJob(
+                Renderer.zPre.Mesh,
+                Resources.UseMaterial("TreeLeaves01.zPre", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                transform2);
+
+            MeshRenderJob leavesShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("TreeLeaves01.Shadow", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                transform2);
+
+            MeshRenderJob trunkOpaque = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                Resources.UseMaterial("TreeTrunk", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
+                transform2);
+
+            MeshRenderJob trunkShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
+                transform2);
+
+
+            // Add some color variance to trees
+            vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.5f, 0.7f + (float)random.NextDouble() * 0.5f, 1, 1);
+            leavesOpaque.SetColor("uColorModulation", colorModulation);
+
+            Tree t = new Tree();
+            Tree.Log l = new Tree.Log();
+            RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
+
+            l.RenderComps.Add(new RenderComponent(leavesOpaque, transform2));
+            l.RenderComps.Add(new RenderComponent(leavesZPre, transform2));
+            l.RenderComps.Add(new RenderComponent(leavesShadow, transform2));
+            l.RenderComps.Add(new RenderComponent(trunkOpaque, transform2));
+            l.RenderComps.Add(new RenderComponent(trunkShadow, transform2));
+
+            t.Logs.Add(l);
+
+            return t;
+        }
+
         /// <summary>
         /// Creates a log.
         /// </summary>
