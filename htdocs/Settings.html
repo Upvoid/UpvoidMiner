@@ -141,7 +141,12 @@
 
           settings[setting] = !settings[setting];
 
-          updateSettingsForm();
+          if (settings[setting]) {
+              $('#check-' + setting + ' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
+          }
+          else {
+              $('#check-' + setting + ' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
+          }
       }
 
       function clickApply() {
@@ -149,7 +154,7 @@
 
           settings.resolution = $('#select-resolution').val();
 
-          settings.lod = ($('#lod-slider').get()[0].style.width.split('%')[0]) * (2 / 100)
+          settings.lod = ($('#lod-slider').get()[0].style.width.split('%')[0]) * (2 / 100);
 
           $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", settings, function (data) {
               window.location.href = "MainMenu.html";
