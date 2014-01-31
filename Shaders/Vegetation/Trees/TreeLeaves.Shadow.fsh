@@ -3,7 +3,7 @@
 // material:
 uniform sampler2D uColor;
 
-uniform float uShadowExp;w
+uniform float uShadowExp;
 
 in vec2 vTexCoord;
 in vec3 vEyePos;
