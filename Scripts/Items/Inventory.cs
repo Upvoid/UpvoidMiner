@@ -165,6 +165,7 @@ namespace UpvoidMiner
             Items.AddItem(item);
 
             // Check if new rules were discovered
+            return; // DEBUG: Disable crafting
             foreach (var rule in craftingRules) 
             {
                 if ( rule.Discovered ) continue;
