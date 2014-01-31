@@ -22,7 +22,7 @@ void main()
     vec4 texColor = texture(uColor, vTexCoord);
 
     float disc = uDiscardBias;
-    disc = -vEyePos.z;//distance(uCameraPosition, vec3(uInverseViewMatrix*vec4(vEyePos,1)));
+    disc = -vEyePos.z;
     disc = 0.901-clamp(disc/100,0,0.9);
 
     if(texColor.a < disc)

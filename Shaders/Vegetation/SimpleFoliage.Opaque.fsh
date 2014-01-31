@@ -20,7 +20,11 @@ void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
 
-    if(texColor.a < uDiscardBias)
+    float disc = uDiscardBias;
+    disc = -vEyePos.z;
+    disc = 0.901-clamp(disc/100,0,0.9);
+
+    if(texColor.a < disc)
         discard;
 
     texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
