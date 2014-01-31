@@ -22,7 +22,7 @@
       
       select option {
         background: #fff;
-        border: 1px solid #000;
+        border: none;
       }
 
     </style>
@@ -42,7 +42,14 @@
                     <option>Native Resolution</option>
                 </select>
 
-                <div class="checkbox" id="check-shadows">
+              <p>Terrain level of detail:</p>
+              <div id="lod-slider-parent" onclick="updateSlider(event)" class="progress">
+                <div id="lod-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%; position: relative;">
+                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
+                </div>
+              </div>
+
+              <div class="checkbox" id="check-shadows">
                     <a href="javascript:toggleSetting('shadows')"><i class="fa fa-circle fa-lg"></i> Enable shadows</a>
                 </div>
                 <div class="checkbox" id="check-bloom">
@@ -80,69 +87,76 @@
     <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
     <script>
 
-        var settings = {};
+      function updateSlider(event) {
+          var relativeX = event.pageX - $('#lod-slider-parent').offset().left;
+          var val = relativeX / document.getElementById("lod-slider-parent").clientWidth;
+          $('#lod-slider').get()[0].style.width = (val * 100) + "%";
+      }
 
-        function updateSettingsForm() {
-            // update the icon classes that are faking the checkboxes
-            for (setting in settings) {
+      var settings = {};
 
-                if (setting == "resolution")
-                {
-                    continue;
-                }
+      function updateSettingsForm() {
+          // update the icon classes that are faking the checkboxes
+          for (setting in settings) {
 
-                if (settings[setting]) {
-                    $('#check-' + setting + ' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
-                }
-                else {
-                    $('#check-' + setting + ' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
-                }
-            }
+              if (setting == "resolution" || setting == "lod") {
+                  continue;
+              }
 
-            // Compile dropdown box with the resolutions
-            var modeList = "";
+              if (settings[setting]) {
+                  $('#check-' + setting + ' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
+              }
+              else {
+                  $('#check-' + setting + ' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
+              }
+          }
 
-            for (var i = 0; i < settings.supportedModes.length; ++i) {
-                var mode = settings.supportedModes[i];
-                if (mode == settings.resolution)
-                    modeList += "<option value='" + mode + "' selected>" + mode + "</option>";
-                else
-                    modeList += "<option value='" + mode + "'>" + mode + "</option>";
-            }
+          // Compile dropdown box with the resolutions
+          var modeList = "";
 
-            $('#select-resolution').html(modeList);
+          for (var i = 0; i < settings.supportedModes.length; ++i) {
+              var mode = settings.supportedModes[i];
+              if (mode == settings.resolution)
+                  modeList += "<option value='" + mode + "' selected>" + mode + "</option>";
+              else
+                  modeList += "<option value='" + mode + "'>" + mode + "</option>";
+          }
 
-        }
+          $('#select-resolution').html(modeList);
+
+          $('#lod-slider').get()[0].style.width = (settings["lod"] * 50) + "%";
+
+      }
 
 
 
-        
+      $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", "", function (data) {
+          settings = data;
+          updateSettingsForm();
+      });
 
-        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", "", function (data) {
-            settings = data;
-            updateSettingsForm();
-        });
+      function toggleSetting(setting) {
+          if (settings[setting] === undefined)
+              settings[setting] = false;
 
-        function toggleSetting(setting) {
-            if (settings[setting] === undefined)
-                settings[setting] = false;
+          settings[setting] = !settings[setting];
 
-            settings[setting] = !settings[setting];
+          updateSettingsForm();
+      }
 
-            updateSettingsForm();
-        }
+      function clickApply() {
+          settings.applySettings = true;
 
-        function clickApply() {
-            settings.applySettings = true;
+          settings.resolution = $('#select-resolution').val();
 
-            settings.resolution = $('#select-resolution').val();
+          settings.lod = ($('#lod-slider').get()[0].style.width.split('%')[0]) * (2 / 100)
 
-            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", settings, function (data) {
-                window.location.href = "MainMenu.html";
-            });
-        }
+          $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", settings, function (data) {
+              window.location.href = "MainMenu.html";
+          });
+      }
 
-    </script>
+      </script>
 
 </body>
 </html>

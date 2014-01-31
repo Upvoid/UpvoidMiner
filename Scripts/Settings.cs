@@ -56,6 +56,8 @@ namespace UpvoidMiner
 
             public string resolution;
             public string[] supportedModes;
+
+            public double lod;
 		}
 
 		static void webSettings(WebRequest request, WebResponse response)
@@ -90,6 +92,26 @@ namespace UpvoidMiner
                 resolution = "-1x-1";
             Scripting.SetUserSettingString("WindowManager/Resolution", resolution);
 
+
+            // Compute both lod settings from the single GUI slider value.
+            double falloff = 10;
+            double minDis = 0;
+
+            double lod = Double.Parse(request.GetQuery("lod"));
+            if(lod<1 && lod >= 0)
+            {
+                falloff = 10 + lod * 30.0;
+                minDis = 0;
+            }
+            else if(lod <= 2)
+            {
+                falloff = 40;
+                minDis = (lod - 1) * 30.0;
+            }
+
+            Scripting.SetUserSettingNumber("Graphics/Lod Falloff", falloff);
+            Scripting.SetUserSettingNumber("Graphics/Min Lod Range", minDis);
+
 		}
 
 		static void getSettings(WebResponse response)
@@ -111,8 +133,7 @@ namespace UpvoidMiner
             info.fullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
 
             // Read the supported video modes
-            List<string> modes = new List<string>();// Rendering.GetSupportedVideoModes();
-            modes.InsertRange(0, new string[] { "800x600", "1024x768", "1280x720", "1280x800", "1440x900", "1920x1080", "1920x1200" });
+            List<string> modes = Rendering.GetSupportedVideoModes();
             modes.Insert(0, "Native Resolution");
 
             info.resolution = Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1");
@@ -121,6 +142,16 @@ namespace UpvoidMiner
                 info.resolution = "Native Resolution";
 
             info.supportedModes = modes.Distinct().ToArray();
+
+            double lod = (Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 40.0)-10.0)/30.0;
+            lod += Scripting.GetUserSettingNumber("Graphics/Min Lod Range", 0.0)/30.0;
+
+            if (lod < 0)
+                lod = 0;
+            if (lod > 2)
+                lod = 2;
+
+            info.lod = lod;
 
             // Serialize to json to be read by the gui
 			StringWriter writer = new StringWriter();
