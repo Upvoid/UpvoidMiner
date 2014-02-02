@@ -33,7 +33,7 @@ namespace UpvoidMiner
         /// </summary>
         public bool IsGuiOpen { get; set; }
 
-		public bool IsMenuOpen { get; private set; }
+		public bool IsMenuOpen { get; set; }
 
 		Player player;
 

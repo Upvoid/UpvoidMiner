@@ -170,6 +170,7 @@ namespace UpvoidMiner
             if (player != null)
             {
                 player.Gui.IsGuiOpen = false;
+                player.Gui.IsMenuOpen = false;
                 return;
             }
 
