@@ -31,8 +31,8 @@ namespace UpvoidMiner
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
         /// </summary>
-        public bool IsGuiOpen { get; set; }
-
+        public bool IsInventoryOpen { get; set; }
+        public bool IsUIOpen { get; set; }
 		public bool IsMenuOpen { get; set; }
 
 		Player player;
@@ -104,8 +104,37 @@ namespace UpvoidMiner
 			public bool playerIsFrozen;
         }
 
+        private void toggleUI()
+        {
+            IsUIOpen = !IsUIOpen;
+            updateSocket.SendMessage("ToggleUI");
+        }
+
+        private void toggleInventory()
+        {
+            IsInventoryOpen = !IsInventoryOpen;
+            updateSocket.SendMessage("ToggleInventory"); 
+        }
+
+        private void toggleMenu()
+        {
+            IsMenuOpen = !IsMenuOpen;
+            if(IsMenuOpen)
+            {
+                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
+                IsInventoryOpen = true;
+            }
+            else
+            {
+                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+                IsInventoryOpen = false;
+            }
+        }
+
         public PlayerGui(Player player)
         {
+            IsUIOpen = true;
+
             // The IngameGui.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
             // These dynamic content handlers provide that information.
             this.player = player;
@@ -125,24 +154,21 @@ namespace UpvoidMiner
             // Workaround for missing keyboard input in the WebGui: Toggle the inventory from here
             Input.OnPressInput += (object sender, InputPressArgs e) => 
             { 
-				if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
-				{
-					IsGuiOpen = !IsGuiOpen;
-					updateSocket.SendMessage("ToggleInventory"); 
-				}
+                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
+                {
+                    if ( !IsUIOpen )
+                        toggleUI();
+                    toggleInventory();
+                }
+                if(e.Key == InputKey.F4 && e.PressType == InputPressArgs.KeyPressType.Down) 
+                {
+                    toggleUI();
+                    if ( !IsUIOpen && IsInventoryOpen )
+                        toggleInventory();
+                }
 				if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down) 
 				{
-					IsMenuOpen = !IsMenuOpen;
-					if(IsMenuOpen)
-					{
-						Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
-						IsGuiOpen = true;
-					}
-					else
-					{
-						Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
-						IsGuiOpen = false;
-					}
+                    toggleMenu();
 				}
             };
         }

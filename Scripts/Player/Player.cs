@@ -191,7 +191,7 @@ namespace UpvoidMiner
                 cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
 
                 // Re-Center mouse if UI is not open.
-                if ( !Gui.IsGuiOpen )
+                if ( !Gui.IsInventoryOpen )
                 {
                     Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
                     Rendering.MainViewport.SetMouseVisibility(false);
@@ -535,7 +535,7 @@ namespace UpvoidMiner
             }
             else if ( e.Axis == AxisType.MouseX)
             {
-                if ( !Gui.IsGuiOpen )
+                if ( !Gui.IsInventoryOpen )
                 {
                     const float rotAzimuthSpeed = -.8f;
                     AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
@@ -543,7 +543,7 @@ namespace UpvoidMiner
             }
             else if (e.Axis == AxisType.MouseY)
             {
-                if ( !Gui.IsGuiOpen )
+                if ( !Gui.IsInventoryOpen )
                 {
                     const float rotElevationSpeed = -.8f;
                     float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
@@ -618,7 +618,7 @@ namespace UpvoidMiner
             }
 
             // Following interactions are only possible if UI is not open.
-            if (!Gui.IsGuiOpen)
+            if (!Gui.IsInventoryOpen)
             {
 
                 // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.

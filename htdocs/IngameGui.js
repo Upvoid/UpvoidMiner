@@ -64,6 +64,10 @@ function setupGui()
             $("#inventory").toggle();
             $("#workbench").toggle();
         }
+        else if(data == "ToggleUI")
+        {
+        	$("#ui-body").toggle();
+        }
     });
 
     WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/ResourceDownloadProgress", handleResourceDownloadProgress);

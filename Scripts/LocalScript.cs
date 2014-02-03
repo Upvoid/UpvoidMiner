@@ -169,7 +169,7 @@ namespace UpvoidMiner
             // Activate player only once.
             if (player != null)
             {
-                player.Gui.IsGuiOpen = false;
+                player.Gui.IsInventoryOpen = false;
                 player.Gui.IsMenuOpen = false;
                 return;
             }
