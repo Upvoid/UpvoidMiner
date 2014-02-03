@@ -34,9 +34,15 @@ namespace UpvoidMiner
 {
 	public static class Settings
     {
+        private static float FieldOfView = float.NaN;
+
 		public static void InitSettingsHandlers()
-		{
-			Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
+        {
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "FieldOfView", fieldOfViewSettings);
+
+            FieldOfView = (float)Scripting.GetUserSettingNumber("Graphics/Field of View", 75f);
+            LocalScript.camera.HorizontalFieldOfView = FieldOfView;
 		}
 
 		[Serializable]
@@ -58,16 +64,31 @@ namespace UpvoidMiner
             public string[] supportedModes;
 
             public double lod;
-		}
+        }
 
-		static void webSettings(WebRequest request, WebResponse response)
-		{
-			// Handle 'Apply' request from the gui
-			if (request.GetQuery("applySettings") != "")
-				applySettings(request);
-			else // If no apply action was sent, return the current settings in json format
-				getSettings(response);
-		}
+        static void webSettings(WebRequest request, WebResponse response)
+        {
+            // Handle 'Apply' request from the gui
+            if (request.GetQuery("applySettings") != "")
+                applySettings(request);
+            else // If no apply action was sent, return the current settings in json format
+                getSettings(response);
+        }
+
+        static void fieldOfViewSettings(WebRequest request, WebResponse response)
+        {
+            // Handle 'Apply' request from the gui
+            if (request.GetQuery("set") != "")
+            {
+                FieldOfView = float.Parse(request.GetQuery("set"));
+                LocalScript.camera.HorizontalFieldOfView = FieldOfView;
+                Scripting.SetUserSettingNumber("Graphics/Field of View", FieldOfView);
+            }
+            else // If no apply action was sent, return the current settings in json format
+            {
+                response.AppendBody(LocalScript.camera.HorizontalFieldOfView.ToString());
+            }
+        }
 
 		static void applySettings(WebRequest request)
 		{

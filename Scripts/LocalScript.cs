@@ -50,7 +50,7 @@ namespace UpvoidMiner
         /// <summary>
         /// The main camera that renders to the screen.
         /// </summary>
-        static GenericCamera camera;
+        public static GenericCamera camera;
 
         /// <summary>
         /// A camera controller for free camera movement. Used when noclipEnabled is true.

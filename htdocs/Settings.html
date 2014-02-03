@@ -43,8 +43,15 @@
                 </select>
 
               <p>Terrain level of detail:</p>
-              <div id="lod-slider-parent" onclick="updateSlider(event)" class="progress">
+              <div id="lod-slider-parent" onclick="updateLodSlider(event)" class="progress">
                 <div id="lod-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%; position: relative;">
+                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
+                </div>
+              </div>
+
+              <p>Horizontal field of view: <span id="fovValue"></span></p>
+              <div id="fov-slider-parent" onclick="updateFovSlider(event)" class="progress">
+                <div id="fov-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%; position: relative;">
                   <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
                 </div>
               </div>
@@ -87,13 +94,32 @@
     <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
     <script>
 
-      function updateSlider(event) {
+      function updateLodSlider(event) {
           var relativeX = event.pageX - $('#lod-slider-parent').offset().left;
           var val = relativeX / document.getElementById("lod-slider-parent").clientWidth;
           $('#lod-slider').get()[0].style.width = (val * 100) + "%";
       }
 
       var settings = {};
+      
+      var minFov = 45;
+      var maxFov = 120;
+      var currFov = 80;
+      var startFov = 80;
+      
+      function updateFovSlider(event) {
+          var relativeX = event.pageX - $('#fov-slider-parent').offset().left;
+          var val = relativeX / document.getElementById("fov-slider-parent").clientWidth;
+          $('#fov-slider').get()[0].style.width = (val * 100) + "%";
+          var fov = Math.floor(minFov + (maxFov - minFov) * val)
+          if ( fov != currFov )
+          {
+          	currFov = fov;
+          	$("#fovValue").text(currFov + "°");
+          	$.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView?set=" + currFov, function (data) {
+          });
+          }
+      }
 
       function updateSettingsForm() {
           // update the icon classes that are faking the checkboxes
@@ -133,6 +159,12 @@
       $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", "", function (data) {
           settings = data;
           updateSettingsForm();
+      });
+      $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView", "", function (data) {
+          currFov = data * 1;
+          startFov = currFov;
+          	$("#fovValue").text(currFov + "°");
+          $('#fov-slider').get()[0].style.width = ((currFov - minFov) / (maxFov - minFov) * 100) + "%";
       });
 
       function toggleSetting(setting) {
