@@ -798,6 +798,23 @@
     "Name" : "Particles/Shadow/Mesh",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "Flowers",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "Flowers.Normal",
+    "Path" : "~.png",
+    "Type" : "Texture"
 }
-
 ]
