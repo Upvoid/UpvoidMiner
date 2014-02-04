@@ -31,7 +31,6 @@ void main()
 
     texColor.rgb *= vColor;
 
-
     vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
 
     vec3 colorFront = lighting(vEyePos, normalFront, texColor.rgb, vec4(vec3(0),1));

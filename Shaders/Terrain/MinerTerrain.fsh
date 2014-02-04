@@ -104,6 +104,7 @@ void main()
     vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
 
     OUTPUT_Color(color);
+
     OUTPUT_Normal(vWorldNormal);
     OUTPUT_Position(vEyePos);
 }

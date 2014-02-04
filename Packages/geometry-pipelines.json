@@ -68,6 +68,23 @@
                 "faceTarget" : 2,
                 "constrainBoundaries" : true
             },
+            "ConditionalOffset" :
+            {
+                "Type" : "ConditionalOffset",
+                "Nodes" : ["NormalRepair"]
+            },
+            "TerrainFoliage":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["ConditionalOffset"],
+                "Copy": ["aPosition", "aNormal", "aOffset"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .3,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    }
+                }
+            },
             "Output":
             {
                 "Type": "Attribute",

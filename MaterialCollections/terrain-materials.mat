@@ -93,6 +93,15 @@
     Parameter: uLodTransitionPart, .4
     Parameter: uColorModulation, 1
 
+[TerrainFoliage] : Default
+    Shader: Vegetation/TerrainFoliage
+    Texture: uColor, Flowers
+    Texture: uNormal, Flowers.Normal
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScale, 2
+    Parameter: uBlendingCoefficient, 4
+    Parameter: uColorModulation, 1
+
 [Particles/Terrain/Dirt] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
