@@ -409,9 +409,9 @@ namespace UpvoidMiner
                 // Tools
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
-                Inventory.AddItem(new ToolItem(ToolType.Axe));
-                Inventory.AddItem(new ToolItem(ToolType.Hammer));
-                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 2));
+                //Inventory.AddItem(new ToolItem(ToolType.Axe));
+                //Inventory.AddItem(new ToolItem(ToolType.Hammer));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5));
 
                 // Testing resource/material items.
                 /*TerrainResource dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
