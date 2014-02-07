@@ -30,3 +30,12 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
+
+[Items/DigPreview] : Default
+    Shader: ::Transparent/MeshFresnelColored
+    Color: uColor, 1,0.0,0, 0.9
+    Color: uSpecularColor, .0, .0, .0, 4
+    Color: uColorFilter, 1, 1, 1, 1
+    Parameter: uFresnelMin, .0
+    Parameter: uFresnelPower, .3
+    Parameter: uLighting, 0

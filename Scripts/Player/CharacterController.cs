@@ -278,6 +278,7 @@ namespace UpvoidMiner
 
 			if(e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
 			{
+                                Body.SetVelocity(vec3.Zero);
 				mat4 transformation = Body.GetTransformation();
 				vec3 pos = new vec3(transformation.col3);
 				pos.y += 20f;

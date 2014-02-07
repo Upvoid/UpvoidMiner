@@ -91,6 +91,16 @@
     "Name" : "Items/ResourcePreviewIndicator",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/DigPreview",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/DigPreview",
+    "Path" : "~.mat",
+    "Type" : "Material"
 }
 
 ]

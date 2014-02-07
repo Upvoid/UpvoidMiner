@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Engine;
+using Engine.Rendering;
+using Engine.Resources;
 
 namespace UpvoidMiner
 {
@@ -88,18 +91,100 @@ namespace UpvoidMiner
             return new ToolItem(ToolType, StackSize);
         }
 
+        /// <summary>
+        /// Renderjobs for the preview sphere
+        /// </summary>
+        private MeshRenderJob previewSphere;
+        private MeshRenderJob previewSphereIndicator;
+
+        /// <summary>
+        /// Radius of terrain material that is removed if dug/picked
+        /// </summary>
+        private float digRadiusShovel = 1.4f;
+        private float digRadiusPickaxe = 0.9f;
+
+        public override void OnSelect()
+        {
+            // Create a transparent sphere as 'fill-indicator'.
+            previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/DigPreview", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewSphere);
+            // And a second one for indicating the center.
+            previewSphereIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewSphereIndicator);
+        }
+
+        public override void OnDeselect()
+        {
+            // Remove and delete it on deselect.
+            LocalScript.world.RemoveRenderJob(previewSphere);
+            LocalScript.world.RemoveRenderJob(previewSphereIndicator);
+            previewSphere = null;
+            previewSphereIndicator = null;
+        }
+
+        /// <summary>
+        /// Some items have a preview for their impact when used, others do not
+        /// </summary>
+        public override bool HasRayPreview{ get {
+        switch (ToolType)
+        {
+            case ToolType.Pickaxe:
+                return true;
+
+            case ToolType.Shovel:
+                return true;
+
+            case ToolType.Axe:
+                return false;
+
+            case ToolType.DroneChain:
+                return false;
+
+            case ToolType.Hammer:
+                return false;
+
+            default:
+                return false;
+        }
+        } }
+
+
+        public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
+        {
+            float useRadius = 0.0f;
+            switch (ToolType)
+            {
+                case ToolType.Pickaxe:
+                    useRadius = digRadiusPickaxe; break;
+                case ToolType.Shovel:
+                    useRadius = digRadiusShovel; break;
+                default: break;
+            }
+            // Radius of the primary preview is always impact-radius of the current tool.
+            previewSphere.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            // Indicator is always in the center and relatively small.
+            previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
+        }
+
+        public override void OnUseParameterChange(float _delta)
+        {
+            // Adjust use-radius between 0.5m and 5m radius
+            digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+            digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+        }
+
         public override void OnUse(Player player, Engine.vec3 _worldPos)
         {
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
                     // Pickaxe has small radius but can dig everywhere
-					player.DigSphere(_worldPos, 0.8f, null);
+                    player.DigSphere(_worldPos, digRadiusPickaxe, null);
                     return;
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-                    player.DigSphere(_worldPos, 1.4f, new [] { TerrainResource.FromName("Dirt").Index });
+                    player.DigSphere(_worldPos, digRadiusShovel, new [] { TerrainResource.FromName("Dirt").Index });
                     return;
 
                 case ToolType.Axe:
@@ -109,7 +194,7 @@ namespace UpvoidMiner
                 case ToolType.DroneChain:
                     // Add a drone to the use-position.
                     player.AddDrone(_worldPos);
-                    // Remove that dron from inventory.
+                    // Remove that drone from inventory.
                     player.Inventory.RemoveItem(new ToolItem(ToolType));
                     return;
 
