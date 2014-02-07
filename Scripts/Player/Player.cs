@@ -518,19 +518,19 @@ namespace UpvoidMiner
 
             if (e.Axis == AxisType.MouseWheelY)
             {
-                // Control + Wheel to cycle through quick access.
+                // Control + Wheel to change 'use-parameter'.
                 if (keyModifierControl)
+                {
+                    Item selection = Inventory.Selection;
+                    if (selection != null)
+                        selection.OnUseParameterChange(e.RelativeChange);
+                }
+                else // Otherwise used to cycle through quick access.
                 {
                     int newIdx = Inventory.SelectionIndex - (int)(e.RelativeChange);
                     while (newIdx < 0)
                         newIdx += Inventory.QuickaccessSlots;
                     Inventory.Select(newIdx % Inventory.QuickaccessSlots);
-                }
-                else // Otherwise used to change 'use-parameter'.
-                {
-                    Item selection = Inventory.Selection;
-                    if (selection != null) 
-                        selection.OnUseParameterChange(e.RelativeChange);
                 }
             }
             else if ( e.Axis == AxisType.MouseX)
