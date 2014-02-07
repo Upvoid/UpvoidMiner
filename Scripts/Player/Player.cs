@@ -46,6 +46,14 @@ namespace UpvoidMiner
         private mat4 torsoTransform = mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0));
 
         /// <summary>
+        /// Minimum and maximum ranges for ray querys for first-person and no-clip mode, resp.
+        /// </summary>
+        const float minRayQueryDistancePlayer = 0.25f;
+        const float maxRayQueryDistancePlayer = 10.0f;
+        const float minRayQueryDistanceNoClip = 0.1f;
+        const float maxRayQueryDistanceNoClip = 200.0f;
+
+        /// <summary>
         /// The direction in which this player is facing.
         /// Is not the same as the camera, but follows it.
         /// </summary>
@@ -222,8 +230,22 @@ namespace UpvoidMiner
             // Update item preview.
             if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
             {
+
+                float minRayQueryRange;
+                float maxRayQueryRange;
+                if (!LocalScript.NoclipEnabled)
+                {
+                    minRayQueryRange = minRayQueryDistancePlayer;
+                    maxRayQueryRange = maxRayQueryDistancePlayer;
+                }
+                else
+                {
+                    minRayQueryRange = minRayQueryDistanceNoClip;
+                    maxRayQueryRange = maxRayQueryDistanceNoClip;
+                }
+
                 // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
                 {
                     Item selection = Inventory.Selection;
                     // Receiving the async ray query result here
@@ -621,11 +643,25 @@ namespace UpvoidMiner
             if (!Gui.IsInventoryOpen)
             {
 
+                float minRayQueryRange;
+                float maxRayQueryRange;
+                if (!LocalScript.NoclipEnabled)
+                {
+                    minRayQueryRange = minRayQueryDistancePlayer;
+                    maxRayQueryRange = maxRayQueryDistancePlayer;
+                }
+                else
+                {
+                    minRayQueryRange = minRayQueryDistanceNoClip;
+                    maxRayQueryRange = maxRayQueryDistanceNoClip;
+                }
+
                 // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
                 if (Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
+
                     // Send a ray query to find the position on the terrain we are looking at.
-                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
                     {
                         // Receiving the async ray query result here
                         if (_hit)
@@ -646,7 +682,7 @@ namespace UpvoidMiner
             
                 if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
-                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * 0.5f, camera.Position + camera.ForwardDirection * 200f, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
                     {
                         // Receiving the async ray query result here
                         if (_body != null && _body.RefComponent != null)
