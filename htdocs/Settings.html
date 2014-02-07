@@ -19,7 +19,7 @@
       select {
         background: #ccc;
       }
-      
+
       select option {
         background: #fff;
         border: none;
@@ -83,6 +83,9 @@
                 <div class="checkbox" id="check-afterImage">
                     <a href="javascript:toggleSetting('afterImage')"><i class="fa fa-circle fa-lg"></i> Enable afterimage effect</a>
                 </div>
+                <div class="checkbox" id="check-fxaa">
+                    <a href="javascript:toggleSetting('fxaa')"><i class="fa fa-circle fa-lg"></i> Enable FXAA</a>
+                </div>
             </form>
 
             <a class="btn" href="MainMenu.html">Cancel</a> <a class="btn" href="Settings.html">Reset</a> <a class="btn btn-primary" href="javascript:clickApply()">Apply</a>
@@ -101,12 +104,12 @@
       }
 
       var settings = {};
-      
+
       var minFov = 45;
       var maxFov = 120;
       var currFov = 80;
       var startFov = 80;
-      
+
       function updateFovSlider(event) {
           var relativeX = event.pageX - $('#fov-slider-parent').offset().left;
           var val = relativeX / document.getElementById("fov-slider-parent").clientWidth;
@@ -114,9 +117,9 @@
           var fov = Math.floor(minFov + (maxFov - minFov) * val)
           if ( fov != currFov )
           {
-          	currFov = fov;
-          	$("#fovValue").text(currFov + "°");
-          	$.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView?set=" + currFov, function (data) {
+                currFov = fov;
+                $("#fovValue").text(currFov + "°");
+                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView?set=" + currFov, function (data) {
           });
           }
       }
@@ -163,7 +166,7 @@
       $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView", "", function (data) {
           currFov = data * 1;
           startFov = currFov;
-          	$("#fovValue").text(currFov + "°");
+                $("#fovValue").text(currFov + "°");
           $('#fov-slider').get()[0].style.width = ((currFov - minFov) / (maxFov - minFov) * 100) + "%";
       });
 
