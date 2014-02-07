@@ -232,7 +232,15 @@ namespace UpvoidMiner
 
 			// N toggles noclip.
 			if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
+                        {
 				NoclipEnabled = !NoclipEnabled;
+
+                                if(!NoclipEnabled) // just switched to first-person mode again
+                                {
+                                    if(player != null)
+                                        player.Character.Body.SetTransformation(mat4.Translate(camera.Position));
+                                }
+                        }
 
             // Cam Paths
             if ( NoclipEnabled && e.PressType == InputPressArgs.KeyPressType.Down )

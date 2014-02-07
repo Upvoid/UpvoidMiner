@@ -95,6 +95,8 @@ namespace UpvoidMiner
         /// </summary>
         CharacterController character;
 
+        public CharacterController Character { get { return character; } }
+
         /// <summary>
         /// Controller for digging and its constraints.
         /// </summary>
