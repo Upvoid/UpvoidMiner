@@ -166,13 +166,6 @@ namespace UpvoidMiner
             previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }
 
-        public override void OnUseParameterChange(float _delta)
-        {
-            // Adjust use-radius between 0.5m and 5m radius
-            digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
-            digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
-        }
-
         public override void OnUse(Player player, Engine.vec3 _worldPos)
         {
             switch (ToolType)
