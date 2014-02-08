@@ -100,8 +100,11 @@ namespace UpvoidMiner
         /// <summary>
         /// Radius of terrain material that is removed if dug/picked
         /// </summary>
-        private float digRadiusShovel = 1.4f;
-        private float digRadiusPickaxe = 0.9f;
+        private const float digRadiusShovelInitial = 1.4f;
+        private const float digRadiusPickaxeInitial = 0.9f;
+
+        private float digRadiusShovel = digRadiusShovelInitial;
+        private float digRadiusPickaxe = digRadiusPickaxeInitial;
 
         public override void OnSelect()
         {
@@ -120,6 +123,16 @@ namespace UpvoidMiner
             LocalScript.world.RemoveRenderJob(previewSphereIndicator);
             previewSphere = null;
             previewSphereIndicator = null;
+        }
+
+        public override void OnUseParameterChange(float _delta)
+        {
+            if(LocalScript.NoclipEnabled)
+            {
+                // Adjust dig-radius between 0.5m and 5m radius
+                digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));
+                digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+            }
         }
 
         /// <summary>
@@ -151,6 +164,14 @@ namespace UpvoidMiner
 
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
+
+            if(!LocalScript.NoclipEnabled)
+            {
+                // no extra radius in first-person mode
+                digRadiusShovel = digRadiusShovelInitial;
+                digRadiusPickaxe = digRadiusPickaxeInitial;
+            }
+
             float useRadius = 0.0f;
             switch (ToolType)
             {
