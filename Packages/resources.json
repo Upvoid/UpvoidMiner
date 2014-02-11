@@ -801,6 +801,58 @@
 },
 {
     "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/SphereShapeCoverColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/SphereShapeCoverColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/SphereShapeCoverColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/SphereShapeColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/SphereShapeColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/SphereShapeColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/BoxShapeCoverColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/BoxShapeCoverColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/BoxShapeCoverColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/BoxShapeColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/BoxShapeColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/BoxShapeColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
         "Type": "File",
         "sRGB": false
     },

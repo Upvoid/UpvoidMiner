@@ -42,6 +42,49 @@
     "Type" : "MaterialCollection"
 },
 
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/DigPreviewSphere",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/DigPreviewSphere",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewSphere",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewSphere",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/DigPreviewBox",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/DigPreviewBox",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewBox",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewBox",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {

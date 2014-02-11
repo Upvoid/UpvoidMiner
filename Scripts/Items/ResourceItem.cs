@@ -96,7 +96,7 @@ namespace UpvoidMiner
         public override void OnSelect()
         {
             // Create a transparent sphere as 'fill-indicator'.
-            previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreview", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
+            previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ConstructionPreviewSphere", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewSphere);
             // And a second one in case we are limited by the volume at hand.
             previewSphereLimited = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewLimited", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
@@ -125,6 +125,7 @@ namespace UpvoidMiner
 
             // Radius of the primary preview is always use-radius.
             previewSphere.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            previewSphere.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             // Indicator is always in the center and relatively small.
             previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }

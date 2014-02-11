@@ -12,6 +12,7 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
+    Culling: None
 
 [Items/ResourcePreviewLimited] : Default
     Shader: ::Transparent/MeshFresnelColored
@@ -39,3 +40,23 @@
     Parameter: uFresnelMin, .0
     Parameter: uFresnelPower, .3
     Parameter: uLighting, 0
+
+[Items/DigPreviewSphere] : Default
+    Shader: ShapeIndicators/SphereShapeCoverColored
+    Color: uColor, 1,0.0,0,0.3
+    Culling: Front
+
+[Items/DigPreviewBox] : Default
+    Shader: ShapeIndicators/BoxShapeCoverColored
+    Color: uColor, 1,0.0,0,0.3
+    Culling: Front
+
+[Items/ConstructionPreviewSphere] : Default
+    Shader: ShapeIndicators/SphereShapeColored
+    Color: uColor, 1,1,1,0.3
+    Culling: Front
+
+[Items/ConstructionPreviewBox] : Default
+    Shader: ShapeIndicators/BoxShapeColored
+    Color: uColor, 1,1,1,0.3
+    Culling: Front
