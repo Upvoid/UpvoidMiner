@@ -90,7 +90,7 @@ namespace UpvoidMiner
             if ( useVolume > Volume )
                 radius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
 
-            player.PlaceSphere(Material, _worldPos, radius);
+            player.PlaceMaterial(Material, _worldPos, radius);
         }
 
         public override void OnSelect()

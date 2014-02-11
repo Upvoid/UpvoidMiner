@@ -48,10 +48,15 @@ namespace UpvoidMiner
         /// </summary>
         Player player;
 
-        /// <summary>
-        /// Cached CSG Sphere.
-        /// </summary>
-        CsgExpression sphereNode;
+		/// <summary>
+		/// Cached CSG Sphere.
+		/// </summary>
+		CsgExpression sphereNode;
+
+		/// <summary>
+		/// Cached CSG Cube.
+		/// </summary>
+		CsgExpression boxNode;
 
         /// <summary>
         /// Particle system for 3D stones due to digging.
@@ -93,8 +98,11 @@ namespace UpvoidMiner
             instance = this;
             this.world = world;
             this.player = player;
-            string sphereExpression = "-sphereRadius + distance(vec3(x,y,z), spherePosition)";
-            sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "sphereRadius:float, spherePosition:vec3");
+			string sphereExpression = "-digRadius + distance(vec3(x,y,z), digPosition)";
+			sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+
+			string boxExpression = "-digRadius + max(max(abs(x-digPosition.x), abs(y-digPosition.y)), abs(z-digPosition.z))";
+			boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
@@ -147,14 +155,23 @@ namespace UpvoidMiner
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
-        public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
-        {
-            sphereNode.MaterialIndex = terrainMaterialId;
-            sphereNode.SetParameterFloat("sphereRadius", radius);
-            sphereNode.SetParameterVec3("spherePosition", position);
+		public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+		{
+			sphereNode.MaterialIndex = terrainMaterialId;
+			sphereNode.SetParameterFloat("digRadius", radius);
+			sphereNode.SetParameterVec3("digPosition", position);
 
-            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
-        }
+			Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
+		}
+
+		public void DigBox(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+		{
+			boxNode.MaterialIndex = terrainMaterialId;
+			boxNode.SetParameterFloat("digRadius", radius);
+			boxNode.SetParameterVec3("digPosition", position);
+
+			Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
+		}
 
         /// <summary>
         /// This callback is called once per changed material in a chunk and reports the amount of volume changed (in m^3).

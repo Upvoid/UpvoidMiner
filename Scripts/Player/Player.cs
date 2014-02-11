@@ -154,10 +154,27 @@ namespace UpvoidMiner
             get { return character.Transformation; }
         }
 
+		public enum DiggingShape : uint
+		{
+			Sphere=0,
+			Box=1
+		}
+
+		public enum DiggingAlignment: uint
+		{
+			GridAligned,
+			AxisAligned
+		}
+
+		public DiggingShape CurrentDiggingShape { get; protected set; }
+		public DiggingAlignment CurrentDiggingAlignment { get; protected set; }
+
         public Player(GenericCamera _camera)
         {
             Direction = new vec3(1, 0, 0);
             camera = _camera;
+			CurrentDiggingShape = DiggingShape.Box;
+			CurrentDiggingAlignment = DiggingAlignment.AxisAligned;
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
@@ -519,18 +536,52 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-        /// Places a sphere of a given material
+		/// Places the current digging shape shape of a given material
         /// </summary>
-        public void PlaceSphere(TerrainResource material, vec3 position, float radius)
+        public void PlaceMaterial(TerrainResource material, vec3 position, float radius)
         {
-            digging.DigSphere(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
+			if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
+				position = new vec3(
+					(int)position.x * 2,
+					(int)position.y * 2,
+					(int)position.z * 2
+				)*0.5f;
+
+			switch(CurrentDiggingShape)
+			{
+				case DiggingShape.Sphere:
+					digging.DigSphere(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
+					break;
+				case DiggingShape.Box:
+					digging.DigBox(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
+					break;
+				default:
+					throw new Exception("Unsupported digging shape used");
+			}
         }
         /// <summary>
-        /// Digs a sphere at a given position with a given radius.
+		/// Places the current digging shape at a given position with a given radius.
         /// </summary>
-        public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials)
+        public void DigMaterial(vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
-            digging.DigSphere(position, radius, filterMaterials);
+			if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
+				position = new vec3(
+					(int)position.x * 2,
+					(int)position.y * 2,
+					(int)position.z * 2
+				)*0.5f;
+
+			switch (CurrentDiggingShape)
+			{
+				case DiggingShape.Sphere:
+					digging.DigSphere(position, radius, filterMaterials);
+					break;
+				case DiggingShape.Box:
+					digging.DigBox(position, radius, filterMaterials);
+					break;
+				default:
+					throw new Exception("Unsupported digging shape used");
+			}
         }
         
         void HandleAxisInput(object sender, InputAxisArgs e)
@@ -614,6 +665,16 @@ namespace UpvoidMiner
                     case InputKey.F1:
                         character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
                         break;
+
+					// Tab and shift-Tab cycle between digging shapes
+					case InputKey.Tab:
+						if (keyModifierShift)
+							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape - 1) % 2);
+						else if(!keyModifierControl)
+							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + 1) % 2);
+						else
+							CurrentDiggingAlignment = (DiggingAlignment)(((uint)CurrentDiggingAlignment + 1) % 2);
+						break;
 
                     default:
                         break;

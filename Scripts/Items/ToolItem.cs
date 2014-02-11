@@ -193,12 +193,13 @@ namespace UpvoidMiner
             {
                 case ToolType.Pickaxe:
                     // Pickaxe has small radius but can dig everywhere
-                    player.DigSphere(_worldPos, digRadiusPickaxe, null);
+					player.DigMaterial(_worldPos, digRadiusPickaxe, null);
+
                     return;
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-                    player.DigSphere(_worldPos, digRadiusShovel, new [] { TerrainResource.FromName("Dirt").Index });
+					player.DigMaterial(_worldPos, digRadiusShovel, new [] { TerrainResource.FromName("Dirt").Index });
                     return;
 
                 case ToolType.Axe:
