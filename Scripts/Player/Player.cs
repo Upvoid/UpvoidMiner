@@ -626,8 +626,8 @@ namespace UpvoidMiner
                 {
                     const float rotElevationSpeed = -.8f;
                     float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
-                    if ( newAngle < -80 ) newAngle = -80;
-                    if ( newAngle > 80 ) newAngle = 80;
+                    if (newAngle < -89.8f) newAngle = -89.8f;
+                    if (newAngle > 89.8f) newAngle = 89.8f;
                     AngleElevation = newAngle;
                 }
             }
