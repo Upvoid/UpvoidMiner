@@ -31,7 +31,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Backref to player.
         /// </summary>
-        //private Player player;
+        private Player player;
 
         /// <summary>
         /// A list of all items.
@@ -55,7 +55,7 @@ namespace UpvoidMiner
 
         public Inventory(Player player)
         {
-            //this.player = player;
+            this.player = player;
 
             Items.OnAdd += setDefaultQuickAccess;
             Items.OnRemove += removeFromQuickAccess;
@@ -87,10 +87,10 @@ namespace UpvoidMiner
             if ( idx == selectedItem ) return;
 
             if ( quickAccessItems[selectedItem] != null )
-                quickAccessItems[selectedItem].OnDeselect();
+                quickAccessItems[selectedItem].OnDeselect(player);
             selectedItem = idx;
             if ( quickAccessItems[selectedItem] != null )
-                quickAccessItems[selectedItem].OnSelect();
+                quickAccessItems[selectedItem].OnSelect(player);
 
             if (OnSelectionChanged != null)
             {
@@ -137,7 +137,7 @@ namespace UpvoidMiner
             if (quickAccessItems[idx] != null)
             {
                 if ( idx == selectedItem )
-                    quickAccessItems[idx].OnDeselect();
+                    quickAccessItems[idx].OnDeselect(player);
                 quickAccessItems[idx].QuickAccessIndex = -1;
             }
 
@@ -147,7 +147,7 @@ namespace UpvoidMiner
             {
                 item.QuickAccessIndex = idx;                
                 if ( idx == selectedItem )
-                    item.OnSelect();
+                    item.OnSelect(player);
             }
 
             if (OnQuickAccessChanged != null)
@@ -166,12 +166,12 @@ namespace UpvoidMiner
 
             // Check if new rules were discovered
             return; // DEBUG: Disable crafting
-            foreach (var rule in craftingRules) 
+            /*foreach (var rule in craftingRules) 
             {
                 if ( rule.Discovered ) continue;
                 else if ( rule.CouldBeDismantled(item) ) rule.Discover();
                 else if ( rule.IsCraftable(item, Items) ) rule.Discover();
-            }
+            }*/
         }
 
         /// <summary>

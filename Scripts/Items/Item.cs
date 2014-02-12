@@ -89,15 +89,15 @@ namespace UpvoidMiner
         /// <summary>
         /// Is executed when this item is selected by a player.
         /// </summary>
-        public virtual void OnSelect() { }
+        public virtual void OnSelect(Player player) { }
         /// <summary>
         /// Is executed when this item is de-selected by a player.
         /// </summary>
-        public virtual void OnDeselect() { }
+        public virtual void OnDeselect(Player player) { }
         /// <summary>
         /// If selected and the user scrolls with the mouse wheel, this function is called with the delta. It should be used to modify 'OnUse' parameter.
         /// </summary>
-        public virtual void OnUseParameterChange(float _delta) { }
+        public virtual void OnUseParameterChange(Player player, float _delta) { }
         /// <summary>
         /// Is executed when this item is selected and a preview ray point was found.
         /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at (with _worldNormal being the surface normal at that position).

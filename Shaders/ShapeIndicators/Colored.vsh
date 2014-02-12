@@ -24,5 +24,5 @@ void main()
     gl_Position  = uProjectionMatrix * vec4(vEyePos, 1.0);
 
     // avoid z-clipping :D
-    gl_Position.z = 0.0;
+    gl_Position.z = 0.00;
 }

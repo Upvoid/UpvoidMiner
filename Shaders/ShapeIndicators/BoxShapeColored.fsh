@@ -30,7 +30,8 @@ void main()
     opaqueEyePos /= opaqueEyePos.w;
 
     // get distance to sphere midpoint
-    float dist = distance(opaqueEyePos.xyz, vec3(uViewMatrix*vec4(uMidPointAndRadius.xyz,1)));
+	vec3 midEyeDis = abs(vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz);
+    float dist = max(midEyeDis.x, max(midEyeDis.y, midEyeDis.z));
 
 
     float e0 = max(0.0, uMidPointAndRadius.w-0.1);
@@ -58,7 +59,6 @@ void main()
     transColor.a += max(0, sin(pos.z * scale) - .75) * 4;
     transColor.a = min(1, transColor.a);
     */
-
 
     OUTPUT_TransparentColor(clamp(transColor, 0, 1));
 }

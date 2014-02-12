@@ -118,10 +118,20 @@
 {
     "Descriptor" : {
         "Collection" : "item-materials",
-        "Name" : "Items/ResourcePreviewLimited",
+        "Name" : "Items/ConstructionPreviewSphereLimited",
         "Type" : "FromCollection"
     },
-    "Name" : "Items/ResourcePreviewLimited",
+    "Name" : "Items/ConstructionPreviewSphereLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewBoxLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewBoxLimited",
     "Path" : "~.mat",
     "Type" : "Material"
 },

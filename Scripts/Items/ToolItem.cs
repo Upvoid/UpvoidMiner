@@ -107,7 +107,7 @@ namespace UpvoidMiner
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
 
-        public override void OnSelect()
+        public override void OnSelect(Player player)
         {
             // Create a transparent sphere as 'fill-indicator'.
             previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/DigPreviewSphere", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
@@ -117,7 +117,7 @@ namespace UpvoidMiner
             LocalScript.world.AddRenderJob(previewSphereIndicator);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
             LocalScript.world.RemoveRenderJob(previewSphere);
@@ -126,7 +126,7 @@ namespace UpvoidMiner
             previewSphereIndicator = null;
         }
 
-        public override void OnUseParameterChange(float _delta)
+        public override void OnUseParameterChange(Player player, float _delta)
         {
             // Adjust dig-radius between 0.5m and 5m radius
             digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));

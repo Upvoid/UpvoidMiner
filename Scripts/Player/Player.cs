@@ -602,7 +602,7 @@ namespace UpvoidMiner
                 {
                     Item selection = Inventory.Selection;
                     if (selection != null)
-                        selection.OnUseParameterChange(e.RelativeChange);
+                        selection.OnUseParameterChange(this, e.RelativeChange);
                 }
                 else // Otherwise used to cycle through quick access.
                 {

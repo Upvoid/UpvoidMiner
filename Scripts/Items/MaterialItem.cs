@@ -158,8 +158,8 @@ namespace UpvoidMiner
             ItemEntity itemEntity = new ItemEntity(droppedItem);
             player.ContainingWorld.AddEntity(itemEntity, previewPlaceMatrix);
         }
-        
-        public override void OnSelect()
+
+        public override void OnSelect(Player player)
         {
             MeshResource mesh;
             switch (Shape)
@@ -188,7 +188,7 @@ namespace UpvoidMiner
             LocalScript.world.AddRenderJob(previewMaterialPlacedIndicator);
         }
         
-        public override void OnUseParameterChange(float _delta) 
+        public override void OnUseParameterChange(Player player, float _delta) 
         {
             // TODO: maybe rotate?
         }
@@ -260,8 +260,8 @@ namespace UpvoidMiner
 
             previewMaterial.ModelMatrix = transform * scaling;
         }
-        
-        public override void OnDeselect()
+
+        public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
             LocalScript.world.RemoveRenderJob(previewMaterial);

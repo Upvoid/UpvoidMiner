@@ -70,9 +70,9 @@ namespace UpvoidMiner
         /// <summary>
         /// Renderjob for the preview sphere
         /// </summary>
-        private MeshRenderJob previewSphere;
-        private MeshRenderJob previewSphereLimited;
-        private MeshRenderJob previewSphereIndicator;
+        private MeshRenderJob previewShape;
+        private MeshRenderJob previewShapeLimited;
+        private MeshRenderJob previewShapeIndicator;
         /// <summary>
         /// Radius of terrain material that is placed if "use"d.
         /// </summary>
@@ -93,20 +93,40 @@ namespace UpvoidMiner
             player.PlaceMaterial(Material, _worldPos, radius);
         }
 
-        public override void OnSelect()
+        public override void OnSelect(Player player)
         {
+            // Use correct preview mesh
+            MeshResource shapeMesh = null;
+            MaterialResource shapeMat = null; 
+            MaterialResource shapeMatLimited = null;
+            switch (player.CurrentDiggingShape)
+            {
+                case Player.DiggingShape.Box: 
+                    shapeMesh = Resources.UseMesh("::Debug/Box", null);
+                    shapeMat = Resources.UseMaterial("Items/ConstructionPreviewBox", UpvoidMiner.ModDomain);
+                    shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewBoxLimited", UpvoidMiner.ModDomain);
+                    break;
+                case Player.DiggingShape.Sphere: 
+                    shapeMesh = Resources.UseMesh("::Debug/Sphere", null); 
+                    shapeMat = Resources.UseMaterial("Items/ConstructionPreviewSphere", UpvoidMiner.ModDomain);
+                    shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewSphereLimited", UpvoidMiner.ModDomain);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown digging shape");
+            }
+
             // Create a transparent sphere as 'fill-indicator'.
-            previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ConstructionPreviewSphere", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewSphere);
+            previewShape = new MeshRenderJob(Renderer.Transparent.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewShape);
             // And a second one in case we are limited by the volume at hand.
-            previewSphereLimited = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewLimited", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewSphereLimited);
+            previewShapeLimited = new MeshRenderJob(Renderer.Transparent.Mesh, shapeMatLimited, shapeMesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewShapeLimited);
             // And a third one for indicating the center.
-            previewSphereIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewSphereIndicator);
+            previewShapeIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewShapeIndicator);
         }
 
-        public override void OnUseParameterChange(float _delta) 
+        public override void OnUseParameterChange(Player player, float _delta) 
         {
             // Adjust use-radius between 0.5m and 5m radius
             useRadius = Math.Max(0.5f, Math.Min(5f, useRadius + _delta / 5f));
@@ -114,31 +134,52 @@ namespace UpvoidMiner
 
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
+            _worldPos = _player.AlignPlacementPosition(_worldPos);
+
             // If the indicated volume is greater than the available volume, show limitation sphere.
-            float useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
-            if ( _visible && useVolume > Volume )
+            float useVolume;
+            switch (_player.CurrentDiggingShape)
             {
-                float availableRadius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
-                previewSphereLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
+                case Player.DiggingShape.Box:
+                    useVolume = 8 * useRadius * useRadius * useRadius;
+                    if (_visible && useVolume > Volume)
+                    {
+                        float availableRadius = (float)Math.Pow(Volume / 8, 1 / 3f);
+                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
+                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+                    }
+                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    break;
+                case Player.DiggingShape.Sphere:
+                    useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
+                    if (_visible && useVolume > Volume)
+                    {
+                        float availableRadius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
+                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
+                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+                    }
+                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown digging shape");
             }
-            else previewSphereLimited.ModelMatrix = mat4.Scale(0f);
 
             // Radius of the primary preview is always use-radius.
-            previewSphere.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
-            previewSphere.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             // Indicator is always in the center and relatively small.
-            previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
+            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }
 
-        public override void OnDeselect()
+        public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
-            LocalScript.world.RemoveRenderJob(previewSphere);
-            LocalScript.world.RemoveRenderJob(previewSphereLimited);
-            LocalScript.world.RemoveRenderJob(previewSphereIndicator);
-            previewSphere = null;
-            previewSphereLimited = null;
-            previewSphereIndicator = null;
+            LocalScript.world.RemoveRenderJob(previewShape);
+            LocalScript.world.RemoveRenderJob(previewShapeLimited);
+            LocalScript.world.RemoveRenderJob(previewShapeIndicator);
+            previewShape = null;
+            previewShapeLimited = null;
+            previewShapeIndicator = null;
         }
         #endregion
     }
