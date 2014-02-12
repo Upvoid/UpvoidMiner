@@ -174,8 +174,8 @@ namespace UpvoidMiner
         {
             Direction = new vec3(1, 0, 0);
             camera = _camera;
-            CurrentDiggingShape = DiggingShape.Cylinder;
-			CurrentDiggingAlignment = DiggingAlignment.GridAligned;
+            CurrentDiggingShape = DiggingShape.Sphere;
+			CurrentDiggingAlignment = DiggingAlignment.AxisAligned;
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
@@ -679,12 +679,27 @@ namespace UpvoidMiner
 
 					// Tab and shift-Tab cycle between digging shapes
 					case InputKey.Tab:
-						if (keyModifierShift)
-							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape - 1) % 3);
-						else if(!keyModifierControl)
-							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + 1) % 3);
-						else
-							CurrentDiggingAlignment = (DiggingAlignment)(((uint)CurrentDiggingAlignment + 1) % 2);
+
+                        if ( !keyModifierControl )
+                        {
+                            int vals = Enum.GetValues(typeof(DiggingShape)).Length;
+                            int offset = keyModifierShift ? vals - 1 : 1;
+                            CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + offset) % vals);
+                        }
+                        else
+                        {
+                            int vals = Enum.GetValues(typeof(DiggingAlignment)).Length;
+                            int offset = keyModifierShift ? vals - 1 : 1;
+                            CurrentDiggingAlignment = (DiggingAlignment)(((uint)CurrentDiggingAlignment + offset) % vals);
+                        }
+
+                        // Reselect to refresh shape
+                        if (Inventory.Selection != null)
+                        {
+                            Inventory.Selection.OnDeselect(this);
+                            Inventory.Selection.OnSelect(this);
+                        }
+
 						break;
 
                     default:
