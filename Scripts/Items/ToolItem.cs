@@ -171,6 +171,8 @@ namespace UpvoidMiner
 
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
+            _worldPos = _player.AlignPlacementPosition(_worldPos);
+
             float useRadius = 0.0f;
             switch (ToolType)
             {

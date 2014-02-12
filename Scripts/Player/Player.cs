@@ -174,7 +174,7 @@ namespace UpvoidMiner
             Direction = new vec3(1, 0, 0);
             camera = _camera;
 			CurrentDiggingShape = DiggingShape.Box;
-			CurrentDiggingAlignment = DiggingAlignment.AxisAligned;
+			CurrentDiggingAlignment = DiggingAlignment.GridAligned;
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
@@ -536,16 +536,25 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Aligns a position according to the current alignment rules
+        /// </summary>
+        public vec3 AlignPlacementPosition(vec3 pos)
+        {
+            if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
+                return new vec3(
+                    (int)Math.Round(pos.x * 2),
+                    (int)Math.Round(pos.y * 2),
+                    (int)Math.Round(pos.z * 2)
+                ) * 0.5f;
+            else return pos;
+        }
+
+        /// <summary>
 		/// Places the current digging shape shape of a given material
         /// </summary>
         public void PlaceMaterial(TerrainResource material, vec3 position, float radius)
         {
-			if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
-				position = new vec3(
-					(int)position.x * 2,
-					(int)position.y * 2,
-					(int)position.z * 2
-				)*0.5f;
+            position = AlignPlacementPosition(position);
 
 			switch(CurrentDiggingShape)
 			{
@@ -564,12 +573,7 @@ namespace UpvoidMiner
         /// </summary>
         public void DigMaterial(vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
-			if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
-				position = new vec3(
-					(int)position.x * 2,
-					(int)position.y * 2,
-					(int)position.z * 2
-				)*0.5f;
+            position = AlignPlacementPosition(position);
 
 			switch (CurrentDiggingShape)
 			{
