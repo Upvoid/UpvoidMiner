@@ -16,6 +16,9 @@ Scripts/obj
 bin
 *.userprefs
 
+# Resharper
+_ReSharper.*
+
 # OS specific temp files:
 *~
 .directory

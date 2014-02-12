@@ -102,6 +102,7 @@ namespace UpvoidMiner
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
+        private const float digRadiusMinFactor = 0.4f;
 
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
@@ -127,11 +128,17 @@ namespace UpvoidMiner
 
         public override void OnUseParameterChange(float _delta)
         {
-            if(LocalScript.NoclipEnabled)
+            // Adjust dig-radius between 0.5m and 5m radius
+            digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));
+            digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+
+            // Limit shape if non-noclip
+            if(!LocalScript.NoclipEnabled)
             {
-                // Adjust dig-radius between 0.5m and 5m radius
-                digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));
-                digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+                if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
+                if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
+                if (digRadiusPickaxe > digRadiusPickaxeInitial) digRadiusPickaxe = digRadiusPickaxeInitial;
+                if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
             }
         }
 
@@ -164,14 +171,6 @@ namespace UpvoidMiner
 
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
-
-            if(!LocalScript.NoclipEnabled)
-            {
-                // no extra radius in first-person mode
-                digRadiusShovel = digRadiusShovelInitial;
-                digRadiusPickaxe = digRadiusPickaxeInitial;
-            }
-
             float useRadius = 0.0f;
             switch (ToolType)
             {
