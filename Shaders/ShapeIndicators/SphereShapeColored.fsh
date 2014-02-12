@@ -49,7 +49,7 @@ void main()
 
     transColor.a += float(opaqueEyePos.z < vEyePos.z) * sphereAlpha;
 
-    transColor.a *= 0.3 + 0.7*shadowFactor(vWorldPos);
+    transColor.a *= 0.1 + 0.9 * shadowFactor(vWorldPos);
     /*
     vec3 pos = opaqueWorldPos.xyz;
     const float scale = 30;

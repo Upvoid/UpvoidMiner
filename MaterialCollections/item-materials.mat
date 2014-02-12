@@ -34,12 +34,12 @@
 
 [Items/DigPreviewSphere] : Default
     Shader: ShapeIndicators/SphereShapeCoverColored
-    Color: uColor, 1,0.0,0,0.3
+    Color: uColor, 1,0,0,0.3
     Culling: Front
 
 [Items/DigPreviewBox] : Default
     Shader: ShapeIndicators/BoxShapeCoverColored
-    Color: uColor, 1,0.0,0,0.3
+    Color: uColor, 1,0,0,0.3
     Culling: Front
 
 [Items/ConstructionPreviewSphere] : Default

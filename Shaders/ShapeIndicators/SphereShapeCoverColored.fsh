@@ -36,7 +36,7 @@ void main()
     transColor.a += 0.3*uColor.a;
     transColor.a *= smoothstep(1.0, 0.95, dist/uMidPointAndRadius.w);
 
-    transColor.a *= 0.3 + 0.7 * shadowFactor(vWorldPos);
+    transColor.a *= 0.1 + 0.9 * shadowFactor(vWorldPos);
 
     /*
     vec3 pos = opaqueWorldPos.xyz;

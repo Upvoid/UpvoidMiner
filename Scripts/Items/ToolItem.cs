@@ -94,8 +94,8 @@ namespace UpvoidMiner
         /// <summary>
         /// Renderjobs for the preview sphere
         /// </summary>
-        private MeshRenderJob previewSphere;
-        private MeshRenderJob previewSphereIndicator;
+        private MeshRenderJob previewShape;
+        private MeshRenderJob previewShapeIndicator;
 
         /// <summary>
         /// Radius of terrain material that is removed if dug/picked
@@ -109,21 +109,38 @@ namespace UpvoidMiner
 
         public override void OnSelect(Player player)
         {
+            // Use correct preview mesh
+            MeshResource shapeMesh = null;
+            MaterialResource shapeMat = null;
+            switch (player.CurrentDiggingShape)
+            {
+                case Player.DiggingShape.Box:
+                    shapeMesh = Resources.UseMesh("::Debug/Box", null);
+                    shapeMat = Resources.UseMaterial("Items/DigPreviewBox", UpvoidMiner.ModDomain);
+                    break;
+                case Player.DiggingShape.Sphere:
+                    shapeMesh = Resources.UseMesh("::Debug/Sphere", null);
+                    shapeMat = Resources.UseMaterial("Items/DigPreviewSphere", UpvoidMiner.ModDomain);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown digging shape");
+            }
+
             // Create a transparent sphere as 'fill-indicator'.
-            previewSphere = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/DigPreviewSphere", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewSphere);
+            previewShape = new MeshRenderJob(Renderer.Transparent.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewShape);
             // And a second one for indicating the center.
-            previewSphereIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewSphereIndicator);
+            previewShapeIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
+            LocalScript.world.AddRenderJob(previewShapeIndicator);
         }
 
         public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
-            LocalScript.world.RemoveRenderJob(previewSphere);
-            LocalScript.world.RemoveRenderJob(previewSphereIndicator);
-            previewSphere = null;
-            previewSphereIndicator = null;
+            LocalScript.world.RemoveRenderJob(previewShape);
+            LocalScript.world.RemoveRenderJob(previewShapeIndicator);
+            previewShape = null;
+            previewShapeIndicator = null;
         }
 
         public override void OnUseParameterChange(Player player, float _delta)
@@ -131,15 +148,6 @@ namespace UpvoidMiner
             // Adjust dig-radius between 0.5m and 5m radius
             digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));
             digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
-
-            // Limit shape if non-noclip
-            if(!LocalScript.NoclipEnabled)
-            {
-                if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
-                if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
-                if (digRadiusPickaxe > digRadiusPickaxeInitial) digRadiusPickaxe = digRadiusPickaxeInitial;
-                if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
-            }
         }
 
         /// <summary>
@@ -173,6 +181,15 @@ namespace UpvoidMiner
         {
             _worldPos = _player.AlignPlacementPosition(_worldPos);
 
+            // Limit shape if non-noclip
+            if (!LocalScript.NoclipEnabled)
+            {
+                if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
+                if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
+                if (digRadiusPickaxe > digRadiusPickaxeInitial) digRadiusPickaxe = digRadiusPickaxeInitial;
+                if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
+            }
+
             float useRadius = 0.0f;
             switch (ToolType)
             {
@@ -183,11 +200,11 @@ namespace UpvoidMiner
                 default: break;
             }
             // Set uniform for position and radius
-            previewSphere.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+            previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             // Radius of the primary preview is always impact-radius of the current tool.
-            previewSphere.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
             // Indicator is always in the center and relatively small.
-            previewSphereIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
+            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }
 
         public override void OnUse(Player player, Engine.vec3 _worldPos)

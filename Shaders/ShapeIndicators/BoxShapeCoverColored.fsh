@@ -27,7 +27,9 @@ void main()
     vec4 opaqueEyePos = uInverseProjectionMatrix * vec4(screenPos.xy, depth * 2 - 1, 1.0);
     opaqueEyePos /= opaqueEyePos.w;
 
-    float dist = distance(opaqueEyePos.xyz, vec3(uViewMatrix*vec4(uMidPointAndRadius.xyz,1)));
+    // get distance to sphere midpoint
+	vec3 midEyeDis = abs(vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz);
+    float dist = max(midEyeDis.x, max(midEyeDis.y, midEyeDis.z));
 
 
     float e0 = max(0.0, uMidPointAndRadius.w-0.3);
@@ -36,7 +38,7 @@ void main()
     transColor.a += 0.3*uColor.a;
     transColor.a *= smoothstep(1.0, 0.95, dist/uMidPointAndRadius.w);
 
-    transColor.a *= 0.3 + 0.7 * shadowFactor(vWorldPos);
+    transColor.a *= 0.1 + 0.9 * shadowFactor(vWorldPos);
 
     /*
     vec3 pos = opaqueWorldPos.xyz;
@@ -46,7 +48,6 @@ void main()
     transColor.a += max(0, sin(pos.z * scale) - .75) * 4;
     transColor.a = min(1, transColor.a);
     */
-
 
     OUTPUT_TransparentColor(transColor);
 }
