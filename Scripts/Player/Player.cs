@@ -156,8 +156,9 @@ namespace UpvoidMiner
 
 		public enum DiggingShape : uint
 		{
-			Sphere=0,
-			Box=1
+            Sphere = 0,
+            Box = 1,
+            Cylinder = 2
 		}
 
 		public enum DiggingAlignment: uint
@@ -173,7 +174,7 @@ namespace UpvoidMiner
         {
             Direction = new vec3(1, 0, 0);
             camera = _camera;
-			CurrentDiggingShape = DiggingShape.Box;
+            CurrentDiggingShape = DiggingShape.Cylinder;
 			CurrentDiggingAlignment = DiggingAlignment.GridAligned;
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
@@ -560,10 +561,13 @@ namespace UpvoidMiner
 			{
 				case DiggingShape.Sphere:
 					digging.DigSphere(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
-					break;
-				case DiggingShape.Box:
-					digging.DigBox(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
-					break;
+                    break;
+                case DiggingShape.Box:
+                    digging.DigBox(position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
+                    break;
+                case DiggingShape.Cylinder:
+                    digging.DigCylinder(position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
+                    break;
 				default:
 					throw new Exception("Unsupported digging shape used");
 			}
@@ -579,10 +583,13 @@ namespace UpvoidMiner
 			{
 				case DiggingShape.Sphere:
 					digging.DigSphere(position, radius, filterMaterials);
-					break;
-				case DiggingShape.Box:
-					digging.DigBox(position, radius, filterMaterials);
-					break;
+                    break;
+                case DiggingShape.Box:
+                    digging.DigBox(position, radius, filterMaterials);
+                    break;
+                case DiggingShape.Cylinder:
+                    digging.DigCylinder(position, radius, filterMaterials);
+                    break;
 				default:
 					throw new Exception("Unsupported digging shape used");
 			}
@@ -673,9 +680,9 @@ namespace UpvoidMiner
 					// Tab and shift-Tab cycle between digging shapes
 					case InputKey.Tab:
 						if (keyModifierShift)
-							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape - 1) % 2);
+							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape - 1) % 3);
 						else if(!keyModifierControl)
-							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + 1) % 2);
+							CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + 1) % 3);
 						else
 							CurrentDiggingAlignment = (DiggingAlignment)(((uint)CurrentDiggingAlignment + 1) % 2);
 						break;

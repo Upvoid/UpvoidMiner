@@ -853,6 +853,32 @@
 },
 {
     "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/CylinderShapeCoverColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/CylinderShapeCoverColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/CylinderShapeCoverColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/CylinderShapeColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/CylinderShapeColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/CylinderShapeColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
         "Type": "File",
         "sRGB": false
     },

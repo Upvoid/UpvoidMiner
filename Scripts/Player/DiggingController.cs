@@ -51,12 +51,17 @@ namespace UpvoidMiner
 		/// <summary>
 		/// Cached CSG Sphere.
 		/// </summary>
-		CsgExpression sphereNode;
+        CsgExpression sphereNode;
 
-		/// <summary>
-		/// Cached CSG Cube.
-		/// </summary>
-		CsgExpression boxNode;
+        /// <summary>
+        /// Cached CSG Cube.
+        /// </summary>
+        CsgExpression boxNode;
+
+        /// <summary>
+        /// Cached CSG Cylinder.
+        /// </summary>
+        CsgExpression cylinderNode;
 
         /// <summary>
         /// Particle system for 3D stones due to digging.
@@ -99,10 +104,13 @@ namespace UpvoidMiner
             this.world = world;
             this.player = player;
 			string sphereExpression = "-digRadius + distance(vec3(x,y,z), digPosition)";
-			sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+            sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
 
-			string boxExpression = "-digRadius + max(max(abs(x-digPosition.x), abs(y-digPosition.y)), abs(z-digPosition.z))";
-			boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+            string boxExpression = "-digRadius + max(max(abs(x-digPosition.x), abs(y-digPosition.y)), abs(z-digPosition.z))";
+            boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+
+            string cylinderExpression = "-digRadius + max(abs(y-digPosition.y), distance(vec2(x,z), digPosition.xz))";
+            cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
@@ -164,14 +172,23 @@ namespace UpvoidMiner
 			Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
 		}
 
-		public void DigBox(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
-		{
-			boxNode.MaterialIndex = terrainMaterialId;
-			boxNode.SetParameterFloat("digRadius", radius);
-			boxNode.SetParameterVec3("digPosition", position);
+        public void DigBox(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        {
+            boxNode.MaterialIndex = terrainMaterialId;
+            boxNode.SetParameterFloat("digRadius", radius);
+            boxNode.SetParameterVec3("digPosition", position);
 
-			Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
-		}
+            Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
+        }
+
+        public void DigCylinder(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        {
+            cylinderNode.MaterialIndex = terrainMaterialId;
+            cylinderNode.SetParameterFloat("digRadius", radius);
+            cylinderNode.SetParameterVec3("digPosition", position);
+
+            Dig(cylinderNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
+        }
 
         /// <summary>
         /// This callback is called once per changed material in a chunk and reports the amount of volume changed (in m^3).

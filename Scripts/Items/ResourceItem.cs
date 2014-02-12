@@ -85,10 +85,27 @@ namespace UpvoidMiner
 
         public override void OnUse(Player player, vec3 _worldPos)
         {
-            float radius = useRadius;
-            float useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
-            if ( useVolume > Volume )
-                radius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
+            float radius = useRadius, useVolume;
+            switch (player.CurrentDiggingShape)
+            {
+                case Player.DiggingShape.Box:
+                    useVolume = 8 * useRadius * useRadius * useRadius;
+                    if (useVolume > Volume)
+                        radius = (float)Math.Pow(Volume / 8, 1 / 3f);
+                    break;
+                case Player.DiggingShape.Cylinder:
+                    useVolume = 2f * (float)Math.PI * useRadius * useRadius * useRadius;
+                    if (useVolume > Volume)
+                        radius = (float)Math.Pow(Volume / (2f * (float)Math.PI), 1 / 3f);
+                    break;
+                case Player.DiggingShape.Sphere:
+                    useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
+                    if (useVolume > Volume)
+                        radius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown digging shape");
+            }
 
             player.PlaceMaterial(Material, _worldPos, radius);
         }
@@ -101,10 +118,15 @@ namespace UpvoidMiner
             MaterialResource shapeMatLimited = null;
             switch (player.CurrentDiggingShape)
             {
-                case Player.DiggingShape.Box: 
+                case Player.DiggingShape.Box:
                     shapeMesh = Resources.UseMesh("::Debug/Box", null);
                     shapeMat = Resources.UseMaterial("Items/ConstructionPreviewBox", UpvoidMiner.ModDomain);
                     shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewBoxLimited", UpvoidMiner.ModDomain);
+                    break;
+                case Player.DiggingShape.Cylinder:
+                    shapeMesh = Resources.UseMesh("::Debug/Cylinder", null);
+                    shapeMat = Resources.UseMaterial("Items/ConstructionPreviewCylinder", UpvoidMiner.ModDomain);
+                    shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewCylinderLimited", UpvoidMiner.ModDomain);
                     break;
                 case Player.DiggingShape.Sphere: 
                     shapeMesh = Resources.UseMesh("::Debug/Sphere", null); 
@@ -145,6 +167,16 @@ namespace UpvoidMiner
                     if (_visible && useVolume > Volume)
                     {
                         float availableRadius = (float)Math.Pow(Volume / 8, 1 / 3f);
+                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
+                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+                    }
+                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    break;
+                case Player.DiggingShape.Cylinder:
+                    useVolume = 2 * (float)Math.PI * useRadius * useRadius * useRadius;
+                    if (_visible && useVolume > Volume)
+                    {
+                        float availableRadius = (float)Math.Pow(Volume / (2 * (float)Math.PI), 1 / 3f);
                         previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
                         previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
                     }

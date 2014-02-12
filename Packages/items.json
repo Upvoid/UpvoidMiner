@@ -85,6 +85,47 @@
     "Path" : "~.mat",
     "Type" : "Material"
 },
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewBoxLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewBoxLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/DigPreviewCylinder",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/DigPreviewCylinder",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewCylinder",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewCylinder",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewCylinderLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewCylinderLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {
@@ -122,16 +163,6 @@
         "Type" : "FromCollection"
     },
     "Name" : "Items/ConstructionPreviewSphereLimited",
-    "Path" : "~.mat",
-    "Type" : "Material"
-},
-{
-    "Descriptor" : {
-        "Collection" : "item-materials",
-        "Name" : "Items/ConstructionPreviewBoxLimited",
-        "Type" : "FromCollection"
-    },
-    "Name" : "Items/ConstructionPreviewBoxLimited",
     "Path" : "~.mat",
     "Type" : "Material"
 },
