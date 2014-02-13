@@ -7,6 +7,9 @@ uniform vec4 uColor;
 uniform sampler2DRect uOpaqueDepth;
 
 uniform vec4 uMidPointAndRadius;
+uniform vec4 uDigDirX;
+uniform vec4 uDigDirY;
+uniform vec4 uDigDirZ;
 
 in vec3 vNormal;
 in vec3 vEyePos;
@@ -30,8 +33,11 @@ void main()
     opaqueEyePos /= opaqueEyePos.w;
 
     // get distance to sphere midpoint
-	vec3 midEyeDis = abs(vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz);
-    float dist = max(midEyeDis.x, max(midEyeDis.y, midEyeDis.z));
+	vec3 midEyeDis = vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz;
+	float dX = abs(dot(midEyeDis, uDigDirX.xyz));
+	float dY = abs(dot(midEyeDis, uDigDirY.xyz));
+	float dZ = abs(dot(midEyeDis, uDigDirZ.xyz));
+    float dist = max(dX, max(dY, dZ));
 
 
     float e0 = max(0.0, uMidPointAndRadius.w-0.1);

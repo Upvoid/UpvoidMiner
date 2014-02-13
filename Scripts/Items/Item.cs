@@ -85,7 +85,7 @@ namespace UpvoidMiner
         /// If IsUsable is true, this executes the "use" action of the item. Does nothing otherwise.
         /// _worldPos is the world position that the player points at.
         /// </summary>
-        public virtual void OnUse(Player player, vec3 _worldPos) { }
+        public virtual void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal) { }
         /// <summary>
         /// Is executed when this item is selected by a player.
         /// </summary>

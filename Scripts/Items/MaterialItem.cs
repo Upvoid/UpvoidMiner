@@ -147,7 +147,7 @@ namespace UpvoidMiner
         public override bool HasRayPreview { get { return true; } }
         public override bool HasUpdatePreview { get { return true; } }
         
-        public override void OnUse(Player player, vec3 _worldPos)
+        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
         {
             if (!previewPlacable || player == null)
                 return;

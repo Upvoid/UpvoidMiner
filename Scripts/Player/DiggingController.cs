@@ -103,14 +103,25 @@ namespace UpvoidMiner
             instance = this;
             this.world = world;
             this.player = player;
+
+            string digParas = "digRadius:float, digPosition:vec3, digDirX:vec3, digDirY:vec3, digDirZ:vec3";
+
 			string sphereExpression = "-digRadius + distance(vec3(x,y,z), digPosition)";
-            sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+            sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, digParas);
 
-            string boxExpression = "-digRadius + max(max(abs(x-digPosition.x), abs(y-digPosition.y)), abs(z-digPosition.z))";
-            boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+            string boxExpression = @"p = vec3(x,y,z) - digPosition;
+                dx = abs(dot(p, digDirX));
+                dy = abs(dot(p, digDirY));
+                dz = abs(dot(p, digDirZ));
+                -digRadius + max(dx, max(dy, dz))";
+            boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, digParas);
 
-            string cylinderExpression = "-digRadius + max(abs(y-digPosition.y), distance(vec2(x,z), digPosition.xz))";
-            cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, "digRadius:float, digPosition:vec3");
+            string cylinderExpression = @"p = vec3(x,y,z) - digPosition;
+                dx = abs(dot(p, digDirX));
+                dy = abs(dot(p, digDirY));
+                dz = abs(dot(p, digDirZ));
+                -digRadius + max(dy, length(vec2(dx, dz)))";
+            cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, digParas);
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
@@ -163,29 +174,47 @@ namespace UpvoidMiner
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
-		public void DigSphere(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
 		{
 			sphereNode.MaterialIndex = terrainMaterialId;
-			sphereNode.SetParameterFloat("digRadius", radius);
-			sphereNode.SetParameterVec3("digPosition", position);
+            sphereNode.SetParameterFloat("digRadius", radius);
+            sphereNode.SetParameterVec3("digPosition", position);
+
+            vec3 dx, dy, dz;
+            player.AlignmentSystem(worldNormal, out dx, out dy, out dz);
+            sphereNode.SetParameterVec3("digDirX", dx);
+            sphereNode.SetParameterVec3("digDirY", dy);
+            sphereNode.SetParameterVec3("digDirZ", dz);
 
 			Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
 		}
 
-        public void DigBox(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
         {
             boxNode.MaterialIndex = terrainMaterialId;
             boxNode.SetParameterFloat("digRadius", radius);
             boxNode.SetParameterVec3("digPosition", position);
 
+            vec3 dx, dy, dz;
+            player.AlignmentSystem(worldNormal, out dx, out dy, out dz);
+            boxNode.SetParameterVec3("digDirX", dx);
+            boxNode.SetParameterVec3("digDirY", dy);
+            boxNode.SetParameterVec3("digDirZ", dz);
+
             Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
         }
 
-        public void DigCylinder(vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
         {
             cylinderNode.MaterialIndex = terrainMaterialId;
             cylinderNode.SetParameterFloat("digRadius", radius);
             cylinderNode.SetParameterVec3("digPosition", position);
+
+            vec3 dx, dy, dz;
+            player.AlignmentSystem(worldNormal, out dx, out dy, out dz);
+            cylinderNode.SetParameterVec3("digDirX", dx);
+            cylinderNode.SetParameterVec3("digDirY", dy);
+            cylinderNode.SetParameterVec3("digDirZ", dz);
 
             Dig(cylinderNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
         }

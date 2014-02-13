@@ -154,17 +154,19 @@ namespace UpvoidMiner
             get { return character.Transformation; }
         }
 
-		public enum DiggingShape : uint
+		public enum DiggingShape
 		{
-            Sphere = 0,
-            Box = 1,
-            Cylinder = 2
+            Sphere,
+            Box,
+            Cylinder
 		}
 
-		public enum DiggingAlignment: uint
+		public enum DiggingAlignment
 		{
-			GridAligned,
-			AxisAligned
+            AxisAligned,
+            GridAligned,
+            PlayerAligned,
+            TerrainAligned
 		}
 
 		public DiggingShape CurrentDiggingShape { get; protected set; }
@@ -551,22 +553,49 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Calculates an alignment system for digging/constructing
+        /// </summary>
+        public void AlignmentSystem(vec3 worldNormal, out vec3 dirX, out vec3 dirY, out vec3 dirZ)
+        {
+            switch (CurrentDiggingAlignment)
+            {
+                case Player.DiggingAlignment.GridAligned:
+                case Player.DiggingAlignment.AxisAligned:
+                    dirX = vec3.UnitX;
+                    dirY = vec3.UnitY;
+                    dirZ = vec3.UnitZ;
+                    break;
+                case Player.DiggingAlignment.PlayerAligned:
+                    dirX = camera.RightDirection.Normalized;
+                    dirY = camera.UpDirection.Normalized;
+                    dirZ = camera.ForwardDirection.Normalized;
+                    break;
+                case Player.DiggingAlignment.TerrainAligned:
+                    dirY = worldNormal.Normalized;
+                    dirX = vec3.cross(camera.ForwardDirection, dirY).Normalized;
+                    dirZ = vec3.cross(dirX, dirY).Normalized;
+                    break;
+                default: throw new InvalidOperationException("Unknown alginment");
+            }
+        }
+
+        /// <summary>
 		/// Places the current digging shape shape of a given material
         /// </summary>
-        public void PlaceMaterial(TerrainResource material, vec3 position, float radius)
+        public void PlaceMaterial(TerrainResource material, vec3 worldNormal, vec3 position, float radius)
         {
             position = AlignPlacementPosition(position);
 
 			switch(CurrentDiggingShape)
 			{
 				case DiggingShape.Sphere:
-					digging.DigSphere(position, radius, new [] { 0 }, material.Index, DiggingController.DigMode.Add);
+                    digging.DigSphere(worldNormal, position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
                     break;
                 case DiggingShape.Box:
-                    digging.DigBox(position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
+                    digging.DigBox(worldNormal, position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
                     break;
                 case DiggingShape.Cylinder:
-                    digging.DigCylinder(position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
+                    digging.DigCylinder(worldNormal, position, radius, new[] { 0 }, material.Index, DiggingController.DigMode.Add);
                     break;
 				default:
 					throw new Exception("Unsupported digging shape used");
@@ -575,20 +604,20 @@ namespace UpvoidMiner
         /// <summary>
 		/// Places the current digging shape at a given position with a given radius.
         /// </summary>
-        public void DigMaterial(vec3 position, float radius, IEnumerable<int> filterMaterials)
+        public void DigMaterial(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
             position = AlignPlacementPosition(position);
 
 			switch (CurrentDiggingShape)
 			{
 				case DiggingShape.Sphere:
-					digging.DigSphere(position, radius, filterMaterials);
+                    digging.DigSphere(worldNormal, position, radius, filterMaterials);
                     break;
                 case DiggingShape.Box:
-                    digging.DigBox(position, radius, filterMaterials);
+                    digging.DigBox(worldNormal, position, radius, filterMaterials);
                     break;
                 case DiggingShape.Cylinder:
-                    digging.DigCylinder(position, radius, filterMaterials);
+                    digging.DigCylinder(worldNormal, position, radius, filterMaterials);
                     break;
 				default:
 					throw new Exception("Unsupported digging shape used");
@@ -763,7 +792,7 @@ namespace UpvoidMiner
                             {
                                 Item selection = Inventory.Selection;
                                 if (selection != null)
-                                    selection.OnUse(this, _position);
+                                    selection.OnUse(this, _position, _normal);
                             }
                         }
                     });

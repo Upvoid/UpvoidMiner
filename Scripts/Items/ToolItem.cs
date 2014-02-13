@@ -205,25 +205,30 @@ namespace UpvoidMiner
             }
             // Set uniform for position and radius
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+            vec3 dx, dy, dz;
+            _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
+            previewShape.SetColor("uDigDirX", new vec4(dx, 0));
+            previewShape.SetColor("uDigDirY", new vec4(dy, 0));
+            previewShape.SetColor("uDigDirZ", new vec4(dz, 0));
             // Radius of the primary preview is always impact-radius of the current tool.
             previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
             // Indicator is always in the center and relatively small.
             previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
         }
 
-        public override void OnUse(Player player, Engine.vec3 _worldPos)
+        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
         {
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
                     // Pickaxe has small radius but can dig everywhere
-					player.DigMaterial(_worldPos, digRadiusPickaxe, null);
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, null);
 
                     return;
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-					player.DigMaterial(_worldPos, digRadiusShovel, new [] { TerrainResource.FromName("Dirt").Index });
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index });
                     return;
 
                 case ToolType.Axe:

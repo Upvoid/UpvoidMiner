@@ -83,7 +83,7 @@ namespace UpvoidMiner
         /// </summary>
         public override bool HasRayPreview { get { return true; } }
 
-        public override void OnUse(Player player, vec3 _worldPos)
+        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
         {
             float radius = useRadius, useVolume;
             switch (player.CurrentDiggingShape)
@@ -107,7 +107,7 @@ namespace UpvoidMiner
                     throw new InvalidOperationException("Unknown digging shape");
             }
 
-            player.PlaceMaterial(Material, _worldPos, radius);
+            player.PlaceMaterial(Material, _worldNormal, _worldPos, radius);
         }
 
         public override void OnSelect(Player player)
@@ -157,50 +157,47 @@ namespace UpvoidMiner
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
             _worldPos = _player.AlignPlacementPosition(_worldPos);
+            vec3 dx, dy, dz;
+            _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
+            mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
 
             // If the indicated volume is greater than the available volume, show limitation sphere.
+            float volumeFactor = 0;
             float useVolume;
             switch (_player.CurrentDiggingShape)
             {
                 case Player.DiggingShape.Box:
-                    useVolume = 8 * useRadius * useRadius * useRadius;
-                    if (_visible && useVolume > Volume)
-                    {
-                        float availableRadius = (float)Math.Pow(Volume / 8, 1 / 3f);
-                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
-                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
-                    }
-                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    volumeFactor = 8;
                     break;
                 case Player.DiggingShape.Cylinder:
-                    useVolume = 2 * (float)Math.PI * useRadius * useRadius * useRadius;
-                    if (_visible && useVolume > Volume)
-                    {
-                        float availableRadius = (float)Math.Pow(Volume / (2 * (float)Math.PI), 1 / 3f);
-                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
-                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
-                    }
-                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    volumeFactor = 2 * (float)Math.PI;
                     break;
                 case Player.DiggingShape.Sphere:
-                    useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
-                    if (_visible && useVolume > Volume)
-                    {
-                        float availableRadius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
-                        previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius);
-                        previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
-                    }
-                    else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+                    volumeFactor = 4f / 3f * (float)Math.PI;
                     break;
                 default:
                     throw new InvalidOperationException("Unknown digging shape");
             }
+            useVolume = volumeFactor * useRadius * useRadius * useRadius;
+            if (_visible && useVolume > Volume)
+            {
+                float availableRadius = (float)Math.Pow(Volume / volumeFactor, 1 / 3f);
+                previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius) * rotMat;
+                previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, availableRadius));
+            }
+            else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
 
             // Radius of the primary preview is always use-radius.
-            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
+            previewShape.SetColor("uDigDirX", new vec4(dx, 0));
+            previewShape.SetColor("uDigDirY", new vec4(dy, 0));
+            previewShape.SetColor("uDigDirZ", new vec4(dz, 0));
+            previewShapeLimited.SetColor("uDigDirX", new vec4(dx, 0));
+            previewShapeLimited.SetColor("uDigDirY", new vec4(dy, 0));
+            previewShapeLimited.SetColor("uDigDirZ", new vec4(dz, 0));
             // Indicator is always in the center and relatively small.
-            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
+            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnDeselect(Player player)
