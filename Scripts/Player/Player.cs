@@ -567,8 +567,8 @@ namespace UpvoidMiner
                     break;
                 case Player.DiggingAlignment.PlayerAligned:
                     dirX = camera.RightDirection.Normalized;
-                    dirY = camera.UpDirection.Normalized;
-                    dirZ = camera.ForwardDirection.Normalized;
+                    dirZ = camera.UpDirection.Normalized;
+                    dirY = camera.ForwardDirection.Normalized;
                     break;
                 case Player.DiggingAlignment.TerrainAligned:
                     dirY = worldNormal.Normalized;

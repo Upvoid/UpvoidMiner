@@ -184,6 +184,9 @@ namespace UpvoidMiner
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
             _worldPos = _player.AlignPlacementPosition(_worldPos);
+            vec3 dx, dy, dz;
+            _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
+            mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
 
             // Limit shape if non-noclip
             if (!LocalScript.NoclipEnabled)
@@ -205,15 +208,13 @@ namespace UpvoidMiner
             }
             // Set uniform for position and radius
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
-            vec3 dx, dy, dz;
-            _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
             previewShape.SetColor("uDigDirX", new vec4(dx, 0));
             previewShape.SetColor("uDigDirY", new vec4(dy, 0));
             previewShape.SetColor("uDigDirZ", new vec4(dz, 0));
             // Radius of the primary preview is always impact-radius of the current tool.
-            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) : mat4.Scale(0f);
+            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
             // Indicator is always in the center and relatively small.
-            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) : mat4.Scale(0f);
+            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
