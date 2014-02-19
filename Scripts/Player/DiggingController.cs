@@ -64,6 +64,11 @@ namespace UpvoidMiner
         CsgExpression cylinderNode;
 
         /// <summary>
+        /// Cached Player safety margin.
+        /// </summary>
+        CsgExpression playerNode;
+
+        /// <summary>
         /// Particle system for 3D stones due to digging.
         /// </summary>
         class StoneParticles
@@ -122,6 +127,13 @@ namespace UpvoidMiner
                 dz = abs(dot(p, digDirZ));
                 -digRadius + max(dy, length(vec2(dx, dz)))";
             cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, digParas);
+
+            string playerExpression = @"p = vec3(x,y,z) - playerPosition;
+                dx = abs(dot(p, digDirX));
+                dy = abs(dot(p, digDirY));
+                dz = abs(dot(p, digDirZ));
+                -playerRadius + max(dy, length(vec2(dx, dz)))";
+            playerNode = new CsgExpression(1, playerExpression, UpvoidMiner.ModDomain, "playerRadius:float, playerPosition:vec3, digDirX:vec3, digDirY:vec3, digDirZ:vec3");
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
@@ -133,6 +145,17 @@ namespace UpvoidMiner
             CsgOpDiff constraintDiffNode = new CsgOpDiff();
             // Assemble difference operation by applying all drone constraints.
             player.AddDroneConstraints(constraintDiffNode, shapeBoundary.Center);
+
+            // When placing material, add a safety margin around the player to prevent it from physically glitching trough the terrain
+            if (digMode == DigMode.Add)
+            {
+                playerNode.SetParameterFloat("playerRadius", player.Character.CharacterDiameter * 0.5f + 0.2f);
+                playerNode.SetParameterVec3("playerPosition", player.Character.Position);
+                playerNode.SetParameterVec3("digDirX", new vec3(1, 0, 0));
+                playerNode.SetParameterVec3("digDirZ", new vec3(0, 0, 1));
+                playerNode.SetParameterVec3("digDirY", new vec3(0, 0, player.Character.BodyHeight * 0.5f + 0.2f));
+                constraintDiffNode.AddNode(playerNode);
+            }
 
             // We apply the constraint by substracting it from the given shape.
             CsgOpConcat constraintedShape = new CsgOpConcat();
