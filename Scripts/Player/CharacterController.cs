@@ -192,6 +192,17 @@ namespace UpvoidMiner
 		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
 		protected void Update(float _elapsedSeconds)
 		{
+            // Don't do anything when noclip is enabled
+            if (LocalScript.NoclipEnabled)
+            {
+                walkDirRight = 0;
+                walkDirForward = 0;
+                IsRunning = false;
+                Body.SetVelocity(vec3.Zero);
+                Body.SetGravity(new vec3(0, -9.807f, 0));
+                return;
+            }
+
 			jumpCoolDown -= _elapsedSeconds;
 			if (jumpCoolDown < 0f)
 				jumpCoolDown = 0f;
