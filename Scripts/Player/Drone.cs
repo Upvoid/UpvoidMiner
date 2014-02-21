@@ -19,6 +19,7 @@ using Engine;
 using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
+using Engine.Physics;
 
 namespace UpvoidMiner
 {
@@ -81,6 +82,9 @@ namespace UpvoidMiner
         private RenderComponent renderComponentWing2Opaque;
         private RenderComponent renderComponentWing2Shadow;
 
+        // Rigid Body
+        private RigidBody rb = null;
+
         // Trigger for drone collection.
         TriggerId AddItemTrigger;
 
@@ -112,6 +116,12 @@ namespace UpvoidMiner
                     CurrentPosition += (realTarget - CurrentPosition).Normalized * dis;
 
                 thisEntity.Transform = mat4.Translate(CurrentPosition);
+            }
+            else if(rb == null) // Only create its rigid body once the drone found its final position.
+            {
+                // Add a RigidBody
+                rb = this.ContainingWorld.Physics.CreateAndAddRigidBody(0.0f, thisEntity.Transform, new SphereShape(0.25f));
+                thisEntity.AddComponent(new PhysicsComponent(rb, mat4.Identity));
             }
             
             renderComponentWing1Opaque.Transform = renderComponentWing1Shadow.Transform = mat4.Scale(DroneScale) * mat4.RotateY(-360 * RotationSpeed * lifetime);

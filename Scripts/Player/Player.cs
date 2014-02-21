@@ -512,20 +512,25 @@ namespace UpvoidMiner
         {
             Drone d = new Drone(position + new vec3(0, 1, 0), this, DroneType.Chain);
             Drones.Add(d);
-            
+
+            // Add drone to the first constraint it can be added to.
             bool foundConstraint = false;
             foreach (var dc in DroneConstraints)
             {
                 if (dc.IsAddable(d))
                 {
+                    // Drone is addable, i.e. the constraint contains a drone of the same type
                     dc.AddDrone(d);
                     foundConstraint = true;
                     break;
                 }
             }
+
+            // If no constraint was found, we add a new one and add the drone to that.
             if (!foundConstraint)
                 DroneConstraints.Add(new DroneConstraint(d));
-            
+
+            // Add the drone as new entity.
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Engine.Network.GameConnectionManager.GetOurUserID());
         }
         /// <summary>
@@ -534,7 +539,17 @@ namespace UpvoidMiner
         public void RemoveDrone(Drone drone)
         {
             foreach (var dc in DroneConstraints)
+            {
                 dc.RemoveDrone(drone);
+
+                // In case removing the drone resulted in an "empty" constraint, delete that.
+                if (dc.ContainsDrones() == false)
+                {
+                    DroneConstraints.Remove(dc);
+                    break;
+                }
+            }
+
             Drones.Remove(drone);
         }
 
@@ -575,7 +590,7 @@ namespace UpvoidMiner
                     dirX = vec3.cross(camera.ForwardDirection, dirY).Normalized;
                     dirZ = vec3.cross(dirX, dirY).Normalized;
                     break;
-                default: throw new InvalidOperationException("Unknown alginment");
+                default: throw new InvalidOperationException("Unknown alignment");
             }
         }
 

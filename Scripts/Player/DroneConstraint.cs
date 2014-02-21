@@ -55,17 +55,36 @@ namespace UpvoidMiner
                 return drones[0];
             }
         }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpvoidMiner.DroneConstraint"/> class.
+        /// A drone constraint creates a digging/construction constraint between two nearby drones.
+        /// </summary>
+        /// <param name="_firstDrone">First drone, initially added to this constraint.</param>
         public DroneConstraint(Drone _firstDrone)
         {
             drones.Add(_firstDrone);
         }
 
+        
         /// <summary>
-        /// Determines whether the drone is addable this istance.
+        /// Reports whether drones are attached to this constraint.
+        /// </summary>
+        /// <returns><c>true</c>, iff at least one drone is attached, <c>false</c> otherwise.</returns>
+        public bool ContainsDrones()
+        {
+            return drones.Count > 0;
+        }
+
+
+        /// <summary>
+        /// Determines whether the drone is addable to this instance.
+        /// True iff constraint contains a drone of the same type.
         /// </summary>
         public bool IsAddable(Drone _drone)
         {
+            //if (drones.Count < 1)
+            //    return false;
+
             Drone refDrone = ReferenceDrone;
 
             // Matching drone type.
@@ -121,67 +140,73 @@ namespace UpvoidMiner
         /// </summary>
         public void Update(float _elapsedSeconds)
         {
-            Drone refDrone = ReferenceDrone;
-
-            switch (refDrone.Type)
+            if (drones.Count > 0)
             {
-                case DroneType.Chain:
-                    for (int i = 0; i < drones.Count - 1; ++i)
-                    {
-                        Drone first = drones[i];
-                        Drone second = drones[i+1];
 
-                        // Swap every other drone.
-                        if ( i % 2 == 1 )
+                Drone refDrone = ReferenceDrone;
+
+                switch (refDrone.Type)
+                {
+                    case DroneType.Chain:
+                        for (int i = 0; i < drones.Count - 1; ++i)
                         {
-                            Drone tmp  = first;
-                            first = second;
-                            second = tmp;
+                            Drone first = drones[i];
+                            Drone second = drones[i + 1];
+
+                            // Swap every other drone.
+                            if (i % 2 == 1)
+                            {
+                                Drone tmp = first;
+                                first = second;
+                                second = tmp;
+                            }
+
+                            bool addJob = false;
+                            if (boundaryIndicators.Count <= i)
+                            {
+                                boundaryIndicators.Add(new MeshRenderJob(Renderer.Transparent.Mesh, 
+                                                                         Resources.UseMaterial("Miner/DroneConstraintVertical", UpvoidMiner.ModDomain),
+                                                                         Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
+                                                                         mat4.Identity));
+                                boundaryIndicatorsDistort.Add(new MeshRenderJob(Renderer.Distortion.Mesh, 
+                                                                                Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", UpvoidMiner.ModDomain),
+                                                                                Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
+                                                                                mat4.Identity));
+
+                                // Vertical drones cause a constraint by the intersection of the planes (i.e. the plane between two drones and the two shadow-planes).
+                                constraintExpression.Add(new CsgExpression(1, "max((dot(plane1Normal, vec3(x, y, z)) - plane1Dis), max( (dot(plane2Normal, vec3(x, y, z)) - plane2Dis), (dot(plane3Normal, vec3(x, y, z)) - plane3Dis)) )", 
+                                                                           UpvoidMiner.ModDomain, 
+                                                                           "plane1Normal:vec3, plane1Dis:float, plane2Normal:vec3, plane2Dis:float, plane3Normal:vec3, plane3Dis:float"));
+                                addJob = true;
+                            }
+                            
+                            MeshRenderJob job1 = boundaryIndicators[i];
+                            MeshRenderJob job2 = boundaryIndicatorsDistort[i];
+
+                            configureVerticalConstraint(first, second, job1, job2);
+
+                            if (addJob)
+                            {
+                                LocalScript.world.AddRenderJob(job1);
+                                LocalScript.world.AddRenderJob(job2);
+                            }
                         }
 
-                        bool addJob = false;
-                        if ( boundaryIndicators.Count <= i )
-                        {
-                            boundaryIndicators.Add(new MeshRenderJob(Renderer.Transparent.Mesh, 
-                                                                     Resources.UseMaterial("Miner/DroneConstraintVertical", UpvoidMiner.ModDomain),
-                                                                     Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
-                                                                     mat4.Identity));
-                            boundaryIndicatorsDistort.Add(new MeshRenderJob(Renderer.Distortion.Mesh, 
-                                                                     Resources.UseMaterial("Miner/DroneConstraintVerticalDistort", UpvoidMiner.ModDomain),
-                                                                     Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
-                                                                     mat4.Identity));
-
-                            // Vertical drones cause a constraint by the intersection of the planes (i.e. the plane between two drones and the two shadow-planes).
-                            constraintExpression.Add(new CsgExpression(1, "max((dot(plane1Normal, vec3(x, y, z)) - plane1Dis), max( (dot(plane2Normal, vec3(x, y, z)) - plane2Dis), (dot(plane3Normal, vec3(x, y, z)) - plane3Dis)) )", 
-                                                                       UpvoidMiner.ModDomain, 
-                                                                       "plane1Normal:vec3, plane1Dis:float, plane2Normal:vec3, plane2Dis:float, plane3Normal:vec3, plane3Dis:float"));
-                            addJob = true;
-                        }
                         
-                        MeshRenderJob job1 = boundaryIndicators[i];
-                        MeshRenderJob job2 = boundaryIndicatorsDistort[i];
-
-                        configureVerticalConstraint(first, second, job1, job2);
-
-                        if ( addJob )
-                        {
-                            LocalScript.world.AddRenderJob(job1);
-                            LocalScript.world.AddRenderJob(job2);
-                        }
-                    }
-
-                    // Remove old ones.
-                    while ( boundaryIndicators.Count > drones.Count )
-                    {
-                        LocalScript.world.RemoveRenderJob(boundaryIndicators[boundaryIndicators.Count - 1]);
-                        LocalScript.world.RemoveRenderJob(boundaryIndicatorsDistort[boundaryIndicators.Count - 1]);
-                        boundaryIndicators.RemoveAt(boundaryIndicators.Count - 1);
-                        boundaryIndicatorsDistort.RemoveAt(boundaryIndicatorsDistort.Count - 1);
-                        constraintExpression.RemoveAt(constraintExpression.Count - 1);
-                    }
-                    break;
-                default: Debug.Fail("Not implemented/Invalid");
-                    break;
+                        break;
+                    default:
+                        Debug.Fail("Not implemented/Invalid");
+                        break;
+                }
+            }
+            // Remove old ones.
+            while ( boundaryIndicators.Count > Math.Max(0, drones.Count -1))
+            {
+                LocalScript.world.RemoveRenderJob(boundaryIndicators[boundaryIndicators.Count - 1]);
+                LocalScript.world.RemoveRenderJob(boundaryIndicatorsDistort[boundaryIndicators.Count - 1]);
+                boundaryIndicators.RemoveAt(boundaryIndicators.Count - 1);
+                boundaryIndicatorsDistort.RemoveAt(boundaryIndicatorsDistort.Count - 1);
+                constraintExpression.RemoveAt(constraintExpression.Count - 1);
             }
         }
 
@@ -228,6 +253,7 @@ namespace UpvoidMiner
         /// </summary>
         public void AddCsgConstraints(CsgOpDiff diffNode, vec3 refPos)
         {            
+
             Drone refDrone = ReferenceDrone;
             switch (refDrone.Type)
             {
