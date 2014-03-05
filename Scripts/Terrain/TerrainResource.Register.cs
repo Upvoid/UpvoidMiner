@@ -39,6 +39,9 @@ namespace UpvoidMiner
             // Dirt
             addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
 
+			// Desert
+			addResource(new VegetatedTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert"));
+
             // Stones
             for (int i = 1; i <= 14; ++i)
                 addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00")));

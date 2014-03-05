@@ -457,7 +457,28 @@
     "Name" : "Terrain/Copper",
     "Path" : "~.mat",
     "Type" : "Material"
- },
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Terrain/Desert",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Desert",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Desert",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Desert",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {

@@ -42,12 +42,38 @@
     Parameter: uTexScaleZY, 30
     Parameter: uBlendingCoefficient, 4
 
+[Terrain/Desert] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmapDetailed
+    Texture: uColorXZ, /Resources.TerrainMaterials::Soil/Soil09.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Soil/Soil09.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Soil/Soil09.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Soil/Soil05.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil09.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil09.Normal
+    Color: uSpecularColor, .0, .0, .0, 4
+    Parameter: uTexScaleXY, 30
+    Parameter: uTexScaleXZ, 30
+    Parameter: uTexScaleZY, 30
+    Parameter: uBlendingCoefficient, 4
+
 
 [Particles/Rock] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, ::compatibility/terrain/RockRough0008_2_S
     Texture: uNormal, ::compatibility/terrain/RockRough0008_2_S.normals
     Color: uSpecularColor, .1, .1, .1, 8
+    ParticleAttribute: aParticlePosition
+    ParticleAttribute: aParticleSize
+    ParticleAttribute: aParticleTangent
+    ParticleAttribute: aParticleBitangent
+    ParticleAttribute: aParticleColor
+    ParticleAttribute: aParticleLife
+
+[Particles/Terrain/Desert] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Soil/Soil09.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Soil/Soil09.Normal
+    Color: uSpecularColor, .0, .0, .0, 8
     ParticleAttribute: aParticlePosition
     ParticleAttribute: aParticleSize
     ParticleAttribute: aParticleTangent
