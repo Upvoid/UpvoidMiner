@@ -154,6 +154,19 @@
     Parameter: uDiscardBias, .9
     Culling: None
 
+[Cactus] : Default
+    Shader: Vegetation/TreeLeavesNormalmap.Opaque
+    Texture: uColor, Vegetation/Cactus/Cactus.Diffuse
+    Texture: uNormal, Vegetation/Cactus/Cactus.Normal
+    Parameter: uDiscardBias, .9
+    Culling: None
+
+[Cactus.Shadow] : Default
+    Shader: Vegetation/TreeLeaves.Shadow
+    Texture: uColor, Vegetation/Cactus/Cactus.Diffuse
+    Parameter: uDiscardBias, .9
+    Culling: None
+
 [TreeTrunk] : Default
     Shader: Vegetation/TreeTrunk
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse

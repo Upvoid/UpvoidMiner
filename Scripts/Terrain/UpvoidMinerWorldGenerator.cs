@@ -220,6 +220,9 @@ namespace UpvoidMiner
             //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
 
             Tree t = TreeGenerator.OldTree(random, transform1, transform2, world);
+
+            // (Cacti)
+            //Tree t = TreeGenerator.Cactus(random, transform1, transform2, world);
             t.Position = pos;
             world.AddEntity(t, transform1);
             trees.Add(t);

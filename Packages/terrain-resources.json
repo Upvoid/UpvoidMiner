@@ -168,7 +168,19 @@
             "Path" : "~.shader",
             "Type" : "Shader"
 },
-
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Trees/TreeLeavesNormalmap.Opaque.fsh",
+            "Vegetation/Trees/Tree.vsh"
+        ],
+        "Name" : "Vegetation/TreeLeavesNormalmap.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/TreeLeavesNormalmap.Opaque",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
 
 {
     "Descriptor" : "File",

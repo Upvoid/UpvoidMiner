@@ -112,6 +112,62 @@
 },
 
 {
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "Vegetation/Cactus/Cactus.Diffuse",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "Vegetation/Cactus/Cactus.Normal",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus1",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus2",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus3",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus4",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus5",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Cactus/Cactus6",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
+
+{
     "Type": "Mesh",
     "Name": "PineTrunk",
     "Path": "~.obj",
@@ -597,6 +653,27 @@
         "Type" : "FromCollection"
     },
     "Name" : "TreeLeaves01.Shadow",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Cactus",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Cactus",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Cactus.Shadow",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Cactus.Shadow",
     "Path" : "~.mat",
     "Type" : "Material"
 },

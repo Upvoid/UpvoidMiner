@@ -27,6 +27,49 @@ namespace UpvoidMiner
     /// </summary>
     public class TreeGenerator
     {
+
+        public static Tree Cactus(Random random, mat4 transform1, mat4 transform2, World world)
+        {
+            // Compute random cactus type \in 0..5
+            int type = (int)(random.NextDouble()*6.0);
+
+            // Circumvent the unlikely case of NextDouble() returning 1.0
+            if(type > 5) type = 5;
+
+            // 0..5 -> 1..6
+            ++type;
+
+            string meshString = "Vegetation/Cactus/Cactus" + type.ToString();
+
+            MeshRenderJob cactus = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                Resources.UseMaterial("Cactus", UpvoidMiner.ModDomain),
+                Resources.UseMesh(meshString, UpvoidMiner.ModDomain),
+                transform2);
+
+            MeshRenderJob cactusShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("Cactus.Shadow", UpvoidMiner.ModDomain),
+                Resources.UseMesh(meshString, UpvoidMiner.ModDomain),
+                transform2);
+
+            // Add some color variance to cacti
+            vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.6f, 0.9f + (float)random.NextDouble() * 0.2f, 1, 1);
+            cactus.SetColor("uColorModulation", colorModulation);
+
+            Tree t = new Tree();
+            Tree.Log l = new Tree.Log();
+            RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
+
+            t.RjLeaves0.Add(new RenderComponent(cactus, transform2));
+            t.RjLeaves0.Add(new RenderComponent(cactusShadow, transform2));
+
+            t.Logs.Add(l);
+
+            return t;
+        }
+
         public static Tree OldTree(Random random, mat4 transform1, mat4 transform2, World world)
         {
             bool type0 = random.NextDouble() > 0.5;
