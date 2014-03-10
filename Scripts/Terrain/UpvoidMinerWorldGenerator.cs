@@ -47,16 +47,24 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
 		private TerrainResource terrainRock;
 		private TerrainResource terrainDesert;
-
+        
+        [Serializable]
+        public enum TreeType 
+        {
+            Tree,
+            Cactus
+        }
 
         [Serializable]
         public class EntitySave
         {
+
             [Serializable]
             public class TreeSave
             {
                 public float x, y, z;
                 public int seed;
+                public TreeType type;
             }
 
             public List<TreeSave> trees = new List<TreeSave>();
@@ -155,8 +163,9 @@ namespace UpvoidMiner
                 diff.AddNode(new CsgExpression(1, caveDef + "Caves", UpvoidMiner.ModDomain));
                 concat.AddNode(diff);
             }
-
+            
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), World, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Cacti", UpvoidMiner.ModDomain), World, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), World, 4));
             concat.AddNode(new CsgCollapseNode());
 
@@ -177,7 +186,7 @@ namespace UpvoidMiner
                 var trees = entitySave.trees;
                 entitySave.trees = new List<EntitySave.TreeSave>();
                 foreach (var item in trees)
-                    TreeCreate(new vec3(item.x, item.y, item.z), item.seed);
+                    TreeCreate(new vec3(item.x, item.y, item.z), item.seed, item.type);
             }
         }
 
@@ -185,23 +194,30 @@ namespace UpvoidMiner
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
             int seed = random.Next();
-            TreeCreate(pos, seed);
+            TreeCreate(pos, seed, TreeType.Tree);
         }
 
-        public static void TreeCreate(vec3 pos, int seed)
+        public static void CactusCallback(IntPtr _pos)
+        {
+            vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
+            int seed = random.Next();
+            TreeCreate(pos, seed, TreeType.Cactus);
+        }
+
+        public static void TreeCreate(vec3 pos, int seed, TreeType type)
         {
             // at least 2m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
             foreach (var tree in entitySave.trees)
-                if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 2f)
+                if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 4f)
                     return;
 
             Random random = new Random(seed);
             entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed });
-            AddTree(pos, random);
+            AddTree(pos, random, type);
         }
 
-        private static void AddTree(vec3 pos, Random random)
+        private static void AddTree(vec3 pos, Random random, TreeType type)
         {
             World world = Instance.World;
 
@@ -220,10 +236,17 @@ namespace UpvoidMiner
 
             //world.AddEntity(TreeGenerator.Birch(8 + (float)random.NextDouble() * 10f, .3f + (float)random.NextDouble() * .1f, random), transform);
 
-            Tree t = TreeGenerator.OldTree(random, transform1, transform2, world);
+            Tree t = null;
+            switch (type)
+            {
+                case TreeType.Tree:
+                    t = TreeGenerator.OldTree(random, transform1, transform2, world);
+                    break;
+                case TreeType.Cactus:
+                    t = TreeGenerator.Cactus(random, transform1, transform2, world);
+                    break;
+            }
 
-            // (Cacti)
-            //Tree t = TreeGenerator.Cactus(random, transform1, transform2, world);
             t.Position = pos;
             world.AddEntity(t, transform1);
             trees.Add(t);

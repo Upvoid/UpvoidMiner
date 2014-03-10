@@ -1,0 +1,45 @@
+// Copyright (C) by Upvoid Studios
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+// Tree spawning Automaton
+automaton CactiTon
+
+cells
+  0, 1, 0 as Top1
+  0, 2, 0 as Top2
+  0, 3, 0 as Top3
+
+  1,0,0  as Left
+  -1,0,0 as Right
+  0,0,-1 as Front
+  0,0,1  as Back
+
+pre
+  this.material is "Desert"
+  Left.material  is "Desert"
+  Right.material is "Desert"
+  Front.material is "Desert"
+  Back.material  is "Desert"
+  Top1.material is void
+  Top2.material is void
+  Top3.material is void
+
+body
+
+  spawnProbability = 0; perlin(x,y,z) $= ::Perlin; p = this.position / 100; spawnProbability = (perlin(p.x, p.y, p.z) * .1 + .2) * 0.1
+
+  if random(0,1) < spawnProbability
+    call $UpvoidMiner UpvoidMiner.UpvoidMinerWorldGenerator.CactusCallback
+      pos = this.position

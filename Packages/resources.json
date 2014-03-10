@@ -351,6 +351,12 @@
     "Path": "~.ca",
     "Descriptor": "File"
 },
+{
+    "Type": "Automaton",
+    "Name": "Cacti",
+    "Path": "~.ca",
+    "Descriptor": "File"
+},
 
 {
     "Type": "Automaton",
