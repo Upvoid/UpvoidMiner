@@ -40,7 +40,7 @@ namespace UpvoidMiner
             addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
 
 			// Desert
-			addResource(new VegetatedTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert"));
+			addResource(new SolidTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert"));
 
             // Stones
             for (int i = 1; i <= 14; ++i)

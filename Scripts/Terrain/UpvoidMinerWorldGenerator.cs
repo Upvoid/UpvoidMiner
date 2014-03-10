@@ -127,8 +127,8 @@ namespace UpvoidMiner
 
 				CsgOpUnion groundTerrain = new CsgOpUnion();
 				{
-					groundTerrain.AddNode(new CsgExpression(terrainDirt.Index, "y+90", UpvoidMiner.ModDomain));
-					groundTerrain.AddNode(new CsgExpression(terrainDesert.Index, hillsDef + "max(y+90 , 3 * perlins(x / 300, z / 300, y / 100))", UpvoidMiner.ModDomain));
+					groundTerrain.AddNode(new CsgExpression(terrainDirt.Index, "y+90.2", UpvoidMiner.ModDomain));
+					groundTerrain.AddNode(new CsgExpression(terrainDesert.Index, hillsDef + "max(y+90.1 , 3 * perlins(x / 300, z / 300, y / 100))", UpvoidMiner.ModDomain));
 				}
 
 				union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", UpvoidMiner.ModDomain));
@@ -160,7 +160,8 @@ namespace UpvoidMiner
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), World, 4));
             concat.AddNode(new CsgCollapseNode());
 
-            return concat;
+
+			return concat;
         }
         
         public static void SaveEntities()
