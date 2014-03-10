@@ -13,6 +13,7 @@
 
 { "Name" : "Items/Icons/Dirt", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Wood", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Desert", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 { "Name" : "Items/Icons/Stone.01", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Stone.02", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },

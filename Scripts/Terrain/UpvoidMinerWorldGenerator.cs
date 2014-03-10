@@ -213,7 +213,7 @@ namespace UpvoidMiner
                     return;
 
             Random random = new Random(seed);
-            entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed });
+            entitySave.trees.Add(new EntitySave.TreeSave { x = pos.x, y = pos.y, z = pos.z, seed = seed, type = type });
             AddTree(pos, random, type);
         }
 
