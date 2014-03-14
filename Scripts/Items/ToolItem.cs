@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Engine;
 using Engine.Rendering;
 using Engine.Resources;
+using Engine.Universe;
 
 namespace UpvoidMiner
 {
@@ -217,7 +218,7 @@ namespace UpvoidMiner
             previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
-        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
+        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal, Entity _hitEntity)
         {
             switch (ToolType)
             {
@@ -233,7 +234,10 @@ namespace UpvoidMiner
                     return;
 
                 case ToolType.Axe:
-                    // TODO
+                    if (_hitEntity != null)
+                    {
+                        _hitEntity[TriggerId.getIdByName("Hit")] |= new HitMessage(player.thisEntity);
+                    }
                     return;
 
                 case ToolType.DroneChain:

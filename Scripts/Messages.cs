@@ -18,6 +18,7 @@ using Engine.Universe;
 
 namespace UpvoidMiner
 {
+    // Message that is (usually) sent when the player interacts with the environment
     [Serializable]
     public class InteractionMessage
     {
@@ -29,6 +30,7 @@ namespace UpvoidMiner
         }
     }
 
+    // Basically for triggering the adding of an item
     [Serializable]
     public class AddItemMessage
     {
@@ -37,6 +39,18 @@ namespace UpvoidMiner
         public AddItemMessage(Item pickedItem)
         {
             PickedItem = pickedItem;
+        }
+    }
+
+    // This message shall be sent when something has been hit (usually by a rayquery)
+    [Serializable]
+    public class HitMessage
+    {
+        public Entity Sender;
+
+        public HitMessage(Entity sender)
+        {
+            Sender = sender;
         }
     }
 }

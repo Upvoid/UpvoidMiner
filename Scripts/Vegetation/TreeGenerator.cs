@@ -57,7 +57,8 @@ namespace UpvoidMiner
             vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.6f, 0.9f + (float)random.NextDouble() * 0.2f, 1, 1);
             cactus.SetColor("uColorModulation", colorModulation);
 
-            Tree t = new Tree();
+            // Create new Tree of type Cactus with 0 wood to gather.
+            Tree t = new Tree(0, Tree.TreeType.Cactus);
             Tree.Log l = new Tree.Log();
             RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
@@ -109,7 +110,8 @@ namespace UpvoidMiner
             vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.5f, 0.7f + (float)random.NextDouble() * 0.5f, 1, 1);
             leavesOpaque.SetColor("uColorModulation", colorModulation);
 
-            Tree t = new Tree();
+            // Amount of wood depends on tree type (thicker/thinner trunk) and tree height scale factor.
+            Tree t = new Tree((type0 ? 0.5f : 1.0f) * transform2.col1.y, Tree.TreeType.Birch);
             Tree.Log l = new Tree.Log();
             RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));

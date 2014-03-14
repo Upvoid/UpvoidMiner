@@ -83,7 +83,7 @@ namespace UpvoidMiner
         /// </summary>
         public override bool HasRayPreview { get { return true; } }
 
-        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal)
+        public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal, Entity _hitEntity)
         {
             float radius = useRadius, useVolume;
             switch (player.CurrentDiggingShape)

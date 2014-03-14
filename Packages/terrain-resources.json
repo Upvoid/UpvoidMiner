@@ -423,6 +423,16 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
+        "Name" : "Terrain/BirchWood",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/BirchWood",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
         "Name" : "Terrain/Coal",
         "Type" : "FromCollection"
     },
@@ -670,6 +680,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Particles/Terrain/Wood",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/BirchWood",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/BirchWood",
     "Path" : "~.mat",
     "Type" : "Material"
  },

@@ -99,6 +99,19 @@ namespace UpvoidMiner
         public List<RenderComponent> RjTrunk = new List<RenderComponent>();
         public List<RenderComponent> RjLeaves0 = new List<RenderComponent>();
 
+        /// The amount of wood this tree has.
+        float amountOfWood;
+
+        [Serializable]
+        public enum TreeType 
+        {
+            Birch,
+            Cactus
+        };
+
+        TreeType treeType;
+
+
         /// <summary>
         /// Initializes all components
         /// </summary>
@@ -115,13 +128,17 @@ namespace UpvoidMiner
             }
         }
 
-        public Tree()
+        public Tree(float _amountOfWood = 0.0f, TreeType _treeType = TreeType.Birch)
         {
+            amountOfWood = _amountOfWood;
+            treeType = _treeType;
         }
 
         protected override void Init()
         {
             base.Init();
+
+            AddTriggerSlot("Hit");
             
             foreach (var r in RjLeaves0)
                 thisEntity.AddComponent(r);
@@ -129,6 +146,28 @@ namespace UpvoidMiner
                 thisEntity.AddComponent(r);
 
             InitComps();
+        }
+
+        void Hit(object message)
+        {
+            if(!(message is HitMessage))
+                return;
+
+            // Tree has been hit (by an axe), so we create some wood cylinders the player can pick up
+            //System.Console.WriteLine(amountOfWood.ToString());
+
+            ContainingWorld.RemoveEntity(thisEntity);
+
+            // Gather wood from "real" trees only, not from cacti etc.
+            if (treeType != TreeType.Birch)
+                return;
+
+            int numberOfWoodCylinders = 3*(int)(amountOfWood + 1.0f);
+            for (int i = 0; i < numberOfWoodCylinders; ++i)
+            {
+                ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder, new vec3(0.2f, 0.7f, 0.2f)));
+                ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + new vec3(0, 1 + i, 0)));
+            }
         }
     }
 }

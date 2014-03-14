@@ -453,7 +453,7 @@ namespace UpvoidMiner
                 // Tools
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
-                //Inventory.AddItem(new ToolItem(ToolType.Axe));
+                Inventory.AddItem(new ToolItem(ToolType.Axe));
                 //Inventory.AddItem(new ToolItem(ToolType.Hammer));
                 Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5));
 
@@ -799,6 +799,12 @@ namespace UpvoidMiner
                         // Receiving the async ray query result here
                         if (_hit)
                         {
+                            Entity _hitEntity = null;
+                            if (_body != null && _body.RefComponent != null)
+                            {
+                                _hitEntity = _body.RefComponent.Entity;
+                            }
+
                             /// Subtract a few cm toward camera to increase stability near constraints.
                             _position -= camera.ForwardDirection * .04f;
 
@@ -807,7 +813,7 @@ namespace UpvoidMiner
                             {
                                 Item selection = Inventory.Selection;
                                 if (selection != null)
-                                    selection.OnUse(this, _position, _normal);
+                                    selection.OnUse(this, _position, _normal, _hitEntity);
                             }
                         }
                     });

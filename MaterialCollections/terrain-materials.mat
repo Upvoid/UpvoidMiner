@@ -510,6 +510,31 @@
     ParticleAttribute: aParticleColor
     ParticleAttribute: aParticleLife
 
+[Terrain/BirchWood] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Wood/Wood02.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Wood/Wood02.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Wood/Wood02.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScaleXY, 3
+    Parameter: uTexScaleXZ, 3
+    Parameter: uTexScaleZY, 3
+    Parameter: uBlendingCoefficient, 4
+
+[Particles/Terrain/BirchWood] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
+    Color: uSpecularColor, .1, .1, .1, 8
+    ParticleAttribute: aParticlePosition
+    ParticleAttribute: aParticleSize
+    ParticleAttribute: aParticleTangent
+    ParticleAttribute: aParticleBitangent
+    ParticleAttribute: aParticleColor
+    ParticleAttribute: aParticleLife
 
 [Terrain/Coal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap

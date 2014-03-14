@@ -47,13 +47,6 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
 		private TerrainResource terrainRock;
 		private TerrainResource terrainDesert;
-        
-        [Serializable]
-        public enum TreeType 
-        {
-            Tree,
-            Cactus
-        }
 
         [Serializable]
         public class EntitySave
@@ -64,7 +57,7 @@ namespace UpvoidMiner
             {
                 public float x, y, z;
                 public int seed;
-                public TreeType type;
+                public Tree.TreeType type;
             }
 
             public List<TreeSave> trees = new List<TreeSave>();
@@ -194,17 +187,17 @@ namespace UpvoidMiner
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
             int seed = random.Next();
-            TreeCreate(pos, seed, TreeType.Tree);
+            TreeCreate(pos, seed, Tree.TreeType.Birch);
         }
 
         public static void CactusCallback(IntPtr _pos)
         {
             vec3 pos = (vec3)Marshal.PtrToStructure(_pos, typeof(vec3));
             int seed = random.Next();
-            TreeCreate(pos, seed, TreeType.Cactus);
+            TreeCreate(pos, seed, Tree.TreeType.Cactus);
         }
 
-        public static void TreeCreate(vec3 pos, int seed, TreeType type)
+        public static void TreeCreate(vec3 pos, int seed, Tree.TreeType type)
         {
             // at least 2m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
@@ -217,7 +210,7 @@ namespace UpvoidMiner
             AddTree(pos, random, type);
         }
 
-        private static void AddTree(vec3 pos, Random random, TreeType type)
+        private static void AddTree(vec3 pos, Random random, Tree.TreeType type)
         {
             World world = Instance.World;
 
@@ -239,10 +232,10 @@ namespace UpvoidMiner
             Tree t = null;
             switch (type)
             {
-                case TreeType.Tree:
+                case Tree.TreeType.Birch:
                     t = TreeGenerator.OldTree(random, transform1, transform2, world);
                     break;
-                case TreeType.Cactus:
+                case Tree.TreeType.Cactus:
                     t = TreeGenerator.Cactus(random, transform1, transform2, world);
                     break;
             }
