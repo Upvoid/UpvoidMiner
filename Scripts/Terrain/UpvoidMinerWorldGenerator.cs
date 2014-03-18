@@ -126,10 +126,17 @@ namespace UpvoidMiner
                 hillsDefines.Append("Hills = (Hills + 1).pow2 * 50;");
                 string hillsDef = hillsDefines.ToString();
 
-				CsgOpUnion groundTerrain = new CsgOpUnion();
+				CsgOpConcat groundTerrain = new CsgOpConcat();
 				{
-					groundTerrain.AddNode(new CsgExpression(terrainDirt.Index, "y+90.2", UpvoidMiner.ModDomain));
-					groundTerrain.AddNode(new CsgExpression(terrainDesert.Index, hillsDef + "max(y+90.1 , 3 * perlins(x / 300, z / 300, y / 100))", UpvoidMiner.ModDomain));
+					CsgOpUnion groundTerrainFull = new CsgOpUnion();
+					groundTerrainFull.AddNode(new CsgExpression(terrainDirt.Index, "-1", UpvoidMiner.ModDomain));
+					groundTerrainFull.AddNode(new CsgExpression(terrainDesert.Index, hillsDef + "3 * perlins(x / 300, z / 300, y / 100)", UpvoidMiner.ModDomain));
+
+					CsgOpDiff groundTerrainDiff = new CsgOpDiff();
+					groundTerrainDiff.AddNode(new CsgExpression(1, "-y-90", UpvoidMiner.ModDomain));
+
+					groundTerrain.AddNode(groundTerrainFull);
+					groundTerrain.AddNode(groundTerrainDiff);
 				}
 
 				union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills", UpvoidMiner.ModDomain));
