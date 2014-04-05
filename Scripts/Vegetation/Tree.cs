@@ -147,14 +147,13 @@ namespace UpvoidMiner
 
             InitComps();
         }
-
-        void Hit(object message)
+        
+        public void Hit(object message)
         {
             if(!(message is HitMessage))
                 return;
 
             // Tree has been hit (by an axe), so we create some wood cylinders the player can pick up
-            //System.Console.WriteLine(amountOfWood.ToString());
 
             ContainingWorld.RemoveEntity(thisEntity);
 
@@ -169,6 +168,7 @@ namespace UpvoidMiner
                 ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + new vec3(0, 1 + i, 0)));
             }
         }
+
     }
 }
 
