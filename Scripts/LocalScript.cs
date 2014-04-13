@@ -21,6 +21,7 @@ using Engine.Rendering;
 using Engine.Modding;
 using Engine.Resources;
 using Engine.Scripting;
+using Engine.Download;
 using Engine.Webserver;
 using Engine.Network;
 using Common.Cameras;
@@ -105,8 +106,7 @@ namespace UpvoidMiner
 
             // Place the camera in the world.
             world.AttachCamera(camera);
-            if (Rendering.ActiveMainPipeline != null)
-                Rendering.ActiveMainPipeline.SetCamera(camera);
+            Rendering.SetupDefaultPipeline(camera);
 
             // Create an active region around the player spawn
             // Active regions help the engine to decide which parts of a world are important (to generate, render, etc.)
@@ -318,18 +318,18 @@ namespace UpvoidMiner
 
 		static void UpdateResourceDownloadProgress()
 		{
-			if (Resources.BytesDownloading != resourceDownloadTotalBytes || Resources.BytesDownloaded != resourceDownloadReceivedBytes)
+			if (Download.BytesReceived != resourceDownloadTotalBytes || Download.BytesReceived!= resourceDownloadReceivedBytes)
 			{
-				double progress = (double)Resources.BytesDownloaded / (double)Resources.BytesDownloading;
-				if(Resources.BytesDownloading == 0)
+				double progress = (double)Download.BytesReceived / (double)Download.BytesTotal;
+				if(Download.BytesTotal == 0)
 					progress = 1.0;
 				else if (progress > 1)
 					progress = 1;
 
 				resourceDownloadProgressSocket.SendMessage(progress.ToString());
 
-				resourceDownloadTotalBytes = Resources.BytesDownloading;
-				resourceDownloadReceivedBytes = Resources.BytesDownloaded;
+				resourceDownloadTotalBytes = Download.BytesTotal;
+                resourceDownloadReceivedBytes = Download.BytesReceived;
 			}
 		}
 

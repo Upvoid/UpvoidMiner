@@ -30,7 +30,7 @@ namespace UpvoidMiner
     /// Implements a world generator to create a basic world with some vegetation.
     /// This class is only available on Host-side.
     /// </summary>
-    public class UpvoidMinerWorldGenerator : SimpleWorldGenerator
+    public class UpvoidMinerWorldGenerator
     {
         /// <summary>
         /// Singleton
@@ -40,6 +40,10 @@ namespace UpvoidMiner
         /// Random
         /// </summary>
         private static Random random = new Random();
+        /// <summary>
+        /// Backref to the world 
+        /// </summary>
+        private World world;
 
         /// <summary>
         /// Dirt terrain resource.
@@ -83,31 +87,32 @@ namespace UpvoidMiner
         /// <summary>
         /// Initializes the terrain materials and settings.
         /// </summary>
-        public override bool init()
+        public static void init(World world)
         {
-            Instance = this;
-            World world = World;
-            TerrainEngine terr = world.Terrain;
+            Instance = new UpvoidMinerWorldGenerator();
+            Instance.world = world;
 
             // Register all terrain resources (and thus terrain materials).
-            TerrainResource.RegisterResources(terr);
+            TerrainResource.RegisterResources(world.Terrain);
 
             // Get handle to dirt for generation.
-            terrainDirt = TerrainResource.FromName("Dirt");
-			terrainRock = TerrainResource.FromName("Stone.09");
-			terrainDesert = TerrainResource.FromName("Desert");
+            Instance.terrainDirt = TerrainResource.FromName("Dirt");
+            Instance.terrainRock = TerrainResource.FromName("Stone.09");
+            Instance.terrainDesert = TerrainResource.FromName("Desert");
 
             // load entities
             LoadEntities();
-            
-            return base.init();
+
+            // init terrain
+            world.SetTerrainGenerator(new TerrainGenerator());
+            world.TerrainGenerator.SetCsgNode(Instance.createTerrain());
         }
         
         
         /// <summary>
         /// Creates the CSG node network for the terrain generation.
         /// </returns>
-        public override CsgNode createTerrain()
+        public CsgNode createTerrain()
         {
             // Load and return a CsgNode based on the "Hills" expression resource. This will create some generic perlin-based hills.
             CsgOpConcat concat = new CsgOpConcat();
@@ -164,9 +169,9 @@ namespace UpvoidMiner
                 concat.AddNode(diff);
             }
             
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), World, 4));
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Cacti", UpvoidMiner.ModDomain), World, 4));
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), World, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Cacti", UpvoidMiner.ModDomain), world, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgCollapseNode());
 
 
@@ -219,7 +224,7 @@ namespace UpvoidMiner
 
         private static void AddTree(vec3 pos, Random random, Tree.TreeType type)
         {
-            World world = Instance.World;
+            World world = Instance.world;
 
             vec3 up = new vec3((float)random.NextDouble() * .05f - .025f, 1, (float)random.NextDouble() * .05f - .025f).Normalized;
             vec3 randXZ = ((float)random.NextDouble() * 2.0f - 1.0f) * vec3.UnitX + ((float)random.NextDouble() * 2.0f - 1.0f) * vec3.UnitZ;
