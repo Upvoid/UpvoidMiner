@@ -38,7 +38,7 @@ namespace UpvoidMiner
         /// The render component for the torso.
         /// </summary>
         private RenderComponent rcTorsoShadow;
-        private CpuParticleSystemBase psTorsoSteam;
+        //private CpuParticleSystemBase psTorsoSteam;
         private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
         /// Relative torso transformation.
@@ -241,13 +241,13 @@ namespace UpvoidMiner
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
             vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
-            psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
+            /*psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
                                       steamVeloMin, steamVeloMax,
                                       new vec4(new vec3(.9f), .8f), new vec4(new vec3(.99f), .9f),
                                       2.0f, 3.4f,
                                       .1f, .2f,
                                       0, 360,
-                                      -.2f, .2f);
+                                      -.2f, .2f);*/
 
             // Update item preview.
             if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
@@ -329,8 +329,8 @@ namespace UpvoidMiner
             thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
                                                                         torsoTransform,
                                                                         true));
-            psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
-            LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));
+            /*psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
+            LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));*/
 
 
             // Add camera component.

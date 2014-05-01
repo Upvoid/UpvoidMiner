@@ -142,7 +142,8 @@ namespace UpvoidMiner
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectItem", webSelectItem);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "DropItem", webDropItem);
-            updateSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "InventoryUpdate");
+            updateSocket = new WebSocketHandler();
+            Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "InventoryUpdate", updateSocket);
 
             // On all relevant changes in the inventory, we order the GUI client to update itself.
             player.Inventory.OnSelectionChanged += (arg1, arg2) => OnUpdate();

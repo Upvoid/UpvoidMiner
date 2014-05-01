@@ -74,13 +74,13 @@ namespace UpvoidMiner
         class StoneParticles
         {
             public SolidTerrainResource resource;
-            public CpuParticleSystemBase particlesStones;
+            //public CpuParticleSystemBase particlesStones;
 
             public StoneParticles(SolidTerrainResource res, World world)
             {
                 resource = res;
 
-                particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
+                /*particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
                 LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(particlesStones, mat4.Identity));
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                                                         (new CpuParticleRenderJob(particlesStones,
@@ -97,7 +97,7 @@ namespace UpvoidMiner
                          Resources.UseMesh("::Particles/Rock", null),
                                       mat4.Identity)),
                     mat4.Identity,
-                      true));
+                      true));*/
             }
         };
         private Dictionary<int, StoneParticles> stoneParticles = new Dictionary<int, StoneParticles>();
@@ -293,7 +293,7 @@ namespace UpvoidMiner
                 StoneParticles particles = instance.stoneParticles[matPrev];
                 if (particles != null)
                 {
-                    instance.stoneParticles[matPrev].particlesStones.AddParticle3D(
+                    /*instance.stoneParticles[matPrev].particlesStones.AddParticle3D(
                         new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
                         RandomDir() * (float)random.NextDouble() * .4f,
                         new vec4(1),
@@ -301,7 +301,7 @@ namespace UpvoidMiner
                         .2f + (float)random.NextDouble() * .3f,
                         RandomDir(),
                         RandomDir(),
-                        new vec3(0));
+                        new vec3(0));*/
                 }
             }
         }

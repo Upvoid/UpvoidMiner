@@ -87,7 +87,8 @@ namespace UpvoidMiner
 				Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
 
 				// Register a socket for sending progress updates to the loading screen
-				generationProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket");
+                generationProgressSocket = new WebSocketHandler();
+				Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
 
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
@@ -121,7 +122,8 @@ namespace UpvoidMiner
             Input.OnPressInput += HandlePressInput;
 
 			// Register sockets for resource downloading progress bar
-			resourceDownloadProgressSocket = Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "ResourceDownloadProgress");
+            resourceDownloadProgressSocket = new WebSocketHandler();
+            Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "ResourceDownloadProgress", resourceDownloadProgressSocket);
 
 			if(!Scripting.IsHost)
 				ActivatePlayer();
