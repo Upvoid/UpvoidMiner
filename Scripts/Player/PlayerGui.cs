@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Engine.Webserver;
+using Engine.Webgui;
 using Engine.Input;
 using Engine.Rendering;
 
@@ -121,12 +122,12 @@ namespace UpvoidMiner
             IsMenuOpen = !IsMenuOpen;
             if(IsMenuOpen)
             {
-                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
+                WebGui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
                 IsInventoryOpen = true;
             }
             else
             {
-                Gui.NavigateTo("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+                WebGui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
                 IsInventoryOpen = false;
             }
         }
