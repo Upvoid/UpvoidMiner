@@ -120,7 +120,8 @@ namespace UpvoidMiner
             else if(rb == null) // Only create its rigid body once the drone found its final position.
             {
                 // Add a RigidBody
-                rb = this.ContainingWorld.Physics.CreateAndAddRigidBody(0.0f, thisEntity.Transform, new SphereShape(0.25f));
+                rb = new RigidBody(0.0f, thisEntity.Transform, new SphereShape(0.25f));
+                this.ContainingWorld.Physics.AddRigidBody(rb);
                 thisEntity.AddComponent(new PhysicsComponent(rb, mat4.Identity));
             }
             

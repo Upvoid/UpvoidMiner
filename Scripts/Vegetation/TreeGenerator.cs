@@ -60,7 +60,8 @@ namespace UpvoidMiner
             // Create new Tree of type Cactus with 0 wood to gather.
             Tree t = new Tree(0, Tree.TreeType.Cactus);
             Tree.Log l = new Tree.Log();
-            RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            RigidBody b = new RigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            world.Physics.AddRigidBody(b);
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
 
             t.RjLeaves0.Add(new RenderComponent(cactus, transform2));
@@ -113,7 +114,8 @@ namespace UpvoidMiner
             // Amount of wood depends on tree type (thicker/thinner trunk) and tree height scale factor.
             Tree t = new Tree((type0 ? 0.5f : 1.0f) * transform2.col1.y, Tree.TreeType.Birch);
             Tree.Log l = new Tree.Log();
-            RigidBody b = world.Physics.CreateAndAddRigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            RigidBody b = new RigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
+            world.Physics.AddRigidBody(b);
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
 
             t.RjLeaves0.Add(new RenderComponent(leavesOpaque, transform2));

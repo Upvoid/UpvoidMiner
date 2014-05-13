@@ -136,11 +136,12 @@ namespace UpvoidMiner
         public virtual void SetupItemEntity(ItemEntity itemEntity, Entity entity)
         {
             // Create the physical representation of the item.
-            RigidBody body = itemEntity.ContainingWorld.Physics.CreateAndAddRigidBody(
+            RigidBody body = new RigidBody(
                 50f,
                 entity.Transform,
                 new BoxShape(new vec3(1))
                 );
+            itemEntity.ContainingWorld.Physics.AddRigidBody(body);
             
             itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
             

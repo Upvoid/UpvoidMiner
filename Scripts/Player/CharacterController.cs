@@ -161,29 +161,30 @@ namespace UpvoidMiner
 
 		public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
 		{
-                    camera = _camera;
-                    ContainingWorld = _containingWorld;
+            camera = _camera;
+            ContainingWorld = _containingWorld;
 
-                    CharacterHeight = _characterHeight;
-                    CharacterDiameter = _bodyDiameter;
+            CharacterHeight = _characterHeight;
+            CharacterDiameter = _bodyDiameter;
 
-                    // Initialize default values for auto properties
-                    IsRunning = false;
-                    WalkSpeed = 2.7f;
-                    WalkSpeedRunning = 6f;
+            // Initialize default values for auto properties
+            IsRunning = false;
+            WalkSpeed = 2.7f;
+            WalkSpeedRunning = 6f;
 
-                    // Create a capsule shaped rigid body representing the character in the physics world.
-                    Body = ContainingWorld.Physics.CreateAndAddRigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, BodyHeight));
+            // Create a capsule shaped rigid body representing the character in the physics world.
+            Body = new RigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, BodyHeight));
+            ContainingWorld.Physics.AddRigidBody(Body);
 
-                    // Prevent the rigid body from falling to the ground by simply disabling any rotation
-                    Body.SetAngularFactor(vec3.Zero);
+            // Prevent the rigid body from falling to the ground by simply disabling any rotation
+            Body.SetAngularFactor(vec3.Zero);
 
-                    // Register the required callbacks.
-                    // This update function is called 20 - 60 times per second to update the character position.
-                    Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f);
+            // Register the required callbacks.
+            // This update function is called 20 - 60 times per second to update the character position.
+            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f);
 
-                    // This event handler is used to catch the keyboard input that steers the character.
-                    Input.OnPressInput += HandleInput;
+            // This event handler is used to catch the keyboard input that steers the character.
+            Input.OnPressInput += HandleInput;
 		}
 
 		/// <summary>
