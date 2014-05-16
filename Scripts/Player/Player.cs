@@ -23,6 +23,7 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Rendering;
 using Engine.Physics;
+using Engine.Network;
 using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
@@ -531,7 +532,7 @@ namespace UpvoidMiner
                 DroneConstraints.Add(new DroneConstraint(d));
 
             // Add the drone as new entity.
-            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Engine.Network.GameConnectionManager.GetOurUserID());
+            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Network.GCManager.CurrentUserID);
         }
         /// <summary>
         /// Removes a drone from drone contraints.
