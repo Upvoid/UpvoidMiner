@@ -193,7 +193,7 @@ namespace UpvoidMiner
             world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)), Network.GCManager.CurrentUserID);
 
             // Register the update callback that updates the camera position.
-            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f);
+            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f, UpvoidMiner.Mod);
 
             // Register save callback
             Savegame.OnSave += s => 

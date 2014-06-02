@@ -181,7 +181,7 @@ namespace UpvoidMiner
 
             // Register the required callbacks.
             // This update function is called 20 - 60 times per second to update the character position.
-            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f);
+            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f, UpvoidMiner.Mod);
 
             // This event handler is used to catch the keyboard input that steers the character.
             Input.OnPressInput += HandleInput;

@@ -318,6 +318,9 @@ namespace UpvoidMiner
         protected override void Init()
         {
             // Create a character controller that allows us to walk around.
+            if (ContainingWorld == null)
+                throw new InvalidOperationException();
+
             character = new CharacterController(camera, ContainingWorld);
 
             // For now, attach this entity to a simple sphere physics object.
