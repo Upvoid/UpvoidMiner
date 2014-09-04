@@ -224,7 +224,6 @@ namespace UpvoidMiner
                 // Re-Center mouse if UI is not open.
                 if ( !Gui.IsInventoryOpen )
                 {
-                    Rendering.MainViewport.SetMousePosition(Rendering.MainViewport.Size / 2);
                     Rendering.MainViewport.SetMouseVisibility(false);
                 }
                 else
