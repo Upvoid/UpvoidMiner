@@ -1,6 +1,6 @@
 #version 140
 
-#include <Common/Camera.csh>
+#pragma ACGLimport  <Common/Camera.csh>
 
 in vec3 aPosition;
 in vec3 aNormal;

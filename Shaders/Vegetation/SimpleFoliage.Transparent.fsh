@@ -1,6 +1,7 @@
 #version 140
+#pragma Pipeline
 
-#include <Common/Lighting.fsh>
+#pragma ACGLimport <Common/Lighting.fsh>
 
 // material:
 uniform sampler2D uColor;

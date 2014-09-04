@@ -1,6 +1,7 @@
 #version 140
+#pragma Pipeline
 
-#include <Common/Lighting.fsh>
+#pragma ACGLimport <Common/Lighting.fsh>
 
 uniform vec4 uColor = vec4(1);
 uniform float uScale = 10;

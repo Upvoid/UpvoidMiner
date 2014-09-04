@@ -1,7 +1,7 @@
 #version 140
 
-#include <Common/Camera.csh>
-#include <Common/Lighting.fsh>
+#pragma ACGLimport  <Common/Camera.csh>
+#pragma ACGLimport  <Common/Lighting.fsh>
 
 in vec3 aPosition;
 in vec2 aTexCoord;

@@ -1,7 +1,8 @@
 #version 140
+#pragma Pipeline
 
-#include <Common/Lighting.fsh>
-#include <Common/Particles.fsh>
+#pragma ACGLimport <Common/Lighting.fsh>
+#pragma ACGLimport <Common/Particles.fsh>
 
 uniform sampler2D uPattern;
 uniform sampler2D uNoise;

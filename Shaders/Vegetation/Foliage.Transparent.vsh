@@ -1,6 +1,6 @@
 #version 140
 
-#include <Common/Camera.csh>
+#pragma ACGLimport  <Common/Camera.csh>
 
 uniform mat4 uModelMatrix;
 uniform float uFadeDistance = 10000;

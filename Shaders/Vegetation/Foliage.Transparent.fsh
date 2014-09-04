@@ -1,8 +1,9 @@
 #version 140
+#pragma Pipeline
 
-#include <Common/Lighting.fsh>
-#include <Common/Camera.csh>
-#include <Common/Normalmapping.fsh>
+#pragma ACGLimport <Common/Lighting.fsh>
+#pragma ACGLimport <Common/Camera.csh>
+#pragma ACGLimport <Common/Normalmapping.fsh>
 
 // material:
 uniform sampler2D uColor;

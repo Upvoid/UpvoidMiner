@@ -1,4 +1,5 @@
 #version 140
+#pragma Pipeline
 
 // material:
 uniform sampler2D uColor;

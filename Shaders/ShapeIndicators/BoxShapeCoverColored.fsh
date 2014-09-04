@@ -1,6 +1,6 @@
 #version 140
 
-#include <Common/Lighting.fsh>
+#pragma ACGLimport <Common/Lighting.fsh>
 
 uniform vec4 uColor;
 
