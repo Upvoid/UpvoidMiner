@@ -169,9 +169,9 @@ namespace UpvoidMiner
                 concat.AddNode(diff);
             }
             
-            //concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
-            //concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Cacti", UpvoidMiner.ModDomain), world, 4));
-            //concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Cacti", UpvoidMiner.ModDomain), world, 4));
+            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgCollapseNode());
 
 
