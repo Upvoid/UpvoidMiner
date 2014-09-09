@@ -225,16 +225,19 @@ namespace UpvoidMiner
                 if ( !Gui.IsInventoryOpen )
                 {
                     Rendering.MainViewport.SetMouseVisibility(false);
+                    Rendering.MainViewport.SetMouseGrab(true);
                 }
                 else
                 {
                     Rendering.MainViewport.SetMouseVisibility(true);
+                    Rendering.MainViewport.SetMouseGrab(false);
                 }
             }
             else
             {
                 cameraComponent.Camera = null;
                 Rendering.MainViewport.SetMouseVisibility(true);
+                Rendering.MainViewport.SetMouseGrab(false);
             }
 
             mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset; 
