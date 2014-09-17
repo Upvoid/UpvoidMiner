@@ -23,7 +23,7 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Download;
 using Engine.Webserver;
-using Engine.Webgui;
+using Engine.Gui;
 using Engine.Network;
 using Common.Cameras;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ namespace UpvoidMiner
 				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
 
 				// Show a splash screen in the GUI client.
-				WebGui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
+				Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
 
 				// Register a socket for sending progress updates to the loading screen
                 generationProgressSocket = new WebSocketHandler();

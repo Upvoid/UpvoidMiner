@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Engine.Webserver;
-using Engine.Webgui;
+using Engine.Gui;
 using Engine.Input;
 using Engine.Rendering;
 
@@ -122,12 +122,12 @@ namespace UpvoidMiner
             IsMenuOpen = !IsMenuOpen;
             if(IsMenuOpen)
             {
-                WebGui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
+                Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
                 IsInventoryOpen = true;
             }
             else
             {
-                WebGui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+                Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
                 IsInventoryOpen = false;
             }
         }
@@ -153,7 +153,7 @@ namespace UpvoidMiner
             player.Inventory.Items.OnRemove += arg1 => OnUpdate();
             player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
 
-            // Workaround for missing keyboard input in the WebGui: Toggle the inventory from here
+            // Workaround for missing keyboard input in the Gui: Toggle the inventory from here
             Input.OnPressInput += (object sender, InputPressArgs e) => 
             { 
                 if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
