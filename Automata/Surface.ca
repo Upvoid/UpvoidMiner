@@ -33,6 +33,7 @@ body
 
   # spawn probabilities
   spawnMod = 1 / 10000 / 10 / 5
+  spawnMod *= 0 # Stone spawning currently blocks terrain generation.
   spawnModOften  = spawnMod * 10
   spawnModMedium = spawnMod * 3
   spawnModSeldom = spawnMod * 1
