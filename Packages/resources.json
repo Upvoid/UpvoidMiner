@@ -830,7 +830,7 @@
     "Descriptor" : {
         "Files" : [
             "Particles/NormalmapColorMultiply.fsh",
-            "Particles/ParticleMeshTextured.vsh"
+            "Particles/ParticleMeshCubic.vsh"
         ],
         "Name" : "Particles/Opaque/Mesh",
         "Type" : "File"

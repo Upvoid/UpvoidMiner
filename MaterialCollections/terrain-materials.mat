@@ -133,12 +133,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/BaseRock] : Default
     Shader: Terrain/MinerTerrain
@@ -269,168 +263,84 @@
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock01.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock02] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock02.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock03] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock03.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock04] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock04.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock05] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock05.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock06] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock06.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock07] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock07.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock08] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock08.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock09] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock09.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock10] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock10.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock11] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock11.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
-
+	
 [Particles/Terrain/Rock12] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock12.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock13] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock13.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Rock14] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock14.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/FireRock] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -451,12 +361,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/FireRock.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/AlienRock] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -477,12 +381,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/Wood] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -503,12 +401,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood21.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/BirchWood] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -529,12 +421,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/Coal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -555,12 +441,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Stones/Stones10.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/Iron] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -581,12 +461,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Manmade/Chainlinks.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/Gold] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -607,12 +481,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/GoldBars.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/Copper] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -633,12 +501,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Goods/Coins.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Coins.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/AoiCrystal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -659,9 +521,3 @@
     Texture: uColor, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Gems01.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife

@@ -74,13 +74,47 @@ namespace UpvoidMiner
         class StoneParticles
         {
             public SolidTerrainResource resource;
-            //public CpuParticleSystemBase particlesStones;
+            public CpuParticleSystem particlesStones;
 
             public StoneParticles(SolidTerrainResource res, World world)
             {
                 resource = res;
 
-                /*particlesStones = CpuParticleSystem.Create3D(new vec3(0, -9.81f, 0), world);
+                particlesStones = new CpuParticleSystem(4, 0.01);
+
+                // aPosition [m]
+                // TIMESTEP  [s]
+                // aVelocity [m/s]
+                // g [m/s²]
+
+
+                particlesStones.AddAttributeVec3("aPosition");
+                particlesStones.AddAttributeVec3("aVelocity");
+                particlesStones.AddAttributeFloat("aSize");
+                particlesStones.AddAttributeFloat("aCurrentLifetime");
+                particlesStones.AddAttributeFloat("aMaxLifetime");
+                particlesStones.AddAttributeVec3("aTangent");
+                particlesStones.AddAttributeVec3("aBiTangent");
+                particlesStones.AddAttributeVec3("aAngularVelocity");
+
+                CpuParticleModifier mody = new CpuParticleModifier();
+                particlesStones.AddModifier(mody);
+
+                string modyAttributesInOut = "aPosition:vec3;aVelocity:vec3;aCurrentLifetime:float";
+                string modyExpression =
+                    "t = particle::TIMESTEP;" + 
+                    "l = particle::aCurrentLifetime + t;" +
+                    "v = particle::aVelocity + t * vec(0, -9.81, 0);" +
+                    "p = particle::aPosition + t * v;" + 
+                    "vec(p, v, l)";
+
+                mody.AddFiller(new CpuParticleExpressionFiller(modyAttributesInOut, modyAttributesInOut, modyExpression, null));
+
+                string lifeAttributes = "aCurrentLifetime:float;aMaxLifetime:float";
+                string deathExpression = "ite(particle::aCurrentLifetime - particle::aMaxLifetime, 1, 0)";
+
+                particlesStones.AddDeathCondition(new CpuParticleDeathCondition(lifeAttributes, deathExpression, null));
+
                 LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(particlesStones, mat4.Identity));
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                                                         (new CpuParticleRenderJob(particlesStones,
@@ -90,6 +124,7 @@ namespace UpvoidMiner
                                                              mat4.Identity)),
                                                         mat4.Identity,
                                                         true));
+                /*
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                   (new CpuParticleRenderJob(particlesStones,
                          Renderer.Shadow.CpuParticles,
@@ -97,7 +132,8 @@ namespace UpvoidMiner
                          Resources.UseMesh("::Particles/Rock", null),
                                       mat4.Identity)),
                     mat4.Identity,
-                      true));*/
+                      true));
+                */
             }
         };
         private Dictionary<int, StoneParticles> stoneParticles = new Dictionary<int, StoneParticles>();
@@ -293,15 +329,31 @@ namespace UpvoidMiner
                 StoneParticles particles = instance.stoneParticles[matPrev];
                 if (particles != null)
                 {
-                    /*instance.stoneParticles[matPrev].particlesStones.AddParticle3D(
-                        new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .3f,
-                        RandomDir() * (float)random.NextDouble() * .4f,
-                        new vec4(1),
-                        .4f + (float)random.NextDouble() * .3f,
-                        .2f + (float)random.NextDouble() * .3f,
-                        RandomDir(),
-                        RandomDir(),
-                        new vec3(0));*/
+                    vec3 partPos = new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .5f;
+                    vec3 partVel = RandomDir() * (1.0f + (float)random.NextDouble() * 1.0f);
+                    partVel.y = Math.Abs(partVel.y); // upwards direction
+                    float partSize = .2f + (float)random.NextDouble() * .25f;
+                    float curLife = .0f;
+                    float maxLife = 0.7f + (float)random.NextDouble() * .4f;
+
+                    // Random orientation
+                    vec3 tangent = RandomDir();
+                    vec3 biTangent = vec3.cross(tangent, RandomDir()).Normalized;
+
+                    // Random rotation axis
+                    vec3 axisToRotateAbout = RandomDir();
+
+                    // ...And random speed for the rotation (radians per second)
+                    float rotSpeed = 2.2f + (float)random.NextDouble() * 3.45f;
+                    axisToRotateAbout *= rotSpeed;
+
+                    particles.particlesStones.AddParticle(
+                        partPos.x.ToString() + ";" + partPos.y.ToString() + ";" + partPos.z.ToString() + ";" +  // pos xyz
+                        partVel.x.ToString() + ";" + partVel.y.ToString() + ";" + partVel.z.ToString() + ";" +  // vel xyz
+                        partSize.ToString()  + ";" + curLife.ToString()   + ";" + maxLife.ToString()   + ";" +  // size, life, lifeMax
+                        tangent.x.ToString() + ";" + tangent.y.ToString() + ";" + tangent.z.ToString() + ";" +  // tangent xyz
+                        biTangent.x.ToString() + ";" + biTangent.y.ToString() + ";" + biTangent.z.ToString() + ";" +  // bitangent xyz
+                        axisToRotateAbout.x.ToString() + ";" + axisToRotateAbout.y.ToString() + ";" + axisToRotateAbout.z.ToString());  // axisToRotateAbout xyz
                 }
             }
         }
