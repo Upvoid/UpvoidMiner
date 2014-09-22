@@ -18,7 +18,7 @@
                     <div id="world-generation-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
                 <p id="loading-notice">This may take several minutes, depending on your CPU speed.</p>
-                <a class="text-right" href="javascript: clickStart()">I'm impatient, start right now</a>            
+                <a class="text-right" href="javascript: clickStart()">I'm impatient, start right now</a>
             </div>
 
             <ul class="nav nav-pills nav-stacked">
@@ -27,6 +27,7 @@
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
                 <li><a href="javascript:clickFeedback()"><i class="fa fa-external-link"></i> Give us Feedback / Report Problems</a></li>
+                <li><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
                 <li><a id="start-button" href="javascript: clickQuit()">Quit</a></li>
             </ul>
 
@@ -79,6 +80,11 @@
         function clickFeedback()
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=https://upvoid.com/feedback");
+        }
+
+        function clickStats()
+        {
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=" + window.location.origin + "/Engine/Statistics/Labels");
         }
 
     </script>
