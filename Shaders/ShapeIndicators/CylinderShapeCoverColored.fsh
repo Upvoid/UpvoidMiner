@@ -1,4 +1,5 @@
 #version 140
+#pragma Pipeline
 
 #pragma ACGLimport <Common/Lighting.fsh>
 
