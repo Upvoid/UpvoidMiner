@@ -843,7 +843,7 @@
     "Descriptor" : {
         "Files" : [
             "Particles/Shadow.fsh",
-            "Particles/ParticleMeshShadow.vsh"
+            "Particles/ParticleMeshCubicShadow.vsh"
         ],
         "Name" : "Particles/Shadow/Mesh",
         "Type" : "File"
