@@ -224,11 +224,6 @@
 
 [Particles/Shadow/Mesh] : CpuParticleDefault
     Shader: Particles/Shadow/Mesh
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleLife
     Culling: None
 
 [Vegetation/BirchLog] : Default
