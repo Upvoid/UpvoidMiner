@@ -30,19 +30,12 @@ void main()
         discard;
 
     texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
-
     texColor.rgb *= uColorModulation.rgb;
 
 
     vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
-
-    // TODO(ks) only one shadow computation!
-    vec3 colorFront = lighting(vWorldPos, normalFront, texColor.rgb, vec4(vec3(0),1));
-    vec3 colorBack = lighting(vWorldPos, -normalFront, texColor.rgb, vec4(vec3(0),1));
-
-    const float translucency = 1.0;
-
-    vec3 color = colorFront + translucency*colorBack;
+    const float translucency = 0.5;
+    vec3 color = leafLighting(vWorldPos, normalFront, translucency, texColor.rgb, vec4(vec3(0),1));
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normalFront);
