@@ -56,10 +56,10 @@ int getParticleOffset()
 
 float interpolateFloat(int offset)
 {
-    float float0 = texelFetch(uBuffer0, getParticleOffset() + offset);
-    float float1 = texelFetch(uBuffer1, getParticleOffset() + offset);
-	float float2 = texelFetch(uBuffer2, getParticleOffset() + offset);
-	float float3 = texelFetch(uBuffer3, getParticleOffset() + offset);
+    float float0 = texelFetch(uBuffer0, getParticleOffset() + offset).r;
+    float float1 = texelFetch(uBuffer1, getParticleOffset() + offset).r;
+        float float2 = texelFetch(uBuffer2, getParticleOffset() + offset).r;
+        float float3 = texelFetch(uBuffer3, getParticleOffset() + offset).r;
 
     vec4 factors = cubic(uInterpolationFactor);
 
