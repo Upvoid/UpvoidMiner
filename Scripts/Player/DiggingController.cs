@@ -48,9 +48,9 @@ namespace UpvoidMiner
         /// </summary>
         Player player;
 
-		/// <summary>
-		/// Cached CSG Sphere.
-		/// </summary>
+        /// <summary>
+        /// Cached CSG Sphere.
+        /// </summary>
         CsgExpression sphereNode;
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace UpvoidMiner
 
                 string modyAttributesInOut = "aPosition:vec3;aVelocity:vec3;aCurrentLifetime:float";
                 string modyExpression =
-                    "t = particle::TIMESTEP;" + 
+                    "t = particle::TIMESTEP;" +
                     "l = particle::aCurrentLifetime + t;" +
                     "v = particle::aVelocity + t * vec(0, -9.81, 0);" +
-                    "p = particle::aPosition + t * v;" + 
+                    "p = particle::aPosition + t * v;" +
                     "vec(p, v, l)";
 
                 mody.AddFiller(new CpuParticleExpressionFiller(modyAttributesInOut, modyAttributesInOut, modyExpression, null));
@@ -116,24 +116,24 @@ namespace UpvoidMiner
                 particlesStones.AddDeathCondition(new CpuParticleDeathCondition(lifeAttributes, deathExpression, null));
 
                 LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(particlesStones, mat4.Identity));
+                
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
-                                                        (new CpuParticleRenderJob(particlesStones,
-                                                             Renderer.Opaque.CpuParticles,
-                                                             res.DigParticleMaterial,
-                                                             Resources.UseMesh("::Particles/Rock", null),
-                                                             mat4.Identity)),
-                                                        mat4.Identity,
-                                                        true));
-                /*
-                LocalScript.ParticleEntity.AddComponent(new RenderComponent(
-                  (new CpuParticleRenderJob(particlesStones,
-                         Renderer.Shadow.CpuParticles,
-                         Resources.UseMaterial("Particles/Shadow/Mesh", UpvoidMiner.ModDomain),
-                         Resources.UseMesh("::Particles/Rock", null),
-                                      mat4.Identity)),
+                    (new CpuParticleRenderJob(particlesStones,
+                        Renderer.Opaque.CpuParticles,
+                        res.DigParticleMaterial,
+                        Resources.UseMesh("::Particles/Rock", null),
+                        mat4.Identity)),
                     mat4.Identity,
-                      true));
-                */
+                    true));
+
+                LocalScript.ParticleEntity.AddComponent(new RenderComponent(
+                    (new CpuParticleRenderJob(particlesStones,
+                        Renderer.Shadow.CpuParticles,
+                        Resources.UseMaterial("Particles/Shadow/Mesh", UpvoidMiner.ModDomain),
+                        Resources.UseMesh("::Particles/Rock", null),
+                        mat4.Identity)),
+                    mat4.Identity,
+                    true));
             }
         };
         private Dictionary<int, StoneParticles> stoneParticles = new Dictionary<int, StoneParticles>();
@@ -147,7 +147,7 @@ namespace UpvoidMiner
 
             string digParas = "digRadius:float, digPosition:vec3, digDirX:vec3, digDirY:vec3, digDirZ:vec3";
 
-			string sphereExpression = "-digRadius + distance(vec3(x,y,z), digPosition)";
+            string sphereExpression = "-digRadius + distance(vec3(x,y,z), digPosition)";
             sphereNode = new CsgExpression(1, sphereExpression, UpvoidMiner.ModDomain, digParas);
 
             string boxExpression = @"p = vec3(x,y,z) - digPosition;
@@ -212,11 +212,11 @@ namespace UpvoidMiner
 
             // Filter for tools
             CsgNode filterNode = digNode;
-            if ( materialFilter != null )
+            if (materialFilter != null)
             {
                 CsgFilterNode filter = new CsgFilterNode(true, digNode);
-                    foreach (int mat in materialFilter)
-                        filter.AddMaterial(mat);
+                foreach (int mat in materialFilter)
+                    filter.AddMaterial(mat);
                 filter.AddMaterial(0); // Air must be white-listed, too!
                 filterNode = filter;
             }
@@ -234,8 +234,8 @@ namespace UpvoidMiner
         }
 
         public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
-		{
-			sphereNode.MaterialIndex = terrainMaterialId;
+        {
+            sphereNode.MaterialIndex = terrainMaterialId;
             sphereNode.SetParameterFloat("digRadius", radius);
             sphereNode.SetParameterVec3("digPosition", position);
 
@@ -245,8 +245,8 @@ namespace UpvoidMiner
             sphereNode.SetParameterVec3("digDirY", dy);
             sphereNode.SetParameterVec3("digDirZ", dz);
 
-			Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
-		}
+            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
+        }
 
         public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
         {
@@ -350,7 +350,7 @@ namespace UpvoidMiner
                     particles.particlesStones.AddParticle(
                         partPos.x.ToString() + ";" + partPos.y.ToString() + ";" + partPos.z.ToString() + ";" +  // pos xyz
                         partVel.x.ToString() + ";" + partVel.y.ToString() + ";" + partVel.z.ToString() + ";" +  // vel xyz
-                        partSize.ToString()  + ";" + curLife.ToString()   + ";" + maxLife.ToString()   + ";" +  // size, life, lifeMax
+                        partSize.ToString() + ";" + curLife.ToString() + ";" + maxLife.ToString() + ";" +  // size, life, lifeMax
                         tangent.x.ToString() + ";" + tangent.y.ToString() + ";" + tangent.z.ToString() + ";" +  // tangent xyz
                         biTangent.x.ToString() + ";" + biTangent.y.ToString() + ";" + biTangent.z.ToString() + ";" +  // bitangent xyz
                         axisToRotateAbout.x.ToString() + ";" + axisToRotateAbout.y.ToString() + ";" + axisToRotateAbout.z.ToString());  // axisToRotateAbout xyz
