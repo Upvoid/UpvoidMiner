@@ -9,7 +9,6 @@ in vec2 aTexCoord;
 
 out vec3 vNormal;
 out vec3 vTangent;
-out vec3 vEyePos;
 out vec2 vTexCoord;
 out vec4 vColor;
 //out float vLife;
@@ -26,44 +25,49 @@ uniform float uInterpolationFactor;
 
 const int offsets[] = int[]
 (
-0, // position vec3
-3, // velocity vec3
-6, // size float
-7, // aCurrentLifetime float
-8, // aMaxLifetime float
-9, // tangent
-12, // bitangent
-15 // angularVelocity
+   0, // position vec3
+   3, // velocity vec3
+   6, // size float
+   7, // aCurrentLifetime float
+   8, // aMaxLifetime float
+   9, // tangent
+   12, // bitangent
+   15 // angularVelocity
 );
 
 // Found at http://stackoverflow.com/questions/13501081/efficient-bicubic-filtering-code-in-glsl
 vec4 cubic(float x)
 {
-    float x2 = x * x;
-    float x3 = x2 * x;
-    vec4 w;
-    w.x =   -x3 + 3*x2 - 3*x + 1;
-    w.y =  3*x3 - 6*x2       + 4;
-    w.z = -3*x3 + 3*x2 + 3*x + 1;
-    w.w =  x3;
-    return w / 6.f;
+   float x2 = x * x;
+   float x3 = x2 * x;
+   vec4 w;
+   w.x =   -x3 + 3*x2 - 3*x + 1;
+   w.y =  3*x3 - 6*x2       + 4;
+   w.z = -3*x3 + 3*x2 + 3*x + 1;
+   w.w =  x3;
+   return w / 6.f;
 }
+
+vec4 cubicInterpolationFactors = cubic(uInterpolationFactor);
 
 int getParticleOffset()
 {
-    return gl_InstanceID * uStrideSize;
+   return gl_InstanceID * uStrideSize;
 }
 
 float interpolateFloat(int offset)
 {
-    float float0 = texelFetch(uBuffer0, getParticleOffset() + offset).r;
-    float float1 = texelFetch(uBuffer1, getParticleOffset() + offset).r;
-        float float2 = texelFetch(uBuffer2, getParticleOffset() + offset).r;
-        float float3 = texelFetch(uBuffer3, getParticleOffset() + offset).r;
+   int currentOffset = getParticleOffset() + offset;
 
-    vec4 factors = cubic(uInterpolationFactor);
+   float float0 = texelFetch(uBuffer0, currentOffset).x;
+   float float1 = texelFetch(uBuffer1, currentOffset).x;
+   float float2 = texelFetch(uBuffer2, currentOffset).x;
+   float float3 = texelFetch(uBuffer3, currentOffset).x;
 
-    return factors.x * float0 + factors.y * float1 + factors.z * float2 + factors.w * float3;
+   return cubicInterpolationFactors.x * float0 +
+          cubicInterpolationFactors.y * float1 +
+          cubicInterpolationFactors.z * float2 +
+          cubicInterpolationFactors.w * float3;
 }
 
 vec2 interpolateVec2(int offset)
@@ -96,71 +100,70 @@ vec4 interpolateVec4(int offset)
 // a is angle in radians, v does will be normalized
 mat3 rotate(mat3 m, vec3 v, float a)
 {
-    float c = cos(a);
-    float s = sin(a);
+   float c = cos(a);
+   float s = sin(a);
 
-    vec3 axis = normalize(v);
+   vec3 axis = normalize(v);
 
-    vec3 temp = (float(1) - c) * axis;
+   vec3 temp = (float(1) - c) * axis;
 
-    mat3 Rotate;
-    Rotate[0][0] = c + temp[0] * axis[0];
-    Rotate[0][1] = 0 + temp[0] * axis[1] + s * axis[2];
-    Rotate[0][2] = 0 + temp[0] * axis[2] - s * axis[1];
+   mat3 Rotate;
+   Rotate[0][0] = c + temp[0] * axis[0];
+   Rotate[0][1] = 0 + temp[0] * axis[1] + s * axis[2];
+   Rotate[0][2] = 0 + temp[0] * axis[2] - s * axis[1];
 
-    Rotate[1][0] = 0 + temp[1] * axis[0] - s * axis[2];
-    Rotate[1][1] = c + temp[1] * axis[1];
-    Rotate[1][2] = 0 + temp[1] * axis[2] + s * axis[0];
+   Rotate[1][0] = 0 + temp[1] * axis[0] - s * axis[2];
+   Rotate[1][1] = c + temp[1] * axis[1];
+   Rotate[1][2] = 0 + temp[1] * axis[2] + s * axis[0];
 
-    Rotate[2][0] = 0 + temp[2] * axis[0] + s * axis[1];
-    Rotate[2][1] = 0 + temp[2] * axis[1] - s * axis[0];
-    Rotate[2][2] = c + temp[2] * axis[2];
+   Rotate[2][0] = 0 + temp[2] * axis[0] + s * axis[1];
+   Rotate[2][1] = 0 + temp[2] * axis[1] - s * axis[0];
+   Rotate[2][2] = c + temp[2] * axis[2];
 
-    mat3 result;
-    result[0] = m[0] * Rotate[0][0] + m[1] * Rotate[0][1] + m[2] * Rotate[0][2];
-    result[1] = m[0] * Rotate[1][0] + m[1] * Rotate[1][1] + m[2] * Rotate[1][2];
-    result[2] = m[0] * Rotate[2][0] + m[1] * Rotate[2][1] + m[2] * Rotate[2][2];
-    return result;
+   mat3 result;
+   result[0] = m[0] * Rotate[0][0] + m[1] * Rotate[0][1] + m[2] * Rotate[0][2];
+   result[1] = m[0] * Rotate[1][0] + m[1] * Rotate[1][1] + m[2] * Rotate[1][2];
+   result[2] = m[0] * Rotate[2][0] + m[1] * Rotate[2][1] + m[2] * Rotate[2][2];
+   return result;
 }
 
 void main()
 {
-    vec3 iPosition = interpolateVec3(offsets[0]);
-    //vec3 iVelocity = interpolateVec3(offsets[1]);
-	float iSize = interpolateFloat(offsets[2]);
-    float iCurLife = interpolateFloat(offsets[3]);
-    float iMaxLife = interpolateFloat(offsets[4]);
-	vec3 iTangent = interpolateVec3(offsets[5]);
-	vec3 iBiTangent = interpolateVec3(offsets[6]);
-	vec3 iAngularVelocity = interpolateVec3(offsets[7]);
-	
+   vec3 iPosition = interpolateVec3(offsets[0]);
+   //vec3 iVelocity = interpolateVec3(offsets[1]);
+   float iSize = interpolateFloat(offsets[2]);
+   float iCurLife = interpolateFloat(offsets[3]);
+   float iMaxLife = interpolateFloat(offsets[4]);
+   vec3 iTangent = interpolateVec3(offsets[5]);
+   vec3 iBiTangent = interpolateVec3(offsets[6]);
+   vec3 iAngularVelocity = interpolateVec3(offsets[7]);
 
-    // Compute relative particle life, i.e. \in 0..1
-    float iRelLife = iCurLife/iMaxLife;
-	iSize *= smoothstep(1, 0.85, iRelLife);
-    //vLife = iRelLife;
-	
-    // Pass attributes
-	vTexCoord = aTexCoord;
-	vColor = vec4(1);
-	
-	vec3 inormal = cross(iTangent, iBiTangent);
-	
-	// TODO(ks) more efficient usage of angularVelocity!
-    mat3 localModel = rotate(mat3(inormal, iTangent, iBiTangent), iAngularVelocity, iCurLife * length(iAngularVelocity));
 
-    // world space normal/tangent:
-    mat3 normalMatrix = mat3(uModelMatrix) * localModel;
-    vNormal = normalMatrix * aNormal;
-    vTangent = normalMatrix * aTangent;
-	
-	// Create position of particle object vertices, i.e particlePosition + size * rotatedObject
-	vec3 objectPos = iPosition + iSize * (localModel * aPosition);
-    vec4 worldPos = uModelMatrix * vec4(objectPos, 1);
-	
-    vWorldPos = worldPos.xyz;
-    vEyePos = (uViewMatrix * worldPos).xyz;
+   // Compute relative particle life, i.e. \in 0..1
+   float iRelLife = iCurLife/iMaxLife;
+   iSize *= smoothstep(1, 0.85, iRelLife);
+   //vLife = iRelLife;
 
-    // projected vertex position used for the interpolation
-    gl_Position = uProjectionMatrix * vec4(vEyePos,1);
+   // Pass attributes
+   vTexCoord = aTexCoord;
+   vColor = vec4(1);
+
+   vec3 inormal = cross(iTangent, iBiTangent);
+
+   // TODO(ks) more efficient usage of angularVelocity!
+   mat3 localModel = rotate(mat3(inormal, iTangent, iBiTangent), iAngularVelocity, iCurLife * length(iAngularVelocity));
+
+   // world space normal/tangent:
+   mat3 normalMatrix = mat3(uModelMatrix) * localModel;
+   vNormal = normalMatrix * aNormal;
+   vTangent = normalMatrix * aTangent;
+
+   // Create position of particle object vertices, i.e particlePosition + size * rotatedObject
+   vec3 objectPos = iPosition + iSize * (localModel * aPosition);
+   vec4 worldPos = uModelMatrix * vec4(objectPos, 1);
+
+   vWorldPos = worldPos.xyz;
+
+   // projected vertex position used for the interpolation
+   gl_Position = uViewProjectionMatrix * worldPos;
 }

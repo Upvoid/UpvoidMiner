@@ -49,16 +49,21 @@ int getParticleOffset()
     return gl_InstanceID * uStrideSize;
 }
 
+vec4 cubicInterpolationFactors = cubic(uInterpolationFactor);
+
 float interpolateFloat(int offset)
 {
-    float float0 = texelFetch(uBuffer0, getParticleOffset() + offset);
-    float float1 = texelFetch(uBuffer1, getParticleOffset() + offset);
-	float float2 = texelFetch(uBuffer2, getParticleOffset() + offset);
-	float float3 = texelFetch(uBuffer3, getParticleOffset() + offset);
+   int currentOffset = getParticleOffset() + offset;
 
-    vec4 factors = cubic(uInterpolationFactor);
+   float float0 = texelFetch(uBuffer0, currentOffset).x;
+   float float1 = texelFetch(uBuffer1, currentOffset).x;
+   float float2 = texelFetch(uBuffer2, currentOffset).x;
+   float float3 = texelFetch(uBuffer3, currentOffset).x;
 
-    return factors.x * float0 + factors.y * float1 + factors.z * float2 + factors.w * float3;
+   return cubicInterpolationFactors.x * float0 +
+          cubicInterpolationFactors.y * float1 +
+          cubicInterpolationFactors.z * float2 +
+          cubicInterpolationFactors.w * float3;
 }
 
 vec2 interpolateVec2(int offset)
@@ -121,29 +126,29 @@ mat3 rotate(mat3 m, vec3 v, float a)
 void main()
 {
     vec3 iPosition = interpolateVec3(offsets[0]);
-	float iSize = interpolateFloat(offsets[2]);
+    float iSize = interpolateFloat(offsets[2]);
     float iCurLife = interpolateFloat(offsets[3]);
     float iMaxLife = interpolateFloat(offsets[4]);
-	vec3 iTangent = interpolateVec3(offsets[5]);
-	vec3 iBiTangent = interpolateVec3(offsets[6]);
-	vec3 iAngularVelocity = interpolateVec3(offsets[7]);
+    vec3 iTangent = interpolateVec3(offsets[5]);
+    vec3 iBiTangent = interpolateVec3(offsets[6]);
+    vec3 iAngularVelocity = interpolateVec3(offsets[7]);
 	
 
     // Compute relative particle life, i.e. \in 0..1
     float iRelLife = iCurLife/iMaxLife;
-	iSize *= smoothstep(1, 0.85, iRelLife);
+    iSize *= smoothstep(1, 0.85, iRelLife);
 	
-	vec3 inormal = cross(iTangent, iBiTangent);
+    vec3 inormal = cross(iTangent, iBiTangent);
 	
-	// TODO(ks) more efficient usage of angularVelocity!
+    // TODO(ks) more efficient usage of angularVelocity!
     mat3 localModel = rotate(mat3(inormal, iTangent, iBiTangent), iAngularVelocity, iCurLife * length(iAngularVelocity));
 	
-	// Create position of particle object vertices, i.e particlePosition + size * rotatedObject
-	vec3 objectPos = iPosition + iSize * (localModel * aPosition);
+    // Create position of particle object vertices, i.e particlePosition + size * rotatedObject
+    vec3 objectPos = iPosition + iSize * (localModel * aPosition);
     vec4 worldPos = uModelMatrix * vec4(objectPos, 1);
 	
-	vec4 projPos = uShadowViewProjectionMatrix * worldPos;
-	vZ = projPos.z;
+    vec4 projPos = uShadowViewProjectionMatrix * worldPos;
+    vZ = projPos.z;
 	
     // projected vertex position used for the interpolation
     gl_Position = projPos;
