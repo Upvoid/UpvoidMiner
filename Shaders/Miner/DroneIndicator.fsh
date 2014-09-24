@@ -8,7 +8,6 @@ uniform float uScale = 10;
 uniform float uSpeed = 1;
 
 in vec3 vObjPos;
-in vec3 vEyePos;
 
 OUTPUT_CHANNEL_TransparentColor(vec4)
 

@@ -17,7 +17,7 @@ in vec3 aInstColor;
 
 out vec3 vNormal;
 out vec3 vTangent;
-out vec3 vEyePos;
+out vec3 vWorldPos;
 out vec2 vTexCoord;
 out vec3 vColor;
 
@@ -56,7 +56,7 @@ void main()
     // world space position:
     vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);
     worldPos.xyz += windOffset(aPosition.y, aInstPosition);
-    vEyePos = (uViewMatrix * worldPos).xyz;
+    vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;

@@ -13,7 +13,7 @@ in vec2 aTexCoord;
 
 out vec3 vNormal;
 out vec3 vTangent;
-out vec3 vEyePos;
+out vec3 vWorldPos;
 out vec2 vTexCoord;
 
 out float vZ;
@@ -38,7 +38,7 @@ void main()
     //worldPos.xyz += windOffset(0.5*length(aPosition.xz)*clamp(aPosition.y-0.2w, 0, 1), worldPos.xyz/6);
 
 
-    vEyePos = (uViewMatrix * worldPos).xyz;
+    vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
 

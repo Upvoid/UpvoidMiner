@@ -21,7 +21,7 @@ uniform float uBlackness = 1.0;
 uniform mat4 uModelMatrix;
 
 in vec3 vColor;
-in vec3 vEyePos;
+in vec3 vWorldPos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
 in mat3 vNormalMatrix;
@@ -68,13 +68,13 @@ void main()
 
     // illumination
     //normal = normalize(mat3(uModelMatrix) * normal);
-    vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
+    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
     OUTPUT_TransparentColor(vec4(color, 0.5*p*texColor.a));
 
     //OUTPUT_Color(color);
     //OUTPUT_Color(vec3(1-vOffset*10, vOffset*10, 0));
     //OUTPUT_Normal(normal);
-    //OUTPUT_Position(vEyePos);
+    //OUTPUT_Position(vWorldPos);
 }
 

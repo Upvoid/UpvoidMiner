@@ -11,7 +11,7 @@ uniform vec4 uColorModulation = vec4(1.0);
 
 in vec2 vTexCoord;
 in vec3 vNormal;
-in vec3 vEyePos;
+in vec3 vWorldPos;
 
 OUTPUT_CHANNEL_TransparentColor(vec4)
 
@@ -31,8 +31,9 @@ void main()
 
     vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
 
-    vec3 colorFront = lighting(vEyePos, normalFront, texColor.rgb, vec4(vec3(0),1));
-    vec3 colorBack = lighting(vEyePos, -normalFront, texColor.rgb, vec4(vec3(0),1));
+    // TODO(ks) only one shadow computation!
+    vec3 colorFront = lighting(vWorldPos, normalFront, texColor.rgb, vec4(vec3(0),1));
+    vec3 colorBack = lighting(vWorldPos, -normalFront, texColor.rgb, vec4(vec3(0),1));
 
     const float translucency = 1.0;
 

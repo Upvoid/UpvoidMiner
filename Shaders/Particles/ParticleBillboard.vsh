@@ -13,7 +13,7 @@ in float aParticleAngle;
 in float aParticleLife;
 
 out vec3 vNormal;
-out vec3 vEyePos;
+out vec3 vWorldPos;
 out vec4 vParticleColor;
 out vec2 vTexCoord;
 out vec4 vScreenPos;
@@ -29,7 +29,7 @@ void main()
 
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aParticlePosition, 1.0);
-    vEyePos = (uViewMatrix * worldPos).xyz;
+    vWorldPos = worldPos.xyz;
     vLife = aParticleLife;
 
     vec4 eyePos = uViewMatrix * worldPos;

@@ -11,7 +11,7 @@ in vec2 aTexCoord;
 
 out vec3 vNormal;
 out vec3 vTangent;
-out vec3 vEyePos;
+out vec3 vWorldPos;
 out vec2 vTexCoord;
 
 vec3 windOffset(float height, vec3 pos)
@@ -29,7 +29,7 @@ void main()
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
     worldPos.xyz += windOffset(0.5*length(aPosition.xz)*clamp(aPosition.y-0.2, 0, 1), worldPos.xyz/6);
-    vEyePos = (uViewMatrix * worldPos).xyz;
+    vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;

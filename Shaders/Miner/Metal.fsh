@@ -20,7 +20,7 @@ uniform float uBlackness = 1.0;
 
 uniform mat4 uModelMatrix;
 
-in vec3 vEyePos;
+in vec3 vWorldPos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
 in mat3 vNormalMatrix;
@@ -32,8 +32,6 @@ OUTPUT_CHANNEL_Position(vec3)
 void main()
 {
     INIT_CHANNELS;
-
-    vec3 worldPos = vec3(uInverseViewMatrix * vec4(vEyePos, 1.0));
 
     // texturing
     vec3 xyColor = texture(uColorXY, vObjectPos.xy / uTexScale).rgb;
@@ -63,17 +61,17 @@ void main()
     vec3 normal = normalize(mat3(uModelMatrix) * objNormal);
 
     // illumination
-    vec3 color = lighting(vEyePos, normal, baseColor, uSpecularColor);
+    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
     // Skybox reflection
-    vec3 reflDir = reflect(normalize(worldPos - uCameraPosition), normal);
+    vec3 reflDir = reflect(normalize(vWorldPos - uCameraPosition), normal);
     vec3 skyColor = sampleSkybox(reflDir).rgb;
-    float reflFactor = .6 * shadowFactor(worldPos);
+    float reflFactor = .6 * shadowFactor(vWorldPos);
     color = mix(color, skyColor, reflFactor);
 
     //color.rgb = reflDir;
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normal);
-    OUTPUT_Position(vEyePos);
+    OUTPUT_Position(vWorldPos);
 }

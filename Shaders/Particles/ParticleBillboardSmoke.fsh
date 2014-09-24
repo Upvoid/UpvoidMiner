@@ -12,7 +12,7 @@ uniform sampler2DRect uOpaqueDepth;
 in vec4 vParticleColor;
 
 in vec3 vNormal;
-in vec3 vEyePos;
+in vec3 vWorldPos;
 in vec2 vTexCoord;
 in vec4 vScreenPos;
 in float vLife;
@@ -28,17 +28,13 @@ void main()
     baseColor.rgb /= baseColor.a + 0.001; // premultiplied alpha
     vec4 transColor = baseColor * vParticleColor * uColorFilter;
 
-    vec4 eyePos = uInverseProjectionMatrix * vScreenPos;
-    eyePos /= eyePos.w;
-    vec4 worldPos = uInverseViewMatrix * eyePos;
-
     transColor.a *= softParticleFactor(vScreenPos, uOpaqueDepth, 1.0);
 
     transColor.a *= 1-smoothstep(0.7, 1, vLife);
     transColor.a *= smoothstep(0.0, .2, vLife);
 
     // DEBUG: no illumination!
-    //transColor.rgb *= shadowFactor(worldPos.xyz);
+    //transColor.rgb *= shadowFactor(vWorldPos.xyz);
 
     OUTPUT_TransparentColor(transColor);
 }
