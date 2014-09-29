@@ -28,6 +28,7 @@
                 <li><a href="Credits.html">Credits</a></li>
                 <li><a href="javascript:clickFeedback()"><i class="fa fa-external-link"></i> Give us Feedback / Report Problems</a></li>
                 <li><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
+                <li><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
                 <li><a id="start-button" href="javascript: clickQuit()">Quit</a></li>
             </ul>
 
@@ -85,6 +86,11 @@
         function clickStats()
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=" + window.location.origin + "/Engine/Statistics/Labels");
+        }
+
+        function clickReport()
+        {
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=" + window.location.origin + "/Engine/Report");
         }
 
     </script>
