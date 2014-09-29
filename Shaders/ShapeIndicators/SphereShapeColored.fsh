@@ -3,9 +3,8 @@
 
 #pragma ACGLimport <Common/Lighting.fsh>
 
+uniform float uOutputOffset;
 uniform vec4 uColor;
-
-uniform sampler2DRect uOpaqueDepth;
 
 uniform vec4 uMidPointAndRadius;
 
@@ -13,7 +12,9 @@ in vec3 vNormal;
 in vec3 vEyePos;
 in vec3 vWorldPos;
 
-OUTPUT_CHANNEL_TransparentColor(vec4)
+INPUT_CHANNEL_OutputColor(vec3)
+INPUT_CHANNEL_Depth(float)
+OUTPUT_CHANNEL_OutputColor(vec3)
 
 void main()
 {
@@ -22,7 +23,7 @@ void main()
     vec4 transColor = uColor;
 
     // get current depth
-    float depth = texture(uOpaqueDepth, gl_FragCoord.xy).r;
+    float depth = texture(INPUT_SAMPLER_Depth, gl_FragCoord.xy + 0*vec2(uOutputOffset)).r;
     vec4 screenPos = uProjectionMatrix * vec4(vEyePos, 1);
     screenPos /= screenPos.w;
 
@@ -61,5 +62,6 @@ void main()
     */
 
 
-    OUTPUT_TransparentColor(clamp(transColor, 0, 1));
+    transColor = clamp(transColor, 0, 1);
+    OUTPUT_VEC4_OutputColor(vec4(vec3(depth),1));
 }

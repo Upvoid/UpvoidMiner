@@ -131,11 +131,11 @@ namespace UpvoidMiner
                     throw new InvalidOperationException("Unknown digging shape");
             }
 
-            // Create a transparent sphere as 'fill-indicator'.
-            previewShape = new MeshRenderJob(Renderer.Transparent.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
+            // Create an overlay sphere as 'fill-indicator'.
+            previewShape = new MeshRenderJob(Renderer.Overlay.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewShape);
             // And a second one for indicating the center.
-            previewShapeIndicator = new MeshRenderJob(Renderer.Transparent.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
+            previewShapeIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewShapeIndicator);
         }
 
