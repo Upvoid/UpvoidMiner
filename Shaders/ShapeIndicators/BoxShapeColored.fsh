@@ -16,7 +16,7 @@ in vec3 vNormal;
 in vec3 vEyePos;
 in vec3 vWorldPos;
 
-OUTPUT_CHANNEL_TransparentColor(vec4)
+OUTPUT_CHANNEL_OutputColor(vec3)
 
 void main()
 {
@@ -67,5 +67,6 @@ void main()
     transColor.a = min(1, transColor.a);
     */
 
-    OUTPUT_TransparentColor(clamp(transColor, 0, 1));
+    transColor = clamp(transColor, 0, 1);
+    OUTPUT_OutputColor(transColor.rgb * transColor.a);
 }
