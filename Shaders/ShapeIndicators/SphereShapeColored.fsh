@@ -7,6 +7,7 @@ uniform float uOutputOffset;
 uniform vec4 uColor;
 
 uniform vec4 uMidPointAndRadius;
+uniform sampler2DRect uInDepth;
 
 in vec3 vNormal;
 in vec3 vEyePos;
@@ -23,7 +24,7 @@ void main()
     vec4 transColor = uColor;
 
     // get current depth
-    float depth = texture(INPUT_SAMPLER_Depth, gl_FragCoord.xy + 0*vec2(uOutputOffset)).r;
+    float depth = texture(uInDepth, gl_FragCoord.xy + vec2(uOutputOffset)).r;
     vec4 screenPos = uProjectionMatrix * vec4(vEyePos, 1);
     screenPos /= screenPos.w;
 
@@ -51,7 +52,6 @@ void main()
 
     transColor.a += float(opaqueEyePos.z < vEyePos.z) * sphereAlpha;
 
-    transColor.a *= 0.1 + 0.9 * shadowFactor(vWorldPos);
     /*
     vec3 pos = opaqueWorldPos.xyz;
     const float scale = 30;
@@ -63,5 +63,5 @@ void main()
 
 
     transColor = clamp(transColor, 0, 1);
-    OUTPUT_VEC4_OutputColor(vec4(vec3(depth),1));
+    OUTPUT_VEC4_OutputColor(transColor);
 }
