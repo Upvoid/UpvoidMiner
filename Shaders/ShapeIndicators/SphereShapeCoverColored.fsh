@@ -8,11 +8,13 @@ uniform vec4 uColor;
 
 uniform vec4 uMidPointAndRadius;
 
+uniform sampler2DRect uInDepth;
+
 in vec3 vNormal;
 in vec3 vEyePos;
 in vec3 vWorldPos;
 
-INPUT_CHANNEL_Color(vec3)
+INPUT_CHANNEL_OutputColor(vec3)
 INPUT_CHANNEL_Depth(float)
 OUTPUT_CHANNEL_OutputColor(vec3)
 
@@ -21,9 +23,8 @@ void main()
     INIT_CHANNELS;
 
     vec4 transColor = uColor;
-/*
-
-    float depth = texture(INPUT_SAMPLER_Depth, gl_FragCoord.xy + vec2(uOutputOffset)).r;
+	
+    float depth = texture(uInDepth, gl_FragCoord.xy + vec2(uOutputOffset)).r;
     vec4 screenPos = uProjectionMatrix * vec4(vEyePos, 1);
     screenPos /= screenPos.w;
     vec4 opaqueEyePos = uInverseProjectionMatrix * vec4(screenPos.xy, depth * 2 - 1, 1.0);
@@ -38,9 +39,7 @@ void main()
     transColor.a += 0.3*uColor.a;
     transColor.a *= smoothstep(1.0, 0.95, dist/uMidPointAndRadius.w);
 
-*/
-    transColor.a *= 0.1 + 0.9 * shadowFactor(vWorldPos);
-
+	
     /*
     vec3 pos = opaqueWorldPos.xyz;
     const float scale = 30;
@@ -51,5 +50,5 @@ void main()
     */
 
 
-    OUTPUT_VEC4_OutputColor(vec4(0,1,0,0.3));// + 0*transColor);
+    OUTPUT_VEC4_OutputColor(transColor);
 }
