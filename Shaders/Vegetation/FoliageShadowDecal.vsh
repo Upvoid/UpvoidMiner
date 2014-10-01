@@ -1,6 +1,6 @@
 #version 140
 
-#pragma ACGLimport  <Common/Camera.csh>
+#pragma ACGLimport  <Common/Lighting.fsh>
 
 uniform mat4 uModelMatrix;
 uniform float uFadeDistance = 10000;
@@ -15,11 +15,11 @@ in vec3 aInstNormal;
 in vec3 aInstTangent;
 in vec3 aInstColor;
 
-out vec3 vNormal;
-out vec3 vColor;
-out vec3 vTangent;
-out vec3 vWorldPos;
 out vec2 vTexCoord;
+
+out vec4 vProj;
+
+out float vShadowDist;
 
 vec3 windOffset(float height, vec3 pos)
 {
@@ -29,7 +29,6 @@ vec3 windOffset(float height, vec3 pos)
 
 void main()
 {
-    vColor = aInstColor;
 
     float tanLength = length(aInstTangent);
     vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent));
@@ -39,25 +38,23 @@ void main()
                 normalize(aInstNormal),
                 instTangent
                 );
-    mat4 instModel = mat4(
-                vec4(instBitangent * tanLength, 0.0),
-                vec4(aInstNormal, 0.0),
-                vec4(instTangent * tanLength, 0.0),
-                vec4(aInstPosition, 1.0)
-                );
 
-    // world space normal:
-    vNormal = mat3(uModelMatrix) * instRot * aNormal;
-    vTangent = mat3(uModelMatrix) * instRot * aTangent;
     vTexCoord = aTexCoord;
 
     float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
 
     // world space position:
-    vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);
-    worldPos.xyz += windOffset(aPosition.y, aInstPosition);
-    vWorldPos = worldPos.xyz;
+	vec3 sunDir = normalize(uSunDirection);
+	// TODO(ks) what about sunDir.y = 0?
+	vShadowDist = -aPosition.y/sunDir.y;
+	vec3 groundProjectedPosition = instRot * aPosition + vShadowDist * sunDir;
+	
+	vShadowDist = distance(aPosition, groundProjectedPosition);
+	groundProjectedPosition.y += 0.001;
+    vec4 worldPos = uModelMatrix * vec4(groundProjectedPosition * posFactor, 1.0);
+    worldPos.xyz += aInstPosition;// + windOffset(aPosition.y, aInstPosition);
 
+	vProj = uViewProjectionMatrix * worldPos;
     // projected vertex position used for the interpolation
-    gl_Position  = uViewProjectionMatrix * worldPos;
+    gl_Position  = vProj;
 }

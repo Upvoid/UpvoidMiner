@@ -17,6 +17,8 @@ using System;
 using Engine;
 using Engine.Universe;
 using Engine.Scripting;
+using Engine.Rendering;
+using Engine.Resources;
 using System.Collections.Generic;
 
 namespace UpvoidMiner
@@ -39,8 +41,21 @@ namespace UpvoidMiner
             // Dirt
             addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
 
+
+            
+
+            SolidTerrainResource desertResource = new SolidTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert");
+            desertResource.Material.AddAttributeFloat("aParviflora", 0, 0, 4);
+
+            // Spawn Parviflora
+            {
+                int pipeline = desertResource.Material.AddPipeline(Resources.UseGeometryPipeline("ParvifloraField", UpvoidMiner.ModDomain), "Input", "", 0, 4);
+                desertResource.Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Parviflora", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
+                desertResource.Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Parviflora.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
+            }
+
             // Desert
-            addResource(new SolidTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert"));
+            addResource(desertResource);
 
             // Stones
             for (int i = 1; i <= 14; ++i)

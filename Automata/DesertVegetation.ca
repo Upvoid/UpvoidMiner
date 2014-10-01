@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 // Tree spawning Automaton
-automaton CactiTon
+automaton DesertVegetationTon
 
 cells
   0, 1, 0 as Top1
@@ -38,6 +38,10 @@ pre
 
 body
 
+  # === Parviflora ===
+  this.aParviflora = perlin(x,y,z) $= ::Perlin; max(0, perlin(this.x / 20, this.y / 20, this.z / 20)) * .5 + .5
+
+  # === Cacti ===
   spawnProbability = 0; perlin(x,y,z) $= ::Perlin; p = this.position / 100; spawnProbability = (perlin(p.x, p.y, p.z) * .1 + .2) * 0.1
 
   if random(0,1) < spawnProbability

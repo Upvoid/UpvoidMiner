@@ -1,0 +1,32 @@
+{
+  "inputs" : [
+    0
+  ],
+  "nodes" : [
+    {
+      "id" : 0,
+      "identifier" : "mesh::aParviflora",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "function" : "max(mesh::aParviflora * 2 - 1, 0) * 15",
+      "id" : 1,
+      "inputs" : [
+        0
+      ],
+      "nodetype" : "Function",
+      "varMapping" : {
+        "mesh::aParviflora" : {
+          "index" : 0,
+          "type" : [
+          ]
+        }
+      }
+    }
+  ],
+  "output" : 1
+}
