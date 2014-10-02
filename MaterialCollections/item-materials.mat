@@ -25,7 +25,7 @@
 
 [Items/DigPreview] : Default
     Shader: ::Overlay/MeshFresnelColored
-    Color: uColor, 1,0.0,0, 0.9
+    Color: uColor, 0.345098,0,0.8,0.9
     Color: uSpecularColor, .0, .0, .0, 4
     Color: uColorFilter, 1, 1, 1, 1
     Parameter: uFresnelMin, .0
@@ -34,7 +34,7 @@
 
 [Items/DigPreviewSphere] : Default
     Shader: ShapeIndicators/SphereShapeCoverColored
-    Color: uColor, 1,0,0,0.3
+    Color: uColor, 0.345098,0,0.8,0.5
     Culling: Front
 
 [Items/ConstructionPreviewSphere] : Default
