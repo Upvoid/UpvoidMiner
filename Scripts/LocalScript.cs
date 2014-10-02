@@ -23,6 +23,7 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Download;
 using Engine.Webserver;
+using Engine.Windows;
 using Engine.Gui;
 using Engine.Network;
 using Common.Cameras;
@@ -84,6 +85,10 @@ namespace UpvoidMiner
 				// Register a callback for the terrain generation so the GUI can be notified when the world is ready.
 				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
 
+                // callbacks for window focus
+                Windows.GetWindow(0).OnFocus += CallbackOnFocus;
+                Windows.GetWindow(0).OnFocusLoss += CallbackOnFocusLoss;
+
 				// Show a splash screen in the GUI client.
 				Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
 
@@ -133,6 +138,15 @@ namespace UpvoidMiner
         static bool generationDone = false;
         static int generatedChunks = 0;
 		static WebSocketHandler generationProgressSocket;
+
+        static void CallbackOnFocus()
+        {
+            Console.WriteLine("Window focused!");
+        }
+        static void CallbackOnFocusLoss()
+        {
+            Console.WriteLine("Window un-focused!");
+        }
 
         static void VolumeCallback(int x, int y, int z, int lod, int size)
         {
