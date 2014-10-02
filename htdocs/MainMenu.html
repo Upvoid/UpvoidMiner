@@ -22,11 +22,11 @@
             </div>
 
             <ul class="nav nav-pills nav-stacked">
-                <li id="start-button" class="hidden"><a href="javascript: clickStart()"><b>Play</b></a></li>
+                <li id="start-button" class="hidden"><a href="javascript: clickStart()"><big><b>Play</b></big></a></li>
                 <li><a href="Settings.html">Settings</a></li>
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
-                <li><a href="javascript:clickFeedback()"><i class="fa fa-external-link"></i> Give us Feedback / Report Problems</a></li>
+                <li><a href="javascript:clickCommunity()"><i class="fa fa-external-link"></i> Community<br><small>(also for Feedback and Bug reports)</small></a></li>
                 <li><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
                 <li><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
                 <li><a id="start-button" href="javascript: clickQuit()">Quit</a></li>
@@ -78,9 +78,9 @@
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/QuitGame");
         }
 
-        function clickFeedback()
+        function clickCommunity()
         {
-            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=https://upvoid.com/feedback");
+            $.get("OpenSiteInBrowser?url=https://community.upvoid.com/");
         }
 
         function clickStats()
