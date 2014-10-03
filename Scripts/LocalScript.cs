@@ -70,11 +70,11 @@ namespace UpvoidMiner
         /// <summary>
         /// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
         /// </summary>
-        public static void Startup(IntPtr _unmanagedModule)
+        public static void Startup(Module module)
         {
-			// Get and save the resource domain of the mod, needed for loading resources.
-			UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
-			UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
+            // Get and save the resource domain of the mod, needed for loading resources.
+            UpvoidMiner.Mod = module;
+            UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
 			// Get the world (created by the host script).
 			world = Universe.GetWorldByName("UpvoidMinerWorld");

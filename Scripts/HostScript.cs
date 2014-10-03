@@ -36,10 +36,10 @@ namespace UpvoidMiner
         /// <summary>
         /// Starts
         /// </summary>
-        public static void Startup(IntPtr _unmanagedModule)
+        public static void Startup(Module module)
         {
             // Get and save the resource domain of the mod, needed for loading resources.
-            UpvoidMiner.Mod = Module.FromHandle(_unmanagedModule);
+            UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
             // Create the world. Multiple worlds could be created here, but we only want one.
