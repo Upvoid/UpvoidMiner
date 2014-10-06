@@ -22,6 +22,7 @@
     Parameter: uFresnelMin, .2
     Parameter: uFresnelPower, 1
     Parameter: uLighting, 0
+    Culling: Front
 
 [Items/DigPreview] : Default
     Shader: ::Overlay/MeshFresnelColored
