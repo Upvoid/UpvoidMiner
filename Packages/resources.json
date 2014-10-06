@@ -49,6 +49,13 @@
 
 {
     "Descriptor": "File",
+    "Name": "FlowerDensity",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
     "Name": "HerbDensity",
     "Path": "~.json",
     "Type": "Expression"
@@ -634,6 +641,17 @@
         "Type" : "FromCollection"
     },
     "Name" : "Parviflora.ShadowDecal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Flower01",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Flower01",
     "Path" : "~.mat",
     "Type" : "Material"
 },

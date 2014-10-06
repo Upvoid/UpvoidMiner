@@ -1,0 +1,32 @@
+{
+  "inputs" : [
+    0
+  ],
+  "nodes" : [
+    {
+      "id" : 0,
+      "identifier" : "mesh::aGrass",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "function" : "max(mesh::aGrass * 2 - 1, 0) * 1",
+      "id" : 1,
+      "inputs" : [
+        0
+      ],
+      "nodetype" : "Function",
+      "varMapping" : {
+        "mesh::aGrass" : {
+          "index" : 0,
+          "type" : [
+          ]
+        }
+      }
+    }
+  ],
+  "output" : 1
+}

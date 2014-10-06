@@ -108,6 +108,14 @@
     Parameter: uDiscardBias, .9
     Parameter: uFadeDistance, 30
 
+[Flower01] : Default
+    Shader: Vegetation/Foliage.Opaque
+    Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Diffuse.1
+    Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Normal
+    Parameter: uDiscardBias, .9
+    Parameter: uFadeDistance, 30
+    Culling: None
+
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent
     Texture: uColor, GrassTest.Low
