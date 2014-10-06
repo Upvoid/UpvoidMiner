@@ -136,7 +136,7 @@ namespace UpvoidMiner
         {
             IsUIOpen = true;
 
-            Engine.Windows.Windows.GetWindow(0).OnFocusLoss += delegate { if(!IsMenuOpen) toggleMenu(); };
+            Engine.Windows.Windows.GetWindow(0).OnFocusLoss += delegate { if (!IsMenuOpen && !LocalScript.NoclipEnabled) toggleMenu(); };
 
             // The IngameGui.html in htdocs/ contains the actual player gui. It contains javascript functions that get the ingame information displayed.
             // These dynamic content handlers provide that information.
