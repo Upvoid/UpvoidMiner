@@ -96,8 +96,9 @@
     Culling: None
 
 [Parviflora] : Default
-    Shader: Vegetation/SimpleFoliage.Opaque
+    Shader: Vegetation/Foliage.Opaque
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Undergrowth/Parviflora.Diffuse
+    Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Undergrowth/Parviflora.Normal
     Parameter: uDiscardBias, .9
     Parameter: uFadeDistance, 30
     Culling: None

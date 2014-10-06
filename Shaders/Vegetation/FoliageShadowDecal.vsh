@@ -19,8 +19,6 @@ out vec2 vTexCoord;
 
 out vec4 vProj;
 
-out float vShadowDist;
-
 vec3 windOffset(float height, vec3 pos)
 {
     float ws = cos(uRuntime + pos.x + pos.y + pos.z);
@@ -39,6 +37,13 @@ void main()
                 instTangent
                 );
 
+    mat4 instModel = mat4(
+             vec4(instBitangent * tanLength, 0.0),
+             vec4(aInstNormal, 0.0),
+             vec4(instTangent * tanLength, 0.0),
+             vec4(aInstPosition, 1.0)
+             );
+
     vTexCoord = aTexCoord;
 
     float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
@@ -46,15 +51,14 @@ void main()
     // world space position:
 	vec3 sunDir = normalize(uSunDirection);
 	// TODO(ks) what about sunDir.y = 0?
-	vShadowDist = -aPosition.y/sunDir.y;
-	vec3 groundProjectedPosition = instRot * aPosition + vShadowDist * sunDir;
+   float shadowDist = -aPosition.y/sunDir.y;
+   vec3 groundProjectedPosition = vec3(vec4(aPosition, 1)) + shadowDist * sunDir;
 	
-	vShadowDist = distance(aPosition, groundProjectedPosition);
-	groundProjectedPosition.y += 0.001;
-    vec4 worldPos = uModelMatrix * vec4(groundProjectedPosition * posFactor, 1.0);
-    worldPos.xyz += aInstPosition;// + windOffset(aPosition.y, aInstPosition);
+   groundProjectedPosition.y += 0.001;
+   vec4 worldPos = uModelMatrix * instModel * vec4(groundProjectedPosition * posFactor, 1.0);
+   worldPos.xyz += windOffset(aPosition.y, aInstPosition);
 
-	vProj = uViewProjectionMatrix * worldPos;
-    // projected vertex position used for the interpolation
-    gl_Position  = vProj;
+   vProj = uViewProjectionMatrix * worldPos;
+   // projected vertex position used for the interpolation
+   gl_Position  = vProj;
 }

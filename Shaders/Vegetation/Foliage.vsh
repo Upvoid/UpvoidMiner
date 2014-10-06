@@ -39,6 +39,12 @@ void main()
                 normalize(aInstNormal),
                 instTangent
                 );
+   mat4 instModel = mat4(
+            vec4(instBitangent * tanLength, 0.0),
+            vec4(aInstNormal, 0.0),
+            vec4(instTangent * tanLength, 0.0),
+            vec4(aInstPosition, 1.0)
+            );
 
     // world space normal:
     vNormal = mat3(uModelMatrix) * instRot * aNormal;
@@ -48,8 +54,8 @@ void main()
     float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
 
     // world space position:
-    vec4 worldPos = uModelMatrix * vec4(instRot * aPosition * posFactor, 1.0);
-    worldPos.xyz += aInstPosition;// + windOffset(aPosition.y, aInstPosition);
+    vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);
+    worldPos.xyz += windOffset(aPosition.y, aInstPosition);
     vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
