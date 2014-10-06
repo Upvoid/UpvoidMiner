@@ -60,6 +60,12 @@ namespace UpvoidMiner
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.zPre", UpvoidMiner.ModDomain), Renderer.zPre.Mesh);
                 }
 
+                // Spawn Flowers
+                {
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("Flowers", UpvoidMiner.ModDomain), "Input", "", 0, 4);
+                    Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower01", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
+                }
+
                 /*
             // Spawn Grass
             {
