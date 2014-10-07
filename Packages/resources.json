@@ -56,6 +56,13 @@
 
 {
     "Descriptor": "File",
+    "Name": "FlowerDensity2",
+    "Path": "~.json",
+    "Type": "Expression"
+},
+
+{
+    "Descriptor": "File",
     "Name": "HerbDensity",
     "Path": "~.json",
     "Type": "Expression"
@@ -652,6 +659,17 @@
         "Type" : "FromCollection"
     },
     "Name" : "Flower01",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Flower02",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Flower02",
     "Path" : "~.mat",
     "Type" : "Material"
 },

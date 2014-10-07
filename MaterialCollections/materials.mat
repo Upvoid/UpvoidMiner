@@ -71,14 +71,14 @@
     Shader: Vegetation/SimpleFoliage.Opaque
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
-    Parameter: uFadeDistance, 30
+    Parameter: uFadeDistance, 130
     Culling: None
 
 [SimpleGrass.zPre] : Default
     Shader: Vegetation/Foliage.zPre
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
-    Parameter: uFadeDistance, 30
+    Parameter: uFadeDistance, 130
     Culling: None
 
 [SimpleGrass.ShadowDecal] : Default
@@ -114,7 +114,15 @@
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Diffuse.1
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Normal
     Parameter: uDiscardBias, .9
-    Parameter: uFadeDistance, 30
+    Parameter: uFadeDistance, 50
+    Culling: None
+
+[Flower02] : Default
+    Shader: Vegetation/Foliage.Opaque
+    Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Diffuse.1
+    Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Normal
+    Parameter: uDiscardBias, .9
+    Parameter: uFadeDistance, 50
     Culling: None
 
 [Grass01.Transparent] : Default

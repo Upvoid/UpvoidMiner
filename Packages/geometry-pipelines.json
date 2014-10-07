@@ -274,10 +274,10 @@
             {
                 "Type" : "Input"
             },
-            "Parviflora" :
+            "Flowers" :
             {
                 "Type" : "Resource",
-                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Plant01"
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
             },
             "Seeds" :
             {
@@ -292,7 +292,64 @@
             "Spawns" :
             {
                 "Type" : "Instancing",
-                "Nodes" : ["Parviflora", "Seeds"]
+                "Nodes" : ["Flowers", "Seeds"]
+            },
+            "ColoredSpawns":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Spawns"],
+                "Copy": ["aPosition"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 30; p2 = p1 / 1.4 + vec3(7.23, 91.1, -5.326); p3 = p2 / 1.4 + vec3(7.23, 91.1, -5.326); vec3(1.2 + perlin(p2.x, p2.y, p2.z) * .5,1 + perlin(p3.x, p3.y, p3.z) * .4,1) * (1 + perlin(p1.x, p1.y, p1.z) * .4)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    },
+                    "aNormal": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
+                    },
+                    "aTangent": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Inputs": [ "aTangent:vec3", "aPosition:vec3" ]
+                    }
+                }
+            }
+        }
+    }
+},
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "Flowers2",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Flowers" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Grass/Grass04.Tall"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "FlowerDensity2",
+                "gridSize": 2.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Flowers", "Seeds"]
             },
             "ColoredSpawns":
             {
