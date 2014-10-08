@@ -63,12 +63,14 @@ namespace UpvoidMiner
                 // Spawn Flowers
                 {
                     int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("Flowers", UpvoidMiner.ModDomain), "Input", "", 0, 4);
+                    //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower01.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower01", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
 
                 // Spawn more Flowers
                 {
                     int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("Flowers2", UpvoidMiner.ModDomain), "Input", "", 0, 4);
+                    //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower02.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower02", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
 

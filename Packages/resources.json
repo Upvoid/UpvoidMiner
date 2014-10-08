@@ -666,10 +666,32 @@
 {
     "Descriptor" : {
         "Collection" : "materials",
+        "Name" : "Flower01.ShadowDecal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Flower01.ShadowDecal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
         "Name" : "Flower02",
         "Type" : "FromCollection"
     },
     "Name" : "Flower02",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Flower02.ShadowDecal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Flower02.ShadowDecal",
     "Path" : "~.mat",
     "Type" : "Material"
 },

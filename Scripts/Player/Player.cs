@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Engine;
+using Engine.Audio;
 using Engine.Universe;
 using Engine.Modding;
 using Engine.Resources;
@@ -186,6 +187,9 @@ namespace UpvoidMiner
 
         public void Update(float elapsedSeconds)
         {
+            // Tell AudioEngine where the listener is at the moment
+            Audio.SetListenerPosition(camera);
+
             // Update drones.
             foreach (var drone in Drones)
                 drone.Update(elapsedSeconds);

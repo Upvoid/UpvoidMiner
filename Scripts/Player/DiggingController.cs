@@ -16,6 +16,7 @@
 using System;
 using System.Diagnostics;
 using Engine;
+using Engine.Audio;
 using Engine.Universe;
 using Engine.Resources;
 using Engine.Rendering;
@@ -67,6 +68,16 @@ namespace UpvoidMiner
         /// Cached Player safety margin.
         /// </summary>
         CsgExpression playerNode;
+
+        /// <summary>
+        /// Cached sound resources for digging dirt and stone
+        /// </summary>
+        private static SoundResource[] dirtSoundResource;
+        private static Sound[] dirtSound;
+        private static SoundResource[] stoneSoundResource;
+        private static Sound[] stoneSound;
+        private static vec3 diggingPosition = vec3.Zero;
+
 
         /// <summary>
         /// Particle system for 3D stones due to digging.
@@ -170,11 +181,36 @@ namespace UpvoidMiner
                 dz = abs(dot(p, digDirZ));
                 -playerRadius + max(dy, length(vec2(dx, dz)))";
             playerNode = new CsgExpression(1, playerExpression, UpvoidMiner.ModDomain, "playerRadius:float, playerPosition:vec3, digDirX:vec3, digDirY:vec3, digDirZ:vec3");
+
+
+
+            dirtSoundResource = new SoundResource[6];
+            dirtSound = new Sound[6];
+            stoneSoundResource = new SoundResource[5];
+            stoneSound = new Sound[5];
+
+            // Add dirt digging sounds
+            for (int i = 1; i <= 6; ++i)
+            {
+                dirtSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Dirt/Dirt" + i.ToString("00"), UpvoidMiner.ModDomain); 
+                dirtSound[i-1] = new Sound(dirtSoundResource[i-1], vec3.Zero, false, 1, 1);
+            }
+
+            // Add stone digging sounds
+            for (int i = 1; i <= 5; ++i)
+            {
+                stoneSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain); 
+                stoneSound[i-1] = new Sound(stoneSoundResource[i-1], vec3.Zero, false, 1, 1);
+            }
+
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
         {
             CsgNode digShape = null;
+
+            // Keep track of where we are digging right now
+            diggingPosition = shapeBoundary.Center;
 
             // constraintDiffNode performs the constraint as a CSG operation
             // by cutting away anything of thge digging shape not inside the allowed area.
@@ -285,6 +321,19 @@ namespace UpvoidMiner
         {
             if (mat != 0)
             {
+                // Depending on whether we dig dirt or stone, play a random digging sound
+
+                Sound digSound = null;
+                if(mat == 1) // Dirt material
+                    digSound = dirtSound[random.Next(0,5)];
+                else if(mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
+                    digSound = stoneSound[random.Next(0,4)];
+
+                // +/- 15% pitching
+                digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f); 
+                digSound.Position = diggingPosition;
+                digSound.Play();
+
                 // Resolve terrain material.
                 TerrainResource material = TerrainResource.FromIndex(mat);
                 Debug.Assert(material != null, "Invalid terrain material");

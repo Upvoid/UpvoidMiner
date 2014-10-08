@@ -113,17 +113,25 @@
     Shader: Vegetation/Foliage.Opaque
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Diffuse.1
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Normal
-    Parameter: uDiscardBias, .9
     Parameter: uFadeDistance, 50
     Culling: None
+
+[Flower01.ShadowDecal] : Default
+    Shader: Vegetation/FoliageShadowDecal.Transparent
+    Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower01.Diffuse.1
+    Parameter: uFadeDistance, 50
 
 [Flower02] : Default
     Shader: Vegetation/Foliage.Opaque
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Diffuse.1
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Normal
-    Parameter: uDiscardBias, .9
     Parameter: uFadeDistance, 50
     Culling: None
+
+[Flower02.ShadowDecal] : Default
+    Shader: Vegetation/FoliageShadowDecal.Transparent
+    Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Diffuse.1
+    Parameter: uFadeDistance, 50
 
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent
