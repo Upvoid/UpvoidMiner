@@ -73,37 +73,6 @@ namespace UpvoidMiner
                     //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower02.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("Flower02", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
-
-                /*
-            // Spawn Grass
-            {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField2", UpvoidMiner.ModDomain), "Input", "", 0, 4);
-                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Grass01", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
-            }
-            
-            // Spawn Herbs
-            {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField", UpvoidMiner.ModDomain), "Input", "", 0, 4);
-                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs17", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
-            }
-            
-            // Spawn Herbs
-            {
-                int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("HerbField2", UpvoidMiner.ModDomain), "Input", "", 0, 4);
-                Material.AddMeshMaterial(pipeline, "Spawns", Resources.UseMaterial("Herbs18", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
-            }*/
-            
-                // Add the geometry for the terrain LoDs 5-8. Add some tree impostors to make the ground look nicer.
-                {
-                    //int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineImpostorField", UpvoidMiner.ModDomain), "Input", "", 5, 8);
-                    //Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineImpostor", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
-                }
-
-                // For terrain LoDs 0-4, spawn "real" tree models instead of the impostors.
-                {
-                    //int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("PineField", UpvoidMiner.ModDomain), "Input", "", 0, 4);
-                    //Material.AddMeshMaterial(pipeline, "PineSpawns", Resources.UseMaterial("PineLeaves", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
-                }
             }
         }
     }
