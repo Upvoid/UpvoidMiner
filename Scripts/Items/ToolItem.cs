@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Engine;
+using Engine.Audio;
 using Engine.Rendering;
 using Engine.Resources;
 using Engine.Universe;
@@ -26,6 +27,8 @@ namespace UpvoidMiner
     /// </summary>
     public class ToolItem : DiscreteItem
     {
+        private static Random random = new Random();
+
         /// <summary>
         /// Type of tool.
         /// </summary>
@@ -57,6 +60,20 @@ namespace UpvoidMiner
                 case ToolType.Axe:
                     Name = "Axe";
                     Description = "Tool used for chopping trees.";
+
+                    // Create sound resources
+                    if (chopSoundResource == null && chopSound == null)
+                    {
+                        chopSoundResource = new SoundResource[5];
+                        chopSound = new Sound[5];
+
+                        // Add dirt digging sounds
+                        for (int i = 1; i <= 5; ++i)
+                        {
+                            chopSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Chopping/Wood/Wood" + i.ToString("00"), UpvoidMiner.ModDomain); 
+                            chopSound[i-1] = new Sound(chopSoundResource[i-1], vec3.Zero, false, 1, 1);
+                        }
+                    }
                     break;
                 case ToolType.Hammer:
                     Name = "Hammer";
@@ -107,6 +124,9 @@ namespace UpvoidMiner
 
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
+
+        private static SoundResource[] chopSoundResource;
+        private static Sound[]  chopSound;
 
         public override void OnSelect(Player player)
         {
@@ -234,8 +254,16 @@ namespace UpvoidMiner
                     return;
 
                 case ToolType.Axe:
+
                     if (_hitEntity != null)
                     {
+                        Sound woodSound = chopSound[random.Next(0,4)];
+                        // +/- 15% pitching
+                        woodSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f); 
+                        woodSound.Position = _worldPos;
+                        woodSound.Play();
+
+                        // Hitmessage to make the log know it has been hit
                         _hitEntity[TriggerId.getIdByName("Hit")] |= new HitMessage(player.thisEntity);
                     }
                     return;
