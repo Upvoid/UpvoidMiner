@@ -326,8 +326,10 @@ namespace UpvoidMiner
                 Sound digSound = null;
                 if(mat == 1) // Dirt material
                     digSound = dirtSound[random.Next(0,5)];
-                else if(mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
-                    digSound = stoneSound[random.Next(0,4)];
+                else if (mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
+                    digSound = stoneSound[random.Next(0, 4)];
+                else
+                    return;
 
                 // +/- 15% pitching
                 digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f); 

@@ -22,14 +22,16 @@
             </div>
 
             <ul class="nav nav-pills nav-stacked">
-                <li id="start-button" class="hidden"><a href="javascript: clickStart()"><big><b>Play</b></big></a></li>
+                <li id="start-button-adventure" class="hidden"><a href="javascript: clickStart(false)"><big><b>Start Adventure Mode</b></big></a></li>
+                <li id="start-button-god" class="hidden"><a href="javascript: clickStart(true)"><big><b>Start God Mode</b></big></a></li>
+				<li>&nbsp;</li>
                 <li><a href="Settings.html">Settings</a></li>
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
                 <li><a href="javascript:clickCommunity()"><i class="fa fa-external-link"></i> Community<br><small>(also for feedback and bug reports)</small></a></li>
                 <li><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
                 <li><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
-                <li><a id="start-button" href="javascript: clickQuit()">Quit</a></li>
+                <li><a href="javascript: clickQuit()">Quit</a></li>
             </ul>
 
 
@@ -47,13 +49,17 @@
             if(progress >= 1.0)
             {
                 $('#generation-info').hide();
-                $('#start-button').removeClass("hidden");
+                $('#start-button-adventure').removeClass("hidden");
+                $('#start-button-god').removeClass("hidden");
             }
         }
 
         $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IsPlayerActivated", "", function (data) {
             if (data === "True")
-                $('#start-button').html("<a href='javascript: clickStart()'><b>Continue</b></a>");
+			{
+				$('#start-button-adventure').html("<a href='javascript: clickStart(false)'><b>Continue</b></a>");
+				$('#start-button-god').html("");
+			}
             updateProgress(1.0)
         });
 
@@ -68,9 +74,9 @@
             updateProgress(data);
         });
 
-        function clickStart()
+        function clickStart(godMode)
         {
-            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/ActivatePlayer", "", function() {window.location.href = "IngameGui.html";});
+            $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/ActivatePlayer?GodMode="+(godMode===true), "", function() {window.location.href = "IngameGui.html";});
         }
 
         function clickQuit()

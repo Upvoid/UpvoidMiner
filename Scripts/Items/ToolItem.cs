@@ -18,6 +18,7 @@ namespace UpvoidMiner
         Shovel,
         Axe,
         Hammer,
+        GodsShovel,
 
         DroneChain
     }
@@ -74,6 +75,10 @@ namespace UpvoidMiner
                             chopSound[i-1] = new Sound(chopSoundResource[i-1], vec3.Zero, false, 1, 1);
                         }
                     }
+                    break;
+                case ToolType.GodsShovel:
+                    Name = "God's Shovel";
+                    Description = "The epic shovel of god.";
                     break;
                 case ToolType.Hammer:
                     Name = "Hammer";
@@ -190,6 +195,9 @@ namespace UpvoidMiner
             case ToolType.Axe:
                 return false;
 
+            case ToolType.GodsShovel:
+                return true;
+
             case ToolType.DroneChain:
                 return false;
 
@@ -210,7 +218,7 @@ namespace UpvoidMiner
             mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
 
             // Limit shape if non-noclip
-            if (!LocalScript.NoclipEnabled)
+            if (!LocalScript.NoclipEnabled && ToolType != ToolType.GodsShovel)
             {
                 if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
                 if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
@@ -224,6 +232,8 @@ namespace UpvoidMiner
                 case ToolType.Pickaxe:
                     useRadius = digRadiusPickaxe; break;
                 case ToolType.Shovel:
+                    useRadius = digRadiusShovel; break;
+                case ToolType.GodsShovel:
                     useRadius = digRadiusShovel; break;
                 default: break;
             }
@@ -250,7 +260,12 @@ namespace UpvoidMiner
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-					player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index });
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index });
+                    return;
+
+                case ToolType.GodsShovel:
+                    // Shovel has big radius but can only dig dirt
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, null);
                     return;
 
                 case ToolType.Axe:

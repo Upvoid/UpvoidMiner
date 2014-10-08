@@ -92,7 +92,11 @@ namespace UpvoidMiner
                 generationProgressSocket = new WebSocketHandler();
 				Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
 
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (WebRequest request, WebResponse response) => ActivatePlayer());
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer",
+                    (WebRequest request, WebResponse response) =>
+                    {
+                        ActivatePlayer(request.GetQuery("GodMode") == "true");
+                    });
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
@@ -100,7 +104,7 @@ namespace UpvoidMiner
 
 			// Create a simple camera that allows free movement.
 			camera = new GenericCamera();
-			camera.Position = new vec3(0, 10, 0);
+            camera.Position = new vec3(150, 40, 150);
 			camera.FarClippingPlane = 1750.0;
 
             // Client-only: register terrain materials
@@ -168,7 +172,7 @@ namespace UpvoidMiner
 			}
 		}
 
-        static void ActivatePlayer()
+        static void ActivatePlayer(bool godMode = false)
         {
             // Activate player only once.
             if (player != null)
@@ -189,9 +193,8 @@ namespace UpvoidMiner
             world.AddEntity(ParticleEntity, Network.GCManager.CurrentUserID);
 
             // Create the Player EntityScript and add it to the world.
-            // For now, place him 30 meters above the ground and let him drop to the ground.
-            player = new Player(camera);
-            world.AddEntity(player, mat4.Translate(new vec3(0, 50f, 0)), Network.GCManager.CurrentUserID);
+            player = new Player(camera, godMode);
+            world.AddEntity(player, mat4.Translate(new vec3(150, 5, 150)), Network.GCManager.CurrentUserID);
 
             // Register the update callback that updates the camera position.
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f, UpvoidMiner.Mod);

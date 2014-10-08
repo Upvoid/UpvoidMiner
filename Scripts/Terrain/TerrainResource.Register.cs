@@ -112,6 +112,11 @@ namespace UpvoidMiner
                 return null;
         }
 
+        public static IEnumerable<TerrainResource> ListResources()
+        {
+            return indexToResource.Values;
+        }
+
         /// <summary>
         /// Adds a resource to the global dictionary.
         /// </summary>

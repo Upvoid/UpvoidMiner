@@ -141,6 +141,8 @@ namespace UpvoidMiner
 		/// </summary>
 		bool WasFrozen = false;
 
+        public bool GodMode { get; protected set; }
+
         /// <summary>
         /// Position of the player.
         /// </summary>
@@ -174,8 +176,9 @@ namespace UpvoidMiner
 		public DiggingShape CurrentDiggingShape { get; protected set; }
 		public DiggingAlignment CurrentDiggingAlignment { get; protected set; }
 
-        public Player(GenericCamera _camera)
+        public Player(GenericCamera _camera, bool _godMode)
         {
+            GodMode = _godMode;
             Direction = new vec3(1, 0, 0);
             camera = _camera;
             CurrentDiggingShape = DiggingShape.Sphere;
@@ -183,6 +186,45 @@ namespace UpvoidMiner
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
+        }
+
+
+        protected override void Init()
+        {
+            // Create a character controller that allows us to walk around.
+            if (ContainingWorld == null)
+                throw new InvalidOperationException();
+
+            camera.Position = thisEntity.Position;
+
+            character = new CharacterController(camera, ContainingWorld, GodMode);
+
+            // For now, attach this entity to a simple sphere physics object.
+            character.Body.SetTransformation(thisEntity.Transform);
+            thisEntity.AddComponent(new PhysicsComponent(
+                                         character.Body,
+                                         mat4.Translate(new vec3(0, (GodMode ? 0f : character.EyeOffset), 0))));
+
+            // Add Torso mesh.
+            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
+                                                                        torsoTransform,
+                                                                        true));
+            /*psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
+            LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));*/
+
+
+            // Add camera component.
+            thisEntity.AddComponent(cameraComponent = new CameraComponent(camera, mat4.Identity));
+
+            // This digging controller will perform digging and handle digging constraints for us.
+            digging = new DiggingController(ContainingWorld, this);
+
+            Gui = new PlayerGui(this);
+
+            AddTriggerSlot("AddItem");
+
+            Inventory.InitCraftingRules();
+            generateInitialItems();
         }
 
         public void Update(float elapsedSeconds)
@@ -321,42 +363,6 @@ namespace UpvoidMiner
                 dc.AddCsgConstraints(diffNode, refPos);
         }
 
-        protected override void Init()
-        {
-            // Create a character controller that allows us to walk around.
-            if (ContainingWorld == null)
-                throw new InvalidOperationException();
-
-            character = new CharacterController(camera, ContainingWorld);
-
-            // For now, attach this entity to a simple sphere physics object.
-            character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
-            thisEntity.AddComponent(new PhysicsComponent(
-                                         character.Body,
-                                         mat4.Translate(new vec3(0, character.EyeOffset, 0))));
-
-            // Add Torso mesh.
-            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
-                                                                        torsoTransform,
-                                                                        true));
-            /*psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
-            LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));*/
-
-
-            // Add camera component.
-            thisEntity.AddComponent(cameraComponent = new CameraComponent(camera, mat4.Identity));
-
-            // This digging controller will perform digging and handle digging constraints for us.
-            digging = new DiggingController(ContainingWorld, this);
-
-            Gui = new PlayerGui(this);
-
-            AddTriggerSlot("AddItem");
-
-            Inventory.InitCraftingRules();
-            generateInitialItems();
-        }
-
         [Serializable]
         public class InventorySave
         {
@@ -458,7 +464,16 @@ namespace UpvoidMiner
         /// </summary>
         void generateInitialItems()
         {
-            if (!File.Exists(UpvoidMiner.SavePathInventory))
+            if (GodMode)
+            {
+                Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
+                IEnumerable<TerrainResource> resources = TerrainResource.ListResources();
+                foreach (var resource in resources)
+                {
+                    Inventory.AddResource(resource, 1e9f);
+                }
+            }
+            else if (!File.Exists(UpvoidMiner.SavePathInventory))
             {
                 // Tools
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
@@ -789,7 +804,7 @@ namespace UpvoidMiner
 
                 float minRayQueryRange;
                 float maxRayQueryRange;
-                if (!LocalScript.NoclipEnabled)
+                if (!LocalScript.NoclipEnabled || GodMode)
                 {
                     minRayQueryRange = minRayQueryDistancePlayer;
                     maxRayQueryRange = maxRayQueryDistancePlayer;

@@ -57,6 +57,12 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// If true, the player is not pulled down to the ground and can fly around.
+        /// Also, all body size settings are ignored; the player's body is a small sphere around the camera.
+        /// </summary>
+        public bool GodMode { get; protected set; }
+
+        /// <summary>
         /// The height that the controller tries to keep between the body and the ground.
         /// The RigidBody representing the character hovers above the ground to make walking on non-planar ground easier.
         /// </summary>
@@ -159,8 +165,10 @@ namespace UpvoidMiner
 
 		float jumpCoolDown = 0f;
 
-		public CharacterController(GenericCamera _camera, World _containingWorld, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
+		public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
 		{
+		    GodMode = _godMode;
+
             camera = _camera;
             ContainingWorld = _containingWorld;
 
@@ -173,7 +181,10 @@ namespace UpvoidMiner
             WalkSpeedRunning = 6f;
 
             // Create a capsule shaped rigid body representing the character in the physics world.
-            Body = new RigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter/2f, BodyHeight));
+            if(GodMode)
+                Body = new RigidBody(1.0f, mat4.Identity, new SphereShape(0.3f));
+            else
+                Body = new RigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter / 2f, BodyHeight));
             ContainingWorld.Physics.AddRigidBody(Body);
 
             // Prevent the rigid body from falling to the ground by simply disabling any rotation
@@ -203,24 +214,31 @@ namespace UpvoidMiner
                 Body.SetGravity(new vec3(0, -9.807f, 0));
                 return;
             }
+            else if (GodMode)
+            {
+                Body.SetGravity(vec3.Zero);
+            }
 
 			jumpCoolDown -= _elapsedSeconds;
 			if (jumpCoolDown < 0f)
 				jumpCoolDown = 0f;
 
-            // When touching the ground, we can walk around with full control over our velocity
-            if (TouchesGround)
+            // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
+            if (TouchesGround || GodMode)
             {
                 
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
                 float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
 
-                // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
+                // Use the forward and right directions of the camera. When not in god mode, remove the y component, and we have our walking direction.
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
-                moveDir.y = 0;
-
                 vec3 velocity = Body.GetVelocity();
-                velocity.y = 0;
+                
+                if (!GodMode)
+                {
+                    moveDir.y = 0;
+                    velocity.y = 0;
+                }
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
             }
@@ -238,7 +256,7 @@ namespace UpvoidMiner
 
 			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
-			if(distanceToGround < HoverHeight+0.1f && jumpCoolDown <= 0f) {
+			if(!GodMode && distanceToGround < HoverHeight+0.1f && jumpCoolDown <= 0f) {
 
                 vec3 velocity = Body.GetVelocity();
 
@@ -261,9 +279,11 @@ namespace UpvoidMiner
                 Body.SetGravity(new vec3(0, customGravity, 0));
 
             }
-            else
+            else if(!GodMode)
                 Body.SetGravity(new vec3(0, -9.807f, 0));
-			ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 500f, 0), ReceiveRayqueryResult);
+			
+            if(!GodMode)
+                ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 500f, 0), ReceiveRayqueryResult);
 		}
 
         protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
@@ -319,7 +339,7 @@ namespace UpvoidMiner
                 else
                     walkDirRight++;
             } else if(e.Key == InputKey.Space) { //Space lets the player jump
-				if(TouchesGround && jumpCoolDown == 0f) {
+				if(!GodMode && TouchesGround && jumpCoolDown == 0f) {
                     Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
 					jumpCoolDown = 1f;
                 }
