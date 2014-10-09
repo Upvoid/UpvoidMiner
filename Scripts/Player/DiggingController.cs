@@ -78,7 +78,6 @@ namespace UpvoidMiner
         private static Sound[] stoneSound;
         private static vec3 diggingPosition = vec3.Zero;
 
-
         /// <summary>
         /// Particle system for 3D stones due to digging.
         /// </summary>
@@ -202,7 +201,6 @@ namespace UpvoidMiner
                 stoneSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain); 
                 stoneSound[i-1] = new Sound(stoneSoundResource[i-1], vec3.Zero, false, 1, 1);
             }
-
         }
 
         public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)

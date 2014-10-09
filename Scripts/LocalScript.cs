@@ -15,6 +15,7 @@
 
 using System;
 using Engine;
+using Engine.Audio;
 using Engine.Input;
 using Engine.Universe;
 using Engine.Rendering;
@@ -61,6 +62,9 @@ namespace UpvoidMiner
         static FreeCameraControl cameraControl;
 
         static Player player = null;
+
+        private static SoundResource birdRes;
+        private static Sound birdSound;
 
         /// <summary>
         /// Set this to true to enable free camera movement.
@@ -133,6 +137,14 @@ namespace UpvoidMiner
 
 			if(!Scripting.IsHost)
 				ActivatePlayer();
+
+            // Play some ambient sounds
+            birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain); 
+            birdSound = new Sound(birdRes, vec3.Zero, true, 0.2f, 1);
+
+            // This is ambient sound, so we do not want it to be attenuated by distance source<->player etc.
+            birdSound.Attenuation = false;
+            birdSound.Play();
         }
 
         static bool generationDone = false;
