@@ -15,11 +15,14 @@ in vec3 aInstNormal;
 in vec3 aInstTangent;
 in vec3 aInstColor;
 
+out vec3 vInstNormal;
+out vec3 vInstPosition;
 out vec3 vNormal;
 out vec3 vColor;
 out vec3 vTangent;
 out vec3 vWorldPos;
 out vec2 vTexCoord;
+out vec3 vObjPos;
 
 vec3 windOffset(float height, vec3 pos)
 {
@@ -51,7 +54,12 @@ void main()
     vTangent = mat3(uModelMatrix) * instRot * aTangent;
     vTexCoord = aTexCoord;
 
+    vInstNormal = aInstNormal;
+    vInstPosition = aInstPosition;
+
     float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
+
+    vObjPos = aPosition * posFactor;
 
     // world space position:
     vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);

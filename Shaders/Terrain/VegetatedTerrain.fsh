@@ -109,6 +109,14 @@ void main()
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
+    // grass modulation
+    //float gmod = (1 - smoothstep(0.7, 1.0, vGrass)) * 0.2;
+    //color *= gmod;
+
+    float gmod = smoothstep(0.66, 0.5, vGrass);
+    gmod = mix(gmod, 1, clamp(camDis / 100, 0.5, 1));
+    color *= gmod;
+
     OUTPUT_Color(color);
     OUTPUT_Normal(vWorldNormal);
     OUTPUT_Position(vWorldPos);
