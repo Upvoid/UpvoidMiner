@@ -71,15 +71,17 @@
     Shader: Vegetation/SimpleFoliage.Opaque
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
-    Parameter: uFadeDistance, 130
+    Parameter: uFadeDistance, 60
     Culling: None
+    MaxDistance: 60
 
 [SimpleGrass.zPre] : Default
     Shader: Vegetation/Foliage.zPre
     Texture: uColor, GrassTest.Low
     Parameter: uDiscardBias, .9
-    Parameter: uFadeDistance, 130
+    Parameter: uFadeDistance, 60
     Culling: None
+    MaxDistance: 60
 
 [SimpleGrass.ShadowDecal] : Default
     Shader: Vegetation/FoliageShadowDecal.Transparent
@@ -94,6 +96,7 @@
     Parameter: uDiscardBias, .9
     Parameter: uFadeDistance, 30
     Culling: None
+    MaxDistance: 30
 
 [Parviflora] : Default
     Shader: Vegetation/Foliage.Opaque
