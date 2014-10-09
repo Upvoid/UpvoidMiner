@@ -77,7 +77,9 @@ function formatQuantity(quantity, isVolumetric)
 {
     if(!isVolumetric)
         return "x"+Math.round(quantity);
-    else
+    else if(quantity > 10e5)
+		return "∞"
+	else
         return (Math.round(quantity*10, -1)/10)+"m³";
 }
 

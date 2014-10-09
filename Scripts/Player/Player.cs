@@ -467,6 +467,8 @@ namespace UpvoidMiner
             if (GodMode)
             {
                 Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
+                Inventory.AddItem(new ToolItem(ToolType.Shovel));
+                Inventory.AddItem(new ToolItem(ToolType.Axe));
                 IEnumerable<TerrainResource> resources = TerrainResource.ListResources();
                 foreach (var resource in resources)
                 {
