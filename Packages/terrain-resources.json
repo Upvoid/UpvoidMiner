@@ -755,6 +755,15 @@
     "Name" : "Particles/Terrain/Copper",
     "Path" : "~.mat",
     "Type" : "Material"
+ },
+ {
+    "Descriptor" : {
+        "Type": "File"
+    },
+    "Name" : "Heightmap",
+    "Path" : "~.png",
+    "Type" : "Texture",
+    "AutoDummy": false
  }
 
 ]

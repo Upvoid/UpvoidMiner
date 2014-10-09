@@ -115,21 +115,11 @@ namespace UpvoidMiner
         /// </returns>
         public CsgNode createTerrain()
         {
-            
-            // Load and return a CsgNode based on the "Hills" expression resource. This will create some generic perlin-based hills.
             CsgOpConcat concat = new CsgOpConcat();
 
             {
                 CsgOpUnion union = new CsgOpUnion();
-                /*
-                var texture = new TextureSampleNode(Resources.UseTextureData("Heightmap", UpvoidMiner.ModDomain),
-                                    TextureSampleNode.CoordinateMode.Relative,
-                                    TextureSampleNode.InterpolationMode.Linear,
-                                    TextureSampleNode.WrapUVWMode.Repeat,
-                                    0f);
-
-                var HeightmapNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling("-700 * texture(x/30000, z/30000).x + y + 0.017", UpvoidMiner.ModDomain, "texture", texture);
-                */
+                
                 StringBuilder hillsDefines = new StringBuilder();
                 // Introduce variables.
                 hillsDefines.Append("pos = vec3(x, y, z);");
@@ -139,28 +129,29 @@ namespace UpvoidMiner
                 // Hill structue.
                 //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
                 hillsDefines.Append("Hills = perlins(x / 30, y / 30, z / 30) * .25 + perlins(x / 10, y / 10, z / 10) * .05;");
-                hillsDefines.Append("Hills = (Hills + 1) * 50;");
+                hillsDefines.Append("Hills = Hills * 20 * perlins(x / 300, y / 300, z / 300);");
                 string hillsDef = hillsDefines.ToString();
 
-				CsgOpConcat groundTerrain = new CsgOpConcat();
-				{
-					CsgOpUnion groundTerrainFull = new CsgOpUnion();
-					groundTerrainFull.AddNode(new CsgExpression(terrainDirt.Index, "-1", UpvoidMiner.ModDomain));
-					groundTerrainFull.AddNode(new CsgExpression(terrainDesert.Index, hillsDef + "3 * perlins(x / 300, z / 300, y / 100)", UpvoidMiner.ModDomain));
+                var texture = new TextureSampleNode(Resources.UseTextureData("Heightmap", UpvoidMiner.ModDomain),
+                    TextureSampleNode.CoordinateMode.Relative,
+                    TextureSampleNode.InterpolationMode.Linear,
+                    TextureSampleNode.WrapUVWMode.Repeat,
+                    0f);
 
-					CsgOpDiff groundTerrainDiff = new CsgOpDiff();
-					groundTerrainDiff.AddNode(new CsgExpression(1, "-y-90", UpvoidMiner.ModDomain));
+                string heightmapRocks = "Heightmap = -225 * (texture(x/5000, z/5000).x - 0.5);";
+                string heightmapDirt = "Heightmap = -225 * (texture(x/5000, z/5000).y - 0.5);";
 
-					groundTerrain.AddNode(groundTerrainFull);
-					groundTerrain.AddNode(groundTerrainDiff);
-				}
+                var dirtNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapDirt + "y + Heightmap + Hills", UpvoidMiner.ModDomain, "texture", texture);
+                var rockNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapRocks + "y + Heightmap + 4 + Hills*0.2", UpvoidMiner.ModDomain, "texture", texture);
 
-				union.AddNode(new CsgExpression(terrainDirt.Index, hillsDef + "y + Hills*3", UpvoidMiner.ModDomain));
-				//union.AddNode(groundTerrain);
+                union.AddNode(new CsgExpression(terrainDirt.Index, dirtNodeNetwork));
+                union.AddNode(new CsgExpression(terrainRock.Index, rockNodeNetwork));
+                
+                //union.AddNode(groundTerrain);
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
                 concat.AddNode(union);
             }
-            
+            /*
             {
                 
                 CsgOpDiff diff = new CsgOpDiff();
@@ -178,13 +169,14 @@ namespace UpvoidMiner
                 caveDefines.Append("Caves = CaveDensity;");
                 string caveDef = "y";// caveDefines.ToString();
                 
-                diff.AddNode(new CsgExpression(1, caveDefines + "Caves", UpvoidMiner.ModDomain));
+                diff.AddNode(new CsgExpression(1, "y", UpvoidMiner.ModDomain));
                 concat.AddNode(diff);
             }
-            
+            */
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("DesertVegetation", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
+            
             concat.AddNode(new CsgCollapseNode());
 
 
