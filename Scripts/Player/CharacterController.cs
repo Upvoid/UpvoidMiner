@@ -15,9 +15,11 @@
 
 using System;
 using Engine;
+using Engine.Audio;
 using Engine.Universe;
 using Engine.Physics;
 using Engine.Input;
+using Engine.Resources;
 using Engine.Scripting;
 using Engine.Webserver;
 using Engine.Rendering;
@@ -165,6 +167,10 @@ namespace UpvoidMiner
 
 		float jumpCoolDown = 0f;
 
+
+        SoundResource movementNoiseResource;
+        Sound movementNoiseSound;
+
 		public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
 		{
 		    GodMode = _godMode;
@@ -196,6 +202,10 @@ namespace UpvoidMiner
 
             // This event handler is used to catch the keyboard input that steers the character.
             Input.OnPressInput += HandleInput;
+
+            // Create sound resource for movement noise
+            movementNoiseResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Movement/WalkingOnLeaves", UpvoidMiner.ModDomain); 
+            movementNoiseSound = new Sound(movementNoiseResource, vec3.Zero, true, 0.5f, 1);
 		}
 
 		/// <summary>
@@ -226,7 +236,7 @@ namespace UpvoidMiner
             // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
             if (TouchesGround || GodMode)
             {
-                
+
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
                 float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
 
@@ -238,6 +248,18 @@ namespace UpvoidMiner
                 {
                     moveDir.y = 0;
                     velocity.y = 0;
+                }
+
+                if (TouchesGround && moveDir.LengthSqr > 0.1f)
+                {
+                    // Resume movement noise (This is a no-op if sound is already playing)
+                    movementNoiseSound.Resume();
+                    movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
+                }
+                else
+                {
+                    // Pause movement noise
+                    movementNoiseSound.Pause();
                 }
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
