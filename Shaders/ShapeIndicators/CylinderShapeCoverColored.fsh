@@ -17,11 +17,13 @@ in vec3 vNormal;
 in vec3 vEyePos;
 in vec3 vWorldPos;
 
+INPUT_CHANNEL_OutputColor(vec3)
+INPUT_CHANNEL_Depth(float)
 OUTPUT_CHANNEL_OutputColor(vec3)
 
 void main()
 {
-    //INIT_CHANNELS;
+    INIT_CHANNELS;
 
     vec4 transColor = uColor;
 
