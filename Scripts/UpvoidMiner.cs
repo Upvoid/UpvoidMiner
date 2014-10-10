@@ -36,15 +36,15 @@ namespace UpvoidMiner
         /// <summary>
         /// The base save path.
         /// </summary>
-        public static readonly string SavePathBase = "Savegames/Mods/UpvoidMiner";
+        public static string SavePathBase = "Savegames/Mods/UpvoidMiner";
         /// <summary>
         /// Save path for the inventory.
         /// </summary>
-        public static readonly string SavePathInventory = SavePathBase + "/Inventory";
+        public static string SavePathInventory = null;
         /// <summary>
         /// Save path for entities.
         /// </summary>
-        public static readonly string SavePathEntities = SavePathBase + "/Entities";
+        public static string SavePathEntities = null;
     }
 }
 

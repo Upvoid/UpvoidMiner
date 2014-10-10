@@ -195,6 +195,10 @@ namespace UpvoidMiner
 
         static void ActivatePlayer(bool godMode = false)
         {
+            // Initialize the savegame paths
+            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
+            UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
+
             // Activate player only once.
             if (player != null)
             {
@@ -327,7 +331,7 @@ namespace UpvoidMiner
 
 			UpdateResourceDownloadProgress();
 
-            if ((DateTime.Now - lastSave).TotalSeconds > 60)
+            if ((DateTime.Now - lastSave).TotalSeconds > 10)
             {
                 lastSave = DateTime.Now;
 
