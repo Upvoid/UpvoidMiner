@@ -379,7 +379,7 @@ namespace UpvoidMiner
                 if (particles != null)
                 {
                     vec3 partPos = new vec3(x, y, z) + RandomDir() * (float)random.NextDouble() * .5f;
-                    vec3 partVel = RandomDir() * (1.0f + (float)random.NextDouble() * 1.0f);
+                    vec3 partVel = 0.1f * RandomDir() * (1.0f + (float)random.NextDouble() * 1.0f);
                     partVel.y = Math.Abs(partVel.y); // upwards direction
                     float partSize = .2f + (float)random.NextDouble() * .25f;
                     float curLife = .0f;
