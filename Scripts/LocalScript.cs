@@ -65,6 +65,8 @@ namespace UpvoidMiner
 
         private static SoundResource birdRes;
         private static Sound birdSound;
+        private static SoundResource musicRes;
+        private static Sound music;
 
         /// <summary>
         /// Set this to true to enable free camera movement.
@@ -141,10 +143,17 @@ namespace UpvoidMiner
             // Play some ambient sounds
             birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain); 
             birdSound = new Sound(birdRes, vec3.Zero, true, 0.2f, 1);
-
             // This is ambient sound, so we do not want it to be attenuated by distance source<->player etc.
             birdSound.Attenuation = false;
             birdSound.Play();
+
+            musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain); 
+            music = new Sound(musicRes, vec3.Zero, true, 0.5f, 1);
+            // This is music, so we do not want it to be attenuated by distance source<->player etc.
+            music.Attenuation = false;
+            music.Play();
+
+
         }
 
         static bool generationDone = false;
