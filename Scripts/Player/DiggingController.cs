@@ -90,7 +90,7 @@ namespace UpvoidMiner
             {
                 resource = res;
 
-                particlesStones = new CpuParticleSystem(4, 0.01);
+                particlesStones = new CpuParticleSystem(4, 0.025);
 
                 // aPosition [m]
                 // TIMESTEP  [s]
