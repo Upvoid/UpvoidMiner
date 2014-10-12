@@ -52,6 +52,8 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
 		private TerrainResource terrainRock;
 		private TerrainResource terrainDesert;
+        private TerrainResource terrainOreGold;
+
 
         [Serializable]
         public class EntitySave
@@ -100,6 +102,7 @@ namespace UpvoidMiner
             Instance.terrainDirt = TerrainResource.FromName("Dirt");
             Instance.terrainRock = TerrainResource.FromName("Stone.09");
             Instance.terrainDesert = TerrainResource.FromName("Desert");
+            Instance.terrainOreGold = TerrainResource.FromName("OreGold");
 
             // load entities
             LoadEntities();
@@ -142,10 +145,16 @@ namespace UpvoidMiner
                 string heightmapDirt = "Heightmap = -225 * (texture(x/5000, z/5000).y - 0.5);";
 
                 var dirtNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapDirt + "y + Heightmap + Hills", UpvoidMiner.ModDomain, "texture", texture);
-                var rockNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapRocks + "y + Heightmap + 4 + Hills*0.2", UpvoidMiner.ModDomain, "texture", texture);
-
                 union.AddNode(new CsgExpression(terrainDirt.Index, dirtNodeNetwork));
+                var rockNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapRocks + "y + Heightmap + 4 + Hills*0.2", UpvoidMiner.ModDomain, "texture", texture);
                 union.AddNode(new CsgExpression(terrainRock.Index, rockNodeNetwork));
+
+                string oreDef = @"perlins(x,y,z) $= ::Perlin;
+                                    Ore = 1.5 + perlins(x / 20, y / 4, z / 20) + perlins(x / 4, y / 0.5, z / 4);
+                                ";
+
+                var goldNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + oreDef + "Ore + clamp(y+20, -10, 0)*0.1", UpvoidMiner.ModDomain, "texture", texture);
+                union.AddNode(new CsgExpression(terrainOreGold.Index, goldNodeNetwork));
                 
                 //union.AddNode(groundTerrain);
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
