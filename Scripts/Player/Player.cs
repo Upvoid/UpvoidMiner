@@ -806,15 +806,15 @@ namespace UpvoidMiner
 
                 float minRayQueryRange;
                 float maxRayQueryRange;
-                if (!LocalScript.NoclipEnabled || GodMode)
-                {
-                    minRayQueryRange = minRayQueryDistancePlayer;
-                    maxRayQueryRange = maxRayQueryDistancePlayer;
-                }
-                else
+                if (LocalScript.NoclipEnabled || GodMode)
                 {
                     minRayQueryRange = minRayQueryDistanceNoClip;
                     maxRayQueryRange = maxRayQueryDistanceNoClip;
+                }
+                else
+                {
+                    minRayQueryRange = minRayQueryDistancePlayer;
+                    maxRayQueryRange = maxRayQueryDistancePlayer;
                 }
 
                 // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
