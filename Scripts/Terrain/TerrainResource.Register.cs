@@ -75,6 +75,9 @@ namespace UpvoidMiner
             addResource(new SolidTerrainResource("AoiCrystal", "Terrain/AoiCrystal", "Particles/Terrain/AoiCrystal"));
             addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock"));
             addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock"));
+
+            addResource(new SolidTerrainResource("OreGold", "Terrain/OreGold", "Particles/Terrain/OreGold"));
+
         }
 
         /// <summary>

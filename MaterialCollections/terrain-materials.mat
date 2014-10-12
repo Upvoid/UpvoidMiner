@@ -470,7 +470,7 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/GoldBars.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
+    Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uTexScaleXY, 3.5
     Parameter: uTexScaleXZ, 3.5
     Parameter: uTexScaleZY, 3.5
@@ -480,7 +480,7 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/GoldBars.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
+    Color: uSpecularColor, 1, 1, 1, 8
 
 [Terrain/Copper] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -521,3 +521,23 @@
     Texture: uColor, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Gems01.Normal
     Color: uSpecularColor, .1, .1, .1, 8
+
+[Terrain/OreGold] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, OreGold.Diffuse
+    Texture: uColorXY, OreGold.Diffuse
+    Texture: uColorZY, OreGold.Diffuse
+    Texture: uNormalXZ, OreGold.Normal
+    Texture: uNormalXY, OreGold.Normal
+    Texture: uNormalZY, OreGold.Normal
+    Color: uSpecularColor, 1, 1, 1, 16
+    Parameter: uTexScaleXY, 3
+    Parameter: uTexScaleXZ, 3
+    Parameter: uTexScaleZY, 3
+    Parameter: uBlendingCoefficient, 4
+
+[Particles/Terrain/OreGold] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, OreGold.Diffuse
+    Texture: uNormal, OreGold.Normal
+    Color: uSpecularColor, 1, 1, 1, 16

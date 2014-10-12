@@ -196,6 +196,24 @@
 },
 
 {
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "OreGold.Diffuse",
+    "Path" : "~.jpg",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": false
+    },
+    "Name" : "OreGold.Normal",
+    "Path" : "~.jpg",
+    "Type" : "Texture"
+},
+{
     "Descriptor" : "File",
     "Name" : "terrain-materials",
     "Path" : "~.mat",
@@ -209,6 +227,26 @@
         "Type" : "FromCollection"
     },
     "Name" : "GrassyMountains2",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Terrain/OreGold",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/OreGold",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/OreGold",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/OreGold",
     "Path" : "~.mat",
     "Type" : "Material"
 },
