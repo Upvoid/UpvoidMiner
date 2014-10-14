@@ -2,6 +2,20 @@
 {
     "Descriptor" : {
         "Files" : [
+            "Vegetation/GrassBlades.Opaque.fsh",
+            "Vegetation/GrassBlades.vsh"
+        ],
+        "Name" : "Vegetation/GrassBlades.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/GrassBlades.Opaque",
+            "Path" : "~.shader",
+            "Type" : "Shader"
+},
+
+{
+    "Descriptor" : {
+        "Files" : [
             "Terrain/MinerTerrain.fsh",
             "Terrain/MinerTerrain.vsh"
         ],
@@ -247,6 +261,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Particles/Terrain/OreGold",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Vegetation/GrassBlades",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Vegetation/GrassBlades",
     "Path" : "~.mat",
     "Type" : "Material"
 },

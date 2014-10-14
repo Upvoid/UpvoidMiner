@@ -32,7 +32,7 @@
             "ConditionalOffset" :
             {
                 "Type" : "ConditionalOffset",
-                "Nodes" : ["NormalRepair"]
+                "Nodes" : ["Input"]
             },
             "TerrainFoliage":
             {
@@ -49,7 +49,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["Input"],
                 "Copy": ["aPosition", "aNormal", "aGrass"],
                 "Calculated": {
                     "aColor": {
@@ -95,7 +95,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["Input"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -140,6 +140,31 @@
             {
                 "Type" : "Instancing",
                 "Nodes" : ["Grass", "Seeds"]
+            },
+            "GrassBlades" :
+            {
+                "Type" : "Grass",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "GrassDensity",
+                "minDistance": 0.01,
+
+                        "bladesPerSqM": 300,
+                        "bladeWidth": 0.07,
+                        "bladeLength": 0.3,
+                        "bladeVariance": 0.4,
+
+                        "colorR": 0.1,
+                        "colorG": 0.9,
+                        "colorB": 0.0,
+                        "colorVariance": 0.2,
+                        "colorGroundFactor": 0.0,
+
+                        "normalRefMix": 0.5,
+                        "bladeTopVariance": 0.1,
+
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
             },
             "ColoredSpawns":
             {
@@ -490,7 +515,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["Input"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -536,7 +561,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["Input"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {

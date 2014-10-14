@@ -29,7 +29,7 @@ namespace UpvoidMiner
             base(name, renderMaterial, particleMaterial, false)
         {
             // For now: just use the setup from our default dirt:
-            
+
             if (Scripting.IsHost)
             {
                 // Add Gras attribute for LoD 4 (= MinLoD).
@@ -51,7 +51,7 @@ namespace UpvoidMiner
                     Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                 }
 
-            
+
                 // Spawn Grass
                 {
                     int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("GrassField", UpvoidMiner.ModDomain), "Input", "", 0, 4);
@@ -59,6 +59,8 @@ namespace UpvoidMiner
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.Transparent", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.zPre", UpvoidMiner.ModDomain), Renderer.zPre.Mesh);
+
+                    Material.AddMeshMaterial(pipeline, "GrassBlades", Resources.UseMaterial("Vegetation/GrassBlades", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
 
                 // Spawn Flowers

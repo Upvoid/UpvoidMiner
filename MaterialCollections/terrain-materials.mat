@@ -128,6 +128,11 @@
     Parameter: uBlendingCoefficient, 4
     Parameter: uColorModulation, 1
 
+[Vegetation/GrassBlades] : Default
+    Shader: Vegetation/GrassBlades.Opaque
+    Parameter: uColorModulation, 1
+    Culling: None
+
 [Particles/Terrain/Dirt] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
@@ -323,7 +328,7 @@
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock11.Normal
     Color: uSpecularColor, .1, .1, .1, 8
-	
+
 [Particles/Terrain/Rock12] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
