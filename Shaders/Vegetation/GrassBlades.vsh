@@ -36,7 +36,7 @@ void main()
 
    // transformation
    vNormal = aNormal;
-   vWorldPos = aPosition;
+   vWorldPos = aPosition + windOffset(aPosition, aY) * 0;
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * vec4(vWorldPos, 1.0);

@@ -23,7 +23,7 @@ void main()
 
    // COLOR BEGIN =======================
    vec3 colorMid = vec3(14., 87., 22.) / 255.0;
-   vec3 colorEdge = vec3(80., 192., 12.) / 255.0;
+   vec3 colorEdge = vec3(60., 192., 12.) / 255.0;
 
    float midF = min(1.0, pow(adX + smoothstep(0.7, 1.0, vY), 2));
 
@@ -32,7 +32,7 @@ void main()
    vColor.r *= (1.0 + vR * 0.9); // random red modultion
 
    // maybe make a texture out of http://www.athleat.co.uk/user/Grass_back.jpg
-
+  
    // COLOR END =========================
 
     // normalize normal
@@ -44,7 +44,7 @@ void main()
     //vec3 color = leafLighting(vWorldPos, normal, 1.0, vColor, vec4(vec3(0.3),16));
 
     //color = normal * 0.5 + 0.5;
-    vec3 color = vColor * mix(0.1, 1, shadowFactor(vWorldPos));
+    vec3 color = vColor * mix(0.07, 1, shadowFactor(vWorldPos));
 
     OUTPUT_Color(color);
     OUTPUT_Normal(normal);
