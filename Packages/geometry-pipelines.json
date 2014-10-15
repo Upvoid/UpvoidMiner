@@ -169,6 +169,10 @@
                         "densityEdge2": 0.4,
                         "densityCutoff": 0.2,
 
+                        "singleTriangle": true,
+                        "segmentsLength": 3,
+                        "segmentsWidth": 2,
+
                 "overrideUpVector": true,
                 "maxRefDeviation": 0.8,
                 "Nodes" : ["Input"]
