@@ -32,9 +32,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Messages.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\Packages\scripts.json">
       <Link>Packages\scripts.json</Link>
     </None>
