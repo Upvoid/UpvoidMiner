@@ -148,17 +148,11 @@
                 "densityDistribution": "GrassDensity",
                 "minDistance": 0.01,
 
-                        "bladesPerSqM": 300,
-                        "bladeWidth": 0.07,
+                        "bladesPerSqM": 200,
+                        "bladeWidth": 0.05,
                         "bladeLength": 0.4,
                         "bladeLengthCutoff": 0.2,
                         "bladeVariance": 0.4,
-
-                        "colorR": 0.2,
-                        "colorG": 0.7,
-                        "colorB": 0.1,
-                        "colorVariance": 0.2,
-                        "colorGroundFactor": 0.0,
 
                         "normalRefMix": 0.5,
                         "bladeTopVariance": 0.1,
@@ -169,9 +163,12 @@
                         "densityEdge2": 0.4,
                         "densityCutoff": 0.2,
 
-                        "singleTriangle": true,
+                        "singleTriangle": false,
                         "segmentsLength": 3,
                         "segmentsWidth": 2,
+                        "tipNarrow": 0.7,
+                        "sideCurvature": 0.02,
+                        "sideCurvatureNormalFactor": 0.5,
 
                 "overrideUpVector": true,
                 "maxRefDeviation": 0.8,

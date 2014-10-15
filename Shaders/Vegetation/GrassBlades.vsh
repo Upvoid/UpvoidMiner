@@ -2,17 +2,16 @@
 
 #pragma ACGLimport  <Common/Camera.csh>
 
-uniform mat4 uModelMatrix;
 uniform float uFadeDistance = 10000;
 
-in vec3 aPosition;
-in vec3 aNormal;
-in vec3 aColor;
-in float aLength;
+in vec4 aPositionAndX;
+in vec4 aNormalAndYAndR;
 
 out vec3 vNormal;
-out vec3 vColor;
 out vec3 vWorldPos;
+out float vX;
+out float vY;
+out float vR;
 
 vec3 windOffset(vec3 pos, float l)
 {
@@ -22,13 +21,22 @@ vec3 windOffset(vec3 pos, float l)
 
 void main()
 {
-   vColor = aColor;
-   // world space normal:
-   vNormal = mat3(uModelMatrix) * aNormal;
-   // world space position:
-   vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
+   // input multiplex
+   vec3 aPosition = aPositionAndX.xyz;
+   float aX = aPositionAndX.w;
+   vec3 aNormal = vec3(aNormalAndYAndR.x, 0.0, aNormalAndYAndR.y);
+   aNormal.y = sqrt(1 - aNormal.x * aNormal.x - aNormal.z * aNormal.z);
+   float aY = aNormalAndYAndR.z;
+   float aR = aNormalAndYAndR.w;
 
-   vWorldPos = worldPos.xyz;// + windOffset(worldPos.xyz, aLength);
+   // pass-through
+   vX = aX;
+   vY = aY;
+   vR = aR;
+
+   // transformation
+   vNormal = aNormal;
+   vWorldPos = aPosition;
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * vec4(vWorldPos, 1.0);
