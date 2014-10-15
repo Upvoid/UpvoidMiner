@@ -28,7 +28,7 @@ void main()
    // world space position:
    vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
 
-   vWorldPos = worldPos.xyz + windOffset(worldPos.xyz, aLength);
+   vWorldPos = worldPos.xyz;// + windOffset(worldPos.xyz, aLength);
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * vec4(vWorldPos, 1.0);

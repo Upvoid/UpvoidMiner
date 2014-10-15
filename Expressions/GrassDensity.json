@@ -1,6 +1,6 @@
 {
   "inputs" : [
-    0, 1
+    0, 1, 2, 3
   ],
   "nodes" : [
     {
@@ -14,18 +14,36 @@
     },
     {
       "id" : 1,
-      "identifier" : "mesh::aPosition",
+      "identifier" : "x",
       "inputs" : [
       ],
       "nodetype" : "Input",
-      "type" : [ 3
+      "type" : [
       ]
     },
     {
-      "function" : "perlin(x,y,z) $= ::Perlin; p = mesh::aPosition / 10 + vec3(1.234, 1.57, 7.26); p2 = p * 3.123 + vec3(1.0234, 1.057, 7.026); perl = (perlin(p.x, p.y, p.z) * 0.5 + 0.7) * step(perlin(p2.x, p2.y, p2.z) + 0.2); perl * max(mesh::aGrass * 2 - 1, 0) * 75",
       "id" : 2,
+      "identifier" : "y",
       "inputs" : [
-        0, 1
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "id" : 3,
+      "identifier" : "z",
+      "inputs" : [
+      ],
+      "nodetype" : "Input",
+      "type" : [
+      ]
+    },
+    {
+      "function" : "perlin(x,y,z) $= ::Perlin; p = vec3(x, y, z) / 10 + vec3(1.234, 1.57, 7.26); max(mesh::aGrass * 2 - 1, 0)",
+      "id" : 4,
+      "inputs" : [
+        0, 1, 2, 3
       ],
       "nodetype" : "Function",
       "varMapping" : {
@@ -34,13 +52,23 @@
           "type" : [
           ]
         },
-        "mesh::aPosition" : {
+        "x" : {
           "index" : 1,
-          "type" : [ 3
+          "type" : [
+          ]
+        },
+        "y" : {
+          "index" : 2,
+          "type" : [
+          ]
+        },
+        "z" : {
+          "index" : 3,
+          "type" : [
           ]
         }
       }
     }
   ],
-  "output" : 2
+  "output" : 4
 }
