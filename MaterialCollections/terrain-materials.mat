@@ -132,6 +132,7 @@
     Shader: Vegetation/GrassBlades.Opaque
     Parameter: uColorModulation, 1
     Culling: None
+    MaxDistance: 20
 
 [Particles/Terrain/Dirt] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
