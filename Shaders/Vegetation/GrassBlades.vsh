@@ -2,8 +2,6 @@
 
 #pragma ACGLimport  <Common/Camera.csh>
 
-uniform float uFadeDistance = 10000;
-
 in vec3 aPosition;
 in vec3 aXYR;
 

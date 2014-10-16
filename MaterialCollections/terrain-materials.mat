@@ -130,9 +130,11 @@
 
 [Vegetation/GrassBlades] : Default
     Shader: Vegetation/GrassBlades.Opaque
+	Texture: uColor, Grassblade
     Parameter: uColorModulation, 1
+	Parameter: uFadeDistance, 35
     Culling: None
-    MaxDistance: 20
+    MaxDistance: 30
 
 [Particles/Terrain/Dirt] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
