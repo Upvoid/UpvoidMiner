@@ -4,7 +4,6 @@
 #pragma ACGLimport <Common/Lighting.fsh>
 #pragma ACGLimport <Common/Camera.csh>
 
-in vec3 vNormal;
 in vec3 vWorldPos;
 in float vX;
 in float vY;
@@ -16,7 +15,7 @@ OUTPUT_CHANNEL_Position(vec3)
 
 void main()
 {
-    INIT_CHANNELS;
+   INIT_CHANNELS;
 
    float dirX = (vX - 0.5) * 2.0;
    float adX = abs(dirX);
@@ -32,21 +31,13 @@ void main()
    vColor.r *= (1.0 + vR * 0.9); // random red modultion
 
    // maybe make a texture out of http://www.athleat.co.uk/user/Grass_back.jpg
-  
+
    // COLOR END =========================
 
-    // normalize normal
-    vec3 normal = normalize(vNormal);
-    //normal *= sign(dot(uSunDirection, normal));
+   // Shadowing
+   vec3 color = vColor * mix(0.07, 1, shadowFactor(vWorldPos));
 
-    // illumination
-    //vec3 color = lighting(vWorldPos, normal, vColor, vec4(vec3(.3), 16));
-    //vec3 color = leafLighting(vWorldPos, normal, 1.0, vColor, vec4(vec3(0.3),16));
-
-    //color = normal * 0.5 + 0.5;
-    vec3 color = vColor * mix(0.07, 1, shadowFactor(vWorldPos));
-
-    OUTPUT_Color(color);
-    OUTPUT_Normal(normal);
-    OUTPUT_Position(vWorldPos);
+   OUTPUT_Color(color);
+   OUTPUT_Normal(normal);
+   OUTPUT_Position(vWorldPos);
 }

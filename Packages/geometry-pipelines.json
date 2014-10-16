@@ -166,7 +166,7 @@
                         "singleTriangle": false,
                         "segmentsLength": 4,
                         "segmentsWidth": 2,
-                        "tipNarrow": 0.5,
+                        "tipNarrow": 0.3,
                         "sideCurvature": 0.02,
                         "sideCurvatureNormalFactor": 0.5,
                         "bendVariance": 0.2,

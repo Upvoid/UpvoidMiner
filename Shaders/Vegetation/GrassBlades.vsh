@@ -4,10 +4,9 @@
 
 uniform float uFadeDistance = 10000;
 
-in vec4 aPositionAndX;
-in vec4 aNormalAndYAndR;
+in vec3 aPosition;
+in vec3 aXYR;
 
-out vec3 vNormal;
 out vec3 vWorldPos;
 out float vX;
 out float vY;
@@ -22,12 +21,9 @@ vec3 windOffset(vec3 pos, float l)
 void main()
 {
    // input multiplex
-   vec3 aPosition = aPositionAndX.xyz;
-   float aX = aPositionAndX.w;
-   vec3 aNormal = vec3(aNormalAndYAndR.x, 0.0, aNormalAndYAndR.y);
-   aNormal.y = sqrt(1 - aNormal.x * aNormal.x - aNormal.z * aNormal.z);
-   float aY = aNormalAndYAndR.z;
-   float aR = aNormalAndYAndR.w;
+   float aX = aXYR.x;
+   float aY = aXYR.y;
+   float aR = aXYR.z;
 
    // pass-through
    vX = aX;
@@ -35,8 +31,7 @@ void main()
    vR = aR;
 
    // transformation
-   vNormal = aNormal;
-   vWorldPos = aPosition + windOffset(aPosition, aY) * 0;
+   vWorldPos = aPosition + windOffset(aPosition, aY);
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * vec4(vWorldPos, 1.0);
