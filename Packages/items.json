@@ -7,6 +7,7 @@
 { "Name" : "Items/Icons/DroneChain", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Shovel", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/GodsShovel", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Pipette", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 { "Name" : "Items/Icons/AlienRock", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/FireRock", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },

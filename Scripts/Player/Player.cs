@@ -29,6 +29,7 @@ using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
 
+
 namespace UpvoidMiner
 {
     /// <summary>
@@ -446,12 +447,12 @@ namespace UpvoidMiner
                         Resource = (item as ResourceItem).Material.Name,
                     });
                 }
-                else
-                    throw new InvalidDataException("Unknown item type: " + item.GetType());
+                //else
+                //    throw new InvalidDataException("Unknown item type: " + item.GetType());
             }
 
-            save.quickAccess = new long[Inventory.QuickaccessSlots];
-            for (int i = 0; i < Inventory.QuickaccessSlots; ++i)
+            save.quickAccess = new long[Inventory.QuickAccessSlotCount];
+            for (int i = 0; i < Inventory.QuickAccessSlotCount; ++i)
                 save.quickAccess[i] = Inventory.QuickAccessItems[i] == null ? -1 : Inventory.QuickAccessItems[i].Id;
             save.currentQuickAccess = Inventory.SelectionIndex;
 
@@ -469,6 +470,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Axe));
+                Inventory.AddItem(new PipetteItem());
                 IEnumerable<TerrainResource> resources = TerrainResource.ListResources();
                 foreach (var resource in resources)
                 {
@@ -522,10 +524,10 @@ namespace UpvoidMiner
                 }
 
                 Inventory.ClearQuickAccess();
-                for (int i = 0; i < Inventory.QuickaccessSlots; ++i)
+                for (int i = 0; i < Inventory.QuickAccessSlotCount; ++i)
                     if (id2item.ContainsKey(save.quickAccess[i]))
                         Inventory.SetQuickAccess(id2item[save.quickAccess[i]], i);
-                Inventory.Select(save.currentQuickAccess);
+                Inventory.SelectQuickAccessSlot(save.currentQuickAccess);
             }
 
             Gui.OnUpdate();
@@ -687,8 +689,8 @@ namespace UpvoidMiner
                 {
                     int newIdx = Inventory.SelectionIndex - (int)(delta);
                     while (newIdx < 0)
-                        newIdx += Inventory.QuickaccessSlots;
-                    Inventory.Select(newIdx % Inventory.QuickaccessSlots);
+                        newIdx += Inventory.QuickAccessSlotCount;
+                    Inventory.SelectQuickAccessSlot(newIdx % Inventory.QuickAccessSlotCount);
                 }
             }
             else if ( e.Axis == AxisType.MouseX)
@@ -780,9 +782,9 @@ namespace UpvoidMiner
 
                 // Quickaccess items.
                 if (InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9)
-                    Inventory.Select((int)e.Key - (int)InputKey.Key1);
+                    Inventory.SelectQuickAccessSlot((int)e.Key - (int)InputKey.Key1);
                 if (e.Key == InputKey.Key0)
-                    Inventory.Select(9); // Special '0'.
+                    Inventory.SelectQuickAccessSlot(9); // Special '0'.
             }
             else if (e.PressType == InputPressArgs.KeyPressType.Up)
             {

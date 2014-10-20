@@ -249,7 +249,7 @@ namespace UpvoidMiner
         {
             // The GUI client calls this when a quick access slot is selected. Get the selected index and pass it to the player inventory.
             int selectedIndex = Convert.ToInt32(request.GetQuery("selectedIndex"));
-            player.Inventory.Select(selectedIndex);
+            player.Inventory.SelectQuickAccessSlot(selectedIndex);
         }
 
         void webSelectItem(WebRequest request, WebResponse response)
@@ -265,7 +265,7 @@ namespace UpvoidMiner
 
             // Place the item in the quick access bar at position 9 (bound to key 0) and select it.
             player.Inventory.SetQuickAccess(item, 9);
-            player.Inventory.Select(9);
+            player.Inventory.SelectQuickAccessSlot(9);
         }
 
         void webDropItem(WebRequest request, WebResponse response)

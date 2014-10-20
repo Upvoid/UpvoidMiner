@@ -53,6 +53,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="Items\PipetteItem.cs" />
     <Compile Include="LocalScript.cs" />
     <Compile Include="HostScript.cs" />
     <Compile Include="Player\CharacterController.cs" />

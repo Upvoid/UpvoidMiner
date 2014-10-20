@@ -17,6 +17,7 @@
                 "Items/DiscreteItem.cs",
                 "Items/MaterialItem.cs",
                 "Items/VolumeItem.cs",
+                "Items/PipetteItem.cs",
                 "Items/ResourceItem.cs",
                 "Items/ToolItem.cs",
                 "Items/CraftingRule.cs",

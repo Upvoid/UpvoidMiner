@@ -25,6 +25,8 @@ namespace UpvoidMiner
     /// </summary>
     public partial class Inventory
     {
+        public const int QuickAccessSlotCount = 10;
+
         public event Action<int, Item> OnQuickAccessChanged;
         public event Action<int, Item> OnSelectionChanged;
 
@@ -57,7 +59,7 @@ namespace UpvoidMiner
         {
             this.player = player;
 
-            Items.OnAdd += setDefaultQuickAccess;
+            Items.OnAdd += item => setDefaultQuickAccess(item);
             Items.OnRemove += removeFromQuickAccess;
         }
 
@@ -66,23 +68,19 @@ namespace UpvoidMiner
         /// </summary>
         public Item Selection { get { return quickAccessItems[selectedItem]; } }
         /// <summary>
-        /// Gets the selected quick access index. Between 0 and 9 (inclusive).
+        /// Gets the selected quick access index. Between 0 and QuickAccessSlotCount (exclusive).
         /// </summary>
         public int SelectionIndex { get { return selectedItem; } }
-        /// <summary>
-        /// Gets the number of quickaccess slots.
-        /// </summary>
-        public int QuickaccessSlots { get { return quickAccessItems.Length; } }
 
         public Item[] QuickAccessItems { get { return quickAccessItems; } }
 
         /// <summary>
         /// Sets the currently selected item
-        /// CAUTION: '1'-'9' is mapped to 0-8, '0' to 9
+        /// CAUTION: Keys '1'-'9' are mapped to 0-8, '0' to 9
         /// </summary>
-        public void Select(int idx)
+        public void SelectQuickAccessSlot(int idx)
         {
-            Debug.Assert(0 <= idx && idx <= 9);
+            Debug.Assert(0 <= idx && idx < QuickAccessSlotCount);
 
             if ( idx == selectedItem ) return;
 
@@ -98,11 +96,31 @@ namespace UpvoidMiner
             }
         }
 
+        /// <summary>
+        /// Sets given item as the selected item. Does nothing if the given item is not contained in this inventory.
+        /// </summary>
+        public void SelectItem(Item item)
+        {
+            // If the item is in a quick access slot, select it there
+            for (int i = 0; i < QuickAccessSlotCount; i++)
+            {
+                if (quickAccessItems[i] == item)
+                {
+                    SelectQuickAccessSlot(i);
+                    return;
+                }
+            }
+
+            // If we got here, the item is not in the quick access slot. Place the item in the quick access slot and select it.
+            SetQuickAccess(item, QuickAccessSlotCount-1);
+            SelectQuickAccessSlot(QuickAccessSlotCount - 1);
+        }
+
         private void setDefaultQuickAccess(Item item)
         {
             // If appended and enough space, also add it to quickAccess.
             // Caution: highest quick access idx is only temporary.
-            for (int i = 0; i < quickAccessItems.Length - 1; ++i)
+            for (int i = 0; i < QuickAccessSlotCount - 1; ++i)
             {
                 if (quickAccessItems[i] == null)
                 {
@@ -123,7 +141,7 @@ namespace UpvoidMiner
         /// </summary>
         public void ClearQuickAccess()
         {
-            for (int i = 0; i < QuickaccessSlots; ++i)
+            for (int i = 0; i < QuickAccessSlotCount; ++i)
                 SetQuickAccess(null, i);
         }
 
