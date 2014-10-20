@@ -305,7 +305,7 @@ namespace UpvoidMiner
 
                 float minRayQueryRange;
                 float maxRayQueryRange;
-                if (!LocalScript.NoclipEnabled)
+                if (!LocalScript.NoclipEnabled && !GodMode)
                 {
                     minRayQueryRange = minRayQueryDistancePlayer;
                     maxRayQueryRange = maxRayQueryDistancePlayer;
