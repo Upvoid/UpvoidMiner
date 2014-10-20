@@ -214,6 +214,19 @@ namespace UpvoidMiner
 		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
 		protected void Update(float _elapsedSeconds)
 		{
+
+            if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
+            {
+                // Resume movement noise (This is a no-op if sound is already playing)
+                movementNoiseSound.Resume();
+                movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
+            }
+            else
+            {
+                // Pause movement noise
+                movementNoiseSound.Pause();
+            }
+
             // Don't do anything when noclip is enabled
             if (LocalScript.NoclipEnabled)
             {
@@ -248,18 +261,6 @@ namespace UpvoidMiner
                 {
                     moveDir.y = 0;
                     velocity.y = 0;
-                }
-
-                if (TouchesGround && moveDir.LengthSqr > 0.1f)
-                {
-                    // Resume movement noise (This is a no-op if sound is already playing)
-                    movementNoiseSound.Resume();
-                    movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
-                }
-                else
-                {
-                    // Pause movement noise
-                    movementNoiseSound.Pause();
                 }
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
