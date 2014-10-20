@@ -68,6 +68,9 @@ namespace UpvoidMiner
         private static SoundResource musicRes;
         private static Sound music;
 
+        const float musicVolume = 0.5f;
+        const float birdVolume = 0.2f;
+
         /// <summary>
         /// Set this to true to enable free camera movement.
         /// </summary>
@@ -142,13 +145,13 @@ namespace UpvoidMiner
 
             // Play some ambient sounds
             birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain); 
-            birdSound = new Sound(birdRes, vec3.Zero, true, 0.2f, 1);
-            // This is ambient sound, so we do not want it to be attenuated by distance source<->player etc.
-            birdSound.Attenuation = false;
+            // Start with zero volume, we adapt that later
+            birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1);
+            birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
             musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain); 
-            music = new Sound(musicRes, vec3.Zero, true, 0.5f, 1);
+            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1);
             // This is music, so we do not want it to be attenuated by distance source<->player etc.
             music.Attenuation = false;
             music.Play();
@@ -340,7 +343,29 @@ namespace UpvoidMiner
                 UpvoidMinerWorldGenerator.SaveEntities();
             }
 
-            UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);
+            // Update all trees and keep position of closest tree, if any
+            vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);
+
+            // Handle bird sound volume (depending on distance to closest tree)
+            if(birdSound != null)
+            {
+                float distToTrees = Math.Max(0.01f, vec3.distance(closestTree, camera.Position));
+
+                if(distToTrees < 50.0f)
+                {
+                    // Set bird sound position to position of the closest tree
+                    birdSound.Position = closestTree + new vec3(0, 2, 0);
+
+                    // Attenuation (by distance) will be handled by Audio-Engine automatically
+                    birdSound.Volume = birdVolume;
+                }
+                else
+                {
+                    // No close tree / birds at all...
+                    birdSound.Volume = 0.0f;
+                }
+            }
+
         }
 
 		// This socket notifies the client GUI about progress in the downloading of resources.

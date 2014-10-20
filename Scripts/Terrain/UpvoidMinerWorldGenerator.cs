@@ -72,11 +72,23 @@ namespace UpvoidMiner
         public static EntitySave entitySave = new EntitySave();
         public static List<Tree> trees = new List<Tree>();
 
-        public static void UpdateTrees(vec3 refPos)
+        // Updates all trees and returns position of closest one
+        public static vec3 UpdateTrees(vec3 refPos)
         {
+            float minDist = float.MaxValue;
+            vec3 closestTree = new vec3(float.MaxValue);
+
             foreach (Tree t in trees)
             {
                 float dis = vec3.distance(refPos, t.Position);
+
+                // Keep distance to closest tree
+                if (dis < minDist)
+                {
+                    minDist = dis;
+                    closestTree = t.Position;
+                }
+
                 bool vTrunk = dis < 150;
                 bool vLeaves0 = dis < 350;
                 
@@ -85,6 +97,9 @@ namespace UpvoidMiner
                 foreach (var r in t.RjLeaves0)
                     r.Visible = vLeaves0;
             }
+
+            // Return distance to closest tree
+            return closestTree;
         }
 
         /// <summary>
