@@ -17,7 +17,7 @@
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
                 "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.3,
+                "maxRelativeDeviation" : 0.2,
                 "maxAngle" : 30.0,
                 "absoluteDeviation" : 0.25
             },
@@ -49,7 +49,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Input"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal", "aGrass"],
                 "Calculated": {
                     "aColor": {
@@ -80,7 +80,7 @@
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
                 "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.3,
+                "maxRelativeDeviation" : 0.2,
                 "maxAngle" : 20.0,
                 "absoluteDeviation" : -1
             },
@@ -95,7 +95,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Input"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -471,7 +471,7 @@
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
                 "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.3,
+                "maxRelativeDeviation" : 0.2,
                 "maxAngle" : 30.0,
                 "absoluteDeviation" : 0.25
             },
@@ -486,7 +486,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Input"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -517,7 +517,7 @@
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
                 "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.3,
+                "maxRelativeDeviation" : 0.2,
                 "maxAngle" : 20.0,
                 "absoluteDeviation" : -1
             },
@@ -532,7 +532,7 @@
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["Input"],
+                "Nodes" : ["NormalRepair"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
