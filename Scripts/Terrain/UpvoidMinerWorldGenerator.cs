@@ -153,8 +153,8 @@ namespace UpvoidMiner
                                     Ore = 1.5 + perlins(x / 20, y / 4, z / 20) + perlins(x / 4, y / 0.5, z / 4);
                                 ";
 
-                var goldNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + oreDef + "Ore + clamp(y+20, -10, 0)*0.1", UpvoidMiner.ModDomain, "texture", texture);
-                union.AddNode(new CsgExpression(terrainOreGold.Index, goldNodeNetwork));
+                //var goldNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + oreDef + "Ore + clamp(y+20, -10, 0)*0.1", UpvoidMiner.ModDomain, "texture", texture);
+                //union.AddNode(new CsgExpression(terrainOreGold.Index, goldNodeNetwork));
                 
                 //union.AddNode(groundTerrain);
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
