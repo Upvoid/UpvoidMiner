@@ -298,7 +298,7 @@ namespace UpvoidMiner
                     mesh = Resources.UseMesh("Sphere", UpvoidMiner.ModDomain);
                     break;
                 case MaterialShape.Cylinder: 
-                    collShape = new CylinderShape(Size.x, Size.y);
+                    collShape = new CylinderShape(Size.x, Size.y / 2f);
                     mesh = Resources.UseMesh("Cylinder", UpvoidMiner.ModDomain);
                     scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
                     break;
