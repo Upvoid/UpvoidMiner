@@ -38,7 +38,7 @@ namespace UpvoidMiner
                 // Lod 0-4
                 // Color modulated geometry pipeline for more variance.
                 {
-                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Decimate", 0, 4);
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrain", UpvoidMiner.ModDomain), "Input", "Input", 0, 4);
                     Material.AddDefaultShadowAndZPre(pipeline);
                     Material.AddMeshMaterial(pipeline, "Output", Resources.UseMaterial("Terrain/DirtVegetated", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
                 }
@@ -46,7 +46,7 @@ namespace UpvoidMiner
                 // Lod 5-max
                 // Color modulated geometry pipeline for more variance.
                 {
-                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrainLow", UpvoidMiner.ModDomain), "Input", "Decimate", 5);
+                    int pipeline = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredTerrainLow", UpvoidMiner.ModDomain), "Input", "Input", 5);
                     Material.AddDefaultShadowAndZPre(pipeline);
                     Material.AddMeshMaterial(pipeline, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                 }
