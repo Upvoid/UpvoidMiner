@@ -6,23 +6,34 @@
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
     <title>UpvoidMiner</title>
+    <style type="text/css">
+      .upvoid-debug
+      {
+         display:none !Important;
+      }
+      .upvoid-debug-menu
+      {
+         /*max-height: 527px;*/
+         max-height: 453px;
+      }
+    </style>
 </head>
 <body style="background: transparent; padding: 1%; height: 100%; overflow: hidden;">
   <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px;"><i class="fa fa-warning"></i> This is an alpha version. Expect crashes and bugs. <br> Please report any problems at community.upvoid.com.</p>
-    <div class="panel panel-default InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; max-height: 527px; height:90%; overflow-y:auto;">
+    <div class="panel panel-default upvoid-debug-menu InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; height:90%; overflow-y:auto;">
         <div class="panel-body text-center">
             <h1>UpvoidMiner</h1>
 
             <ul class="nav nav-pills nav-stacked">
                 <li id="start-button-adventure"><a href="javascript: clickStart(false)"><big><b>Start Adventure Mode</b></big></a></li>
                 <li id="start-button-god"><a href="javascript: clickStart(true)"><big><b>Start God Mode</b></big></a></li>
-				<li>&nbsp;</li>
+                                <li>&nbsp;</li>
                 <li><a href="Settings.html">Settings</a></li>
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
                 <li><a href="javascript:clickCommunity()"><i class="fa fa-external-link"></i> Community<br><small>(also for feedback and bug reports)</small></a></li>
-                <li><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
-                <li><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
+                <li class="upvoid-debug"><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
+                <li class="upvoid-debug"><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
                 <li><a href="javascript: clickQuit()">Quit</a></li>
             </ul>
 
@@ -37,10 +48,10 @@
 
         $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IsPlayerActivated", "", function (data) {
             if (data === "True")
-			{
-				$('#start-button-adventure').html("<a href='javascript: clickStart(false)'><b>Continue</b></a>");
-				$('#start-button-god').html("");
-			}
+                        {
+                                $('#start-button-adventure').html("<a href='javascript: clickStart(false)'><b>Continue</b></a>");
+                                $('#start-button-god').html("");
+                        }
         });
 
         // Register the websocket handler for future progress updates
@@ -51,9 +62,9 @@
         function clickStart(godMode)
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/ActivatePlayer?GodMode="+(godMode===true), "", function() {window.location.href = "IngameGui.html";});
-			
-			$('#start-button-adventure').html("<h2>Loading...</h2>");
-			$('#start-button-god').html("");
+
+                        $('#start-button-adventure').html("<h2>Loading...</h2>");
+                        $('#start-button-god').html("");
         }
 
         function clickQuit()
@@ -75,6 +86,12 @@
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=" + window.location.origin + "/Engine/Report");
         }
+
+      if ($(location).attr('search') == '?Debug')
+      {
+         $('.upvoid-debug').removeClass("upvoid-debug");
+         $('.upvoid-debug-menu').css("max-height", "527px");
+      }
 
     </script>
 

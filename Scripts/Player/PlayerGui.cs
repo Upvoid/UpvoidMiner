@@ -21,6 +21,7 @@ using Engine.Webserver;
 using Engine.Gui;
 using Engine.Input;
 using Engine.Rendering;
+using Engine.Scripting;
 
 namespace UpvoidMiner
 {
@@ -34,9 +35,9 @@ namespace UpvoidMiner
         /// </summary>
         public bool IsInventoryOpen { get; set; }
         public bool IsUIOpen { get; set; }
-		public bool IsMenuOpen { get; set; }
+                public bool IsMenuOpen { get; set; }
 
-		Player player;
+                Player player;
 
         JsonSerializer json = new JsonSerializer();
         WebSocketHandler updateSocket;
@@ -49,7 +50,7 @@ namespace UpvoidMiner
             public class GuiItem {
 
                 public GuiItem() { }
-                
+
                 public GuiItem(Item item)
                 {
                     icon = item.Icon;
@@ -102,7 +103,7 @@ namespace UpvoidMiner
             public List<string> quickAccess = new List<string>();
             public int selection;
 
-			public bool playerIsFrozen;
+                        public bool playerIsFrozen;
         }
 
         private void toggleUI()
@@ -114,7 +115,7 @@ namespace UpvoidMiner
         private void toggleInventory()
         {
             IsInventoryOpen = !IsInventoryOpen;
-            updateSocket.SendMessage("ToggleInventory"); 
+            updateSocket.SendMessage("ToggleInventory");
         }
 
         private void toggleMenu()
@@ -122,12 +123,12 @@ namespace UpvoidMiner
             IsMenuOpen = !IsMenuOpen;
             if(IsMenuOpen)
             {
-                Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/MainMenu.html");
+                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "MainMenu.html" + (Scripting.IsDeploy ? "" : "?Debug"));
                 IsInventoryOpen = true;
             }
             else
             {
-                Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGui.html");
+                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "IngameGui.html" + (Scripting.IsDeploy ? "" : "?Debug"));
                 IsInventoryOpen = false;
             }
         }
@@ -156,24 +157,24 @@ namespace UpvoidMiner
             player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
 
             // Workaround for missing keyboard input in the Gui: Toggle the inventory from here
-            Input.OnPressInput += (object sender, InputPressArgs e) => 
-            { 
-                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down) 
+            Input.OnPressInput += (object sender, InputPressArgs e) =>
+            {
+                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     if ( !IsUIOpen )
                         toggleUI();
                     toggleInventory();
                 }
-                if(e.Key == InputKey.F4 && e.PressType == InputPressArgs.KeyPressType.Down) 
+                if(e.Key == InputKey.F4 && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     toggleUI();
                     if ( !IsUIOpen && IsInventoryOpen )
                         toggleInventory();
                 }
-				if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down) 
-				{
+                                if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
+                                {
                     toggleMenu();
-				}
+                                }
             };
         }
 
@@ -191,7 +192,7 @@ namespace UpvoidMiner
             // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
 
-			info.playerIsFrozen = player.IsFrozen;
+                        info.playerIsFrozen = player.IsFrozen;
 
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
 

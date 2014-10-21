@@ -39,7 +39,7 @@ namespace UpvoidMiner
     /// Main class for the local scripting domain.
     /// </summary>
     public class LocalScript
-    {		
+    {
         /// <summary>
         /// The main world. We will use this to create new entities or query information about the environment.
         /// </summary>
@@ -85,21 +85,21 @@ namespace UpvoidMiner
             UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
-			// Get the world (created by the host script).
-			world = Universe.GetWorldByName("UpvoidMinerWorld");
+                        // Get the world (created by the host script).
+                        world = Universe.GetWorldByName("UpvoidMinerWorld");
 
-			// No loading screen for clients (since the server generates the world)
-			if (Scripting.IsHost)
-			{
-				// Register a callback for the terrain generation so the GUI can be notified when the world is ready.
-				world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
+                        // No loading screen for clients (since the server generates the world)
+                        if (Scripting.IsHost)
+                        {
+                                // Register a callback for the terrain generation so the GUI can be notified when the world is ready.
+                                world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
 
-				// Show a splash screen in the GUI client.
-				Gui.DefaultUI.LoadURL("http://localhost:" + Webserver.DefaultWebserver.Port + "/Mods/Upvoid/UpvoidMiner/0.0.1/SplashScreen.html");
+                                // Show a splash screen in the GUI client.
+                                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "SplashScreen.html" + (Scripting.IsDeploy ? "" : "?Debug"));
 
-				// Register a socket for sending progress updates to the loading screen
+                                // Register a socket for sending progress updates to the loading screen
                 generationProgressSocket = new WebSocketHandler();
-				Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
+                                Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
 
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer",
                     (WebRequest request, WebResponse response) =>
@@ -109,12 +109,12 @@ namespace UpvoidMiner
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
-			}
+                        }
 
-			// Create a simple camera that allows free movement.
-			camera = new GenericCamera();
+                        // Create a simple camera that allows free movement.
+                        camera = new GenericCamera();
             camera.Position = new vec3(150, 40, 150);
-			camera.FarClippingPlane = 1750.0;
+                        camera.FarClippingPlane = 1750.0;
 
             // Client-only: register terrain materials
             if (!Scripting.IsHost)
@@ -129,28 +129,28 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-			Settings.InitSettingsHandlers();
+                        Settings.InitSettingsHandlers();
 
-			Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
+                        Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;
 
-			// Register sockets for resource downloading progress bar
+                        // Register sockets for resource downloading progress bar
             resourceDownloadProgressSocket = new WebSocketHandler();
             Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "ResourceDownloadProgress", resourceDownloadProgressSocket);
 
-			if(!Scripting.IsHost)
-				ActivatePlayer();
+                        if(!Scripting.IsHost)
+                                ActivatePlayer();
 
             // Play some ambient sounds
-            birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain); 
+            birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain);
             // Start with zero volume, we adapt that later
             birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1);
             birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
-            musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain); 
+            musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
             music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1);
             // This is music, so we do not want it to be attenuated by distance source<->player etc.
             music.Attenuation = false;
@@ -161,40 +161,40 @@ namespace UpvoidMiner
 
         static bool generationDone = false;
         static int generatedChunks = 0;
-		static WebSocketHandler generationProgressSocket;
+                static WebSocketHandler generationProgressSocket;
 
         static void VolumeCallback(int x, int y, int z, int lod, int size)
         {
-			if (generationDone)
-			{
-				generationProgressSocket.SendMessage(1.0f.ToString());
-				return;
-			}
+                        if (generationDone)
+                        {
+                                generationProgressSocket.SendMessage(1.0f.ToString());
+                                return;
+                        }
 
             if (lod <= 4)
             {
                 generatedChunks++;
             }
-            
-			if (generatedChunks >= 20)
+
+                        if (generatedChunks >= 20)
             {
                 generationDone = true;
             }
 
-			generationProgressSocket.SendMessage(((float)generatedChunks/20f).ToString());
+                        generationProgressSocket.SendMessage(((float)generatedChunks/20f).ToString());
         }
 
-		static void webGenerationProgress(WebRequest request, WebResponse response)
-		{
-			if (generationDone)
-			{
-				response.AppendBody(1.0f.ToString());
-			}
-			else
-			{
-				response.AppendBody(((float)generatedChunks/28f).ToString());
-			}
-		}
+                static void webGenerationProgress(WebRequest request, WebResponse response)
+                {
+                        if (generationDone)
+                        {
+                                response.AppendBody(1.0f.ToString());
+                        }
+                        else
+                        {
+                                response.AppendBody(((float)generatedChunks/28f).ToString());
+                        }
+                }
 
         static void ActivatePlayer(bool godMode = false)
         {
@@ -228,7 +228,7 @@ namespace UpvoidMiner
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f, UpvoidMiner.Mod);
 
             // Register save callback
-            Savegame.OnSave += s => 
+            Savegame.OnSave += s =>
             {
                 player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
@@ -265,10 +265,10 @@ namespace UpvoidMiner
                 return;
             // For now, gameplay and debug actions are bound to static keys.
 
-			// N toggles noclip.
-			if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
+                        // N toggles noclip.
+                        if(e.PressType == InputPressArgs.KeyPressType.Up && e.Key == InputKey.N)
                         {
-				NoclipEnabled = !NoclipEnabled;
+                                NoclipEnabled = !NoclipEnabled;
 
                                 if(!NoclipEnabled) // just switched to first-person mode again
                                 {
@@ -324,7 +324,7 @@ namespace UpvoidMiner
                     camera.Position = pos;
                     camera.SetTarget(pos + dir, vec3.UnitY);
                 }
-			    cameraControl.Update(_elapsedSeconds);
+                            cameraControl.Update(_elapsedSeconds);
             }
 
             if (player != null)
@@ -332,7 +332,7 @@ namespace UpvoidMiner
                 player.Update(_elapsedSeconds);
             }
 
-			UpdateResourceDownloadProgress();
+                        UpdateResourceDownloadProgress();
 
             if ((DateTime.Now - lastSave).TotalSeconds > 10)
             {
@@ -368,27 +368,27 @@ namespace UpvoidMiner
 
         }
 
-		// This socket notifies the client GUI about progress in the downloading of resources.
-		static WebSocketHandler resourceDownloadProgressSocket;
-		static long resourceDownloadTotalBytes = 0;
-		static long resourceDownloadReceivedBytes = 0;
+                // This socket notifies the client GUI about progress in the downloading of resources.
+                static WebSocketHandler resourceDownloadProgressSocket;
+                static long resourceDownloadTotalBytes = 0;
+                static long resourceDownloadReceivedBytes = 0;
 
-		static void UpdateResourceDownloadProgress()
-		{
-			if (Download.BytesReceived != resourceDownloadTotalBytes || Download.BytesReceived!= resourceDownloadReceivedBytes)
-			{
-				double progress = (double)Download.BytesReceived / (double)Download.BytesTotal;
-				if(Download.BytesTotal == 0)
-					progress = 1.0;
-				else if (progress > 1)
-					progress = 1;
+                static void UpdateResourceDownloadProgress()
+                {
+                        if (Download.BytesReceived != resourceDownloadTotalBytes || Download.BytesReceived!= resourceDownloadReceivedBytes)
+                        {
+                                double progress = (double)Download.BytesReceived / (double)Download.BytesTotal;
+                                if(Download.BytesTotal == 0)
+                                        progress = 1.0;
+                                else if (progress > 1)
+                                        progress = 1;
 
-				resourceDownloadProgressSocket.SendMessage(progress.ToString());
+                                resourceDownloadProgressSocket.SendMessage(progress.ToString());
 
-				resourceDownloadTotalBytes = Download.BytesTotal;
+                                resourceDownloadTotalBytes = Download.BytesTotal;
                 resourceDownloadReceivedBytes = Download.BytesReceived;
-			}
-		}
+                        }
+                }
 
         /// <summary>
         /// MonoDevelop's debugger requires an executable program, so here is a dummy Main method.

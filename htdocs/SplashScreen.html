@@ -13,7 +13,7 @@
         -webkit-transition: background 2s ease-in-out;
         padding: 1em;
       }
-      
+
       #logo {
         width: 256px;
         height: 256px;
@@ -25,9 +25,9 @@
         transition: opacity 1s ease-in-out;
         -webkit-transition: opacity 1s ease-in-out;
       }
-      
+
     </style>
-    
+
 </head>
 <body style="background: #fff;">
   <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px;">
@@ -35,28 +35,29 @@
   </p>
 
   <img id="logo" src="/Resource/Texture/::Icon" alt="">
-  
+
   <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
   <script>
     window.setTimeout(function() {
       $('#logo').css('opacity', '1.0');
     }, 500);
-    
+
     window.setTimeout(function() {
       document.body.style.background = "rgba(255, 255, 255, 0)";
     }, 4000);
-    
+
     window.setTimeout(function() {
       $('#logo').css('opacity', '0.0');
     }, 6000);
-    
-    window.setTimeout(function() {
-      window.location.href = "MainMenu.html";
-    }, 7500);
-    
 
-    
+    window.setTimeout(function() {
+      window.location.href = "MainMenu.html" + window.location.search;
+    }, 7500);
+
+      //window.location.href = "MainMenu.html" + window.location.search;
+
+
   </script>
-  
+
 </body>
 </html>
