@@ -164,9 +164,11 @@ namespace UpvoidMiner
                 var rockNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + heightmapRocks + "y + Heightmap + 4 + Hills*0.2", UpvoidMiner.ModDomain, "texture", texture);
                 union.AddNode(new CsgExpression(terrainRock.Index, rockNodeNetwork));
 
+/*
                 string oreDef = @"perlins(x,y,z) $= ::Perlin;
                                     Ore = 1.5 + perlins(x / 20, y / 4, z / 20) + perlins(x / 4, y / 0.5, z / 4);
                                 ";
+*/
 
                 //var goldNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + oreDef + "Ore + clamp(y+20, -10, 0)*0.1", UpvoidMiner.ModDomain, "texture", texture);
                 //union.AddNode(new CsgExpression(terrainOreGold.Index, goldNodeNetwork));
