@@ -37,11 +37,14 @@ void main()
     opaqueEyePos /= opaqueEyePos.w;
 
     // get distance to sphere midpoint
-	vec3 midEyeDis = vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz;
+	vec3 opaqueWorldPos = (uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)).xyz;
+	vec3 midEyeDis = opaqueWorldPos - uMidPointAndRadius.xyz;
 	float dX = abs(dot(midEyeDis, uDigDirX.xyz));
 	float dY = abs(dot(midEyeDis, uDigDirY.xyz));
 	float dZ = abs(dot(midEyeDis, uDigDirZ.xyz));
     float dist = max(dX, max(dY, dZ));
+	
+	float dist2 = min(dX, min(dY, dZ));
 
 
     float e0 = max(0.0, uMidPointAndRadius.w-0.1);
@@ -53,21 +56,17 @@ void main()
 
     float sphereAlpha = 0.2;
 
+	
     // fresnel
-    vec3 viewDir = normalize(uCameraPosition - vWorldPos);
-    float dotVN = pow(abs(dot(viewDir, vNormal)), 0.5);
+    vec3 viewDir = normalize(uMidPointAndRadius.xyz - uCameraPosition);
+    float dotVN = pow(abs(dot(viewDir, vNormal)), 1);
     sphereAlpha *= mix(1.0, 0.1, dotVN);
-
+	//sphereAlpha = max(0.05, sphereAlpha);
+	
+	
+	sphereAlpha += 1 * max(0, (distance(vWorldPos, uMidPointAndRadius.xyz) - 1.6*uMidPointAndRadius.w) / uMidPointAndRadius.w);
+	
     transColor.a += float(opaqueEyePos.z < vEyePos.z) * sphereAlpha;
-
-    /*
-    vec3 pos = opaqueWorldPos.xyz;
-    const float scale = 30;
-    transColor.a += max(0, sin(pos.x * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.y * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.z * scale) - .75) * 4;
-    transColor.a = min(1, transColor.a);
-    */
 
     transColor = clamp(transColor, 0, 1);
     OUTPUT_VEC4_OutputColor(transColor);

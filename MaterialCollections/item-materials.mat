@@ -41,7 +41,7 @@
 [Items/ConstructionPreviewSphere] : Default
     Shader: ShapeIndicators/SphereShapeColored
     Color: uColor, 1,1,1,0.3
-    Culling: Front
+    Culling: None
 
 [Items/ConstructionPreviewSphereLimited] : Default
     Shader: ShapeIndicators/SphereShapeColored
@@ -56,7 +56,7 @@
 [Items/ConstructionPreviewBox] : Default
     Shader: ShapeIndicators/BoxShapeColored
     Color: uColor, 1,1,1,0.3
-    Culling: Front
+    Culling: None
 
 [Items/ConstructionPreviewBoxLimited] : Default
     Shader: ShapeIndicators/BoxShapeColored
@@ -71,7 +71,7 @@
 [Items/ConstructionPreviewCylinder] : Default
     Shader: ShapeIndicators/CylinderShapeColored
     Color: uColor, 1,1,1,0.3
-    Culling: Front
+    Culling: None
 
 [Items/ConstructionPreviewCylinderLimited] : Default
     Shader: ShapeIndicators/CylinderShapeColored

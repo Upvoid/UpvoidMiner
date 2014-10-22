@@ -57,17 +57,14 @@ void main()
     vec3 viewDir = normalize(uCameraPosition - vWorldPos);
     float dotVN = pow(abs(dot(viewDir, vNormal)), 0.5);
     sphereAlpha *= mix(1.0, 0.1, dotVN);
+	
+	float upperBorder = max(0, (distance(vWorldPos, uMidPointAndRadius.xyz) - 1.37*uMidPointAndRadius.w) / uMidPointAndRadius.w);
 
+	sphereAlpha += upperBorder;
+
+	
+	
     transColor.a += float(opaqueEyePos.z < vEyePos.z) * sphereAlpha;
-
-    /*
-    vec3 pos = opaqueWorldPos.xyz;
-    const float scale = 30;
-    transColor.a += max(0, sin(pos.x * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.y * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.z * scale) - .75) * 4;
-    transColor.a = min(1, transColor.a);
-    */
 
     transColor = clamp(transColor, 0, 1);
     OUTPUT_VEC4_OutputColor(transColor);
