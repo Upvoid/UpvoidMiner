@@ -133,11 +133,11 @@ namespace UpvoidMiner
         /// This function is supposed to add renderjobs and physicscomponents.
         /// Don't forget to add components to the item entity!
         /// </summary>
-        public virtual void SetupItemEntity(ItemEntity itemEntity, Entity entity)
+        public virtual void SetupItemEntity(ItemEntity itemEntity, Entity entity, bool fixedPosition = false)
         {
             // Create the physical representation of the item.
             RigidBody body = new RigidBody(
-                50f,
+                fixedPosition ? 0f : 50f,
                 entity.Transform,
                 new BoxShape(new vec3(1))
                 );

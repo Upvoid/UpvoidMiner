@@ -155,7 +155,7 @@ namespace UpvoidMiner
             Item droppedItem = new MaterialItem(Material, Shape, Size);
             player.Inventory.RemoveItem(droppedItem);
             
-            ItemEntity itemEntity = new ItemEntity(droppedItem);
+            ItemEntity itemEntity = new ItemEntity(droppedItem, true);
             player.ContainingWorld.AddEntity(itemEntity, previewPlaceMatrix);
         }
 
@@ -279,7 +279,7 @@ namespace UpvoidMiner
         /// This function is supposed to add renderjobs and physicscomponents.
         /// Don't forget to add components to the item entity!
         /// </summary>
-        public override void SetupItemEntity(ItemEntity itemEntity, Entity entity)
+        public override void SetupItemEntity(ItemEntity itemEntity, Entity entity, bool fixedPosition = false)
         {
             // Create an appropriate physics shape.
             CollisionShape collShape;
@@ -307,7 +307,7 @@ namespace UpvoidMiner
 
             // Create the physical representation of the item.
             RigidBody body = new RigidBody(
-                50f,
+                fixedPosition ? 0f : 50f,
                 entity.Transform,
                 collShape
                 );

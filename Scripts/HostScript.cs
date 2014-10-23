@@ -54,7 +54,7 @@ namespace UpvoidMiner
                 Debug.Assert(mat != null, "Invalid material");
                 MaterialItem testItem = new MaterialItem(mat, MaterialShape.Cube, new vec3(1), 1);
 
-                world.AddEntity(new ItemEntity(testItem), mat4.Translate(new vec3(5f, i * 2f, ((i % 3) * 2f))));
+                world.AddEntity(new ItemEntity(testItem, false), mat4.Translate(new vec3(5f, i * 2f, ((i % 3) * 2f))));
             }
 
         }

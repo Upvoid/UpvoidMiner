@@ -36,9 +36,12 @@ namespace UpvoidMiner
 
         TriggerId AddItemTrigger;
 
-        public ItemEntity(Item representedItem)
+        public bool FixedPosition { get; protected set; }
+
+        public ItemEntity(Item representedItem, bool fixedPosition)
         {
             RepresentedItem = representedItem;
+            FixedPosition = fixedPosition;
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace UpvoidMiner
 
         protected override void Init()
         {
-            RepresentedItem.SetupItemEntity(this, thisEntity);
+            RepresentedItem.SetupItemEntity(this, thisEntity, FixedPosition);
 
             // Set up the triggers.
             AddItemTrigger = TriggerId.getIdByName("AddItem");

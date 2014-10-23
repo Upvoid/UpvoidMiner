@@ -458,7 +458,7 @@ namespace UpvoidMiner
             Item droppedItem = item.Clone();
             Inventory.RemoveItem(item);
 
-            ItemEntity itemEntity = new ItemEntity(droppedItem);
+            ItemEntity itemEntity = new ItemEntity(droppedItem, false);
             ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + vec3.UnitY * 1f + CameraDirection * 1f));
             itemEntity.ApplyImpulse(CameraDirection * 200f, new vec3(0, .3f, 0));
         }
