@@ -56,6 +56,8 @@ namespace UpvoidMiner
         const float minRayQueryDistanceNoClip = 0.1f;
         const float maxRayQueryDistanceNoClip = 200.0f;
 
+        public static vec3 SpawnPosition = new vec3(150, 5, 150);
+
         /// <summary>
         /// The direction in which this player is facing.
         /// Is not the same as the camera, but follows it.
@@ -106,16 +108,14 @@ namespace UpvoidMiner
         DiggingController digging;
 
         /// <summary>
+        /// Controller for input handling.
+        /// </summary>
+        InputController input;
+
+        /// <summary>
         /// GUI for player values.
         /// </summary>
         public PlayerGui Gui { get; set; }
-
-        // Flags for modifier keys.
-#pragma warning disable 0414 // Disable "field assigned but not used" as Shift and Alt may be used in future versions.
-        bool keyModifierShift = false;
-        bool keyModifierControl = false;
-        bool keyModifierAlt = false;
-#pragma warning restore 0414
 
         /// <summary>
         /// A list of items representing the inventory of the player.
@@ -174,8 +174,8 @@ namespace UpvoidMiner
             TerrainAligned
 		}
 
-		public DiggingShape CurrentDiggingShape { get; protected set; }
-		public DiggingAlignment CurrentDiggingAlignment { get; protected set; }
+		public DiggingShape CurrentDiggingShape { get; set; }
+		public DiggingAlignment CurrentDiggingAlignment { get; set; }
 
         public Player(GenericCamera _camera, bool _godMode)
         {
@@ -184,8 +184,6 @@ namespace UpvoidMiner
             camera = _camera;
             CurrentDiggingShape = DiggingShape.Sphere;
 			CurrentDiggingAlignment = DiggingAlignment.AxisAligned;
-            Input.OnPressInput += HandlePressInput;
-            Input.OnAxisInput += HandleAxisInput;
             Inventory = new Inventory(this);
         }
 
@@ -197,6 +195,8 @@ namespace UpvoidMiner
                 throw new InvalidOperationException();
 
             camera.Position = thisEntity.Position;
+
+            input = new InputController(this);
 
             character = new CharacterController(camera, ContainingWorld, GodMode);
 
@@ -226,6 +226,8 @@ namespace UpvoidMiner
 
             Inventory.InitCraftingRules();
             generateInitialItems();
+
+            SetPosition(SpawnPosition);
         }
 
         public void Update(float elapsedSeconds)
@@ -340,6 +342,88 @@ namespace UpvoidMiner
 			if (WasFrozen != IsFrozen)
 				Gui.OnUpdate();
 			WasFrozen = IsFrozen;
+        }
+
+        public void Lookaround(vec2 angleDelta)
+        {
+            AngleAzimuth += angleDelta.x;
+            float newAngle = AngleElevation + angleDelta.y;
+            if (newAngle < -89.8f) newAngle = -89.8f;
+            if (newAngle > 89.8f) newAngle = 89.8f;
+            AngleElevation = newAngle;
+        }
+
+        public void SetPosition(vec3 position)
+        {
+            character.Body.SetTransformation(mat4.Translate(position));
+        }
+
+        public void TriggerItemUse()
+        {
+            float minRayQueryRange;
+            float maxRayQueryRange;
+            if (LocalScript.NoclipEnabled || GodMode)
+            {
+                minRayQueryRange = minRayQueryDistanceNoClip;
+                maxRayQueryRange = maxRayQueryDistanceNoClip;
+            }
+            else
+            {
+                minRayQueryRange = minRayQueryDistancePlayer;
+                maxRayQueryRange = maxRayQueryDistancePlayer;
+            }
+
+            // Send a ray query to find the position on the terrain we are looking at.
+            ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+            {
+                // Receiving the async ray query result here
+                if (_hit)
+                {
+                    Entity _hitEntity = null;
+                    if (_body != null && _body.RefComponent != null)
+                    {
+                        _hitEntity = _body.RefComponent.Entity;
+                    }
+
+                    /// Subtract a few cm toward camera to increase stability near constraints.
+                    _position -= camera.ForwardDirection * .04f;
+
+                    // Use currently selected item.
+                    Item selection = Inventory.Selection;
+                    if (selection != null)
+                        selection.OnUse(this, _position, _normal, _hitEntity);
+                }
+            });
+        }
+
+        public void TriggerInteraction()
+        {
+            float minRayQueryRange;
+            float maxRayQueryRange;
+            if (LocalScript.NoclipEnabled || GodMode)
+            {
+                minRayQueryRange = minRayQueryDistanceNoClip;
+                maxRayQueryRange = maxRayQueryDistanceNoClip;
+            }
+            else
+            {
+                minRayQueryRange = minRayQueryDistancePlayer;
+                maxRayQueryRange = maxRayQueryDistancePlayer;
+            }
+
+            ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+            {
+                // Receiving the async ray query result here
+                if (_body != null && _body.RefComponent != null)
+                {
+                    Entity entity = _body.RefComponent.Entity;
+                    if (entity != null)
+                    {
+                        TriggerId trigger = TriggerId.getIdByName("Interaction");
+                        entity[trigger] |= new InteractionMessage(thisEntity);
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -666,206 +750,6 @@ namespace UpvoidMiner
 				default:
 					throw new Exception("Unsupported digging shape used");
 			}
-        }
-        
-        void HandleAxisInput(object sender, InputAxisArgs e)
-        {
-            if (!Rendering.MainViewport.HasFocus)
-                return;
-
-            // CAUTION: this is currently in the wrong thread, isn't it?
-
-            if (e.Axis == AxisType.MouseWheelY)
-            {
-                float delta = e.RelativeChange / 100;
-                // Control + Wheel to change 'use-parameter'.
-                if (keyModifierControl)
-                {
-                    Item selection = Inventory.Selection;
-                    if (selection != null)
-                        selection.OnUseParameterChange(this, delta);
-                }
-                else // Otherwise used to cycle through quick access.
-                {
-                    int newIdx = Inventory.SelectionIndex - (int)(delta);
-                    while (newIdx < 0)
-                        newIdx += Inventory.QuickAccessSlotCount;
-                    Inventory.SelectQuickAccessSlot(newIdx % Inventory.QuickAccessSlotCount);
-                }
-            }
-            else if ( e.Axis == AxisType.MouseX)
-            {
-                if ( !Gui.IsInventoryOpen )
-                {
-                    const float rotAzimuthSpeed = -.8f;
-                    AngleAzimuth += e.RelativeChange * rotAzimuthSpeed;
-                }
-            }
-            else if (e.Axis == AxisType.MouseY)
-            {
-                if ( !Gui.IsInventoryOpen )
-                {
-                    const float rotElevationSpeed = -.8f;
-                    float newAngle = AngleElevation + e.RelativeChange * rotElevationSpeed;
-                    if (newAngle < -89.8f) newAngle = -89.8f;
-                    if (newAngle > 89.8f) newAngle = 89.8f;
-                    AngleElevation = newAngle;
-                }
-            }
-        }
-
-        void HandlePressInput(object sender, InputPressArgs e)
-        {
-            if (!Rendering.MainViewport.HasFocus)
-                return;
-
-            // Scale the area using + and - keys.
-            // Translate it using up down left right (x, z)
-            // and PageUp PageDown (y).
-            if (e.PressType == InputPressArgs.KeyPressType.Down)
-            {
-
-                switch (e.Key)
-                {
-                    case InputKey.Shift: 
-                        keyModifierShift = true;
-                        break;
-                    case InputKey.Control: 
-                        keyModifierControl = true;
-                        break;
-                    case InputKey.Alt: 
-                        keyModifierAlt = true;
-                        break;
-
-                    case InputKey.F8:
-                        Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
-                        break;
-
-                    case InputKey.Q:
-                        if (Inventory.Selection != null)
-                            DropItem(Inventory.Selection);
-                        break;
-
-                    // F1 resets the player position
-                    case InputKey.F1:
-                        character.Body.SetTransformation(mat4.Translate(new vec3(0, 10f, 0)));
-                        break;
-
-					// Tab and shift-Tab cycle between digging shapes
-					case InputKey.Tab:
-
-                        if ( !keyModifierControl )
-                        {
-                            int vals = Enum.GetValues(typeof(DiggingShape)).Length;
-                            int offset = keyModifierShift ? vals - 1 : 1;
-                            CurrentDiggingShape = (DiggingShape)(((uint)CurrentDiggingShape + offset) % vals);
-                        }
-                        else
-                        {
-                            int vals = Enum.GetValues(typeof(DiggingAlignment)).Length;
-                            int offset = keyModifierShift ? vals - 1 : 1;
-                            CurrentDiggingAlignment = (DiggingAlignment)(((uint)CurrentDiggingAlignment + offset) % vals);
-                        }
-
-                        // Reselect to refresh shape
-                        if (Inventory.Selection != null)
-                        {
-                            Inventory.Selection.OnDeselect(this);
-                            Inventory.Selection.OnSelect(this);
-                        }
-
-						break;
-
-                    default:
-                        break;
-                }
-
-                // Quickaccess items.
-                if (InputKey.Key1 <= e.Key && e.Key <= InputKey.Key9)
-                    Inventory.SelectQuickAccessSlot((int)e.Key - (int)InputKey.Key1);
-                if (e.Key == InputKey.Key0)
-                    Inventory.SelectQuickAccessSlot(9); // Special '0'.
-            }
-            else if (e.PressType == InputPressArgs.KeyPressType.Up)
-            {
-                switch (e.Key)
-                {
-                    case InputKey.Shift: 
-                        keyModifierShift = false;
-                        break;
-                    case InputKey.Control: 
-                        keyModifierControl = false;
-                        break;
-                    case InputKey.Alt: 
-                        keyModifierAlt = false;
-                        break;
-                }
-            }
-
-            // Following interactions are only possible if UI is not open.
-            if (!Gui.IsInventoryOpen)
-            {
-
-                float minRayQueryRange;
-                float maxRayQueryRange;
-                if (LocalScript.NoclipEnabled || GodMode)
-                {
-                    minRayQueryRange = minRayQueryDistanceNoClip;
-                    maxRayQueryRange = maxRayQueryDistanceNoClip;
-                }
-                else
-                {
-                    minRayQueryRange = minRayQueryDistancePlayer;
-                    maxRayQueryRange = maxRayQueryDistancePlayer;
-                }
-
-                // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
-                if (Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
-                {
-
-                    // Send a ray query to find the position on the terrain we are looking at.
-                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
-                    {
-                        // Receiving the async ray query result here
-                        if (_hit)
-                        {
-                            Entity _hitEntity = null;
-                            if (_body != null && _body.RefComponent != null)
-                            {
-                                _hitEntity = _body.RefComponent.Entity;
-                            }
-
-                            /// Subtract a few cm toward camera to increase stability near constraints.
-                            _position -= camera.ForwardDirection * .04f;
-
-                            // Use currently selected item.
-                            if (e.Key == InputKey.MouseLeft)
-                            {
-                                Item selection = Inventory.Selection;
-                                if (selection != null)
-                                    selection.OnUse(this, _position, _normal, _hitEntity);
-                            }
-                        }
-                    });
-                }
-            
-                if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
-                {
-                    ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
-                    {
-                        // Receiving the async ray query result here
-                        if (_body != null && _body.RefComponent != null)
-                        {
-                            Entity entity = _body.RefComponent.Entity;
-                            if (entity != null)
-                            {
-                                TriggerId trigger = TriggerId.getIdByName("Interaction");
-                                entity[trigger] |= new InteractionMessage(thisEntity);
-                            }
-                        }
-                    });
-                }
-            }
         }
 
         /// <summary>

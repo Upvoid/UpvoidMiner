@@ -27,6 +27,7 @@
                 "Player/Drone.cs",
                 "Player/DroneConstraint.cs",
                 "Player/PlayerGui.cs",
+                "Player/InputController.cs",
                 "Player/CharacterController.cs",
                 "Player/DiggingController.cs",
                 "Terrain/UpvoidMinerWorldGenerator.cs",
