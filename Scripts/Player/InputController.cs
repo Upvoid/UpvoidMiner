@@ -181,23 +181,19 @@ namespace UpvoidMiner
                         break;
                 }
             }
-            
-            // Following interactions are only possible if UI is not open.
-            if (!player.Gui.IsInventoryOpen)
+ 
+            // Tell the player to use its current item while left mouse button is pressed
+            if (e.Key == InputKey.MouseLeft)
             {
-                // Tell the player to use its current item while left mouse button is pressed
-                if (player.Inventory.Selection != null && e.Key == InputKey.MouseLeft)
-                {
-                    if(e.PressType == InputPressArgs.KeyPressType.Down)
-                        player.StartItemUse();
-                    else
-                        player.StopItemUse();
-                }
+                if (player.Inventory.Selection != null && e.PressType == InputPressArgs.KeyPressType.Down && !player.Gui.IsInventoryOpen)
+                    player.StartItemUse();
+                else
+                    player.StopItemUse();
+            }
 
-                if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
-                {
-                    player.TriggerInteraction();
-                }
+            if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down && !player.Gui.IsInventoryOpen)
+            {
+                player.TriggerInteraction();
             }
 
         }
