@@ -74,11 +74,7 @@ namespace UpvoidMiner
                 [Serializable]
                 class SettingsInfo
                 {
-                        public bool afterImage;
-                        public bool bloom;
                         public bool lensFlares;
-                        public bool noise;
-                        public bool ssao;
                         public bool tonemapping;
                         public bool volumetricScattering;
                         public bool shadows;
@@ -165,15 +161,10 @@ namespace UpvoidMiner
 
                 static void applySettings(WebRequest request)
                 {
-                    // TODO(ks) Remove SSAO, Bloom and noise.
                         Scripting.SetUserSetting("Graphics/Enable Lensflares", Boolean.Parse(request.GetQuery("lensFlares")));
                         Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", Boolean.Parse(request.GetQuery("volumetricScattering")));
-                        Scripting.SetUserSetting("Graphics/Enable Bloom", Boolean.Parse(request.GetQuery("bloom")));
-                        Scripting.SetUserSetting("Graphics/Enable AfterImage", Boolean.Parse(request.GetQuery("afterImage")));
                         Scripting.SetUserSetting("Graphics/Enable Tonemapping", Boolean.Parse(request.GetQuery("tonemapping")));
-                        Scripting.SetUserSetting("Graphics/Enable Noise", Boolean.Parse(request.GetQuery("noise")));
                         Scripting.SetUserSetting("Graphics/Enable Shadows", Boolean.Parse(request.GetQuery("shadows")));
-                        Scripting.SetUserSetting("Graphics/Enable SSAO", Boolean.Parse(request.GetQuery("ssao")));
                         Scripting.SetUserSetting("Graphics/Enable Fog", Boolean.Parse(request.GetQuery("fog")));
                         Scripting.SetUserSetting("Graphics/Enable FXAA", Boolean.Parse(request.GetQuery("fxaa")));
 
@@ -217,12 +208,8 @@ namespace UpvoidMiner
             // Read the current graphics flags
                         info.lensFlares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
                         info.volumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
-                        info.bloom = Scripting.GetUserSetting("Graphics/Enable Bloom", true);
-                        info.afterImage = Scripting.GetUserSetting("Graphics/Enable AfterImage", true);
                         info.tonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-                        info.noise = Scripting.GetUserSetting("Graphics/Enable Noise", false);
                         info.shadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
-                        info.ssao = Scripting.GetUserSetting("Graphics/Enable SSAO", true);
                         info.fog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
                         info.fxaa = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
 
