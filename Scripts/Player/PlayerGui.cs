@@ -33,11 +33,13 @@ namespace UpvoidMiner
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
         /// </summary>
-        public bool IsInventoryOpen { get; set; }
         public bool IsUIOpen { get; set; }
-                public bool IsMenuOpen { get; set; }
 
-                Player player;
+        public bool IsInventoryOpen { get; set; }
+        
+        public bool IsMenuOpen { get; set; }
+
+        Player player;
 
         JsonSerializer json = new JsonSerializer();
         WebSocketHandler updateSocket;
@@ -171,10 +173,13 @@ namespace UpvoidMiner
                     if ( !IsUIOpen && IsInventoryOpen )
                         toggleInventory();
                 }
-                                if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
-                                {
-                    toggleMenu();
-                                }
+                if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
+                {
+                    if (IsInventoryOpen)
+                        toggleInventory();
+                    else
+                        toggleMenu();
+                }
             };
         }
 
