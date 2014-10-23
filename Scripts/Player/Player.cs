@@ -56,6 +56,8 @@ namespace UpvoidMiner
         const float minRayQueryDistanceNoClip = 0.1f;
         const float maxRayQueryDistanceNoClip = 200.0f;
 
+        private const int millisecondsBetweenItemUsages = 500;
+
         public static vec3 SpawnPosition = new vec3(150, 5, 150);
 
         /// <summary>
@@ -235,6 +237,13 @@ namespace UpvoidMiner
             // Tell AudioEngine where the listener is at the moment
             Audio.SetListenerPosition(camera);
 
+            // Use current item?
+            if (isUsingItem && (DateTime.Now - lastItemUse).TotalMilliseconds > millisecondsBetweenItemUsages)
+            {
+                TriggerItemUse();
+                lastItemUse = DateTime.Now;
+            }
+
             // Update drones.
             foreach (var drone in Drones)
                 drone.Update(elapsedSeconds);
@@ -358,6 +367,9 @@ namespace UpvoidMiner
             character.Body.SetTransformation(mat4.Translate(position));
         }
 
+        private bool isUsingItem = false;
+        private DateTime lastItemUse = DateTime.Now;
+
         public void TriggerItemUse()
         {
             float minRayQueryRange;
@@ -394,6 +406,16 @@ namespace UpvoidMiner
                         selection.OnUse(this, _position, _normal, _hitEntity);
                 }
             });
+        }
+
+        public void StartItemUse()
+        {
+            isUsingItem = true;
+        }
+
+        public void StopItemUse()
+        {
+            isUsingItem = false;
         }
 
         public void TriggerInteraction()

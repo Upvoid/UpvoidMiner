@@ -185,10 +185,13 @@ namespace UpvoidMiner
             // Following interactions are only possible if UI is not open.
             if (!player.Gui.IsInventoryOpen)
             {
-                // If left mouse click is detected, we want to execute a rayquery and report a "OnUse" to the selected item.
-                if (player.Inventory.Selection != null && e.Key == InputKey.MouseLeft && e.PressType == InputPressArgs.KeyPressType.Down)
+                // Tell the player to use its current item while left mouse button is pressed
+                if (player.Inventory.Selection != null && e.Key == InputKey.MouseLeft)
                 {
-                    player.TriggerItemUse();
+                    if(e.PressType == InputPressArgs.KeyPressType.Down)
+                        player.StartItemUse();
+                    else
+                        player.StopItemUse();
                 }
 
                 if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
