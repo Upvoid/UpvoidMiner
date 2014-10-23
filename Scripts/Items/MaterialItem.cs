@@ -105,6 +105,7 @@ namespace UpvoidMiner
             Size = size;
             Description = "A " + shape + " made of " + material.Name + " with " + DimensionString;
             Icon = material.Name + "," + shape;
+            IsDroppable = true;
         }
 
         /// <summary>

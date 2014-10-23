@@ -61,7 +61,13 @@ namespace UpvoidMiner
         /// Category that this item belongs to.
         /// </summary>
         public virtual ItemCategory Category { get; protected set; }
-        
+
+        /// <summary>
+        /// True iff the item can be dropped from an inventory.
+        /// Examples for items that can not be dropped are resource items (they have to be placed to get rid of them) or tools that the player should keep.
+        /// </summary>
+        public virtual bool IsDroppable { get; protected set; }
+
         /// <summary>
         /// True iff the item is usable.
         /// Examples for usable items are potions and weapons.
@@ -124,7 +130,7 @@ namespace UpvoidMiner
             Category = category;
             QuickAccessIndex = -1;
             Icon = "Dummy";
-
+            IsDroppable = false;
             Id = IdCounter++;
         }
 
