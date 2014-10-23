@@ -411,6 +411,8 @@ namespace UpvoidMiner
         public void StartItemUse()
         {
             isUsingItem = true;
+            TriggerItemUse();
+            lastItemUse = DateTime.Now;
         }
 
         public void StopItemUse()
