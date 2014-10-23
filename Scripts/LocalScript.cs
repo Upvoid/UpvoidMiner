@@ -70,8 +70,8 @@ namespace UpvoidMiner
 
         // Note that these are the initial volumes for the specific sounds.
         // The "global" music volume is defined via settings
-        const float musicVolume = 0.5f;
-        const float birdVolume = 0.2f;
+        const float musicVolume = 1.0f;
+        const float birdVolume = 0.5f;
 
         /// <summary>
         /// Set this to true to enable free camera movement.
