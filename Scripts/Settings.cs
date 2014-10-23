@@ -44,18 +44,29 @@ namespace UpvoidMiner
 
         public static class Settings
     {
-        private static float FieldOfView = float.NaN;
-        private static float MusicVolume = float.NaN;
+        private static float FieldOfView  = float.NaN;
+
+        private static float MasterVolume = float.NaN;
+        private static float SfxVolume = float.NaN;
+        private static float MusicVolume  = float.NaN;
 
                 public static void InitSettingsHandlers()
         {
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "FieldOfView", fieldOfViewSettings);
+
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "MasterVolume", audioSettingsMaster);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SfxVolume", audioSettingsSfx);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "MusicVolume", audioSettingsMusic);
+            
 
             FieldOfView = (float)Scripting.GetUserSettingNumber("Graphics/Field of View", 75f);
             LocalScript.camera.HorizontalFieldOfView = FieldOfView;
 
+            MasterVolume = (float)Scripting.GetUserSettingNumber("Audio/Master Volume", 1.0f);
+            Audio.SetVolumeForSpecificAudioType(MasterVolume, (int)AudioType.Master);
+            SfxVolume = (float)Scripting.GetUserSettingNumber("Audio/SFX Volume", 0.5f);
+            Audio.SetVolumeForSpecificAudioType(SfxVolume, (int)AudioType.SFX);
             MusicVolume = (float)Scripting.GetUserSettingNumber("Audio/Music Volume", 0.5f);
             Audio.SetVolumeForSpecificAudioType(MusicVolume, (int)AudioType.Music);
                 }
@@ -106,6 +117,36 @@ namespace UpvoidMiner
             }
         }
 
+        static void audioSettingsMaster(WebRequest request, WebResponse response)
+        {
+            // Handle 'Apply' request from the gui
+            if (request.GetQuery("set") != "")
+            {
+                MasterVolume = 0.01f * float.Parse(request.GetQuery("set"));
+                Audio.SetVolumeForSpecificAudioType(MasterVolume, (int)AudioType.Master);
+                Scripting.SetUserSettingNumber("Audio/Master Volume", MasterVolume);
+
+            }
+            else // If no apply action was sent, return the current settings in json format
+            {
+                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100).ToString());
+            }
+        }
+        static void audioSettingsSfx(WebRequest request, WebResponse response)
+        {
+            // Handle 'Apply' request from the gui
+            if (request.GetQuery("set") != "")
+            {
+                SfxVolume = 0.01f * float.Parse(request.GetQuery("set"));
+                Audio.SetVolumeForSpecificAudioType(SfxVolume, (int)AudioType.SFX);
+                Scripting.SetUserSettingNumber("Audio/SFX Volume", SfxVolume);
+
+            }
+            else // If no apply action was sent, return the current settings in json format
+            {
+                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100).ToString());
+            }
+        }
         static void audioSettingsMusic(WebRequest request, WebResponse response)
         {
             // Handle 'Apply' request from the gui
@@ -124,6 +165,7 @@ namespace UpvoidMiner
 
                 static void applySettings(WebRequest request)
                 {
+                    // TODO(ks) Remove SSAO, Bloom and noise.
                         Scripting.SetUserSetting("Graphics/Enable Lensflares", Boolean.Parse(request.GetQuery("lensFlares")));
                         Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", Boolean.Parse(request.GetQuery("volumetricScattering")));
                         Scripting.SetUserSetting("Graphics/Enable Bloom", Boolean.Parse(request.GetQuery("bloom")));

@@ -56,6 +56,20 @@
                 </div>
               </div>
 			  
+			  <p>Master Volume: <span id="masterVolumeValue"></span></p>
+              <div id="masterVolume-slider-parent" onclick="updateMasterVolumeSlider(event)" class="progress">
+                <div id="masterVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
+                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
+                </div>
+              </div>
+			  
+			  <p>SFX Volume: <span id="sfxVolumeValue"></span></p>
+              <div id="sfxVolume-slider-parent" onclick="updateSfxVolumeSlider(event)" class="progress">
+                <div id="sfxVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
+                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
+                </div>
+              </div>
+			  
 			  <p>Music Volume: <span id="musicVolumeValue"></span></p>
               <div id="musicVolume-slider-parent" onclick="updateMusicVolumeSlider(event)" class="progress">
                 <div id="musicVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
@@ -131,6 +145,42 @@
           }
       }
 	  
+	  var minMasterVolume = 0;
+      var maxMasterVolume = 100;
+      var currMasterVolume = 100;
+      var startMasterVolume = 100;
+	  function updateMasterVolumeSlider(event) {
+          var relativeX = event.pageX - $('#masterVolume-slider-parent').offset().left;
+          var val = relativeX / document.getElementById("masterVolume-slider-parent").clientWidth;
+          $('#masterVolume-slider').get()[0].style.width = (val * 100) + "%";
+          var masterVolume = Math.floor(minMasterVolume + (maxMasterVolume - minMasterVolume) * val)
+          if ( masterVolume != currMasterVolume )
+          {
+                currMasterVolume = masterVolume;
+                $("#masterVolumeValue").text(currMasterVolume + "%");
+                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MasterVolume?set=" + currMasterVolume, function (data) {
+          });
+          }
+      }
+	  
+	  var minSfxVolume = 0;
+      var maxSfxVolume = 100;
+      var currSfxVolume = 50;
+      var startSfxVolume = 50;
+	  function updateSfxVolumeSlider(event) {
+          var relativeX = event.pageX - $('#sfxVolume-slider-parent').offset().left;
+          var val = relativeX / document.getElementById("sfxVolume-slider-parent").clientWidth;
+          $('#sfxVolume-slider').get()[0].style.width = (val * 100) + "%";
+          var sfxVolume = Math.floor(minSfxVolume + (maxSfxVolume - minSfxVolume) * val)
+          if ( sfxVolume != currSfxVolume )
+          {
+                currSfxVolume = sfxVolume;
+                $("#sfxVolumeValue").text(currSfxVolume + "%");
+                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SfxVolume?set=" + currSfxVolume, function (data) {
+          });
+          }
+      }
+	  
 	  var minMusicVolume = 0;
       var maxMusicVolume = 100;
       var currMusicVolume = 50;
@@ -193,6 +243,18 @@
           startFov = currFov;
                 $("#fovValue").text(currFov + "°");
           $('#fov-slider').get()[0].style.width = ((currFov - minFov) / (maxFov - minFov) * 100) + "%";
+      });
+	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MasterVolume", "", function (data) {
+          currMasterVolume = data * 1;
+          startMasterVolume = currMasterVolume;
+                $("#masterVolumeValue").text(currMasterVolume + "%");
+          $('#masterVolume-slider').get()[0].style.width = ((currMasterVolume - minMasterVolume) / (maxMasterVolume - minMasterVolume) * 100) + "%";
+      });
+	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SfxVolume", "", function (data) {
+          currSfxVolume = data * 1;
+          startSfxVolume = currSfxVolume;
+                $("#sfxVolumeValue").text(currSfxVolume + "%");
+          $('#sfxVolume-slider').get()[0].style.width = ((currSfxVolume - minSfxVolume) / (maxSfxVolume - minSfxVolume) * 100) + "%";
       });
 	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MusicVolume", "", function (data) {
           currMusicVolume = data * 1;
