@@ -68,6 +68,8 @@ namespace UpvoidMiner
         private static SoundResource musicRes;
         private static Sound music;
 
+        // Note that these are the initial volumes for the specific sounds.
+        // The "global" music volume is defined via settings
         const float musicVolume = 0.5f;
         const float birdVolume = 0.2f;
 
@@ -146,17 +148,13 @@ namespace UpvoidMiner
             // Play some ambient sounds
             birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain);
             // Start with zero volume, we adapt that later
-            birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1);
+            birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1, (int)AudioType.SFX);
             birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
             musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
-            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1);
-            // This is music, so we do not want it to be attenuated by distance source<->player etc.
-            music.Attenuation = false;
+            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1, (int)AudioType.Music);
             music.Play();
-
-
         }
 
         static bool generationDone = false;
@@ -365,7 +363,6 @@ namespace UpvoidMiner
                     birdSound.Volume = 0.0f;
                 }
             }
-
         }
 
                 // This socket notifies the client GUI about progress in the downloading of resources.

@@ -55,6 +55,13 @@
                   <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
                 </div>
               </div>
+			  
+			  <p>Music Volume: <span id="musicVolumeValue"></span></p>
+              <div id="musicVolume-slider-parent" onclick="updateMusicVolumeSlider(event)" class="progress">
+                <div id="musicVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
+                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
+                </div>
+              </div>
 
               <div class="checkbox" id="check-shadows">
                     <a href="javascript:toggleSetting('shadows')"><i class="fa fa-circle fa-lg"></i> Enable shadows</a>
@@ -123,6 +130,24 @@
           });
           }
       }
+	  
+	  var minMusicVolume = 0;
+      var maxMusicVolume = 100;
+      var currMusicVolume = 50;
+      var startMusicVolume = 50;
+	  function updateMusicVolumeSlider(event) {
+          var relativeX = event.pageX - $('#musicVolume-slider-parent').offset().left;
+          var val = relativeX / document.getElementById("musicVolume-slider-parent").clientWidth;
+          $('#musicVolume-slider').get()[0].style.width = (val * 100) + "%";
+          var musicVolume = Math.floor(minMusicVolume + (maxMusicVolume - minMusicVolume) * val)
+          if ( musicVolume != currMusicVolume )
+          {
+                currMusicVolume = musicVolume;
+                $("#musicVolumeValue").text(currMusicVolume + "%");
+                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MusicVolume?set=" + currMusicVolume, function (data) {
+          });
+          }
+      }
 
       function updateSettingsForm() {
           // update the icon classes that are faking the checkboxes
@@ -168,6 +193,12 @@
           startFov = currFov;
                 $("#fovValue").text(currFov + "°");
           $('#fov-slider').get()[0].style.width = ((currFov - minFov) / (maxFov - minFov) * 100) + "%";
+      });
+	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MusicVolume", "", function (data) {
+          currMusicVolume = data * 1;
+          startMusicVolume = currMusicVolume;
+                $("#musicVolumeValue").text(currMusicVolume + "%");
+          $('#musicVolume-slider').get()[0].style.width = ((currMusicVolume - minMusicVolume) / (maxMusicVolume - minMusicVolume) * 100) + "%";
       });
 
       function toggleSetting(setting) {

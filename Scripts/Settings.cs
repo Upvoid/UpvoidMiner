@@ -19,6 +19,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Engine;
+using Engine.Audio;
 using Engine.Input;
 using Engine.Universe;
 using Engine.Rendering;
@@ -32,17 +33,31 @@ using Newtonsoft.Json;
 
 namespace UpvoidMiner
 {
+
+        enum AudioType
+        {
+           Master,
+           SFX,
+           Music,
+           Speech
+        };
+
         public static class Settings
     {
         private static float FieldOfView = float.NaN;
+        private static float MusicVolume = float.NaN;
 
                 public static void InitSettingsHandlers()
         {
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "FieldOfView", fieldOfViewSettings);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "MusicVolume", audioSettingsMusic);
 
             FieldOfView = (float)Scripting.GetUserSettingNumber("Graphics/Field of View", 75f);
             LocalScript.camera.HorizontalFieldOfView = FieldOfView;
+
+            MusicVolume = (float)Scripting.GetUserSettingNumber("Audio/Music Volume", 0.5f);
+            Audio.SetVolumeForSpecificAudioType(MusicVolume, (int)AudioType.Music);
                 }
 
                 [Serializable]
@@ -88,6 +103,22 @@ namespace UpvoidMiner
             else // If no apply action was sent, return the current settings in json format
             {
                 response.AppendBody(LocalScript.camera.HorizontalFieldOfView.ToString());
+            }
+        }
+
+        static void audioSettingsMusic(WebRequest request, WebResponse response)
+        {
+            // Handle 'Apply' request from the gui
+            if (request.GetQuery("set") != "")
+            {
+                MusicVolume = 0.01f * float.Parse(request.GetQuery("set"));
+                Audio.SetVolumeForSpecificAudioType(MusicVolume, (int)AudioType.Music);
+                Scripting.SetUserSettingNumber("Audio/Music Volume", MusicVolume);
+
+            }
+            else // If no apply action was sent, return the current settings in json format
+            {
+                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100).ToString());
             }
         }
 
