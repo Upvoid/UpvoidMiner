@@ -87,36 +87,36 @@ namespace UpvoidMiner
             UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
-                        // Get the world (created by the host script).
-                        world = Universe.GetWorldByName("UpvoidMinerWorld");
+            // Get the world (created by the host script).
+            world = Universe.GetWorldByName("UpvoidMinerWorld");
 
-                        // No loading screen for clients (since the server generates the world)
-                        if (Scripting.IsHost)
-                        {
-                                // Register a callback for the terrain generation so the GUI can be notified when the world is ready.
-                                world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
+            // No loading screen for clients (since the server generates the world)
+            if (Scripting.IsHost)
+            {
+                // Register a callback for the terrain generation so the GUI can be notified when the world is ready.
+                world.Terrain.AddVolumeUpdateCallback(VolumeCallback, false, 0, 4);
 
-                                // Show a splash screen in the GUI client.
-                                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "SplashScreen.html" + (Scripting.IsDeploy ? "" : "?Debug"));
+                // Show a splash screen in the GUI client.
+                if(Scripting.IsDeploy)
+                    Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "SplashScreen.html");
+                else
+                    Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "MainMenu.html?Debug");
 
-                                // Register a socket for sending progress updates to the loading screen
+                // Register a socket for sending progress updates to the loading screen
                 generationProgressSocket = new WebSocketHandler();
-                                Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
+                Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
 
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer",
-                    (WebRequest request, WebResponse response) =>
-                    {
-                        ActivatePlayer(request.GetQuery("GodMode") == "true");
-                    });
+                    (WebRequest request, WebResponse response) => ActivatePlayer(request.GetQuery("GodMode") == "true"));
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
-                        }
+            }
 
-                        // Create a simple camera that allows free movement.
-                        camera = new GenericCamera();
+            // Create a simple camera that allows free movement.
+            camera = new GenericCamera();
             camera.Position = new vec3(150, 40, 150);
-                        camera.FarClippingPlane = 1750.0;
+            camera.FarClippingPlane = 1750.0;
 
             // Client-only: register terrain materials
             if (!Scripting.IsHost)
@@ -220,7 +220,7 @@ namespace UpvoidMiner
 
             // Create the Player EntityScript and add it to the world.
             player = new Player(camera, godMode);
-            world.AddEntity(player, mat4.Translate(new vec3(150, 5, 150)), Network.GCManager.CurrentUserID);
+            world.AddEntity(player, mat4.Translate(Player.SpawnPosition), Network.GCManager.CurrentUserID);
 
             // Register the update callback that updates the camera position.
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 3 / 60f, UpvoidMiner.Mod);
