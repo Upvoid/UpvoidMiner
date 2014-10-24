@@ -459,9 +459,15 @@ namespace UpvoidMiner
             {
                 Item droppedItem = item.Clone();
                 
+                if(droppedItem is DiscreteItem)
+                {
+                    var dItem = droppedItem as DiscreteItem;
+                    dItem.StackSize = 1;
+                }
+
                 // Keep all items in god mode
                 if(!GodMode)
-                    Inventory.RemoveItem(item);
+                    Inventory.RemoveItem(droppedItem);
 
                 ItemEntity itemEntity = new ItemEntity(droppedItem, false);
                 ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + vec3.UnitY*1f + CameraDirection*1f));
