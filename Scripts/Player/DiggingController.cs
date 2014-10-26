@@ -203,7 +203,15 @@ namespace UpvoidMiner
             }
         }
 
-        public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter)
+        /// <summary>
+        /// Generic digging function
+        /// </summary>
+        /// <param name="shape">Shape of the terrain modification.</param>
+        /// <param name="shapeBoundary">bounding sphere for the modification (as tight as possible has better performance)</param>
+        /// <param name="digMode">Dig composition mode</param>
+        /// <param name="materialFilter">if non-null: a whitelist of materials that are allowed to change (air should be configured with the next parameter)</param>
+        /// <param name="allowAirChange">If set to <c>true</c> allow air change.</param>
+        public void Dig(CsgNode shape, BoundingSphere shapeBoundary, DigMode digMode, IEnumerable<int> materialFilter, bool allowAirChange = true)
         {
             CsgNode digShape = null;
 
@@ -251,7 +259,14 @@ namespace UpvoidMiner
                 CsgFilterNode filter = new CsgFilterNode(true, digNode);
                 foreach (int mat in materialFilter)
                     filter.AddMaterial(mat);
-                filter.AddMaterial(0); // Air must be white-listed, too!
+                if (allowAirChange)
+                    filter.AddMaterial(0); // Air must be white-listed, too!
+                filterNode = filter;
+            }
+            else if (!allowAirChange) // special case: no filter but no air? black-list air
+            {
+                CsgFilterNode filter = new CsgFilterNode(false, digNode);
+                filter.AddMaterial(0);
                 filterNode = filter;
             }
 
@@ -267,7 +282,7 @@ namespace UpvoidMiner
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
-        public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
         {
             sphereNode.MaterialIndex = terrainMaterialId;
             sphereNode.SetParameterFloat("digRadius", radius);
@@ -279,10 +294,10 @@ namespace UpvoidMiner
             sphereNode.SetParameterVec3("digDirY", dy);
             sphereNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials);
+            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials, allowAirChange);
         }
 
-        public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
         {
             boxNode.MaterialIndex = terrainMaterialId;
             boxNode.SetParameterFloat("digRadius", radius);
@@ -294,10 +309,10 @@ namespace UpvoidMiner
             boxNode.SetParameterVec3("digDirY", dy);
             boxNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
+            Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
         }
 
-        public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract)
+        public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
         {
             cylinderNode.MaterialIndex = terrainMaterialId;
             cylinderNode.SetParameterFloat("digRadius", radius);
@@ -309,7 +324,7 @@ namespace UpvoidMiner
             cylinderNode.SetParameterVec3("digDirY", dy);
             cylinderNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(cylinderNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials);
+            Dig(cylinderNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
         }
 
         /// <summary>
