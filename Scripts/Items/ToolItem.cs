@@ -260,7 +260,7 @@ namespace UpvoidMiner
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index, 0 /* air change must be allowed explicitly */ });
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index });
                     return;
 
                 case ToolType.GodsShovel:

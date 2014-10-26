@@ -750,16 +750,22 @@ namespace UpvoidMiner
         {
             position = AlignPlacementPosition(position);
 
+            bool paintMode = false;
+            bool fullModification = false;
+
+            var filterMats = paintMode || fullModification ? null : new int[] { 0 };
+            bool allowAirChange = !paintMode;
+
 			switch(CurrentDiggingShape)
 			{
 				case DiggingShape.Sphere:
-                    digging.DigSphere(worldNormal, position, radius, null, material.Index, DiggingController.DigMode.Add, true);
+                    digging.DigSphere(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
                 case DiggingShape.Box:
-                    digging.DigBox(worldNormal, position, radius, null, material.Index, DiggingController.DigMode.Add, true);
+                    digging.DigBox(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
                 case DiggingShape.Cylinder:
-                    digging.DigCylinder(worldNormal, position, radius, null, material.Index, DiggingController.DigMode.Add, true);
+                    digging.DigCylinder(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
 				default:
 					throw new Exception("Unsupported digging shape used");
