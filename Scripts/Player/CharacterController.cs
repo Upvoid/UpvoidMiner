@@ -174,6 +174,8 @@ namespace UpvoidMiner
 		public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
 		{
 		    GodMode = _godMode;
+		    if (GodMode)
+		        HoverHeight = 0f;
 
             camera = _camera;
             ContainingWorld = _containingWorld;
@@ -279,8 +281,9 @@ namespace UpvoidMiner
 
 			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
-			if(!GodMode && distanceToGround < HoverHeight+0.1f && jumpCoolDown <= 0f) {
-
+            // Also, only tinker with the gravcity if the player is moving relatively slow
+            if (!GodMode && distanceToGround < HoverHeight + 0.1f && jumpCoolDown <= 0f && Body.GetVelocity().Length < WalkSpeedRunning*1.5f)
+            {
                 vec3 velocity = Body.GetVelocity();
 
 				// Never move down when more than 10cm below the desired height.

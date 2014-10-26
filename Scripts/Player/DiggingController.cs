@@ -175,11 +175,8 @@ namespace UpvoidMiner
             cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, digParas);
 
             string playerExpression = @"p = vec3(x,y,z) - playerPosition;
-                dx = abs(dot(p, digDirX));
-                dy = abs(dot(p, digDirY));
-                dz = abs(dot(p, digDirZ));
-                -playerRadius + max(dy, length(vec2(dx, dz)))";
-            playerNode = new CsgExpression(1, playerExpression, UpvoidMiner.ModDomain, "playerRadius:float, playerPosition:vec3, digDirX:vec3, digDirY:vec3, digDirZ:vec3");
+                max(abs(p.y) - (playerHeight/2), length(p.xz) - playerRadius)";
+            playerNode = new CsgExpression(1, playerExpression, UpvoidMiner.ModDomain, "playerRadius:float, playerHeight:float, playerPosition:vec3");
 
 
 
@@ -227,11 +224,9 @@ namespace UpvoidMiner
             // When placing material, add a safety margin around the player to prevent it from physically glitching trough the terrain
             if (digMode == DigMode.Add)
             {
-                playerNode.SetParameterFloat("playerRadius", player.Character.CharacterDiameter * 0.5f + 0.2f);
+                playerNode.SetParameterFloat("playerRadius", player.Character.CharacterDiameter * 0.5f + 0.35f);
                 playerNode.SetParameterVec3("playerPosition", player.Character.Position);
-                playerNode.SetParameterVec3("digDirX", new vec3(1, 0, 0));
-                playerNode.SetParameterVec3("digDirZ", new vec3(0, 0, 1));
-                playerNode.SetParameterVec3("digDirY", new vec3(0, 0, player.Character.BodyHeight * 0.5f + 0.2f));
+                playerNode.SetParameterFloat("playerHeight", player.Character.BodyHeight + 0.3f);
                 constraintDiffNode.AddNode(playerNode);
             }
 

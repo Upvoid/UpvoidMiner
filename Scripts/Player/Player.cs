@@ -200,7 +200,7 @@ namespace UpvoidMiner
 
             input = new InputController(this);
 
-            character = new CharacterController(camera, ContainingWorld, GodMode);
+            character = new CharacterController(camera, ContainingWorld, GodMode, GodMode ? 0.45f : 1.85f);
 
             // For now, attach this entity to a simple sphere physics object.
             character.Body.SetTransformation(thisEntity.Transform);
