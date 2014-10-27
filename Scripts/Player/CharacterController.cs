@@ -198,6 +198,9 @@ namespace UpvoidMiner
             // Prevent the rigid body from falling to the ground by simply disabling any rotation
             Body.SetAngularFactor(vec3.Zero);
 
+            // Prevent bouncing
+            Body.SetRestitution(0f);
+
             // Register the required callbacks.
             // This update function is called 20 - 60 times per second to update the character position.
             Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f, UpvoidMiner.Mod);
