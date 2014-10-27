@@ -156,6 +156,8 @@ namespace UpvoidMiner
             // Tree has been hit (by an axe), so we create some wood cylinders the player can pick up
 
             ContainingWorld.RemoveEntity(thisEntity);
+            // remove tree from trees list
+            UpvoidMinerWorldGenerator.trees.Remove(this);
 
             // Gather wood from "real" trees only, not from cacti etc.
             if (treeType != TreeType.Birch)
