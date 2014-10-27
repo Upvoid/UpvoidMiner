@@ -219,7 +219,6 @@ namespace UpvoidMiner
 		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
 		protected void Update(float _elapsedSeconds)
 		{
-
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
                 // Resume movement noise (This is a no-op if sound is already playing)

@@ -136,15 +136,15 @@ namespace UpvoidMiner
 
                         if (!keyModifierControl)
                         {
-                            int vals = Enum.GetValues(typeof(Player.DiggingShape)).Length;
+                            int vals = Enum.GetValues(typeof(DiggingController.DigShape)).Length;
                             int offset = keyModifierShift ? vals - 1 : 1;
-                            player.CurrentDiggingShape = (Player.DiggingShape)(((uint)player.CurrentDiggingShape + offset) % vals);
+                            player.CurrentDiggingShape = (DiggingController.DigShape)(((uint)player.CurrentDiggingShape + offset) % vals);
                         }
                         else
                         {
-                            int vals = Enum.GetValues(typeof(Player.DiggingAlignment)).Length;
+                            int vals = Enum.GetValues(typeof(DiggingController.DigAlignment)).Length;
                             int offset = keyModifierShift ? vals - 1 : 1;
-                            player.CurrentDiggingAlignment = (Player.DiggingAlignment)(((uint)player.CurrentDiggingAlignment + offset) % vals);
+                            player.CurrentDiggingAlignment = (DiggingController.DigAlignment)(((uint)player.CurrentDiggingAlignment + offset) % vals);
                         }
 
                         // Reselect to refresh shape

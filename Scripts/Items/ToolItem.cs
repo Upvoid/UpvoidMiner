@@ -140,15 +140,15 @@ namespace UpvoidMiner
             MaterialResource shapeMat = null;
             switch (player.CurrentDiggingShape)
             {
-                case Player.DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     shapeMesh = Resources.UseMesh("::Debug/Box", null);
                     shapeMat = Resources.UseMaterial("Items/DigPreviewBox", UpvoidMiner.ModDomain);
                     break;
-                case Player.DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     shapeMesh = Resources.UseMesh("::Debug/Cylinder", null);
                     shapeMat = Resources.UseMaterial("Items/DigPreviewCylinder", UpvoidMiner.ModDomain);
                     break;
-                case Player.DiggingShape.Sphere:
+                case DiggingController.DigShape.Sphere:
                     shapeMesh = Resources.UseMesh("::Debug/Sphere", null);
                     shapeMat = Resources.UseMaterial("Items/DigPreviewSphere", UpvoidMiner.ModDomain);
                     break;

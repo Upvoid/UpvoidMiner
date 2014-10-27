@@ -88,17 +88,17 @@ namespace UpvoidMiner
             float radius = useRadius, useVolume;
             switch (player.CurrentDiggingShape)
             {
-                case Player.DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     useVolume = 8 * useRadius * useRadius * useRadius;
                     if (useVolume > Volume)
                         radius = (float)Math.Pow(Volume / 8, 1 / 3f);
                     break;
-                case Player.DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     useVolume = 2f * (float)Math.PI * useRadius * useRadius * useRadius;
                     if (useVolume > Volume)
                         radius = (float)Math.Pow(Volume / (2f * (float)Math.PI), 1 / 3f);
                     break;
-                case Player.DiggingShape.Sphere:
+                case DiggingController.DigShape.Sphere:
                     useVolume = 4f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
                     if (useVolume > Volume)
                         radius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
@@ -118,17 +118,17 @@ namespace UpvoidMiner
             MaterialResource shapeMatLimited = null;
             switch (player.CurrentDiggingShape)
             {
-                case Player.DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     shapeMesh = Resources.UseMesh("::Debug/Box", null);
                     shapeMat = Resources.UseMaterial("Items/ConstructionPreviewBox", UpvoidMiner.ModDomain);
                     shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewBoxLimited", UpvoidMiner.ModDomain);
                     break;
-                case Player.DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     shapeMesh = Resources.UseMesh("::Debug/Cylinder", null);
                     shapeMat = Resources.UseMaterial("Items/ConstructionPreviewCylinder", UpvoidMiner.ModDomain);
                     shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewCylinderLimited", UpvoidMiner.ModDomain);
                     break;
-                case Player.DiggingShape.Sphere: 
+                case DiggingController.DigShape.Sphere: 
                     shapeMesh = Resources.UseMesh("::Debug/Sphere", null); 
                     shapeMat = Resources.UseMaterial("Items/ConstructionPreviewSphere", UpvoidMiner.ModDomain);
                     shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewSphereLimited", UpvoidMiner.ModDomain);
@@ -166,13 +166,13 @@ namespace UpvoidMiner
             float useVolume;
             switch (_player.CurrentDiggingShape)
             {
-                case Player.DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     volumeFactor = 8;
                     break;
-                case Player.DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     volumeFactor = 2 * (float)Math.PI;
                     break;
-                case Player.DiggingShape.Sphere:
+                case DiggingController.DigShape.Sphere:
                     volumeFactor = 4f / 3f * (float)Math.PI;
                     break;
                 default:

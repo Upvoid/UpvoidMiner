@@ -12,13 +12,46 @@
 
     <!-- Inventory -->
     <div id="quickaccess"><ul id="quickaccess-list"></ul><div class="clear-float"></div></div>
-    <div id="inventory" class="col-md-4 InputConsumer">
-        <h4>All Items</h4>
-        <div id="inventory-list"></div>
-        <div class="clearfix"></div>
-    </div>
-    <div id="workbench" class="col-md-8 InputConsumer">
-        <div class="well" id="item-info">
+    <div id="ingame-overlay">
+        <div id="tool-settings" class="clear-float InputConsumer">
+            <nav class="navbar navbar-default" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a><b>Tool Settings</b></a></li>
+                    <li class="dropdown" id="digging-setting-shape">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-shape-value">Sphere Shape</span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="javascript:setDiggingSetting('Shape', 1);">Sphere Shape</a></li>
+                            <li><a href="javascript:setDiggingSetting('Shape', 2);">Box Shape</a></li>
+                            <li><a href="javascript:setDiggingSetting('Shape', 3);">Cylinder Shape</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="digging-setting-alignment">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-alignment-value">Axis Alignment</span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="javascript:setDiggingSetting('Alignment', 1);">Axis Alignment</a></li>
+                            <li><a href="javascript:setDiggingSetting('Alignment', 2);">Camera Alignment</a></li>
+                            <li><a href="javascript:setDiggingSetting('Alignment', 3);">Surface Alignment</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="digging-setting-addmode">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-addmode-value">Replace Air</span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="javascript:setDiggingSetting('AddMode', 1);">Replace All</a></li>
+                            <li><a href="javascript:setDiggingSetting('AddMode', 2);">Replace Air</a></li>
+                            <li><a href="javascript:setDiggingSetting('AddMode', 3);">Replace Material</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="inventory" class="panel InputConsumer">
+            <h4>All Items</h4>
+            <div id="inventory-list"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div id="workbench" class="col-md-8 InputConsumer">
+            <div class="well" id="item-info">
+            </div>
         </div>
     </div>
 

@@ -8,11 +8,11 @@ body {
     float: clear;
 }
 
-#inventory {
+#ingame-overlay {
     display: none;
-    position: absolute;
-    left: 0px;
-    top: 70px;
+}
+
+#inventory {
 }
 
 #workbench {

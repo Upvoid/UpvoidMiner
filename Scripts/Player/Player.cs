@@ -56,7 +56,7 @@ namespace UpvoidMiner
         const float minRayQueryDistanceNoClip = 0.1f;
         const float maxRayQueryDistanceNoClip = 200.0f;
 
-        private const int millisecondsBetweenItemUsages = 500;
+        private const int millisecondsBetweenItemUsages = 250;
 
         public static vec3 SpawnPosition = new vec3(150, 5, 150);
 
@@ -161,31 +161,20 @@ namespace UpvoidMiner
             get { return character.Transformation; }
         }
 
-		public enum DiggingShape
-		{
-            Sphere,
-            Box,
-            Cylinder
-		}
 
-		public enum DiggingAlignment
-		{
-            AxisAligned,
-            GridAligned,
-            PlayerAligned,
-            TerrainAligned
-		}
+		public DiggingController.DigShape CurrentDiggingShape { get; set; }
+        public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
 
-		public DiggingShape CurrentDiggingShape { get; set; }
-		public DiggingAlignment CurrentDiggingAlignment { get; set; }
+        public DiggingController.AddMode CurrentDiggingAddMode { get; set; }
 
         public Player(GenericCamera _camera, bool _godMode)
         {
             GodMode = _godMode;
             Direction = new vec3(1, 0, 0);
             camera = _camera;
-            CurrentDiggingShape = DiggingShape.Sphere;
-			CurrentDiggingAlignment = DiggingAlignment.AxisAligned;
+            CurrentDiggingShape = DiggingController.DigShape.Sphere;
+            CurrentDiggingAlignment = DiggingController.DigAlignment.Axis;
+            CurrentDiggingAddMode = DiggingController.AddMode.AirOnly;
             Inventory = new Inventory(this);
         }
 
@@ -710,13 +699,14 @@ namespace UpvoidMiner
         /// </summary>
         public vec3 AlignPlacementPosition(vec3 pos)
         {
+            /*
             if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
                 return new vec3(
                     (int)Math.Round(pos.x * 2),
                     (int)Math.Round(pos.y * 2),
                     (int)Math.Round(pos.z * 2)
                 ) * 0.5f;
-            else return pos;
+            else*/ return pos;
         }
 
         /// <summary>
@@ -726,18 +716,17 @@ namespace UpvoidMiner
         {
             switch (CurrentDiggingAlignment)
             {
-                case Player.DiggingAlignment.GridAligned:
-                case Player.DiggingAlignment.AxisAligned:
+                case DiggingController.DigAlignment.Axis:
                     dirX = vec3.UnitX;
                     dirY = vec3.UnitY;
                     dirZ = vec3.UnitZ;
                     break;
-                case Player.DiggingAlignment.PlayerAligned:
+                case DiggingController.DigAlignment.View:
                     dirX = camera.RightDirection.Normalized;
                     dirZ = camera.UpDirection.Normalized;
                     dirY = camera.ForwardDirection.Normalized;
                     break;
-                case Player.DiggingAlignment.TerrainAligned:
+                case DiggingController.DigAlignment.Terrain:
                     dirY = worldNormal.Normalized;
                     dirX = vec3.cross(camera.ForwardDirection, dirY).Normalized;
                     dirZ = vec3.cross(dirX, dirY).Normalized;
@@ -753,21 +742,18 @@ namespace UpvoidMiner
         {
             position = AlignPlacementPosition(position);
 
-            bool paintMode = false;
-            bool fullModification = false;
-
-            var filterMats = paintMode || fullModification ? null : new int[] { 0 };
-            bool allowAirChange = !paintMode;
+            var filterMats = CurrentDiggingAddMode != DiggingController.AddMode.AirOnly ? null : new int[] { 0 };
+            bool allowAirChange = CurrentDiggingAddMode != DiggingController.AddMode.NonAirOnly;
 
 			switch(CurrentDiggingShape)
 			{
-				case DiggingShape.Sphere:
+                case DiggingController.DigShape.Sphere:
                     digging.DigSphere(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
-                case DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     digging.DigBox(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
-                case DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     digging.DigCylinder(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
 				default:
@@ -783,13 +769,13 @@ namespace UpvoidMiner
 
 			switch (CurrentDiggingShape)
 			{
-				case DiggingShape.Sphere:
+                case DiggingController.DigShape.Sphere:
                     digging.DigSphere(worldNormal, position, radius, filterMaterials);
                     break;
-                case DiggingShape.Box:
+                case DiggingController.DigShape.Box:
                     digging.DigBox(worldNormal, position, radius, filterMaterials);
                     break;
-                case DiggingShape.Cylinder:
+                case DiggingController.DigShape.Cylinder:
                     digging.DigCylinder(worldNormal, position, radius, filterMaterials);
                     break;
 				default:
@@ -811,7 +797,6 @@ namespace UpvoidMiner
 
             // Add the received item to the inventory.
             Inventory.AddItem(addItemMsg.PickedItem);
-
         }
 
     }

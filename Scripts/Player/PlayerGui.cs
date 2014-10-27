@@ -89,6 +89,7 @@ namespace UpvoidMiner
                 public bool canBeDismantled = false;
                 public List<GuiItem> craftingIngredients = new List<GuiItem>();
 
+
                 public static Dictionary<string, GuiItem> FromItemCollection(IEnumerable<Item> items)
                 {
                     Dictionary<string, GuiItem> guiItems = new Dictionary<string, GuiItem>();
@@ -104,8 +105,8 @@ namespace UpvoidMiner
             public Dictionary<string, GuiItem> inventory = new Dictionary<string, GuiItem>();
             public List<string> quickAccess = new List<string>();
             public int selection;
-
-                        public bool playerIsFrozen;
+            public DiggingController.DiggingSettings diggingSettings = new DiggingController.DiggingSettings();
+            public bool playerIsFrozen;
         }
 
         private void toggleUI()
@@ -148,6 +149,7 @@ namespace UpvoidMiner
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectQuickAccessSlot", webSelectQuickAccessSlot);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SelectItem", webSelectItem);
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "DropItem", webDropItem);
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SetToolSettings", webSetToolSettings);
             updateSocket = new WebSocketHandler();
             Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "InventoryUpdate", updateSocket);
 
@@ -164,6 +166,12 @@ namespace UpvoidMiner
                 if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     if ( !IsUIOpen )
+                        toggleUI();
+                    toggleInventory();
+                }
+                if (e.Key == InputKey.MouseRight && !LocalScript.NoclipEnabled && e.PressType == InputPressArgs.KeyPressType.Down)
+                {
+                    if (!IsUIOpen)
                         toggleUI();
                     toggleInventory();
                 }
@@ -324,6 +332,28 @@ namespace UpvoidMiner
                     cr.Craft(item, player.Inventory.Items);
                     break;
                 }
+            }
+        }
+
+        void webSetToolSettings(WebRequest request, WebResponse response)
+        {
+            string settingsString = request.GetQuery("DiggingSettings");
+            StringReader reader = new StringReader(settingsString);
+            JsonTextReader jsonReader = new JsonTextReader(reader);
+            DiggingController.DiggingSettings diggingSettings =
+                json.Deserialize<DiggingController.DiggingSettings>(jsonReader);
+            
+            if (diggingSettings == null)
+                return;
+            
+            player.CurrentDiggingShape = diggingSettings.Shape;
+            player.CurrentDiggingAlignment = diggingSettings.Alignment;
+            player.CurrentDiggingAddMode = diggingSettings.AddMode;
+
+            if (player.Inventory.Selection != null)
+            {
+                player.Inventory.Selection.OnDeselect(player);
+                player.Inventory.Selection.OnSelect(player);
             }
         }
     }

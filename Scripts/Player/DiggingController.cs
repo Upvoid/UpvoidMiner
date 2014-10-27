@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using Engine;
 using Engine.Audio;
@@ -30,14 +31,91 @@ namespace UpvoidMiner
         private static Random random = new Random();
 
         /// <summary>
+        /// Contains all relevant settings for the digging tools. Used to save settings per tool and to pass them to the GUI
+        /// </summary>
+        [Serializable]
+        public class DiggingSettings
+        {
+            public DigMode Mode = DigMode.Substract;
+            public DigShape Shape = DigShape.Sphere;
+            public DigAlignment Alignment = DigAlignment.Axis;
+            public DigPosition Position = DigPosition.Ground;
+            public AddMode AddMode = AddMode.AirOnly;
+            //public vec3 Scale = new vec3(1f);
+        }
+
+        /// <summary>
         /// Singleton for this controller.
         /// </summary>
         private static DiggingController instance;
 
+        [Serializable]
         public enum DigMode
         {
-            Substract,
+            Substract=1,
             Add
+        }
+
+        [Serializable]
+        public enum DigShape
+        {
+            Sphere=1,
+            Box,
+            Cylinder
+        }
+
+        /// <summary>
+        /// Describes how the digging shape should be rotated
+        /// </summary>
+        [Serializable]
+        public enum DigAlignment
+        {
+            /// <summary>
+            /// Align the shape along the coordinate system (no rotation) 
+            /// </summary>
+            Axis=1,
+            /// <summary>
+            /// Align the shape along the viewing direction of the player
+            /// </summary>
+            View,
+            /// <summary>
+            /// Align the shape along the terrain surface orientation
+            /// </summary>
+            Terrain
+        }
+
+        /// <summary>
+        /// Describes where the digging shape should be placed
+        /// </summary>
+        [Serializable]
+        public enum DigPosition
+        {
+            /// <summary>
+            /// Place the shape on the groudn where the center of the screen is pointing at (or nowhere if that position is too far away or non-existent
+            /// </summary>
+            Ground=1,
+            FixedDistance
+        }
+
+
+        /// <summary>
+        /// Describes where material should be added
+        /// </summary>
+        [Serializable]
+        public enum AddMode
+        {
+            /// <summary>
+            /// Fill the whole digging shape with material
+            /// </summary>
+            Overwrite=1,
+            /// <summary>
+            /// Fill only the parts inside the digging shape that are air
+            /// </summary>
+            AirOnly,
+            /// <summary>
+            /// Only replace the parts inside the digging shape that are non-air ("Paint mode")
+            /// </summary>
+            NonAirOnly
         }
 
         /// <summary>
