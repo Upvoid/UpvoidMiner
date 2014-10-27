@@ -75,9 +75,19 @@ namespace UpvoidMiner
         // Updates all trees and returns position of closest one
         public static vec3 UpdateTrees(vec3 refPos)
         {
+            // Settings
+            const int maxTrunks = 100;
+            const float maxDisTrunks = 150;
+            const int maxLeaves = 300;
+            const float maxDisLeaves = 350;
+
             float minDist = float.MaxValue;
             vec3 closestTree = new vec3(float.MaxValue);
-
+            
+            int visCountTrunk = 0;
+            int visCountLeaves = 0;
+            List<Tree> trunks = new List<Tree>();
+            List<Tree> leaves = new List<Tree>();
             foreach (Tree t in trees)
             {
                 float dis = vec3.distance(refPos, t.Position);
@@ -89,14 +99,52 @@ namespace UpvoidMiner
                     closestTree = t.Position;
                 }
 
-                bool vTrunk = dis < 150;
-                bool vLeaves0 = dis < 350;
-                
-                foreach (var r in t.RjTrunk)
-                    r.Visible = vTrunk;
-                foreach (var r in t.RjLeaves0)
-                    r.Visible = vLeaves0;
+                bool vTrunk = dis < maxDisTrunks;
+                bool vLeaves0 = dis < maxDisLeaves;
+
+                if (vTrunk)
+                {
+                    ++visCountTrunk;
+                    trunks.Add(t);
+                }
+                else 
+                    foreach (var r in t.RjTrunk)
+                        r.Visible = false;
+
+                if (vLeaves0)
+                {
+                    ++visCountLeaves;                    
+                    leaves.Add(t);
+                }
+                else 
+                    foreach (var r in t.RjLeaves0)
+                        r.Visible = false;
             }
+
+            // Max trees
+            if (visCountTrunk > maxTrunks)
+            {
+                trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
+                for (int i = 0; i < trunks.Count; ++i)
+                    foreach (var r in trunks[i].RjTrunk)
+                        r.Visible = i < maxTrunks;
+            }
+            else
+                foreach (var t in trunks)
+                    foreach (var r in t.RjTrunk)
+                        r.Visible = true;
+
+            if (visCountLeaves > maxLeaves)
+            {
+                trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
+                for (int i = 0; i < trunks.Count; ++i)
+                    foreach (var r in trunks[i].RjLeaves0)
+                        r.Visible = i < maxLeaves;
+            }
+            else
+                foreach (var t in leaves)
+                    foreach (var r in t.RjLeaves0)
+                        r.Visible = true;
 
             // Return distance to closest tree
             return closestTree;
