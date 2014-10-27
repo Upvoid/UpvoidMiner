@@ -54,12 +54,12 @@ void main()
 
     transColor.a *= float(dist < uMidPointAndRadius.w);
 
-    float sphereAlpha = 0.2;
 
+    float sphereAlpha = 0.2;
 	
     // fresnel
     vec3 viewDir = normalize(uMidPointAndRadius.xyz - uCameraPosition);
-    float dotVN = pow(abs(dot(viewDir, vNormal)), 1);
+    float dotVN = abs(dot(viewDir, vNormal));
     sphereAlpha *= mix(1.0, 0.1, dotVN);
 	//sphereAlpha = max(0.05, sphereAlpha);
 	
@@ -67,7 +67,7 @@ void main()
 	sphereAlpha += 1 * max(0, (distance(vWorldPos, uMidPointAndRadius.xyz) - 1.6*uMidPointAndRadius.w) / uMidPointAndRadius.w);
 	
     transColor.a += float(opaqueEyePos.z < vEyePos.z) * sphereAlpha;
-
+	
     transColor = clamp(transColor, 0, 1);
     OUTPUT_VEC4_OutputColor(transColor);
 }

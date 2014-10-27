@@ -55,7 +55,7 @@ void main()
 
     // fresnel
     vec3 viewDir = normalize(uCameraPosition - vWorldPos);
-    float dotVN = pow(abs(dot(viewDir, vNormal)), 0.5);
+    float dotVN = abs(dot(viewDir, vNormal));
     sphereAlpha *= mix(1.0, 0.1, dotVN);
 	
 	float upperBorder = max(0, (distance(vWorldPos, uMidPointAndRadius.xyz) - 1.37*uMidPointAndRadius.w) / uMidPointAndRadius.w);

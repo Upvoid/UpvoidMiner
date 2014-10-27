@@ -64,7 +64,7 @@ void main()
 
        // fresnel
        vec3 viewDir = normalize(uCameraPosition - vWorldPos);
-       float dotVN = pow(abs(dot(viewDir, normal)), 1.0);
+       float dotVN = abs(dot(viewDir, normal));
        shapeColor.a *= mix(1.0, 0.2, dotVN);
 
        shapeColor.a *= 0.6;
@@ -79,15 +79,6 @@ void main()
     transColor = shapeColor;
     transColor.rgb = mix(transColor.rgb, surfaceColor.rgb, surfaceColor.a);
     transColor.a = 1 - (1 - transColor.a) * (1 - surfaceColor.a);
-
-    /*
-    vec3 pos = opaqueWorldPos.xyz;
-    const float scale = 30;
-    transColor.a += max(0, sin(pos.x * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.y * scale) - .75) * 4;
-    transColor.a += max(0, sin(pos.z * scale) - .75) * 4;
-    transColor.a = min(1, transColor.a);
-    */
 
     OUTPUT_VEC4_OutputColor(transColor);
 }

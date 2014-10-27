@@ -64,7 +64,7 @@ void main()
 
        // fresnel
        vec3 viewDir = normalize(uCameraPosition - vWorldPos);
-       float dotVN = pow(abs(dot(viewDir, normal)), 1.0);
+       float dotVN = abs(dot(viewDir, normal));
        shapeColor.a *= mix(1.0, 0.2, dotVN);
 
        shapeColor.a *= 0.6;
