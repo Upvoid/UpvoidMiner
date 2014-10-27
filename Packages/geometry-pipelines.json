@@ -262,11 +262,11 @@
                         "Inputs": [ "aPosition:vec3" ]
                     },
                     "aNormal": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .5",
                         "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
                     },
                     "aTangent": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .5",
                         "Inputs": [ "aTangent:vec3", "aPosition:vec3" ]
                     }
                 }
@@ -319,11 +319,11 @@
                         "Inputs": [ "aPosition:vec3" ]
                     },
                     "aNormal": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .6",
                         "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
                     },
                     "aTangent": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.0",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .6",
                         "Inputs": [ "aTangent:vec3", "aPosition:vec3" ]
                     }
                 }
