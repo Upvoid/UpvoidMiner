@@ -16,10 +16,10 @@
             {
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
-                "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.2,
+                "keepExistingBoundaryNormals" : false,
+                "maxRelativeDeviation" : 0.1,
                 "maxAngle" : 30.0,
-                "absoluteDeviation" : 0.25
+                "absoluteDeviation" : 0.025
             },
             "Decimate" :
             {
@@ -466,14 +466,14 @@
             {
                 "Type" : "Input"
             },
-            "NormalRepair" :
+			"NormalRepair" :
             {
                 "Type" : "NormalRepair",
                 "Nodes" : ["Input"],
-                "keepExistingBoundaryNormals" : true,
-                "maxRelativeDeviation" : 0.2,
+                "keepExistingBoundaryNormals" : false,
+                "maxRelativeDeviation" : 0.1,
                 "maxAngle" : 30.0,
-                "absoluteDeviation" : 0.25
+                "absoluteDeviation" : 0.025
             },
             "Decimate" :
             {
