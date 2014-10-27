@@ -128,7 +128,7 @@
                 "densityDistribution": "GrassDensity",
                 "minDistance": 0.01,
 
-                        "bladesPerSqM": 200,
+                        "bladesPerSqM": 150,
                         "bladeWidth": 0.05,
                         "bladeLength": 0.25,
                         "bladeLengthCutoff": 0.2,
@@ -144,8 +144,8 @@
                         "densityCutoff": 0.2,
 
                         "singleTriangle": false,
-                        "segmentsLength": 2,
-                        "segmentsWidth": 2,
+                        "segmentsLength": 1,
+                        "segmentsWidth": 1,
                         "tipNarrow": 0.3,
                         "sideCurvature": 0.002,
                         "sideCurvatureNormalFactor": 0.5,
