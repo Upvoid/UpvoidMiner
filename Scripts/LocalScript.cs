@@ -231,6 +231,12 @@ namespace UpvoidMiner
                 player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
             };
+
+            Scripting.OnEngineShutdown += (sender, args) =>
+            {
+                player.Save();
+                UpvoidMinerWorldGenerator.SaveEntities();
+            };
         }
 
         /// Bezier Camera Path Feature
