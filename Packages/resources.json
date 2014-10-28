@@ -927,6 +927,32 @@
             "Particles/NormalmapColorMultiply.fsh",
             "Particles/ParticleMeshCubic.vsh"
         ],
+        "Name" : "Particles/Opaque/MeshCubic",
+        "Type" : "File"
+    },
+    "Name" : "Particles/Opaque/MeshCubic",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Particles/Shadow.fsh",
+            "Particles/ParticleMeshCubicShadow.vsh"
+        ],
+        "Name" : "Particles/Shadow/MeshCubic",
+        "Type" : "File"
+    },
+    "Name" : "Particles/Shadow/MeshCubic",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "Particles/NormalmapColorMultiply.fsh",
+            "Particles/ParticleMeshLinear.vsh"
+        ],
         "Name" : "Particles/Opaque/Mesh",
         "Type" : "File"
     },
@@ -938,7 +964,7 @@
     "Descriptor" : {
         "Files" : [
             "Particles/Shadow.fsh",
-            "Particles/ParticleMeshCubicShadow.vsh"
+            "Particles/ParticleMeshLinearShadow.vsh"
         ],
         "Name" : "Particles/Shadow/Mesh",
         "Type" : "File"

@@ -168,7 +168,7 @@ namespace UpvoidMiner
             {
                 resource = res;
 
-                particlesStones = new CpuParticleSystem(4, 0.025);
+                particlesStones = new CpuParticleSystem(2,0.05);
 
                 // aPosition [m]
                 // TIMESTEP  [s]
