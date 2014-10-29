@@ -292,7 +292,7 @@ namespace UpvoidMiner
                         PathTmps.Add(vec3.Zero);
                         Console.WriteLine("Point recorded");
                         break;
-                    case InputKey.F12:
+                    case InputKey.F11:
                         PathPositions.Clear();
                         PathTmps.Clear();
                         PathDirections.Clear();

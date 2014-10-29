@@ -516,8 +516,6 @@ namespace UpvoidMiner
         public void Save()
         {
             saveInventory();
-
-            Console.WriteLine("[" + DateTime.Now + "] Player saved.");
         }
 
         void saveInventory()
@@ -699,14 +697,14 @@ namespace UpvoidMiner
         /// </summary>
         public vec3 AlignPlacementPosition(vec3 pos)
         {
-            /*
-            if (CurrentDiggingAlignment == DiggingAlignment.GridAligned)
+            
+            if (CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned)
                 return new vec3(
                     (int)Math.Round(pos.x * 2),
                     (int)Math.Round(pos.y * 2),
                     (int)Math.Round(pos.z * 2)
                 ) * 0.5f;
-            else*/ return pos;
+            else return pos;
         }
 
         /// <summary>
@@ -716,6 +714,7 @@ namespace UpvoidMiner
         {
             switch (CurrentDiggingAlignment)
             {
+                case DiggingController.DigAlignment.GridAligned: // fall-through intended
                 case DiggingController.DigAlignment.Axis:
                     dirX = vec3.UnitX;
                     dirY = vec3.UnitY;

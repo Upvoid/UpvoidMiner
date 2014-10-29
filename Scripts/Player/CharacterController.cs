@@ -247,6 +247,11 @@ namespace UpvoidMiner
             }
 
                         jumpCoolDown -= _elapsedSeconds;
+
+            // Jumping cooldown is reset instantly when moving down in any way.
+            if (Body.GetVelocity().y <= 0f)
+                jumpCoolDown = 0f;
+
                         if (jumpCoolDown < 0f)
                                 jumpCoolDown = 0f;
 
@@ -260,10 +265,6 @@ namespace UpvoidMiner
                 // Use the forward and right directions of the camera. When not in god mode, remove the y component, and we have our walking direction.
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 vec3 velocity = Body.GetVelocity();
-
-                // Jumping cooldown is reset instantly when moving down in any way.
-                if (velocity.y <= 0f)
-                    jumpCoolDown = 0f;
 
                 if (!GodMode)
                 {
@@ -327,7 +328,7 @@ namespace UpvoidMiner
             else
                 distanceToGround = 5f;
 
-            TouchesGround = Math.Abs(distanceToGround) < HoverHeight+0.3f;
+            TouchesGround = (jumpCoolDown <= 0f) && (Math.Abs(distanceToGround) < HoverHeight+0.3f);
         }
 
                 /// <summary>
@@ -375,7 +376,7 @@ namespace UpvoidMiner
             { //Space lets the player jump
                                 if(!GodMode && TouchesGround && jumpCoolDown == 0f) {
                     Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
-                                        jumpCoolDown = 1f;
+                                        jumpCoolDown = 0.5f;
                 }
             } else if(e.Key == InputKey.Shift) { // Shift controls running
                 if(e.PressType == InputPressArgs.KeyPressType.Down)
