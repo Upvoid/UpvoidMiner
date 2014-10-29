@@ -282,7 +282,6 @@ namespace UpvoidMiner
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 moveDir.y = 0;
 
-                Console.WriteLine(moveDir.Length);
 				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass, vec3.Zero);
             }
 
