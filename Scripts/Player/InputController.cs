@@ -122,7 +122,9 @@ namespace UpvoidMiner
                         break;
 
                     case InputKey.F12:
-                        Rendering.WriteNextFrameToFile("Screenshots/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png");
+                        string screenshotName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
+                        Console.WriteLine("Writing screenshot to " + screenshotName);
+                        Rendering.WriteNextFrameToFile("Screenshots/" + screenshotName);
                         break;
 
                     case InputKey.Q:
