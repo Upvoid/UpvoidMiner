@@ -516,8 +516,6 @@ namespace UpvoidMiner
         public void Save()
         {
             saveInventory();
-
-            Console.WriteLine("[" + DateTime.Now + "] Player saved.");
         }
 
         void saveInventory()
