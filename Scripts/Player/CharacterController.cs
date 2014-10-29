@@ -73,7 +73,7 @@ namespace UpvoidMiner
         /// If it is too low, the body will collide with obstacles that a real person would just step over.
         /// If it is too high, the body will not collide with obstacles that a real person would not simply step over.
         /// </value>
-        public float HoverHeight = 0.4f;
+        public float HoverHeight = 0.3f;
 
         /// <summary>
         /// The total height of the simulated character (from the ground to the top, including HoverHeight).
@@ -251,7 +251,7 @@ namespace UpvoidMiner
 				jumpCoolDown = 0f;
 
             // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
-            if (TouchesGround || GodMode)
+            if ((TouchesGround && jumpCoolDown <= 0f) || GodMode)
             {
 
                 float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
@@ -260,7 +260,11 @@ namespace UpvoidMiner
                 // Use the forward and right directions of the camera. When not in god mode, remove the y component, and we have our walking direction.
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 vec3 velocity = Body.GetVelocity();
-                
+
+                // Jumping cooldown is reset instantly when moving down in any way.
+                if (velocity.y <= 0f)
+                    jumpCoolDown = 0f;
+
                 if (!GodMode)
                 {
                     moveDir.y = 0;
@@ -269,15 +273,16 @@ namespace UpvoidMiner
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
             }
-			else if (jumpCoolDown <= 0f) // otherwise, we can do some subtile acceleration in air (except right after jumping)
+			else // Otherwise, we can do some subtile acceleration in air
             {
-                float forwardSpeed = WalkSpeed * 0.2f;
-                float strafeSpeed = StrafeSpeed * 0.2f;
+                float forwardSpeed = StrafeSpeed;
+                float strafeSpeed = StrafeSpeed * 2.0f;
 
                 // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 moveDir.y = 0;
 
+                Console.WriteLine(moveDir.Length);
 				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass, vec3.Zero);
             }
 
@@ -323,7 +328,7 @@ namespace UpvoidMiner
             else
                 distanceToGround = 5f;
 
-            TouchesGround = Math.Abs(distanceToGround) < 1f;
+            TouchesGround = Math.Abs(distanceToGround) < HoverHeight+0.3f;
         }
 
 		/// <summary>
@@ -366,7 +371,9 @@ namespace UpvoidMiner
                     walkDirRight--;
                 else
                     walkDirRight++;
-            } else if(e.Key == InputKey.Space) { //Space lets the player jump
+            }
+            else if (e.Key == InputKey.Space && e.PressType == InputPressArgs.KeyPressType.Down)
+            { //Space lets the player jump
 				if(!GodMode && TouchesGround && jumpCoolDown == 0f) {
                     Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
 					jumpCoolDown = 1f;
