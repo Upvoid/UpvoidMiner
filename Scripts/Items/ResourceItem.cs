@@ -103,6 +103,11 @@ namespace UpvoidMiner
                     if (useVolume > Volume)
                         radius = (float)Math.Pow(Volume / (4f / 3f * (float)Math.PI), 1 / 3f);
                     break;
+                case DiggingController.DigShape.Cone:
+                    useVolume = 1f / 3f * (float)Math.PI * useRadius * useRadius * useRadius;
+                    if (useVolume > Volume)
+                        radius = (float)Math.Pow(Volume / (1f / 3f * (float)Math.PI), 1 / 3f);
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown digging shape");
             }
@@ -132,6 +137,11 @@ namespace UpvoidMiner
                     shapeMesh = Resources.UseMesh("::Debug/Sphere", null); 
                     shapeMat = Resources.UseMaterial("Items/ConstructionPreviewSphere", UpvoidMiner.ModDomain);
                     shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewSphereLimited", UpvoidMiner.ModDomain);
+                    break;
+                case DiggingController.DigShape.Cone:
+                    shapeMesh = Resources.UseMesh("::Debug/Cone", null);
+                    shapeMat = Resources.UseMaterial("Items/ConstructionPreviewCone", UpvoidMiner.ModDomain);
+                    shapeMatLimited = Resources.UseMaterial("Items/ConstructionPreviewConeLimited", UpvoidMiner.ModDomain);
                     break;
                 default:
                     throw new InvalidOperationException("Unknown digging shape");
@@ -174,6 +184,9 @@ namespace UpvoidMiner
                     break;
                 case DiggingController.DigShape.Sphere:
                     volumeFactor = 4f / 3f * (float)Math.PI;
+                    break;
+                case DiggingController.DigShape.Cone:
+                    volumeFactor = 1f / 3f * (float)Math.PI;
                     break;
                 default:
                     throw new InvalidOperationException("Unknown digging shape");

@@ -30,7 +30,8 @@ namespace UpvoidMiner
     {
         Cube,
         Cylinder,
-        Sphere
+        Sphere,
+        Cone
     }
 
     /// <summary>
@@ -52,6 +53,7 @@ namespace UpvoidMiner
         /// Cube: width, height, depth
         /// Cylinder: radius, height, radius
         /// Sphere: radius, (y/z = radius)
+        /// Cone: radius, height, radius
         /// </summary>
         public readonly vec3 Size;
 
@@ -75,6 +77,7 @@ namespace UpvoidMiner
                     case MaterialShape.Cube: return Size.x * Size.y * Size.z;
                     case MaterialShape.Cylinder: return 2 * (float)Math.PI * Size.x * Size.y * Size.z;
                     case MaterialShape.Sphere: return 4f / 3f * (float)Math.PI * Size.x * Size.y * Size.z;
+                    case MaterialShape.Cone: return 1f / 3f * (float)Math.PI * Size.x * Size.y * Size.z;
                     default: Debug.Fail("Invalid shape"); return -1;
                 }
             }
@@ -92,6 +95,7 @@ namespace UpvoidMiner
                     case MaterialShape.Cube: return "size " + Size.x.ToString("0.0") + " m x " + Size.y.ToString("0.0") + " m x " + Size.z.ToString("0.0") + " m";
                     case MaterialShape.Cylinder: return Size.x.ToString("0.0") + " m radius and " + Size.y.ToString("0.0") + " m height";
                     case MaterialShape.Sphere: return Size.x.ToString("0.0") + " m radius";
+                    case MaterialShape.Cone: return Size.x.ToString("0.0") + " m radius and " + Size.y.ToString("0.0") + " m height";
                     default: Debug.Fail("Invalid shape"); return "<invalid>";
                 }
             }
@@ -168,6 +172,7 @@ namespace UpvoidMiner
                 case MaterialShape.Cube: mesh = Resources.UseMesh("::Debug/Box", null); break;
                 case MaterialShape.Sphere: mesh = Resources.UseMesh("::Debug/Sphere", null); break;
                 case MaterialShape.Cylinder: mesh = Resources.UseMesh("::Debug/Cylinder", null); break;
+                case MaterialShape.Cone: mesh = Resources.UseMesh("::Debug/Cone", null); break;
                 default: throw new NotImplementedException("Invalid shape");
             }
 

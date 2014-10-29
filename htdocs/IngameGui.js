@@ -315,6 +315,9 @@ function buildDiggingSettings()
         case 3:
             shapeName = "Cylinder Shape";
             break;
+		case 4:
+            shapeName = "Cone Shape";
+            break;
     }
     $('#digging-setting-shape-value').text(shapeName);
     

@@ -121,6 +121,10 @@ namespace UpvoidMiner
                         Renderer.Opaque.Mesh.DebugWireframe = !Renderer.Opaque.Mesh.DebugWireframe;
                         break;
 
+                    case InputKey.F12:
+                        //Rendering.WriteNextFrameToFile("Brabbelsabbel.png");
+                        break;
+
                     case InputKey.Q:
                         if (player.Inventory.Selection != null)
                             player.DropItem(player.Inventory.Selection);

@@ -77,3 +77,18 @@
     Shader: ShapeIndicators/CylinderShapeColored
     Color: uColor, 1,0,0,0.3
     Culling: Front
+	
+[Items/DigPreviewCone] : Default
+    Shader: ShapeIndicators/ConeShapeCoverColored
+    Color: uColor, 0.345098,0,0.8,0.3
+    Culling: Front
+
+[Items/ConstructionPreviewCone] : Default
+    Shader: ShapeIndicators/ConeShapeColored
+    Color: uColor, 1,1,1,0.3
+    Culling: None
+
+[Items/ConstructionPreviewConeLimited] : Default
+    Shader: ShapeIndicators/ConeShapeColored
+    Color: uColor, 1,0,0,0.3
+    Culling: Front

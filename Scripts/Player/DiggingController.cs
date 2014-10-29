@@ -61,7 +61,8 @@ namespace UpvoidMiner
         {
             Sphere=1,
             Box,
-            Cylinder
+            Cylinder,
+            Cone
         }
 
         /// <summary>
@@ -141,6 +142,11 @@ namespace UpvoidMiner
         /// Cached CSG Cylinder.
         /// </summary>
         CsgExpression cylinderNode;
+
+        /// <summary>
+        /// Cached CSG Cone.
+        /// </summary>
+        CsgExpression coneNode;
 
         /// <summary>
         /// Cached Player safety margin.
@@ -246,11 +252,18 @@ namespace UpvoidMiner
             boxNode = new CsgExpression(1, boxExpression, UpvoidMiner.ModDomain, digParas);
 
             string cylinderExpression = @"p = vec3(x,y,z) - digPosition;
-                dx = abs(dot(p, digDirX));
+                dx = dot(p, digDirX);
                 dy = abs(dot(p, digDirY));
-                dz = abs(dot(p, digDirZ));
+                dz = dot(p, digDirZ);
                 -digRadius + max(dy, length(vec2(dx, dz)))";
             cylinderNode = new CsgExpression(1, cylinderExpression, UpvoidMiner.ModDomain, digParas);
+
+            string coneExpression = @"p = vec3(x,y,z) - digPosition;
+                dx = dot(p, digDirX);
+                dy = dot(p, digDirY);
+                dz = dot(p, digDirZ);
+                -digRadius + max(-dy, 2*length(vec2(dx, dz)) + dy)";
+            coneNode = new CsgExpression(1, coneExpression, UpvoidMiner.ModDomain, digParas);
 
             string playerExpression = @"p = vec3(x,y,z) - playerPosition;
                 max(abs(p.y) - (playerHeight/2), length(p.xz) - playerRadius)";
@@ -367,7 +380,8 @@ namespace UpvoidMiner
             sphereNode.SetParameterVec3("digDirY", dy);
             sphereNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials, allowAirChange);
+            // radius + 10%
+            Dig(sphereNode, new BoundingSphere(position, radius * 1.1f), digMode, filterMaterials, allowAirChange);
         }
 
         public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
@@ -382,7 +396,8 @@ namespace UpvoidMiner
             boxNode.SetParameterVec3("digDirY", dy);
             boxNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
+            // radius * sqrt(3) + 10%
+            Dig(boxNode, new BoundingSphere(position, radius * 1.733f * 1.1f), digMode, filterMaterials, allowAirChange);
         }
 
         public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
@@ -397,7 +412,23 @@ namespace UpvoidMiner
             cylinderNode.SetParameterVec3("digDirY", dy);
             cylinderNode.SetParameterVec3("digDirZ", dz);
 
-            Dig(cylinderNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
+            // radius * sqrt(2) + 10%
+            Dig(cylinderNode, new BoundingSphere(position, radius * 1.414f * 1.1f), digMode, filterMaterials, allowAirChange);
+        }
+
+        public void DigCone(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
+        {
+            coneNode.MaterialIndex = terrainMaterialId;
+            coneNode.SetParameterFloat("digRadius", radius);
+            coneNode.SetParameterVec3("digPosition", position);
+
+            vec3 dx, dy, dz;
+            player.AlignmentSystem(worldNormal, out dx, out dy, out dz);
+            coneNode.SetParameterVec3("digDirX", dx);
+            coneNode.SetParameterVec3("digDirY", dy);
+            coneNode.SetParameterVec3("digDirZ", dz);
+
+            Dig(coneNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
         }
 
         /// <summary>

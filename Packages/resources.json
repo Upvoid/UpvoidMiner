@@ -1083,6 +1083,32 @@
 },
 {
     "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/ConeShapeCoverColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/ConeShapeCoverColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/ConeShapeCoverColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
+            "ShapeIndicators/ConeShapeColored.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/ConeShapeColored",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/ConeShapeColored",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
         "Type": "File",
         "sRGB": false
     },

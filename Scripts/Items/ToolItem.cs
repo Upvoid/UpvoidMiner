@@ -152,6 +152,10 @@ namespace UpvoidMiner
                     shapeMesh = Resources.UseMesh("::Debug/Sphere", null);
                     shapeMat = Resources.UseMaterial("Items/DigPreviewSphere", UpvoidMiner.ModDomain);
                     break;
+                case DiggingController.DigShape.Cone:
+                    shapeMesh = Resources.UseMesh("::Debug/Cone", null);
+                    shapeMat = Resources.UseMaterial("Items/DigPreviewCone", UpvoidMiner.ModDomain);
+                    break;
                 default:
                     throw new InvalidOperationException("Unknown digging shape");
             }

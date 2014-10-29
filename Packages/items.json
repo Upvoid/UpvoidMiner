@@ -139,6 +139,37 @@
 
 {
     "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/DigPreviewCone",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/DigPreviewCone",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewCone",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewCone",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/ConstructionPreviewConeLimited",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/ConstructionPreviewConeLimited",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
         "Type": "File",
         "sRGB": true
     },

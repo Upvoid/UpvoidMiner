@@ -75,6 +75,7 @@ namespace UpvoidMiner
                 craftingRules.Add(new MaterialCraftingRule(mat, MaterialShape.Cube, new vec3(1)));
                 craftingRules.Add(new MaterialCraftingRule(mat, MaterialShape.Cylinder, new vec3(1)));
                 craftingRules.Add(new MaterialCraftingRule(mat, MaterialShape.Sphere, new vec3(1)));
+                craftingRules.Add(new MaterialCraftingRule(mat, MaterialShape.Cone, new vec3(1)));
             }
         }
     }

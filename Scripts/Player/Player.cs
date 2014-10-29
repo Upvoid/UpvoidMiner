@@ -756,6 +756,9 @@ namespace UpvoidMiner
                 case DiggingController.DigShape.Cylinder:
                     digging.DigCylinder(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
+                case DiggingController.DigShape.Cone:
+                    digging.DigCone(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
+                    break;
 				default:
 					throw new Exception("Unsupported digging shape used");
 			}
@@ -777,6 +780,9 @@ namespace UpvoidMiner
                     break;
                 case DiggingController.DigShape.Cylinder:
                     digging.DigCylinder(worldNormal, position, radius, filterMaterials);
+                    break;
+                case DiggingController.DigShape.Cone:
+                    digging.DigCone(worldNormal, position, radius, filterMaterials);
                     break;
 				default:
 					throw new Exception("Unsupported digging shape used");
