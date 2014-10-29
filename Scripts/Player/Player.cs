@@ -610,7 +610,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
                 Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
                 Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AoiCrystal"), MaterialShape.Sphere, new vec3(1), 10));
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 10));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 10));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 10));
             }

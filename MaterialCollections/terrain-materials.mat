@@ -510,7 +510,7 @@
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Coins.Normal
     Color: uSpecularColor, .1, .1, .1, 8
 
-[Terrain/AoiCrystal] : Default
+[Terrain/BlueCrystal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
@@ -524,7 +524,7 @@
     Parameter: uTexScaleZY, 3
     Parameter: uBlendingCoefficient, 4
 
-[Particles/Terrain/AoiCrystal] : CpuParticleDefault
+[Particles/Terrain/BlueCrystal] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Gems01.Normal

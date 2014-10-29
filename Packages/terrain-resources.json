@@ -538,10 +538,10 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
-        "Name" : "Terrain/AoiCrystal",
+        "Name" : "Terrain/BlueCrystal",
         "Type" : "FromCollection"
     },
-    "Name" : "Terrain/AoiCrystal",
+    "Name" : "Terrain/BlueCrystal",
     "Path" : "~.mat",
     "Type" : "Material"
  },
@@ -801,10 +801,10 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
-        "Name" : "Particles/Terrain/AoiCrystal",
+        "Name" : "Particles/Terrain/BlueCrystal",
         "Type" : "FromCollection"
     },
-    "Name" : "Particles/Terrain/AoiCrystal",
+    "Name" : "Particles/Terrain/BlueCrystal",
     "Path" : "~.mat",
     "Type" : "Material"
  },

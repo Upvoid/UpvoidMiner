@@ -37,7 +37,7 @@ namespace UpvoidMiner
             TerrainResource coal = TerrainResource.FromName("Coal");
             TerrainResource gold = TerrainResource.FromName("Gold");
             TerrainResource copper = TerrainResource.FromName("Copper");
-            TerrainResource aoicrystal = TerrainResource.FromName("AoiCrystal");
+            TerrainResource aoicrystal = TerrainResource.FromName("BlueCrystal");
 
             /*craftingRules.Add(new ExplicitCraftingRule(new MaterialItem(dirt, MaterialShape.Cube, new vec3(1)),
                                                        new [] { new ResourceItem(dirt, 1f) } ,
