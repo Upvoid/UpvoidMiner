@@ -82,7 +82,11 @@ namespace UpvoidMiner
             /// <summary>
             /// Align the shape along the terrain surface orientation
             /// </summary>
-            Terrain
+            Terrain,
+            /// <summary>
+            /// Align the shape along the coordinate system (no rotation) and snap to grid
+            /// </summary>
+            GridAligned
         }
 
         /// <summary>
