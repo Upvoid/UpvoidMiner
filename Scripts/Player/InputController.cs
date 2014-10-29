@@ -122,7 +122,7 @@ namespace UpvoidMiner
                         break;
 
                     case InputKey.F12:
-                        //Rendering.WriteNextFrameToFile("Brabbelsabbel.png");
+                        Rendering.WriteNextFrameToFile("Screenshots/" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png");
                         break;
 
                     case InputKey.Q:
