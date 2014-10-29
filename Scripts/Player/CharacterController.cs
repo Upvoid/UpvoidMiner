@@ -247,6 +247,41 @@ namespace UpvoidMiner
                 Body.SetGravity(vec3.Zero);
             }
 
+            // Security: if in non-air chunk, teleport to next all-air one
+            {
+                mat4 transformation = Body.GetTransformation();
+                vec3 pos = new vec3(transformation.col3);
+                WorldTreeNode node = ContainingWorld.QueryWorldTreeNode(pos);
+                if (node != null && node.IsMinLod)
+                {
+                    HermiteData volumeData = node.CurrentVolume;
+                    if (volumeData != null)
+                    {
+                        if (!volumeData.HasAir)
+                        {
+                            // we are definitely in a non-air chunk here
+                            // teleport one node size above
+                            Body.SetTransformation(mat4.Translate(new vec3(0, node.Size, 0)) * Body.GetTransformation());
+                        }
+                        else if (!volumeData.HasAirAt(pos))
+                        {
+                            // we are in a mixed chunk, advance pos until air
+                            float offset = 0f;
+                            do
+                            {
+                                pos.y += 0.5f;
+                                offset += 0.5f;
+                            } while(!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
+
+                            // another 1.5m to ensure good ground
+                            offset += 1.5f;
+
+                            Body.SetTransformation(mat4.Translate(new vec3(0, offset, 0)) * Body.GetTransformation());
+                        }
+                    }
+                }
+            }
+
             jumpCoolDown -= _elapsedSeconds;
 
             // Jumping cooldown is reset instantly when moving down in any way.
