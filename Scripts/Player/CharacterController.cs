@@ -26,25 +26,25 @@ using Engine.Rendering;
 
 namespace UpvoidMiner
 {
-	/// <summary>
-	/// A simple character controller.
-	/// It takes control of a rigid body and lets the user steer it around using the WASD keys.
-	/// A given camera is used to get the walking direction.
-	/// </summary>
-	public class CharacterController
-	{
+        /// <summary>
+        /// A simple character controller.
+        /// It takes control of a rigid body and lets the user steer it around using the WASD keys.
+        /// A given camera is used to get the walking direction.
+        /// </summary>
+        public class CharacterController
+        {
         /// <summary>
         /// The rigid body that represents the controlled character to the physics system.
         /// </summary>
         public RigidBody Body { get; protected set; }
 
-		/// <summary>
-		/// The current position of the controlled character.
-		/// </summary>
-        public vec3 Position { 
+                /// <summary>
+                /// The current position of the controlled character.
+                /// </summary>
+        public vec3 Position {
             get
             {
-                return new vec3(Body.GetTransformation().col3); 
+                return new vec3(Body.GetTransformation().col3);
             }
         }
         /// <summary>
@@ -54,7 +54,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return Body.GetTransformation(); 
+                return Body.GetTransformation();
             }
         }
 
@@ -105,24 +105,24 @@ namespace UpvoidMiner
         /// </summary>
         public float JumpImpulse = 300f;
 
-		/// <summary>
+                /// <summary>
                 /// The velocity of the character when walking (meters per second). Default is 2.7.
-		/// </summary>
+                /// </summary>
         public float WalkSpeed = 2.7f;
-        
+
         /// <summary>
         /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
         /// </summary>
         public float StrafeSpeed = 1f;
-        
+
         /// <summary>
         /// The velocity of the character when strafing while running (meters per second). Default is 3.0 (11 km/h).
         /// </summary>
         public float StrafeSpeedRunning = 3f;
 
-		/// <summary>
+                /// <summary>
                 /// The velocity of the character when running (meters per second). Default is 6.
-		/// </summary>
+                /// </summary>
         public float WalkSpeedRunning = 6f;
 
         /// <summary>
@@ -130,52 +130,52 @@ namespace UpvoidMiner
         /// </summary>
         public bool IsWalking { get { return walkDirRight != 0 || walkDirForward != 0; } }
 
-		/// <summary>
-		/// True iff the character is currently running.
-		/// </summary>
-		public bool IsRunning { get; protected set; }
+                /// <summary>
+                /// True iff the character is currently running.
+                /// </summary>
+                public bool IsRunning { get; protected set; }
 
-		/// <summary>
-		/// True iff the character is closer than 40cm to the ground. Usually, it hovers 30cm above.
-		/// </summary>
-		public bool TouchesGround { get; protected set; }
+                /// <summary>
+                /// True iff the character is closer than 40cm to the ground. Usually, it hovers 30cm above.
+                /// </summary>
+                public bool TouchesGround { get; protected set; }
 
-		/// <summary>
-		/// The world that contains the controlled rigid body.
-		/// </summary>
-		public World ContainingWorld { get; protected set; }
+                /// <summary>
+                /// The world that contains the controlled rigid body.
+                /// </summary>
+                public World ContainingWorld { get; protected set; }
 
-		/// <summary>
-		/// This camera is used to determine the directions we are walking. Forward means the direction the camera is currently pointing.
-		/// </summary>
-		GenericCamera camera;
+                /// <summary>
+                /// This camera is used to determine the directions we are walking. Forward means the direction the camera is currently pointing.
+                /// </summary>
+                GenericCamera camera;
 
-		/// <summary>
-		/// Forward/neutral/backward encoded in -1/0/1
-		/// </summary>
-		int walkDirForward = 0;
+                /// <summary>
+                /// Forward/neutral/backward encoded in -1/0/1
+                /// </summary>
+                int walkDirForward = 0;
 
-		/// <summary>
-		/// Left/neutral/right encoded in -1/0/1
-		/// </summary>
-		int walkDirRight = 0;
+                /// <summary>
+                /// Left/neutral/right encoded in -1/0/1
+                /// </summary>
+                int walkDirRight = 0;
 
-		/// <summary>
-		/// The last known distance to the ground.
-		/// </summary>
-		float distanceToGround = 0;
+                /// <summary>
+                /// The last known distance to the ground.
+                /// </summary>
+                float distanceToGround = 0;
 
-		float jumpCoolDown = 0f;
+                float jumpCoolDown = 0f;
 
 
         SoundResource movementNoiseResource;
         Sound movementNoiseSound;
 
-		public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
-		{
-		    GodMode = _godMode;
-		    if (GodMode)
-		        HoverHeight = 0f;
+                public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
+                {
+                    GodMode = _godMode;
+                    if (GodMode)
+                        HoverHeight = 0f;
 
             camera = _camera;
             ContainingWorld = _containingWorld;
@@ -203,22 +203,22 @@ namespace UpvoidMiner
 
             // Register the required callbacks.
             // This update function is called 20 - 60 times per second to update the character position.
-            Scripting.RegisterUpdateFunction(Update, 1 / 60f, 1 / 20f, UpvoidMiner.Mod);
+            Scripting.RegisterUpdateFunction(Update, UpvoidMiner.Mod);
 
             // This event handler is used to catch the keyboard input that steers the character.
             Input.OnPressInput += HandleInput;
 
             // Create sound resource for movement noise
-            movementNoiseResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Movement/WalkingOnLeaves", UpvoidMiner.ModDomain); 
+            movementNoiseResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Movement/WalkingOnLeaves", UpvoidMiner.ModDomain);
             movementNoiseSound = new Sound(movementNoiseResource, vec3.Zero, true, 0.75f, 1);
-		}
+                }
 
-		/// <summary>
-		/// Called by the scripting system in regular timesteps. Updates the position of the character.
-		/// </summary>
-		/// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
-		protected void Update(float _elapsedSeconds)
-		{
+                /// <summary>
+                /// Called by the scripting system in regular timesteps. Updates the position of the character.
+                /// </summary>
+                /// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
+                protected void Update(float _elapsedSeconds)
+                {
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
                 // Resume movement noise (This is a no-op if sound is already playing)
@@ -246,9 +246,9 @@ namespace UpvoidMiner
                 Body.SetGravity(vec3.Zero);
             }
 
-			jumpCoolDown -= _elapsedSeconds;
-			if (jumpCoolDown < 0f)
-				jumpCoolDown = 0f;
+                        jumpCoolDown -= _elapsedSeconds;
+                        if (jumpCoolDown < 0f)
+                                jumpCoolDown = 0f;
 
             // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
             if ((TouchesGround && jumpCoolDown <= 0f) || GodMode)
@@ -273,7 +273,7 @@ namespace UpvoidMiner
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
             }
-			else // Otherwise, we can do some subtile acceleration in air
+                        else // Otherwise, we can do some subtile acceleration in air
             {
                 float forwardSpeed = StrafeSpeed;
                 float strafeSpeed = StrafeSpeed * 2.0f;
@@ -282,41 +282,41 @@ namespace UpvoidMiner
                 vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
                 moveDir.y = 0;
 
-				Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass, vec3.Zero);
+                                Body.ApplyImpulse(moveDir * _elapsedSeconds * CharacterMass, vec3.Zero);
             }
 
-			// Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
+                        // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
             // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
             // Also, only tinker with the gravcity if the player is moving relatively slow
             if (!GodMode && distanceToGround < HoverHeight + 0.1f && jumpCoolDown <= 0f && Body.GetVelocity().Length < WalkSpeedRunning*1.5f)
             {
                 vec3 velocity = Body.GetVelocity();
 
-				// Never move down when more than 10cm below the desired height.
-				if(distanceToGround < HoverHeight-0.1f && velocity.y < 0f) {
+                                // Never move down when more than 10cm below the desired height.
+                                if(distanceToGround < HoverHeight-0.1f && velocity.y < 0f) {
                     Body.ApplyImpulse(Body.Mass * new vec3(0, -velocity.y, 0), vec3.Zero);
-					velocity.y = 0f;
+                                        velocity.y = 0f;
                 }
 
-				float convergenceSpeed = Math.Max(0.1f, _elapsedSeconds*1.2f);
-				float distanceToHoverHeight = distanceToGround - HoverHeight;
+                                float convergenceSpeed = Math.Max(0.1f, _elapsedSeconds*1.2f);
+                                float distanceToHoverHeight = distanceToGround - HoverHeight;
 
                 float customGravity = -2f * (distanceToHoverHeight + velocity.y*convergenceSpeed) / (convergenceSpeed*convergenceSpeed);
 
-				if (customGravity < -20f)
-					customGravity = -20f;
-				else if (customGravity > 20f)
-					customGravity = 20f;
+                                if (customGravity < -20f)
+                                        customGravity = -20f;
+                                else if (customGravity > 20f)
+                                        customGravity = 20f;
 
                 Body.SetGravity(new vec3(0, customGravity, 0));
 
             }
             else if(!GodMode)
                 Body.SetGravity(new vec3(0, -9.807f, 0));
-			
+
             if(!GodMode)
                 ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 500f, 0), ReceiveRayqueryResult);
-		}
+                }
 
         protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
         {
@@ -330,26 +330,26 @@ namespace UpvoidMiner
             TouchesGround = Math.Abs(distanceToGround) < HoverHeight+0.3f;
         }
 
-		/// <summary>
-		/// Called on keyboard input. Updates the walking directions of the character.
-		/// </summary>
-		protected void HandleInput(object sender, InputPressArgs e)
+                /// <summary>
+                /// Called on keyboard input. Updates the walking directions of the character.
+                /// </summary>
+                protected void HandleInput(object sender, InputPressArgs e)
         {
             if (!Rendering.MainViewport.HasFocus)
                 return;
             if (LocalScript.NoclipEnabled)
                 return;
 
-			if(e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
-			{
+                        if(e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
+                        {
                                 Body.SetVelocity(vec3.Zero);
-				mat4 transformation = Body.GetTransformation();
-				vec3 pos = new vec3(transformation.col3);
-				pos.y += 20f;
-				Body.SetTransformation(mat4.Translate(pos));
-			}
+                                mat4 transformation = Body.GetTransformation();
+                                vec3 pos = new vec3(transformation.col3);
+                                pos.y += 20f;
+                                Body.SetTransformation(mat4.Translate(pos));
+                        }
 
-			// Let the default WASD-keys control the walking directions.
+                        // Let the default WASD-keys control the walking directions.
             if(e.Key == InputKey.W) {
                 if(e.PressType == InputPressArgs.KeyPressType.Down)
                     walkDirForward++;
@@ -373,9 +373,9 @@ namespace UpvoidMiner
             }
             else if (e.Key == InputKey.Space && e.PressType == InputPressArgs.KeyPressType.Down)
             { //Space lets the player jump
-				if(!GodMode && TouchesGround && jumpCoolDown == 0f) {
+                                if(!GodMode && TouchesGround && jumpCoolDown == 0f) {
                     Body.ApplyImpulse(new vec3(0, 5f*CharacterMass, 0), vec3.Zero);
-					jumpCoolDown = 1f;
+                                        jumpCoolDown = 1f;
                 }
             } else if(e.Key == InputKey.Shift) { // Shift controls running
                 if(e.PressType == InputPressArgs.KeyPressType.Down)
@@ -387,22 +387,22 @@ namespace UpvoidMiner
                 Body.SetVelocity(vec3.Zero);
             }
 
-			// Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
-			if(walkDirForward < -1)
-				walkDirForward = -1;
-			if(walkDirForward > 1)
-				walkDirForward = 1;
-			if(walkDirRight < -1)
-				walkDirRight = -1;
-			if(walkDirRight > 1)
-				walkDirRight = 1;
+                        // Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
+                        if(walkDirForward < -1)
+                                walkDirForward = -1;
+                        if(walkDirForward > 1)
+                                walkDirForward = 1;
+                        if(walkDirRight < -1)
+                                walkDirRight = -1;
+                        if(walkDirRight > 1)
+                                walkDirRight = 1;
 
             // This hack stops the player movement immediately when we stop walking
             //TODO: do some actual friction simulation instead
             if(walkDirRight == 0 && walkDirRight == 0 && TouchesGround && e.PressType == InputPressArgs.KeyPressType.Up) {
                 Body.SetVelocity(vec3.Zero);
             }
-		}
-	}
+                }
+        }
 }
 
