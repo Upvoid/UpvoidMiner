@@ -47,16 +47,6 @@ namespace UpvoidMiner
             World world = Universe.CreateWorld("UpvoidMinerWorld");
             UpvoidMinerWorldGenerator.init(world);
             world.Start();
-
-            for (int i = 0; i<3; ++i)
-            {
-                TerrainResource mat = TerrainResource.FromName("Stone." + (i+1).ToString("00"));
-                Debug.Assert(mat != null, "Invalid material");
-                MaterialItem testItem = new MaterialItem(mat, MaterialShape.Cube, new vec3(1), 1);
-
-                world.AddEntity(new ItemEntity(testItem, false), mat4.Translate(new vec3(5f, i * 2f, ((i % 3) * 2f))));
-            }
-
         }
     }
 }
