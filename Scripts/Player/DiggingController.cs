@@ -36,7 +36,7 @@ namespace UpvoidMiner
         [Serializable]
         public class DiggingSettings
         {
-            public DigMode Mode = DigMode.Substract;
+            public DigMode Mode = DigMode.Subtract;
             public DigShape Shape = DigShape.Sphere;
             public DigAlignment Alignment = DigAlignment.Axis;
             public DigPosition Position = DigPosition.Ground;
@@ -52,7 +52,7 @@ namespace UpvoidMiner
         [Serializable]
         public enum DigMode
         {
-            Substract=1,
+            Subtract=1,
             Add
         }
 
@@ -91,7 +91,7 @@ namespace UpvoidMiner
         public enum DigPosition
         {
             /// <summary>
-            /// Place the shape on the groudn where the center of the screen is pointing at (or nowhere if that position is too far away or non-existent
+            /// Place the shape on the ground where the center of the screen is pointing at (or nowhere if that position is too far away or non-existent)
             /// </summary>
             Ground=1,
             FixedDistance
@@ -316,7 +316,7 @@ namespace UpvoidMiner
 
             CsgNode digNode = null;
             // Depending on the digging mode, we either add or substract the digging shape from the terrain.
-            if (digMode == DigMode.Substract)
+            if (digMode == DigMode.Subtract)
             {
                 digNode = new CsgOpDiff(digShape);
             }
@@ -355,7 +355,7 @@ namespace UpvoidMiner
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
 
-        public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
+        public void DigSphere(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
         {
             sphereNode.MaterialIndex = terrainMaterialId;
             sphereNode.SetParameterFloat("digRadius", radius);
@@ -370,7 +370,7 @@ namespace UpvoidMiner
             Dig(sphereNode, new BoundingSphere(position, radius * 1.25f), digMode, filterMaterials, allowAirChange);
         }
 
-        public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
+        public void DigBox(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
         {
             boxNode.MaterialIndex = terrainMaterialId;
             boxNode.SetParameterFloat("digRadius", radius);
@@ -385,7 +385,7 @@ namespace UpvoidMiner
             Dig(boxNode, new BoundingSphere(position, radius * 1.5f), digMode, filterMaterials, allowAirChange);
         }
 
-        public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Substract, bool allowAirChange = true)
+        public void DigCylinder(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials, int terrainMaterialId = 1, DigMode digMode = DigMode.Subtract, bool allowAirChange = true)
         {
             cylinderNode.MaterialIndex = terrainMaterialId;
             cylinderNode.SetParameterFloat("digRadius", radius);
