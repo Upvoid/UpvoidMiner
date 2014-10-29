@@ -585,7 +585,7 @@ namespace UpvoidMiner
                 {
                     Inventory.AddResource(resource, 1e9f);
                 }
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AoiCrystal"), MaterialShape.Sphere, new vec3(1), 1000));
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 1000));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 1000));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 1000));
             }
