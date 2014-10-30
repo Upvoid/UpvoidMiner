@@ -73,6 +73,9 @@ namespace UpvoidMiner
         private MeshRenderJob previewShape;
         private MeshRenderJob previewShapeLimited;
         private MeshRenderJob previewShapeIndicator;
+        private RenderComponent previewShapeRenderComp;
+        private RenderComponent previewShapeLimitedRenderComp;
+        private RenderComponent previewShapeIndicatorRenderComp;
         /// <summary>
         /// Radius of terrain material that is placed if "use"d.
         /// </summary>
@@ -149,13 +152,18 @@ namespace UpvoidMiner
 
             // Create an overlay sphere as 'fill-indicator'.
             previewShape = new MeshRenderJob(Renderer.Overlay.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewShape);
+            previewShapeRenderComp = new RenderComponent(previewShape, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeRenderComp);
+
             // And a second one in case we are limited by the volume at hand.
             previewShapeLimited = new MeshRenderJob(Renderer.Overlay.Mesh, shapeMatLimited, shapeMesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewShapeLimited);
+            previewShapeLimitedRenderComp = new RenderComponent(previewShapeLimited, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeLimitedRenderComp);
+
             // And a third one for indicating the center.
             previewShapeIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewShapeIndicator);
+            previewShapeIndicatorRenderComp = new RenderComponent(previewShapeIndicator, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeIndicatorRenderComp);
         }
 
         public override void OnUseParameterChange(Player player, float _delta) 
@@ -195,13 +203,13 @@ namespace UpvoidMiner
             if (_visible && useVolume > Volume)
             {
                 float availableRadius = (float)Math.Pow(Volume / volumeFactor, 1 / 3f);
-                previewShapeLimited.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(availableRadius) * rotMat;
+                previewShapeLimitedRenderComp.Transform = mat4.Translate(_worldPos) * mat4.Scale(availableRadius) * rotMat;
                 previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, availableRadius));
             }
-            else previewShapeLimited.ModelMatrix = mat4.Scale(0f);
+            else previewShapeLimitedRenderComp.Transform = mat4.Scale(0f);
 
             // Radius of the primary preview is always use-radius.
-            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
+            previewShapeRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             previewShape.SetColor("uDigDirX", new vec4(dx, 0));
             previewShape.SetColor("uDigDirY", new vec4(dy, 0));
@@ -210,15 +218,15 @@ namespace UpvoidMiner
             previewShapeLimited.SetColor("uDigDirY", new vec4(dy, 0));
             previewShapeLimited.SetColor("uDigDirZ", new vec4(dz, 0));
             // Indicator is always in the center and relatively small.
-            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
+            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
-            LocalScript.world.RemoveRenderJob(previewShape);
-            LocalScript.world.RemoveRenderJob(previewShapeLimited);
-            LocalScript.world.RemoveRenderJob(previewShapeIndicator);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeRenderComp);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeLimitedRenderComp);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeIndicatorRenderComp);
             previewShape = null;
             previewShapeLimited = null;
             previewShapeIndicator = null;

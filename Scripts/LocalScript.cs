@@ -52,6 +52,11 @@ namespace UpvoidMiner
         public static AnonymousEntity ParticleEntity;
 
         /// <summary>
+        /// A global entity that handles the renderjobs for the digging/construction preview shapes
+        /// </summary>
+        public static AnonymousEntity ShapeIndicatorEntity;
+
+        /// <summary>
         /// The main camera that renders to the screen.
         /// </summary>
         public static GenericCamera camera;
@@ -217,6 +222,10 @@ namespace UpvoidMiner
             // Create particle entity.
             ParticleEntity = new AnonymousEntity(mat4.Identity);
             world.AddEntity(ParticleEntity, Network.GCManager.CurrentUserID);
+
+            // Create shape indicator entity.
+            ShapeIndicatorEntity = new AnonymousEntity(mat4.Identity);
+            world.AddEntity(ShapeIndicatorEntity, Network.GCManager.CurrentUserID);
 
             // Create the Player EntityScript and add it to the world.
             player = new Player(camera, godMode);

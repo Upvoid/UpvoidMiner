@@ -115,10 +115,12 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-        /// Renderjobs for the preview sphere
+        /// Renderjobs and -components for the preview sphere
         /// </summary>
         private MeshRenderJob previewShape;
         private MeshRenderJob previewShapeIndicator;
+        private RenderComponent previewShapeRenderComp;
+        private RenderComponent previewShapeIndicatorRenderComp;
 
         /// <summary>
         /// Radius of terrain material that is removed if dug/picked
@@ -162,17 +164,20 @@ namespace UpvoidMiner
 
             // Create an overlay sphere as 'fill-indicator'.
             previewShape = new MeshRenderJob(Renderer.Overlay.Mesh, shapeMat, shapeMesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewShape);
+            previewShapeRenderComp = new RenderComponent(previewShape, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeRenderComp);
+
             // And a second one for indicating the center.
             previewShapeIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewShapeIndicator);
+            previewShapeIndicatorRenderComp = new RenderComponent(previewShapeIndicator, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeIndicatorRenderComp);
         }
 
         public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
-            LocalScript.world.RemoveRenderJob(previewShape);
-            LocalScript.world.RemoveRenderJob(previewShapeIndicator);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeRenderComp);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeIndicatorRenderComp);
             previewShape = null;
             previewShapeIndicator = null;
         }
@@ -247,9 +252,9 @@ namespace UpvoidMiner
             previewShape.SetColor("uDigDirY", new vec4(dy, 0));
             previewShape.SetColor("uDigDirZ", new vec4(dz, 0));
             // Radius of the primary preview is always impact-radius of the current tool.
-            previewShape.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
+            previewShapeRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(useRadius) * rotMat : mat4.Scale(0f);
             // Indicator is always in the center and relatively small.
-            previewShapeIndicator.ModelMatrix = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
+            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal, Entity _hitEntity)
@@ -259,7 +264,6 @@ namespace UpvoidMiner
                 case ToolType.Pickaxe:
                     // Pickaxe has small radius but can dig everywhere
                     player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, null);
-
                     return;
 
                 case ToolType.Shovel:
