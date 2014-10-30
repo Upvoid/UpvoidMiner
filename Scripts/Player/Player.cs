@@ -51,9 +51,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Minimum and maximum ranges for ray querys for first-person and no-clip mode, resp.
         /// </summary>
-        const float minRayQueryDistancePlayer = 0.25f;
         const float maxRayQueryDistancePlayer = 10.0f;
-        const float minRayQueryDistanceNoClip = 0.1f;
         const float maxRayQueryDistanceNoClip = 200.0f;
 
         private const int millisecondsBetweenItemUsages = 250;
@@ -302,36 +300,29 @@ namespace UpvoidMiner
             // Update item preview.
             if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
             {
-
-                float minRayQueryRange;
                 float maxRayQueryRange;
                 if (!LocalScript.NoclipEnabled && !GodMode)
                 {
-                    minRayQueryRange = minRayQueryDistancePlayer;
                     maxRayQueryRange = maxRayQueryDistancePlayer;
                 }
                 else
                 {
-                    minRayQueryRange = minRayQueryDistanceNoClip;
                     maxRayQueryRange = maxRayQueryDistanceNoClip;
                 }
 
                 // Send a ray query to find the position on the terrain we are looking at.
-                ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+                RayHit hit = ContainingWorld.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * maxRayQueryRange, character.Body);
+                Item selection = Inventory.Selection;
+                if (hit != null)
                 {
-                    Item selection = Inventory.Selection;
-                    // Receiving the async ray query result here
-                    if (_hit)
-                    {
-                        /// Subtract a few cm toward camera to increase stability near constraints.
-                        _position -= camera.ForwardDirection * .04f;
+                    /// Subtract a few cm toward camera to increase stability near constraints.
+                    vec3 pos = hit.Position - camera.ForwardDirection * .04f;
 
-                        if (selection != null)
-                            selection.OnRayPreview(this, _position, _normal, true);
-                    }
-                    else if (selection != null)
-                        selection.OnRayPreview(this, vec3.Zero, vec3.Zero, false);
-                });
+                    if (selection != null)
+                        selection.OnRayPreview(this, pos, hit.Normal, true);
+                }
+                else if (selection != null)
+                    selection.OnRayPreview(this, vec3.Zero, vec3.Zero, false);
             }
             if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
                 Inventory.Selection.OnUpdatePreview(this, elapsedSeconds);
@@ -361,40 +352,35 @@ namespace UpvoidMiner
 
         public void TriggerItemUse()
         {
-            float minRayQueryRange;
             float maxRayQueryRange;
             if (LocalScript.NoclipEnabled || GodMode)
             {
-                minRayQueryRange = minRayQueryDistanceNoClip;
                 maxRayQueryRange = maxRayQueryDistanceNoClip;
             }
             else
             {
-                minRayQueryRange = minRayQueryDistancePlayer;
                 maxRayQueryRange = maxRayQueryDistancePlayer;
             }
 
             // Send a ray query to find the position on the terrain we are looking at.
-            ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+            RayHit hit = ContainingWorld.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * maxRayQueryRange, Character.Body);
+            if (hit != null)
             {
-                // Receiving the async ray query result here
-                if (_hit)
+                Entity hitEntity = null;
+                RigidBody body = hit.CollisionBody;
+                if (body != null && body.RefComponent != null)
                 {
-                    Entity _hitEntity = null;
-                    if (_body != null && _body.RefComponent != null)
-                    {
-                        _hitEntity = _body.RefComponent.Entity;
-                    }
-
-                    /// Subtract a few cm toward camera to increase stability near constraints.
-                    _position -= camera.ForwardDirection * .04f;
-
-                    // Use currently selected item.
-                    Item selection = Inventory.Selection;
-                    if (selection != null)
-                        selection.OnUse(this, _position, _normal, _hitEntity);
+                    hitEntity = body.RefComponent.Entity;
                 }
-            });
+
+                /// Subtract a few cm toward camera to increase stability near constraints.
+                vec3 pos = hit.Position - camera.ForwardDirection * .04f;
+
+                // Use currently selected item.
+                Item selection = Inventory.Selection;
+                if (selection != null)
+                    selection.OnUse(this, pos, hit.Normal, hitEntity);
+            }
         }
 
         public void StartItemUse()
@@ -411,32 +397,27 @@ namespace UpvoidMiner
 
         public void TriggerInteraction()
         {
-            float minRayQueryRange;
             float maxRayQueryRange;
             if (LocalScript.NoclipEnabled || GodMode)
             {
-                minRayQueryRange = minRayQueryDistanceNoClip;
                 maxRayQueryRange = maxRayQueryDistanceNoClip;
             }
             else
             {
-                minRayQueryRange = minRayQueryDistancePlayer;
                 maxRayQueryRange = maxRayQueryDistancePlayer;
             }
 
-            ContainingWorld.Physics.RayQuery(camera.Position + camera.ForwardDirection * minRayQueryRange, camera.Position + camera.ForwardDirection * maxRayQueryRange, delegate(bool _hit, vec3 _position, vec3 _normal, RigidBody _body, bool _hasTerrainCollision)
+            RayHit hit = ContainingWorld.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * maxRayQueryRange, Character.Body);
+            RigidBody body = hit == null ? null : hit.CollisionBody;
+            if (body != null && body.RefComponent != null)
             {
-                // Receiving the async ray query result here
-                if (_body != null && _body.RefComponent != null)
+                Entity entity = body.RefComponent.Entity;
+                if (entity != null)
                 {
-                    Entity entity = _body.RefComponent.Entity;
-                    if (entity != null)
-                    {
-                        TriggerId trigger = TriggerId.getIdByName("Interaction");
-                        entity[trigger] |= new InteractionMessage(thisEntity);
-                    }
+                    TriggerId trigger = TriggerId.getIdByName("Interaction");
+                    entity[trigger] |= new InteractionMessage(thisEntity);
                 }
-            });
+            }
         }
 
         /// <summary>
