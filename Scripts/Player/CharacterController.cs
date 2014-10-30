@@ -363,20 +363,20 @@ namespace UpvoidMiner
             else if (!GodMode)
                 Body.SetGravity(new vec3(0, -9.807f, 0));
 
+            // Recalc distance to ground
             if (!GodMode)
-                ContainingWorld.Physics.RayQuery(Position, Position - new vec3(0, 500f, 0), ReceiveRayqueryResult);
-        }
-
-        protected void ReceiveRayqueryResult(bool hasCollision, vec3 hitPosition, vec3 normal, RigidBody body, bool hasTerrainCollision)
-        {
-            if (hasCollision)
             {
-                distanceToGround = Position.y - BodyHeight * 0.5f - hitPosition.y;
-            }
-            else
-                distanceToGround = 5f;
+                RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 500f, 0), Body);
+                
+                if (hit != null)
+                {
+                    distanceToGround = Position.y - BodyHeight * 0.5f - hit.Position.y;
+                }
+                else
+                    distanceToGround = 5f;
 
-            TouchesGround = (jumpCoolDown <= 0f) && (Math.Abs(distanceToGround) < HoverHeight + 0.3f);
+                TouchesGround = (jumpCoolDown <= 0f) && (Math.Abs(distanceToGround) < HoverHeight + 0.3f);
+            }
         }
 
         /// <summary>
