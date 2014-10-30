@@ -202,10 +202,6 @@ namespace UpvoidMiner
             // Prevent bouncing
             Body.SetRestitution(0f);
 
-            // Register the required callbacks.
-            // This update function is called 20 - 60 times per second to update the character position.
-            Scripting.RegisterUpdateFunction(Update, UpvoidMiner.Mod);
-
             // This event handler is used to catch the keyboard input that steers the character.
             Input.OnPressInput += HandleInput;
 
@@ -215,10 +211,10 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-        /// Called by the scripting system in regular timesteps. Updates the position of the character.
+        /// Called by the player in regular timesteps. Updates the position of the character.
         /// </summary>
         /// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
-        protected void Update(float _elapsedSeconds)
+        public void Update(float _elapsedSeconds)
         {
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
