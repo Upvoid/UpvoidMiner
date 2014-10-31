@@ -53,6 +53,7 @@ namespace UpvoidMiner
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
 
+            // Initialization of sounds
             shutterSoundResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Miscellaneous/Shutter", UpvoidMiner.ModDomain);
             shutterSound = new Sound(shutterSoundResource, vec3.Zero, false, 1, 1, (int)AudioType.SFX, false);
         }
@@ -79,6 +80,7 @@ namespace UpvoidMiner
                     int newIdx = player.Inventory.SelectionIndex - (int)(delta);
                     while (newIdx < 0)
                         newIdx += Inventory.QuickAccessSlotCount;
+
                     player.Inventory.SelectQuickAccessSlot(newIdx % Inventory.QuickAccessSlotCount);
                 }
             }
@@ -150,7 +152,9 @@ namespace UpvoidMiner
                         if (!keyModifierControl)
                         {
                             int vals = Enum.GetValues(typeof(DiggingController.DigShape)).Length;
+                            Console.WriteLine(keyModifierShift ? "Using shift" : "Not using shift");
                             int offset = keyModifierShift ? vals - 1 : 1;
+                            Console.WriteLine("Offset is " + offset);
                             player.CurrentDiggingShape = (DiggingController.DigShape)(((uint)player.CurrentDiggingShape - 1 + offset) % vals + 1);
                         }
                         else
