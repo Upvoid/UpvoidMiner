@@ -145,12 +145,12 @@ namespace UpvoidMiner
             // Play some ambient sounds
             birdRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Ambient/Birds/BirdAmbient01", UpvoidMiner.ModDomain);
             // Start with zero volume, we adapt that later
-            birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1, (int)AudioType.SFX);
+            birdSound = new Sound(birdRes, vec3.Zero, true, 0.0f, 1, (int)AudioType.SFX, true);
             birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
             musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
-            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1, (int)AudioType.Music);
+            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1, (int)AudioType.Music, false);
             music.Play();
         }
 

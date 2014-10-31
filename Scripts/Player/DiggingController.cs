@@ -284,14 +284,14 @@ namespace UpvoidMiner
             for (int i = 1; i <= 6; ++i)
             {
                 dirtSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Dirt/Dirt" + i.ToString("00"), UpvoidMiner.ModDomain);
-                dirtSound[i - 1] = new Sound(dirtSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX);
+                dirtSound[i - 1] = new Sound(dirtSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
             }
 
             // Add stone digging sounds
             for (int i = 1; i <= 5; ++i)
             {
                 stoneSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain);
-                stoneSound[i - 1] = new Sound(stoneSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX);
+                stoneSound[i - 1] = new Sound(stoneSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
             }
         }
 
