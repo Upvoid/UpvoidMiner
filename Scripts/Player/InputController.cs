@@ -44,11 +44,17 @@ namespace UpvoidMiner
         bool keyModifierControl = false;
         bool keyModifierAlt = false;
 
+        private SoundResource shutterSoundResource;
+        private Sound shutterSound;
+
         public InputController(Player _player)
         {
             player = _player;
             Input.OnPressInput += HandlePressInput;
             Input.OnAxisInput += HandleAxisInput;
+
+            shutterSoundResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Miscellaneous/Shutter", UpvoidMiner.ModDomain);
+            shutterSound = new Sound(shutterSoundResource, vec3.Zero, false, 1, 1, (int)AudioType.SFX, false);
         }
 
         void HandleAxisInput(object sender, InputAxisArgs e)
@@ -124,6 +130,7 @@ namespace UpvoidMiner
                     case InputKey.F12:
                         string screenshotName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
                         Console.WriteLine("Writing screenshot to " + screenshotName);
+                        shutterSound.Play();
                         Rendering.WriteNextFrameToFile("Screenshots/" + screenshotName, 1920, 1080);
                         break;
 
