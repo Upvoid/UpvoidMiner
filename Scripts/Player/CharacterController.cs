@@ -207,7 +207,7 @@ namespace UpvoidMiner
 
             // Create sound resource for movement noise
             movementNoiseResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Movement/WalkingOnLeaves", UpvoidMiner.ModDomain);
-            movementNoiseSound = new Sound(movementNoiseResource, vec3.Zero, true, 0.75f, 1);
+            movementNoiseSound = new Sound(movementNoiseResource, vec3.Zero, true, 0.75f, 1, (int)AudioType.SFX, true);
         }
 
         /// <summary>

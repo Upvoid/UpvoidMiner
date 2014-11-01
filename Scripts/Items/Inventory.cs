@@ -16,6 +16,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Engine;
+using Engine.Audio;
+using Engine.Resources;
 using Engine.Universe;
 
 namespace UpvoidMiner
@@ -29,6 +32,10 @@ namespace UpvoidMiner
 
         public event Action<int, Item> OnQuickAccessChanged;
         public event Action<int, Item> OnSelectionChanged;
+
+        // Click sound for slot access
+        private SoundResource clickSoundResource;
+        private Sound clickSound;
 
         /// <summary>
         /// Backref to player.
@@ -61,6 +68,10 @@ namespace UpvoidMiner
 
             Items.OnAdd += item => setDefaultQuickAccess(item);
             Items.OnRemove += removeFromQuickAccess;
+
+            // Create click sound
+            clickSoundResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::UI/Click/Click01", UpvoidMiner.ModDomain);
+            clickSound = new Sound(clickSoundResource, vec3.Zero, false, 0.2f, 1.0f, (int)AudioType.SFX, false);
         }
 
         /// <summary>
@@ -83,6 +94,9 @@ namespace UpvoidMiner
             Debug.Assert(0 <= idx && idx < QuickAccessSlotCount);
 
             if ( idx == selectedItem ) return;
+
+            // Play click sound
+            clickSound.Play();
 
             if ( quickAccessItems[selectedItem] != null )
                 quickAccessItems[selectedItem].OnDeselect(player);
