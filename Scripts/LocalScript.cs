@@ -32,6 +32,8 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
 
+using EfficientUI;
+
 namespace UpvoidMiner
 {
     /// <summary>
@@ -128,7 +130,7 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
-            Settings.InitSettingsHandlers();
+            UIProxyManager.AddProxy(Settings.settings);
 
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 

@@ -38,7 +38,7 @@
                 "Vegetation/Tree.cs",
                 "Vegetation/TreeGenerator.cs"
             ],
-            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local", "Mods/Upvoid/Common.JSON/0.0.1::Newtonsoft.Json" ]
+            "ModuleDependencies": [ "Mods/Upvoid/Common.Cameras/0.0.1::Common.Cameras.Local", "Mods/Upvoid/Common.JSON/0.0.1::Newtonsoft.Json", "Mods/Upvoid/EfficientUI/1.0.0::EfficientUI"]
         },
         "Type": "ScriptModule",
         "Name": "UpvoidMiner",

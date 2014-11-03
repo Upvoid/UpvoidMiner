@@ -92,6 +92,9 @@
     <Reference Include="Common.Cameras.Local">
       <HintPath>..\..\..\..\..\AssemblyCache\Common.Cameras.Local.dll</HintPath>
     </Reference>
+    <Reference Include="EfficientUI">
+      <HintPath>..\..\..\..\..\AssemblyCache\EfficientUI.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="Engine">
       <HintPath>..\..\..\..\..\AssemblyCache\Engine.dll</HintPath>

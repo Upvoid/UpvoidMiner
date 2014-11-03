@@ -152,9 +152,7 @@ namespace UpvoidMiner
                         if (!keyModifierControl)
                         {
                             int vals = Enum.GetValues(typeof(DiggingController.DigShape)).Length;
-                            Console.WriteLine(keyModifierShift ? "Using shift" : "Not using shift");
                             int offset = keyModifierShift ? vals - 1 : 1;
-                            Console.WriteLine("Offset is " + offset);
                             player.CurrentDiggingShape = (DiggingController.DigShape)(((uint)player.CurrentDiggingShape - 1 + offset) % vals + 1);
                         }
                         else

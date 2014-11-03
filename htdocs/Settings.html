@@ -5,8 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/jquery-ui.min.css">
+    
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8" defer></script>
+    <script src="/Mods/Upvoid/EfficientUI/1.0.0/js/efficientUI.js" type="text/javascript" charset="utf-8" defer></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-ui.min.js" type="text/javascript" charset="utf-8" defer></script>
+    
+    
     <title>Settings</title>
-
+   
     <style>
       div.checkbox a:link,
       div.checkbox a:hover,
@@ -24,6 +31,9 @@
         background: #fff;
         border: none;
       }
+      
+      .audio-slider .ui-slider-range { background: #88f; }
+      .fov-slider .ui-slider-range { background: #8f8; }
 
     </style>
 
@@ -31,253 +41,70 @@
 <body style="background: transparent; padding: 1em;">
     <div class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto;">
         <div class="panel-body text-center InputConsumer">
-            <h1>Settings</h1>
-            <p style="color: #c00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p>
-            <form role="form" style="text-align: left; margin-left: 3em;">
-                <div class="checkbox" id="check-fullscreen">
-                    <a href="javascript:toggleSetting('fullscreen')"><i class="fa fa-circle fa-lg"></i> Fullscreen mode</a>
-                </div>
+        
+            <ui name="Settings">
+                <h1>Settings</h1>
+                <p style="color: #c00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p>
+                <form role="form" style="text-align: left; margin-left: 3em;">
+                    
+                    <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
+                    <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
+                    
+                    <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
+                        <option>Native Resolution</option>
+                    </select>
 
-                <select class="form-control InputConsumer" id="select-resolution" size="4">
-                    <option>Native Resolution</option>
-                </select>
+                    <p>Horizontal field of view: <span id="fovValue"></span></p>
+                        <uislider onvalue="function(el, value) { $('#fovValue').html(value+'%'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider>
+                    <p>Master Volume: <span id="masterVolumeValue"></span></p>
+                        <uislider onvalue="function(el, value) { $('#masterVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MasterVolume"></uislider>
+                    <p>SFX Volume: <span id="sfxVolumeValue"></span></p>
+                        <uislider onvalue="function(el, value) { $('#sfxVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="SfxVolume"></uislider>
+                    <p>Music Volume: <span id="musicVolumeValue"></span></p>
+                        <uislider onvalue="function(el, value) { $('#musicVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MusicVolume"></uislider>
 
-              <p>Terrain level of detail:</p>
-              <div id="lod-slider-parent" onclick="updateLodSlider(event)" class="progress">
-                <div id="lod-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%; position: relative;">
-                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
-                </div>
-              </div>
-
-              <p>Horizontal field of view: <span id="fovValue"></span></p>
-              <div id="fov-slider-parent" onclick="updateFovSlider(event)" class="progress">
-                <div id="fov-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="200" style="width: 0%; position: relative;">
-                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
-                </div>
-              </div>
-			  
-			  <p>Master Volume: <span id="masterVolumeValue"></span></p>
-              <div id="masterVolume-slider-parent" onclick="updateMasterVolumeSlider(event)" class="progress">
-                <div id="masterVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
-                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
-                </div>
-              </div>
-			  
-			  <p>SFX Volume: <span id="sfxVolumeValue"></span></p>
-              <div id="sfxVolume-slider-parent" onclick="updateSfxVolumeSlider(event)" class="progress">
-                <div id="sfxVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
-                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
-                </div>
-              </div>
-			  
-			  <p>Music Volume: <span id="musicVolumeValue"></span></p>
-              <div id="musicVolume-slider-parent" onclick="updateMusicVolumeSlider(event)" class="progress">
-                <div id="musicVolume-slider" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; position: relative;">
-                  <div style="width: 20px; height: 20px; position: absolute; right: -10px; background: #000; border-radius: 15px;"></div>
-                </div>
-              </div>
-
-              <div class="checkbox" id="check-shadows">
-                    <a href="javascript:toggleSetting('shadows')"><i class="fa fa-circle fa-lg"></i> Enable shadows</a>
-                </div>
-                <div class="checkbox" id="check-lensFlares">
-                    <a href="javascript:toggleSetting('lensFlares')"><i class="fa fa-circle fa-lg"></i> Enable lens flares</a>
-                </div>
-                <div class="checkbox" id="check-tonemapping">
-                    <a href="javascript:toggleSetting('tonemapping')"><i class="fa fa-circle fa-lg"></i> Enable tonemapping</a>
-                </div>
-                <div class="checkbox" id="check-volumetricScattering">
-                    <a href="javascript:toggleSetting('volumetricScattering')"><i class="fa fa-circle fa-lg"></i> Enable volumetric god rays</a>
-                </div>
-                <div class="checkbox" id="check-fog">
-                    <a href="javascript:toggleSetting('fog')"><i class="fa fa-circle fa-lg"></i> Enable fog</a>
-                </div>
-                <div class="checkbox" id="check-fxaa">
-                    <a href="javascript:toggleSetting('fxaa')"><i class="fa fa-circle fa-lg"></i> Enable FXAA</a>
-                </div>
-            </form>
-
-            <a class="btn" href="MainMenu.html">Cancel</a> <a class="btn" href="Settings.html">Reset</a> <a class="btn btn-primary" href="javascript:clickApply()">Apply</a>
+                    <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
+                    <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
+                    <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
+                    <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
+                    <uicheckbox name="Fog">Enable Fog</uicheckbox>
+                    <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                </form>
+                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ApplySettings">Apply</uibutton>
+                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ResetSettings">Cancel</uibutton>
+                <uibutton name="ResetSettings">Reset</uibutton>
+            </ui>
         </div>
     </div>
-
-    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
-    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
-    <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
+    
     <script>
 
-      function updateLodSlider(event) {
-          var relativeX = event.pageX - $('#lod-slider-parent').offset().left;
-          var val = relativeX / document.getElementById("lod-slider-parent").clientWidth;
-          $('#lod-slider').get()[0].style.width = (val * 100) + "%";
-      }
-
-      var settings = {};
-
-      var minFov = 45;
-      var maxFov = 120;
-      var currFov = 80;
-      var startFov = 80;
-
-      function updateFovSlider(event) {
-          var relativeX = event.pageX - $('#fov-slider-parent').offset().left;
-          var val = relativeX / document.getElementById("fov-slider-parent").clientWidth;
-          $('#fov-slider').get()[0].style.width = (val * 100) + "%";
-          var fov = Math.floor(minFov + (maxFov - minFov) * val)
-          if ( fov != currFov )
-          {
-                currFov = fov;
-                $("#fovValue").text(currFov + "°");
-                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView?set=" + currFov, function (data) {
-          });
-          }
-      }
-	  
-	  var minMasterVolume = 0;
-      var maxMasterVolume = 100;
-      var currMasterVolume = 100;
-      var startMasterVolume = 100;
-	  function updateMasterVolumeSlider(event) {
-          var relativeX = event.pageX - $('#masterVolume-slider-parent').offset().left;
-          var val = relativeX / document.getElementById("masterVolume-slider-parent").clientWidth;
-          $('#masterVolume-slider').get()[0].style.width = (val * 100) + "%";
-          var masterVolume = Math.floor(minMasterVolume + (maxMasterVolume - minMasterVolume) * val)
-          if ( masterVolume != currMasterVolume )
-          {
-                currMasterVolume = masterVolume;
-                $("#masterVolumeValue").text(currMasterVolume + "%");
-                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MasterVolume?set=" + currMasterVolume, function (data) {
-          });
-          }
-      }
-	  
-	  var minSfxVolume = 0;
-      var maxSfxVolume = 100;
-      var currSfxVolume = 50;
-      var startSfxVolume = 50;
-	  function updateSfxVolumeSlider(event) {
-          var relativeX = event.pageX - $('#sfxVolume-slider-parent').offset().left;
-          var val = relativeX / document.getElementById("sfxVolume-slider-parent").clientWidth;
-          $('#sfxVolume-slider').get()[0].style.width = (val * 100) + "%";
-          var sfxVolume = Math.floor(minSfxVolume + (maxSfxVolume - minSfxVolume) * val)
-          if ( sfxVolume != currSfxVolume )
-          {
-                currSfxVolume = sfxVolume;
-                $("#sfxVolumeValue").text(currSfxVolume + "%");
-                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SfxVolume?set=" + currSfxVolume, function (data) {
-          });
-          }
-      }
-	  
-	  var minMusicVolume = 0;
-      var maxMusicVolume = 100;
-      var currMusicVolume = 50;
-      var startMusicVolume = 50;
-	  function updateMusicVolumeSlider(event) {
-          var relativeX = event.pageX - $('#musicVolume-slider-parent').offset().left;
-          var val = relativeX / document.getElementById("musicVolume-slider-parent").clientWidth;
-          $('#musicVolume-slider').get()[0].style.width = (val * 100) + "%";
-          var musicVolume = Math.floor(minMusicVolume + (maxMusicVolume - minMusicVolume) * val)
-          if ( musicVolume != currMusicVolume )
-          {
-                currMusicVolume = musicVolume;
-                $("#musicVolumeValue").text(currMusicVolume + "%");
-                $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MusicVolume?set=" + currMusicVolume, function (data) {
-          });
-          }
-      }
-
-      function updateSettingsForm() {
-          // update the icon classes that are faking the checkboxes
-          for (setting in settings) {
-
-              if (setting == "resolution" || setting == "lod") {
-                  continue;
-              }
-
-              if (settings[setting]) {
-                  $('#check-' + setting + ' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
-              }
-              else {
-                  $('#check-' + setting + ' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
-              }
-          }
-
-          // Compile dropdown box with the resolutions
-          var modeList = "";
-
-          for (var i = 0; i < settings.supportedModes.length; ++i) {
-              var mode = settings.supportedModes[i];
-              if (mode == settings.resolution)
-                  modeList += "<option value='" + mode + "' selected>" + mode + "</option>";
-              else
-                  modeList += "<option value='" + mode + "'>" + mode + "</option>";
-          }
-
-          $('#select-resolution').html(modeList);
-
-          $('#lod-slider').get()[0].style.width = (settings["lod"] * 50) + "%";
-
-      }
-
-
-
-      $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", "", function (data) {
-          settings = data;
-          updateSettingsForm();
-      });
-      $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/FieldOfView", "", function (data) {
-          currFov = data * 1;
-          startFov = currFov;
-                $("#fovValue").text(currFov + "°");
-          $('#fov-slider').get()[0].style.width = ((currFov - minFov) / (maxFov - minFov) * 100) + "%";
-      });
-	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MasterVolume", "", function (data) {
-          currMasterVolume = data * 1;
-          startMasterVolume = currMasterVolume;
-                $("#masterVolumeValue").text(currMasterVolume + "%");
-          $('#masterVolume-slider').get()[0].style.width = ((currMasterVolume - minMasterVolume) / (maxMasterVolume - minMasterVolume) * 100) + "%";
-      });
-	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SfxVolume", "", function (data) {
-          currSfxVolume = data * 1;
-          startSfxVolume = currSfxVolume;
-                $("#sfxVolumeValue").text(currSfxVolume + "%");
-          $('#sfxVolume-slider').get()[0].style.width = ((currSfxVolume - minSfxVolume) / (maxSfxVolume - minSfxVolume) * 100) + "%";
-      });
-	  $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/MusicVolume", "", function (data) {
-          currMusicVolume = data * 1;
-          startMusicVolume = currMusicVolume;
-                $("#musicVolumeValue").text(currMusicVolume + "%");
-          $('#musicVolume-slider').get()[0].style.width = ((currMusicVolume - minMusicVolume) / (maxMusicVolume - minMusicVolume) * 100) + "%";
-      });
-
-      function toggleSetting(setting) {
-          if (settings[setting] === undefined)
-              settings[setting] = false;
-
-          settings[setting] = !settings[setting];
-
-          if (settings[setting]) {
-              $('#check-' + setting + ' i.fa').removeClass('fa-circle').addClass('fa-check-circle');
-          }
-          else {
-              $('#check-' + setting + ' i.fa').addClass('fa-circle').removeClass('fa-check-circle');
-          }
-      }
-
-      function clickApply() {
-          settings.applySettings = true;
-
-          settings.resolution = $('#select-resolution').val();
-
-          settings.lod = ($('#lod-slider').get()[0].style.width.split('%')[0]) * (2 / 100);
-
-          $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/Settings", settings, function (data) {
-              window.location.href = "MainMenu.html";
-          });
-      }
-
-      </script>
+       
+    function onVideoModeChanged(el, obj)
+    {
+        var modeList = "";
+        for(var i=0;i<obj.length;i++)
+        {
+            var curr = obj[i];
+            {
+                var width = curr['Width'];
+                var height = curr['Height'];
+                
+                if(width < 0)
+                    modeList += "<option>Native Resolution</option>";
+                else
+                    modeList += "<option>" + width + " x " + height + "</option>";
+            }
+        }
+        $('#select-resolution').html(modeList);
+    }
+    
+    function videoModeCallback (el) 
+    {
+         EfficientUI.SendCallback(el, 'VideoModeCallback', {index: el.selectedIndex});
+    }
+    
+    </script>
 
 </body>
 </html>

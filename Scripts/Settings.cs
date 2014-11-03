@@ -17,6 +17,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Engine;
 using Engine.Audio;
@@ -31,191 +32,270 @@ using Engine.Network;
 
 using Newtonsoft.Json;
 
+using EfficientUI;
+
 namespace UpvoidMiner
 {
 
-        enum AudioType
-        {
-           Master,
-           SFX,
-           Music,
-           Speech
-        };
-
-        public static class Settings
+    enum AudioType
     {
-        private static float FieldOfView  = float.NaN;
+        Master,
+        SFX,
+        Music,
+        Speech
+    };
 
-        private static float MasterVolume = float.NaN;
-        private static float SfxVolume = float.NaN;
-        private static float MusicVolume  = float.NaN;
+        public class Settings : UIProxy
+    {
 
-                public static void InitSettingsHandlers()
+        public static Settings settings = new Settings();
+
+        public struct VideoMode
         {
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "FieldOfView", fieldOfViewSettings);
+            public int Width;
+            public int Height;
+            //int Screen;
 
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "MasterVolume", audioSettingsMaster);
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SfxVolume", audioSettingsSfx);
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "MusicVolume", audioSettingsMusic);
+            public VideoMode(int width, int height)
+            {
+                Width = width;
+                Height = height;
+            }
+        }
+
+        private List<VideoMode> supportedVideoModes;
+
+        private static VideoMode StringToVideoMode(string vidModString)
+        {
+            String[] curMode = vidModString.Split('x');
+
+            Debug.Assert(curMode.Count() == 2);
+
+            if (curMode.Count() == 2)
+            {
+                return new VideoMode(int.Parse(curMode[0]), int.Parse(curMode[1]));
+            }
+
+            // Error
+            return new VideoMode(-2, -2);
+        }
+
+        // Local variables for the current settings values
+        private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
+        private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
+
+        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100);
+        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100);
+        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100);
+        private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
+        private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
+        private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
+        private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
+        private bool settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
+        private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
+        private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
+
+
+        private Settings() : base("Settings") 
+        {
+            // Read the supported video modes
+            List<string> modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
+            //modes.Insert(0, "Native Resolution");
+
+            // TODO(ks) necessary?
+            settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
+
+            // Add native resolution
+            supportedVideoModes = new List<VideoMode>();
+            supportedVideoModes.Add(new VideoMode(-1, -1));
+            foreach (string vidMode in modes)
+            {
+                supportedVideoModes.Add(StringToVideoMode(vidMode));
+            }
+        }
+
+
+        [UIObject]
+        public List<VideoMode> VideoModesObject
+        {
+            get { return supportedVideoModes; }
+        }
+
+        [UICallback]
+        public void VideoModeCallback(int index)
+        {
+            Debug.Assert(index < supportedVideoModes.Count());
+            settingResolution = supportedVideoModes[index];
+        }
+
+
+        [UISlider(0, 100)]
+        public int MasterVolume 
+        {
+            get { return settingMasterVolume; }
+            set 
+            {
+                settingMasterVolume = value;
+                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.Master);
+            }
+        }
+
+        [UISlider(0, 100)]
+        public int SfxVolume
+        {
+            get { return settingSfxVolume; }
+            set
+            {
+                settingSfxVolume = value;
+                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.SFX);
+            }
+        }
+
+        [UISlider(0, 100)]
+        public int MusicVolume
+        {
+            get { return settingMusicVolume; }
+            set
+            {
+                settingMusicVolume = value;
+                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.Music);
+            }
+        }
+
+        [UISlider(45, 135)]
+        public int FieldOfView
+        {
+            get { return settingFieldOfView; }
+            set
+            {
+                settingFieldOfView = value;
+                LocalScript.camera.HorizontalFieldOfView = value;
+            }
+        }
+
+        [UICheckBox]
+        public bool Fullscreen
+        {
+            get { return settingFullscreen; }
+            set { settingFullscreen = value; }
+        }
+
+        [UICheckBox]
+        public bool Shadows
+        {
+            get { return settingShadows; }
+            set { settingShadows = value; }
+        }
+
+        [UICheckBox]
+        public bool Lensflares
+        {
+            get { return settingLensflares; }
+            set { settingLensflares = value; }
+        }
+
+        [UICheckBox]
+        public bool VolumetricScattering
+        {
+            get { return settingVolumetricScattering; }
+            set { settingVolumetricScattering = value; }
+        }
+
+        [UICheckBox]
+        public bool Tonemapping
+        {
+            get { return settingTonemapping; }
+            set { settingTonemapping = value; }
+        }
+
+        [UICheckBox]
+        public bool Fog
+        {
+            get { return settingFog; }
+            set { settingFog = value; }
+        }
+
+        [UICheckBox]
+        public bool FXAA
+        {
+            get { return settingFXAA; }
+            set { settingFXAA = value; }
+        }
+
+
+        [UIButton]
+        public void ApplySettings() 
+        {
+            // Write all settings to settings file
+
+            // Audio settings
+            Scripting.SetUserSettingNumber("Audio/Master Volume", settingMasterVolume);
+            Scripting.SetUserSettingNumber("Audio/SFX Volume", settingSfxVolume);
+            Scripting.SetUserSettingNumber("Audio/Music Volume", settingMusicVolume);
+
+            // Graphics settings
+            Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
             
+            Scripting.SetUserSetting("Graphics/Enable Shadows", settingShadows);
+            Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
+            Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", settingVolumetricScattering);
+            Scripting.SetUserSetting("Graphics/Enable Tonemapping", settingTonemapping);
+            Scripting.SetUserSetting("Graphics/Enable Fog", settingFog);
+            Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
 
-            FieldOfView = (float)Scripting.GetUserSettingNumber("Graphics/Field of View", 75f);
-            LocalScript.camera.HorizontalFieldOfView = FieldOfView;
-
-            MasterVolume = (float)Scripting.GetUserSettingNumber("Audio/Master Volume", 1.0f);
-            Audio.SetVolumeForSpecificAudioType(MasterVolume, (int)AudioType.Master);
-            SfxVolume = (float)Scripting.GetUserSettingNumber("Audio/SFX Volume", 0.5f);
-            Audio.SetVolumeForSpecificAudioType(SfxVolume, (int)AudioType.SFX);
-            MusicVolume = (float)Scripting.GetUserSettingNumber("Audio/Music Volume", 0.5f);
-            Audio.SetVolumeForSpecificAudioType(MusicVolume, (int)AudioType.Music);
-                }
-
-                [Serializable]
-                class SettingsInfo
-                {
-                        public bool lensFlares;
-                        public bool tonemapping;
-                        public bool volumetricScattering;
-                        public bool shadows;
-                        public bool fog;
-                        public bool fxaa;
-
-            public bool fullscreen;
-
-            public string resolution;
-            public string[] supportedModes;
-
-            public double lod;
-        }
-
-        static void webSettings(WebRequest request, WebResponse response)
-        {
-            // Handle 'Apply' request from the gui
-            if (request.GetQuery("applySettings") != "")
-                applySettings(request);
-            else // If no apply action was sent, return the current settings in json format
-                getSettings(response);
-        }
-
-        static void fieldOfViewSettings(WebRequest request, WebResponse response)
-        {
-            // Handle 'Apply' request from the gui
-            if (request.GetQuery("set") != "")
-            {
-                FieldOfView = float.Parse(request.GetQuery("set"));
-                LocalScript.camera.HorizontalFieldOfView = FieldOfView;
-                Scripting.SetUserSettingNumber("Graphics/Field of View", FieldOfView);
-            }
-            else // If no apply action was sent, return the current settings in json format
-            {
-                response.AppendBody(LocalScript.camera.HorizontalFieldOfView.ToString());
-            }
-        }
-
-        static void audioSettingsMaster(WebRequest request, WebResponse response)
-        {
-            // Handle 'Apply' request from the gui
-            if (request.GetQuery("set") != "")
-            {
-                MasterVolume = 0.01f * float.Parse(request.GetQuery("set"));
-                Audio.SetVolumeForSpecificAudioType(MasterVolume, (int)AudioType.Master);
-                Scripting.SetUserSettingNumber("Audio/Master Volume", MasterVolume);
-
-            }
-            else // If no apply action was sent, return the current settings in json format
-            {
-                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100).ToString());
-            }
-        }
-        static void audioSettingsSfx(WebRequest request, WebResponse response)
-        {
-            // Handle 'Apply' request from the gui
-            if (request.GetQuery("set") != "")
-            {
-                SfxVolume = 0.01f * float.Parse(request.GetQuery("set"));
-                Audio.SetVolumeForSpecificAudioType(SfxVolume, (int)AudioType.SFX);
-                Scripting.SetUserSettingNumber("Audio/SFX Volume", SfxVolume);
-
-            }
-            else // If no apply action was sent, return the current settings in json format
-            {
-                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100).ToString());
-            }
-        }
-        static void audioSettingsMusic(WebRequest request, WebResponse response)
-        {
-            // Handle 'Apply' request from the gui
-            if (request.GetQuery("set") != "")
-            {
-                MusicVolume = 0.01f * float.Parse(request.GetQuery("set"));
-                Audio.SetVolumeForSpecificAudioType(MusicVolume, (int)AudioType.Music);
-                Scripting.SetUserSettingNumber("Audio/Music Volume", MusicVolume);
-
-            }
-            else // If no apply action was sent, return the current settings in json format
-            {
-                response.AppendBody((Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100).ToString());
-            }
-        }
-
-                static void applySettings(WebRequest request)
-                {
-                        Scripting.SetUserSetting("Graphics/Enable Lensflares", Boolean.Parse(request.GetQuery("lensFlares")));
-                        Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", Boolean.Parse(request.GetQuery("volumetricScattering")));
-                        Scripting.SetUserSetting("Graphics/Enable Tonemapping", Boolean.Parse(request.GetQuery("tonemapping")));
-                        Scripting.SetUserSetting("Graphics/Enable Shadows", Boolean.Parse(request.GetQuery("shadows")));
-                        Scripting.SetUserSetting("Graphics/Enable Fog", Boolean.Parse(request.GetQuery("fog")));
-                        Scripting.SetUserSetting("Graphics/Enable FXAA", Boolean.Parse(request.GetQuery("fxaa")));
-
-            bool fullscreen = Boolean.Parse(request.GetQuery("fullscreen"));
-            if (fullscreen)
+            if (settingFullscreen)
                 Scripting.SetUserSettingString("WindowManager/Fullscreen", "0");
             else
                 Scripting.SetUserSettingString("WindowManager/Fullscreen", "-1");
 
-            string resolution = request.GetQuery("resolution");
-            if (resolution == "Native Resolution" || resolution == "Native+Resolution")
-                resolution = "-1x-1";
-            Scripting.SetUserSettingString("WindowManager/Resolution", resolution);
+            string vidModeString = settingResolution.Width + "x" + settingResolution.Height;
+            Scripting.SetUserSettingString("WindowManager/Resolution", vidModeString);
+        }
+
+        [UIButton]
+        public void ResetSettings()
+        {
+            // Reset local setting values to those from user settings
+            settingMasterVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 100);
+            settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 50);
+            settingMusicVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 50);
+
+            settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
+
+            settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", settingShadows);
+            settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
+            settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
+            settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
+            settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
+            settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
+
+            settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
+            settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
+
+            // Re-apply the former settings 
+            Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
+            Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
+            Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
+            LocalScript.camera.HorizontalFieldOfView = settingFieldOfView;
+        }
 
 
-            // Compute both lod settings from the single GUI slider value.
-            double falloff = 10;
-            double minDis = 0;
+        public static void InitSettingsHandlers()
+        {
+            //Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
+        }
 
-            double lod = Double.Parse(request.GetQuery("lod"));
-            if(lod<1 && lod >= 0)
-            {
-                falloff = 10 + lod * 30.0;
-                minDis = 0;
-            }
-            else if(lod <= 2)
-            {
-                falloff = 40;
-                minDis = (lod - 1) * 30.0;
-            }
+        [Serializable]
+        class SettingsInfo
+        {
+        }
 
-            Scripting.SetUserSettingNumber("Graphics/Lod Falloff", falloff);
-            Scripting.SetUserSettingNumber("Graphics/Min Lod Range", minDis);
 
-                }
+        static void getSettings(WebResponse response)
+        {
+            SettingsInfo info = new SettingsInfo();
 
-                static void getSettings(WebResponse response)
-                {
-                        SettingsInfo info = new SettingsInfo();
-
-            // Read the current graphics flags
-                        info.lensFlares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
-                        info.volumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
-                        info.tonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-                        info.shadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
-                        info.fog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
-                        info.fxaa = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
-
-            // Currently, only the main screen can be set for fullscreen mode.
-            info.fullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-
+            /*
             // Read the supported video modes
             List<string> modes = Rendering.GetSupportedVideoModes();
             modes.Insert(0, "Native Resolution");
@@ -226,26 +306,16 @@ namespace UpvoidMiner
                 info.resolution = "Native Resolution";
 
             info.supportedModes = modes.Distinct().ToArray();
-
-            double lod = (Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 40.0)-10.0)/30.0;
-            lod += Scripting.GetUserSettingNumber("Graphics/Min Lod Range", 0.0)/30.0;
-
-            if (lod < 0)
-                lod = 0;
-            if (lod > 2)
-                lod = 2;
-
-            info.lod = lod;
+            */
 
             // Serialize to json to be read by the gui
-                        StringWriter writer = new StringWriter();
-                        JsonSerializer json = new JsonSerializer();
-                        JsonTextWriter jsonWriter = new JsonTextWriter(writer);
-                        json.Formatting = Formatting.Indented;
-                        json.Serialize(jsonWriter, info);
-                        response.AddHeader("Content-Type", "application/json");
-                        response.AppendBody(writer.GetStringBuilder().ToString());
-                }
+            StringWriter writer = new StringWriter();
+            JsonSerializer json = new JsonSerializer();
+            JsonTextWriter jsonWriter = new JsonTextWriter(writer);
+            json.Formatting = Formatting.Indented;
+            json.Serialize(jsonWriter, info);
+            response.AddHeader("Content-Type", "application/json");
+            response.AppendBody(writer.GetStringBuilder().ToString());
+        }
     }
 }
-
