@@ -1,0 +1,63 @@
+This document was designed to give credit to those people and libraries on whose work the UpvoidMiner or the UpvoidEngine depend on.
+
+
+Resources
+===========
+
+Some of the used textures and models were created by Nobiax (http://nobiax.deviantart.com/).
+
+Some fantastic music was created by Chris Zabriskie (http://chriszabriskie.com/).
+The song "The Temperature of the Air on the Bow of the Kaleetan" (background music in the game) is from his album "Undercover Vampire Policeman".
+He shares his songs via the Creative Commons Attribution 4.0 license. 
+The conditions of that license can be found under http://creativecommons.org/licenses/by/4.0/
+
+
+Libraries
+===========
+
+The following is a list of awesome libraries used in the UpvoidEngine or the UpvoidMiner in no particular order.
+Every list item contains the name, a URL for more information on the library and the license (or terms of service) via which it was released.
+
+Qt                          (http://qt-project.org/)                        GNU Lesser General Public License version 2.1
+Bullet                      (http://bulletphysics.org/)                     zlib license
+Assimp                      (http://assimp.sourceforge.net/)                BSD 3-clause
+ACGL                        (http://www.graphics.rwth-aachen.de/)           MIT
+GLM                         (http://glm.g-truc.net/)                        MIT
+AsmJit                      (http://code.google.com/p/asmjit/)              zlib license
+Eigen                       (http://eigen.tuxfamily.org/)                   Mozilla Public License (MPL) 2.0
+Mono                        (http://www.mono-project.com/)                  MIT (class libraries), LGPL (runtime libraries)
+Ogg Vorbis                  (http://www.vorbis.com/)                        Modified BSD License
+OpenAL Soft                 (http://openal-soft.sourceforge.net/)           GNU Library General Public License, Version 2.0
+Snappy                      (http://code.google.com/p/snappy/)              BSD 3-clause
+TCLAP                       (http://tclap.sourceforge.net/)                 MIT
+Tufão                       (http://github.com/vinipsmaker/tufao)           GNU Library General Public License, Version 2.0
+QSlim 1.0                   (http://www.cs.cmu.edu/afs/cs/Web/People/garland/quadrics/qslim10.html) Public Domain
+zlib                        (http://www.zlib.net/)                          zlib license
+jQuery                      (http://jquery.com/)                            MIT
+jQuery UI                   (http://jqueryui.com/)                          MIT
+Bootstrap                   (http://http://getbootstrap.com/)               MIT
+FontAwesome                 (http://fortawesome.github.io/Font-Awesome/)    MIT (Code), SIL OFL 1.1 (Fonts)
+Chromium Embedded Framework (https://code.google.com/p/chromiumembedded/)   BSD 3-clause
+SQLite                      (https://www.sqlite.org/)                       Public Domain
+Google Charts               (https://developers.google.com/chart/)          Google APIs Terms of Service ("API ToS") 
+ZeroClipboard               (http://zeroclipboard.org/)                     MIT
+Prettify                    (https://code.google.com/p/google-code-prettify/)   Apache License 2.0
+MathJax                     (http://www.mathjax.org/)                       Apache License 2.0
+Chart.js                    (http://www.chartjs.org/)                       MIT
+
+
+===========
+
+The individual license files for the libraries above can be found in the folder "LICENCES".
+However, you can find generic versions for most of the libraries at the following locations:
+
+SIL OFL 1.1 http://scripts.sil.org/OFL
+Mozilla Public License (MPL) 2.0 https://www.mozilla.org/MPL/2.0/
+zlib http://opensource.org/licenses/Zlib
+GNU Lesser General Public License, Version 2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+GNU Library General Public License, Version 2.0 http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
+Apache License 2.0 http://www.apache.org/licenses/LICENSE-2.0
+MIT http://opensource.org/licenses/mit-license.html
+CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
+BSD 3-clause http://opensource.org/licenses/BSD-3-Clause
+Google APIs Terms of Service ("API ToS") https://developers.google.com/terms/

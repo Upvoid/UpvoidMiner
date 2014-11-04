@@ -1,0 +1,2 @@
+Find the Google APIs Terms of Service ("API ToS") at the following location
+https://developers.google.com/terms
