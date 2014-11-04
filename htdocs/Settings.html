@@ -10,6 +10,7 @@
     <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8" defer></script>
     <script src="/Mods/Upvoid/EfficientUI/1.0.0/js/efficientUI.js" type="text/javascript" charset="utf-8" defer></script>
     <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-ui.min.js" type="text/javascript" charset="utf-8" defer></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js" defer></script>
     
     
     <title>Settings</title>
@@ -34,6 +35,9 @@
       
       .audio-slider .ui-slider-range { background: #88f; }
       .fov-slider .ui-slider-range { background: #8f8; }
+      .lod-slider .ui-slider-range { background: #00f; }
+
+      .slider-cell { padding-left: 1em; padding-right: 1em; width: 100%; }
 
     </style>
 
@@ -45,35 +49,96 @@
             <ui name="Settings">
                 <h1>Settings</h1>
                 <p style="color: #c00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p>
-                <form role="form" style="text-align: left; margin-left: 3em;">
+                <form role="form" style="text-align: left;">
                     
-                    <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
-                    <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
-                    
-                    <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
-                        <option>Native Resolution</option>
-                    </select>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-resolution">
+                            <div class="panel-body">
+                                <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
+                                <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
+                                
+                                <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
+                                    <option>Native Resolution</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-                    <p>Horizontal field of view: <span id="fovValue"></span></p>
-                        <uislider onvalue="function(el, value) { $('#fovValue').html(value+'%'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider>
-                    <p>Master Volume: <span id="masterVolumeValue"></span></p>
-                        <uislider onvalue="function(el, value) { $('#masterVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MasterVolume"></uislider>
-                    <p>SFX Volume: <span id="sfxVolumeValue"></span></p>
-                        <uislider onvalue="function(el, value) { $('#sfxVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="SfxVolume"></uislider>
-                    <p>Music Volume: <span id="musicVolumeValue"></span></p>
-                        <uislider onvalue="function(el, value) { $('#musicVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MusicVolume"></uislider>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('#group-volume').collapse('toggle')">Volume <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-volume">
+                            <div class="panel-body">
+                                <table>
+                                    <tr><td>Master:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#masterVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MasterVolume"></uislider></td>
+                                        <td><span id="masterVolumeValue"></span></td></tr>
 
-                    <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
-                    <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
-                    <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
-                    <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
-                    <uicheckbox name="Fog">Enable Fog</uicheckbox>
-                    <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                    <tr><td>SFX:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#sfxVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="SfxVolume"></uislider></td>
+                                        <td><span id="sfxVolumeValue"></span></td></tr>
 
-                    <uicheckbox name="ShowStats">Show Engine Stats</uicheckbox>
+                                    <tr><td>Music:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#musicVolumeValue').html(value+'%'); }" options="{range:'min'}" class="audio-slider" name="MusicVolume"></uislider></td>
+                                        <td><span id="musicVolumeValue"></span></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('#group-lod').collapse('toggle')">Level of Detail <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-lod">
+                            <div class="panel-body">
+                                <table>
+                                    <tr><td>Lod&nbsp;Falloff:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#lodFalloff').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="LodFalloff"></uislider></td>
+                                        <td><span id="lodFalloff"></span></td></tr>
+
+                                    <tr><td>Min&nbsp;Lod&nbsp;Distance:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#minLodDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MinLodDistance"></uislider></td>
+                                        <td><span id="minLodDistance"></span></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('#group-graphics').collapse('toggle')">Graphics <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-graphics">
+                            <div class="panel-body">
+                                <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
+                                <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
+                                <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
+                                <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
+                                <uicheckbox name="Fog">Enable Fog</uicheckbox>
+                                <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                <table>
+                                    <tr><td>Horizontal&nbsp;FOV:</td>
+                                    <td class="slider-cell">
+                                        <uislider onvalue="function(el, value) { $('#fovValue').html(value+'°'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider></td>
+                                        <td><span id="fovValue"></span></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('#group-debug').collapse('toggle')">Debug <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-debug">
+                            <div class="panel-body">
+                                <uicheckbox name="ShowStats">Show Engine Stats</uicheckbox>
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ApplySettings">Apply</uibutton>
-                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ResetSettings">Cancel</uibutton>
+                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ResetSettings" class="btn btn-danger">Cancel</uibutton>
                 <uibutton name="ResetSettings">Undo changes</uibutton>
             </ui>
         </div>

@@ -37,9 +37,8 @@ namespace UpvoidMiner
         Master,
         SFX,
         Music,
-        Speech}
-
-    ;
+        Speech
+    }
 
     public class Settings : UIProxy
     {
@@ -77,11 +76,9 @@ namespace UpvoidMiner
         // Local variables for the current settings values
         private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
         private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-
         private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
         private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
         private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
-
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
@@ -215,6 +212,20 @@ namespace UpvoidMiner
         [UICheckBox]
         public bool ShowStats { get; set; }
 
+        [UISlider(10, 50)]
+        public int LodFalloff
+        { 
+            get { return (int)LocalScript.world.LodSettings.LodFalloff; }
+            set { LocalScript.world.LodSettings.LodFalloff = value; }
+        }
+
+        [UISlider(0, 100)]
+        public int MinLodDistance
+        { 
+            get { return (int)LocalScript.world.LodSettings.MinLodDistance; }
+            set { LocalScript.world.LodSettings.MinLodDistance = value; }
+        }
+
         [UIButton]
         public void ApplySettings()
         {
@@ -234,6 +245,9 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable Tonemapping", settingTonemapping);
             Scripting.SetUserSetting("Graphics/Enable Fog", settingFog);
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
+            
+            Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
+            Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
 
             if (settingFullscreen)
                 Scripting.SetUserSettingString("WindowManager/Fullscreen", "0");
@@ -247,6 +261,8 @@ namespace UpvoidMiner
         [UIButton]
         public void ResetSettings()
         {
+            WorldLod lod = LocalScript.world.LodSettings;
+
             // Reset local setting values to those from user settings
             settingMasterVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 100);
             settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 50);
@@ -263,6 +279,9 @@ namespace UpvoidMiner
 
             settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
+            
+            MinLodDistance = (int)Scripting.GetUserSettingNumber("Graphics/Min Lod Distance", 20);
+            LodFalloff = (int)Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 30);
 
             // Re-apply the former settings
             Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
