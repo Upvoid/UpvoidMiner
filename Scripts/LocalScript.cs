@@ -195,10 +195,6 @@ namespace UpvoidMiner
 
         static void ActivatePlayer(bool godMode = false)
         {
-            // Initialize the savegame paths
-            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
-            UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
-
             // Activate player only once.
             if (player != null)
             {
@@ -206,6 +202,10 @@ namespace UpvoidMiner
                 player.Gui.IsMenuOpen = false;
                 return;
             }
+
+            // Initialize the savegame paths
+            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
+            UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
 
             // Activate camera movement
             cameraControl = new FreeCameraControl(-10f, camera);
