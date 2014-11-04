@@ -84,9 +84,9 @@ namespace UpvoidMiner
         private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
         private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
 
-        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100);
-        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100);
-        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100);
+        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
+        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
+        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
@@ -100,9 +100,7 @@ namespace UpvoidMiner
         {
             // Read the supported video modes
             List<string> modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
-            //modes.Insert(0, "Native Resolution");
 
-            // TODO(ks) necessary?
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
 
             // Add native resolution
@@ -136,7 +134,7 @@ namespace UpvoidMiner
             set 
             {
                 settingMasterVolume = value;
-                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.Master);
+                Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
             }
         }
 
@@ -147,7 +145,7 @@ namespace UpvoidMiner
             set
             {
                 settingSfxVolume = value;
-                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.SFX);
+                Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
             }
         }
 
@@ -158,7 +156,7 @@ namespace UpvoidMiner
             set
             {
                 settingMusicVolume = value;
-                Audio.SetVolumeForSpecificAudioType(value / 100f, (int)AudioType.Music);
+                Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
             }
         }
 
@@ -277,45 +275,6 @@ namespace UpvoidMiner
             Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
             Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
             LocalScript.camera.HorizontalFieldOfView = settingFieldOfView;
-        }
-
-
-        public static void InitSettingsHandlers()
-        {
-            //Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "Settings", webSettings);
-        }
-
-        [Serializable]
-        class SettingsInfo
-        {
-        }
-
-
-        static void getSettings(WebResponse response)
-        {
-            SettingsInfo info = new SettingsInfo();
-
-            /*
-            // Read the supported video modes
-            List<string> modes = Rendering.GetSupportedVideoModes();
-            modes.Insert(0, "Native Resolution");
-
-            info.resolution = Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1");
-
-            if (info.resolution == "-1x-1")
-                info.resolution = "Native Resolution";
-
-            info.supportedModes = modes.Distinct().ToArray();
-            */
-
-            // Serialize to json to be read by the gui
-            StringWriter writer = new StringWriter();
-            JsonSerializer json = new JsonSerializer();
-            JsonTextWriter jsonWriter = new JsonTextWriter(writer);
-            json.Formatting = Formatting.Indented;
-            json.Serialize(jsonWriter, info);
-            response.AddHeader("Content-Type", "application/json");
-            response.AppendBody(writer.GetStringBuilder().ToString());
         }
     }
 }
