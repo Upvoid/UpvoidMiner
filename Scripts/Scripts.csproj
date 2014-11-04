@@ -90,9 +90,8 @@
     <Compile Include="Vegetation\TreeGenerator.cs" />
     <Compile Include="UpvoidMiner.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="StatUI.cs">
-      <DependentUpon>UpvoidMiner.cs</DependentUpon>
-    </Compile>
+    <Compile Include="UI\MemoryFailsafe.cs" />
+    <Compile Include="UI\StatUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Common.Cameras.Local">
@@ -125,4 +124,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
 </Project>

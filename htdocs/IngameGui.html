@@ -90,10 +90,10 @@
             left: 8px;
             bottom: 8px;
             margin: 0;
-            min-width: 310px;
+            min-width: 330px;
         }
     </style>
-    <hud name="EngineStats" id="stats" class="well well-sm">
+    <hud name="EngineStats" id="stats" class="well well-sm" style="display:none;">
         <uiobject name="Visible" onvalue="function(el, val) { $('#stats').css('visibility', val ? 'visible' : 'hidden'); }" tag="span"></uiobject>
 
         FPS: <uistring name="FPS" tag="span"></uistring> (<uistring name="MsPerFrame" tag="span"></uistring> ms)
@@ -105,6 +105,30 @@
         Cam Pos: (<uistring name="CameraPos" tag="span"></uistring>)
         <br>
         Ray: <uistring name="RayResult" tag="span"></uistring>
+    </hud>
+
+    <!-- Memory failsafe -->
+    <style type="text/css">
+        #memfailsafe {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            margin: 0;
+            width: 450px;
+        }
+    </style>
+    <hud name="MemoryFailsafe" id="memfailsafe" class="alert alert-danger" style="display:none;">
+        <uiobject name="Visible" onvalue="function(el, val) { $('#memfailsafe').css('visibility', val ? 'visible' : 'hidden'); }" tag="span"></uiobject>
+        <h4><i class="fa fa-exclamation-triangle"></i> Memory Failsafe</h4>
+        <p>
+        Unfortunately, the Upvoid Engine is currently approaching the memory limit of your system.
+        Additionally, we seem to be unable to properly reduce our own memory consumption.
+        We advice you to restart the game as soon as possible to ensure system stability.
+        </p>
+        <br>
+        Our Memory usage: <uistring name="MemoryUsage" tag="b"></uistring>
+        <br>
+        Free memory: <uistring name="MemoryFree" tag="b" style="color:#f00;"></uistring>
     </hud>
   </body>
 </html>

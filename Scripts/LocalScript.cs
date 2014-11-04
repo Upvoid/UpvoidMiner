@@ -71,6 +71,7 @@ namespace UpvoidMiner
         const float musicVolume = 1.0f;
         const float birdVolume = 0.5f;
         public static StatUI stats = new StatUI();
+        public static MemoryFailsafe memFailsafe = new MemoryFailsafe();
 
         /// <summary>
         /// Set this to true to enable free camera movement.
@@ -132,6 +133,7 @@ namespace UpvoidMiner
 
             UIProxyManager.AddProxy(Settings.settings);
             UIProxyManager.AddProxy(stats);
+            UIProxyManager.AddProxy(memFailsafe);
 
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 

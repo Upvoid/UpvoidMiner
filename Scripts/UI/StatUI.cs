@@ -131,7 +131,7 @@ namespace UpvoidMiner
 
         private string vec2str(vec3 pos)
         {
-            return pos.x.ToString("0.0") + ", " + pos.y.ToString("0.0") + ", " + pos.z.ToString("0.0");
+            return pos.x.ToString("0.00") + ", " + pos.y.ToString("0.00") + ", " + pos.z.ToString("0.00");
         }
 
         public StatUI() : base("EngineStats")
