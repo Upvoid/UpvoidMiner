@@ -24,7 +24,7 @@ Assimp                      (http://assimp.sourceforge.net/)                BSD 
 ACGL                        (http://www.graphics.rwth-aachen.de/)           MIT
 GLM                         (http://glm.g-truc.net/)                        MIT
 AsmJit                      (http://code.google.com/p/asmjit/)              zlib license
-Eigen                       (http://eigen.tuxfamily.org/)                   Mozilla Public License (MPL) 2.0
+Eigen                       (http://eigen.tuxfamily.org/)                   Primarily Mozilla Public License (MPL) 2.0, some files LGPL and BSD
 Mono                        (http://www.mono-project.com/)                  MIT (class libraries), LGPL (runtime libraries)
 Ogg Vorbis                  (http://www.vorbis.com/)                        Modified BSD License
 OpenAL Soft                 (http://openal-soft.sourceforge.net/)           GNU Library General Public License, Version 2.0
