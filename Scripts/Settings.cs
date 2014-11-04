@@ -12,13 +12,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Engine;
 using Engine.Audio;
 using Engine.Input;
@@ -29,23 +27,21 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Webserver;
 using Engine.Network;
-
 using Newtonsoft.Json;
-
 using EfficientUI;
 
 namespace UpvoidMiner
 {
-
     enum AudioType
     {
         Master,
         SFX,
         Music,
-        Speech
-    };
+        Speech}
 
-        public class Settings : UIProxy
+    ;
+
+    public class Settings : UIProxy
     {
 
         public static Settings settings = new Settings();
@@ -55,7 +51,6 @@ namespace UpvoidMiner
             public int Width;
             public int Height;
             //int Screen;
-
             public VideoMode(int width, int height)
             {
                 Width = width;
@@ -79,7 +74,6 @@ namespace UpvoidMiner
             // Error
             return new VideoMode(-2, -2);
         }
-
         // Local variables for the current settings values
         private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
         private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
@@ -87,6 +81,7 @@ namespace UpvoidMiner
         private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
         private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
         private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
+
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
@@ -95,8 +90,7 @@ namespace UpvoidMiner
         private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
 
-
-        private Settings() : base("Settings") 
+        private Settings() : base("Settings")
         {
             // Read the supported video modes
             List<string> modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
@@ -112,7 +106,6 @@ namespace UpvoidMiner
             }
         }
 
-
         [UIObject]
         public List<VideoMode> VideoModesObject
         {
@@ -126,12 +119,11 @@ namespace UpvoidMiner
             settingResolution = supportedVideoModes[index];
         }
 
-
         [UISlider(0, 100)]
-        public int MasterVolume 
+        public int MasterVolume
         {
             get { return settingMasterVolume; }
-            set 
+            set
             {
                 settingMasterVolume = value;
                 Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
@@ -220,9 +212,11 @@ namespace UpvoidMiner
             set { settingFXAA = value; }
         }
 
+        [UICheckBox]
+        public bool ShowStats { get; set; }
 
         [UIButton]
-        public void ApplySettings() 
+        public void ApplySettings()
         {
             // Write all settings to settings file
 
@@ -233,7 +227,7 @@ namespace UpvoidMiner
 
             // Graphics settings
             Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
-            
+
             Scripting.SetUserSetting("Graphics/Enable Shadows", settingShadows);
             Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
             Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", settingVolumetricScattering);
@@ -270,7 +264,7 @@ namespace UpvoidMiner
             settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
 
-            // Re-apply the former settings 
+            // Re-apply the former settings
             Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
             Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
             Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);

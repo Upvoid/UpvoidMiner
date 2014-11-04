@@ -37,7 +37,7 @@ void main()
     // get distance to sphere midpoint
     vec3 midEyeDis = vec3(uInverseViewMatrix*vec4(opaqueEyePos.xyz,1)) - uMidPointAndRadius.xyz;
     float dX = abs(dot(midEyeDis, uDigDirX.xyz));
-    float dY = abs(dot(midEyeDis, uDigDirY.xyz));
+    float dY = (dot(midEyeDis, uDigDirY.xyz));
     float dZ = abs(dot(midEyeDis, uDigDirZ.xyz));
     float dist = max(-dY, dY + 2*length(vec2(dX, dZ)));
 
