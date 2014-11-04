@@ -8,6 +8,7 @@
                 "Settings.cs",
                 "UpvoidMiner.cs",
                 "Messages.cs",
+                "StatUI.cs",
                 "Items/Item.cs",
                 "Items/ItemCollection.cs",
                 "Items/ItemCategory.cs",
