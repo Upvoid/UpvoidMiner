@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
-
 using EfficientUI;
 
 namespace UpvoidMiner
@@ -62,7 +61,7 @@ namespace UpvoidMiner
         /// A camera controller for free camera movement. Used when noclipEnabled is true.
         /// </summary>
         static FreeCameraControl cameraControl;
-        static Player player = null;
+        public static Player player = null;
         private static SoundResource birdRes;
         private static Sound birdSound;
         private static SoundResource musicRes;
@@ -71,6 +70,8 @@ namespace UpvoidMiner
         // The "global" music volume is defined via settings
         const float musicVolume = 1.0f;
         const float birdVolume = 0.5f;
+        public static StatUI stats = new StatUI();
+        public static MemoryFailsafe memFailsafe = new MemoryFailsafe();
 
         /// <summary>
         /// Set this to true to enable free camera movement.
@@ -131,6 +132,8 @@ namespace UpvoidMiner
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
             UIProxyManager.AddProxy(Settings.settings);
+            UIProxyManager.AddProxy(stats);
+            UIProxyManager.AddProxy(memFailsafe);
 
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
@@ -195,10 +198,6 @@ namespace UpvoidMiner
 
         static void ActivatePlayer(bool godMode = false)
         {
-            // Initialize the savegame paths
-            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
-            UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
-
             // Activate player only once.
             if (player != null)
             {
@@ -206,6 +205,10 @@ namespace UpvoidMiner
                 player.Gui.IsMenuOpen = false;
                 return;
             }
+
+            // Initialize the savegame paths
+            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
+            UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
 
             // Activate camera movement
             cameraControl = new FreeCameraControl(-10f, camera);
