@@ -131,6 +131,7 @@ namespace UpvoidMiner
             // In near future it will be updated when the player moves out of it
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
+            Settings.settings.ResetSettings(); // aka load from settings
             UIProxyManager.AddProxy(Settings.settings);
             UIProxyManager.AddProxy(stats);
             UIProxyManager.AddProxy(memFailsafe);
