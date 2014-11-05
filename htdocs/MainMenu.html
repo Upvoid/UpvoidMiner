@@ -54,11 +54,6 @@
                         }
         });
 
-        // Register the websocket handler for future progress updates
-        WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/GenerationProgressSocket", function(data) {
-            updateProgress(data);
-        });
-
         function clickStart(godMode)
         {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/ActivatePlayer?GodMode="+(godMode===true), "", function() {window.location.href = "IngameGui.html";});
