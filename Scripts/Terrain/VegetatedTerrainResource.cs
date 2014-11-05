@@ -67,6 +67,8 @@ namespace UpvoidMiner
 
                     GrassPipelineIndex = pipeline;
                     GrassMaterialIndex = materialIdx;
+
+                    Material.SetPipelineActive(pipeline, Settings.settings.Grass);
                 }
 
                 // Spawn Flowers
