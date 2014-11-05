@@ -118,6 +118,7 @@
                                 <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
                                 <uicheckbox name="Fog">Enable Fog</uicheckbox>
                                 <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                <uicheckbox name="Grass">Enable Grass</uicheckbox>
                                 <table>
                                     <tr><td>Horizontal&nbsp;FOV:</td>
                                     <td class="slider-cell">
@@ -166,7 +167,7 @@
         $('#select-resolution').html(modeList);
     }
     
-    function videoModeCallback (el) 
+    function videoModeCallback (el)
     {
          EfficientUI.SendCallback(el, 'VideoModeCallback', {index: el.selectedIndex});
     }

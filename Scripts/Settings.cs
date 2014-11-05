@@ -86,21 +86,19 @@ namespace UpvoidMiner
         private bool settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
         private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
+        private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
 
         private Settings() : base("Settings")
         {
             // Read the supported video modes
-            List<string> modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
+            var modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
 
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
 
             // Add native resolution
-            supportedVideoModes = new List<VideoMode>();
-            supportedVideoModes.Add(new VideoMode(-1, -1));
+            supportedVideoModes = new List<VideoMode> {new VideoMode(-1, -1)};
             foreach (string vidMode in modes)
-            {
                 supportedVideoModes.Add(StringToVideoMode(vidMode));
-            }
         }
 
         [UIObject]
@@ -210,6 +208,31 @@ namespace UpvoidMiner
         }
 
         [UICheckBox]
+        public bool Grass
+        {
+            get { return settingGrass; }
+            set
+            {
+                if (value == settingGrass)
+                    return;
+
+                if (LocalScript.world != null)
+                {
+                    // update terrain material activity
+                    foreach (var resource in TerrainResource.ListResources())
+                        if (resource is VegetatedTerrainResource)
+                        {
+                            var res = resource as VegetatedTerrainResource;
+                            res.Material.SetPipelineActive(res.GrassPipelineIndex, value);
+                        }
+                    // grass change requires terrain rebuilt
+                    LocalScript.world.Terrain.RebuildTerrainGeometry();
+                }
+                settingGrass = value;
+            }
+        }
+
+        [UICheckBox]
         public bool ShowStats { get; set; }
 
         [UISlider(10, 50)]
@@ -245,6 +268,8 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable Tonemapping", settingTonemapping);
             Scripting.SetUserSetting("Graphics/Enable Fog", settingFog);
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
+
+            Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
             
             Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
             Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
@@ -276,6 +301,9 @@ namespace UpvoidMiner
             settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
             settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
             settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
+
+            // property in order to trigger rebuilt
+            Grass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
 
             settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));

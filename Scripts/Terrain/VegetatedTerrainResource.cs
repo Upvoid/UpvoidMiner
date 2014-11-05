@@ -25,6 +25,9 @@ namespace UpvoidMiner
     /// </summary>
     public class VegetatedTerrainResource : SolidTerrainResource
     {
+        public int GrassPipelineIndex;
+        public int GrassMaterialIndex;
+
         public VegetatedTerrainResource(string name, string renderMaterial, string particleMaterial) :
             base(name, renderMaterial, particleMaterial, false)
         {
@@ -60,7 +63,10 @@ namespace UpvoidMiner
                     //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.ShadowDecal", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
                     //Material.AddMeshMaterial(pipeline, "ColoredSpawns", Resources.UseMaterial("SimpleGrass.zPre", UpvoidMiner.ModDomain), Renderer.zPre.Mesh);
 
-                    Material.AddMeshMaterial(pipeline, "GrassBlades", Resources.UseMaterial("Vegetation/GrassBlades", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
+                    var materialIdx = Material.AddMeshMaterial(pipeline, "GrassBlades", Resources.UseMaterial("Vegetation/GrassBlades", UpvoidMiner.ModDomain), Renderer.Opaque.Mesh);
+
+                    GrassPipelineIndex = pipeline;
+                    GrassMaterialIndex = materialIdx;
                 }
 
                 // Spawn Flowers
