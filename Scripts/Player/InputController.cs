@@ -42,7 +42,7 @@ namespace UpvoidMiner
         // Flags for modifier keys.
         bool keyModifierShift = false;
         bool keyModifierControl = false;
-        bool keyModifierAlt = false;
+        //bool keyModifierAlt = false;
 
         private SoundResource shutterSoundResource;
         private Sound shutterSound;
@@ -122,7 +122,7 @@ namespace UpvoidMiner
                         keyModifierControl = true;
                         break;
                     case InputKey.Alt:
-                        keyModifierAlt = true;
+                        //keyModifierAlt = true;
                         break;
 
                     case InputKey.F8:
@@ -192,7 +192,7 @@ namespace UpvoidMiner
                         keyModifierControl = false;
                         break;
                     case InputKey.Alt:
-                        keyModifierAlt = false;
+                        //keyModifierAlt = false;
                         break;
                 }
             }

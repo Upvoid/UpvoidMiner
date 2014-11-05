@@ -97,13 +97,7 @@
     <Reference Include="Common.Cameras.Local">
       <HintPath>..\..\..\..\..\AssemblyCache\Common.Cameras.Local.dll</HintPath>
     </Reference>
-    <Reference Include="EfficientUI">
-      <HintPath>..\..\..\..\..\AssemblyCache\EfficientUI.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="Engine">
-      <HintPath>..\..\..\..\..\AssemblyCache\Engine.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\..\AssemblyCache\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -111,7 +105,16 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Engine\Scripts\Engine.csproj">
+      <Project>{61dd35b1-5494-40e2-8aaa-513f9de65976}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\EfficientUI\1.0.0\EfficientUI.csproj">
+      <Project>{23b4d993-8c84-4837-84f0-4b24aab0ebe1}</Project>
+      <Name>EfficientUI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -124,7 +127,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
