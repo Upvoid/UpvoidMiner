@@ -44,7 +44,7 @@ function updateGui(data)
 
         if(i === data.selection)
         {
-            buildItemInfo(data.inventory[data.quickAccess[i]]);
+            buildItemInfo(data.quickAccess[i] == "" ? null : data.inventory[data.quickAccess[i]]);
         }
 
     }
@@ -193,7 +193,7 @@ function buildInventory(items, quickAccessItems, selection)
 }
 
 function buildQuickAccessBar(quickAccessItems, selection)
-{   
+{
     var html = "";
     
     for(var i = 0; i < quickAccessItems.length; ++i)
@@ -206,6 +206,12 @@ function buildQuickAccessBar(quickAccessItems, selection)
 
 function buildItemInfo(item)
 {
+    if (item === null)
+    {
+        $('#item-info').hide();
+        return;
+    }
+
     var html = "";
     html += "<h2>";
 
@@ -250,7 +256,7 @@ function buildItemInfo(item)
         html += " <button onclick=\"dropItem('"+item.id+"')\" class=\"btn btn-primary\"><i class='fa fa-arrow-down'></i> Drop</button>";
 
     $('#item-info').html(html);
-
+    $('#item-info').show();
 }
 
 function selectQuickAccessSlot(index)
