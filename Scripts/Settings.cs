@@ -269,10 +269,16 @@ namespace UpvoidMiner
 
         [UISlider(0, 100)]
         public int MinLodDistance
-        { 
+        {
             get { return (int)LocalScript.world.LodSettings.MinLodDistance; }
             set { LocalScript.world.LodSettings.MinLodDistance = value; }
         }
+
+        [UISlider(10, 500)]
+        public int MaxTrees { get; set; }
+
+        [UISlider(10, 500)]
+        public int MaxTreeDistance { get; set; }
 
         [UIButton]
         public void ApplySettings()
@@ -295,9 +301,11 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
 
             Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
-            
+
             Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
             Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
+            Scripting.SetUserSettingNumber("Graphics/Max Trees", MaxTrees);
+            Scripting.SetUserSettingNumber("Graphics/Max Tree Distance", MaxTreeDistance);
 
             if (settingFullscreen)
                 Scripting.SetUserSettingString("WindowManager/Fullscreen", "0");
@@ -338,9 +346,11 @@ namespace UpvoidMiner
 
             settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
-            
+
             MinLodDistance = (int)Scripting.GetUserSettingNumber("Graphics/Min Lod Distance", 20);
             LodFalloff = (int)Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 30);
+            MaxTrees = (int)Scripting.GetUserSettingNumber("Graphics/Max Trees", 200);
+            MaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 300);
 
             // Re-apply the former settings
             Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);

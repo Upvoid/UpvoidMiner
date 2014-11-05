@@ -76,10 +76,10 @@ namespace UpvoidMiner
         public static vec3 UpdateTrees(vec3 refPos)
         {
             // Settings
-            const int maxTrunks = 100;
-            const float maxDisTrunks = 150;
-            const int maxLeaves = 300;
-            const float maxDisLeaves = 350;
+            int maxTrunks = (int)(Settings.settings.MaxTrees * 0.6);
+            int maxLeaves = (int)(Settings.settings.MaxTrees * 1.4);
+            int maxDisTrunks = (int)(Settings.settings.MaxTreeDistance * 0.6);
+            int maxDisLeaves = (int)(Settings.settings.MaxTreeDistance * 1.4);
 
             float minDist = float.MaxValue;
             vec3 closestTree = new vec3(float.MaxValue);
