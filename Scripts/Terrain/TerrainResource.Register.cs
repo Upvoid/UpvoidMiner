@@ -98,21 +98,16 @@ namespace UpvoidMiner
         public static TerrainResource FromIndex(int idx)
         {
             TerrainResource res;
-            if (indexToResource.TryGetValue(idx, out res))
-                return res;
-            else
-                return null;
+            return indexToResource.TryGetValue(idx, out res) ? res : null;
         }
+
         /// <summary>
         /// Gets a terrain resource based on material name
         /// </summary>
         public static TerrainResource FromName(string name)
         {
             TerrainResource res;
-            if (nameToResource.TryGetValue(name, out res))
-                return res;
-            else
-                return null;
+            return nameToResource.TryGetValue(name, out res) ? res : null;
         }
 
         public static IEnumerable<TerrainResource> ListResources()

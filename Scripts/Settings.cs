@@ -88,6 +88,8 @@ namespace UpvoidMiner
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
 
+        private bool pipelineChanges = false;
+
         private Settings() : base("Settings")
         {
             // Read the supported video modes
@@ -169,42 +171,65 @@ namespace UpvoidMiner
         public bool Shadows
         {
             get { return settingShadows; }
-            set { settingShadows = value; }
+            set
+            {
+                if (settingShadows != value) pipelineChanges = true;
+                settingShadows = value; }
         }
 
         [UICheckBox]
         public bool Lensflares
         {
             get { return settingLensflares; }
-            set { settingLensflares = value; }
+            set
+            {
+                if (settingLensflares != value) pipelineChanges = true;
+                settingLensflares = value;
+            }
         }
 
         [UICheckBox]
         public bool VolumetricScattering
         {
             get { return settingVolumetricScattering; }
-            set { settingVolumetricScattering = value; }
+            set
+            {
+                if (settingVolumetricScattering != value) pipelineChanges = true;
+                settingVolumetricScattering = value;
+            }
         }
 
         [UICheckBox]
         public bool Tonemapping
         {
             get { return settingTonemapping; }
-            set { settingTonemapping = value; }
+            set
+            {
+                if (settingTonemapping != value) pipelineChanges = true;
+                settingTonemapping = value;
+            }
         }
 
         [UICheckBox]
         public bool Fog
         {
             get { return settingFog; }
-            set { settingFog = value; }
+            set
+            {
+                if (settingFog != value) pipelineChanges = true;
+                settingFog = value;
+            }
         }
 
         [UICheckBox]
         public bool FXAA
         {
             get { return settingFXAA; }
-            set { settingFXAA = value; }
+            set
+            {
+                if (settingFXAA != value) pipelineChanges = true;
+                settingFXAA = value;
+            }
         }
 
         [UICheckBox]
@@ -281,6 +306,12 @@ namespace UpvoidMiner
 
             string vidModeString = settingResolution.Width + "x" + settingResolution.Height;
             Scripting.SetUserSettingString("WindowManager/Resolution", vidModeString);
+
+            // rebuild pipeline on changes
+            // TODO: fixme
+            //if (pipelineChanges)
+            //    Rendering.SetupDefaultPipeline(LocalScript.camera);
+            pipelineChanges = false;
         }
 
         [UIButton]
@@ -316,6 +347,8 @@ namespace UpvoidMiner
             Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
             Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
             LocalScript.camera.HorizontalFieldOfView = settingFieldOfView;
+
+            pipelineChanges = false;
         }
     }
 }

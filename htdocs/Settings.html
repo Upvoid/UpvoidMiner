@@ -48,13 +48,13 @@
         
             <ui name="Settings">
                 <h1>Settings</h1>
-                <p style="color: #c00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p>
                 <form role="form" style="text-align: left;">
                     
                     <div class="panel panel-default">
                         <div class="panel-heading" onclick="$('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-resolution">
                             <div class="panel-body">
+                                <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
                                 <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
                                 <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
                                 
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-volume').collapse('toggle')">Volume <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('#group-volume').collapse('toggle')">Audio <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-volume">
                             <div class="panel-body">
                                 <table>
@@ -112,12 +112,16 @@
                         <div class="panel-heading" onclick="$('#group-graphics').collapse('toggle')">Graphics <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-graphics">
                             <div class="panel-body">
-                                <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
-                                <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
-                                <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
-                                <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
-                                <uicheckbox name="Fog">Enable Fog</uicheckbox>
-                                <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                <div class="well well-sm">
+                                    <!--<div style="text-align:center;"><p style="color: #f90;"><i class="fa fa-warning"></i> Changes are effective after pressing 'Apply'.</p></div>-->
+                                    <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
+                                    <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
+                                    <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
+                                    <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
+                                    <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
+                                    <uicheckbox name="Fog">Enable Fog</uicheckbox>
+                                    <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                </div>
                                 <uicheckbox name="Grass">Enable Grass</uicheckbox>
                                 <table>
                                     <tr><td>Horizontal&nbsp;FOV:</td>
