@@ -99,7 +99,7 @@
     Parameter: uBlendingCoefficient, 4
     Parameter: uLodRefDist, 2
     Parameter: uLodFactor, 3.7
-    Parameter: uLodTransitionPart, .4
+    Parameter: uLodTransitionPart, .2
 
 [Terrain/Dirt] : Default
     Shader: Terrain/MinerTerrain
@@ -116,7 +116,7 @@
     Parameter: uBlendingCoefficient, 4
     Parameter: uLodRefDist, 2
     Parameter: uLodFactor, 3.7
-    Parameter: uLodTransitionPart, .4
+    Parameter: uLodTransitionPart, .2
     Parameter: uColorModulation, 1
 
 [TerrainFoliage] : Default
