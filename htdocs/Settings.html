@@ -51,7 +51,7 @@
                 <form role="form" style="text-align: left;">
                     
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-resolution">
                             <div class="panel-body">
                                 <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
@@ -66,7 +66,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-volume').collapse('toggle')">Audio <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-volume').collapse('toggle')">Audio <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-volume">
                             <div class="panel-body">
                                 <table>
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-lod').collapse('toggle')">Level of Detail <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-lod').collapse('toggle')">Level of Detail <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-lod">
                             <div class="panel-body">
                                 <table>
@@ -119,7 +119,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-graphics').collapse('toggle')">Graphics <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-graphics').collapse('toggle')">Graphics <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-graphics">
                             <div class="panel-body">
                                 <div class="well well-sm">
@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('#group-debug').collapse('toggle')">Debug <span class="caret"></span></div>
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-debug').collapse('toggle')">Debug <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-debug">
                             <div class="panel-body">
                                 <uicheckbox name="ShowStats">Show Engine Stats</uicheckbox>
@@ -185,6 +185,10 @@
     {
          EfficientUI.SendCallback(el, 'VideoModeCallback', {index: el.selectedIndex});
     }
+
+    $(document).ready(function() {
+     $('.panel-collapse').collapse({toggle:false});
+    });
     
     </script>
 
