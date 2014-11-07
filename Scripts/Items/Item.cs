@@ -147,6 +147,7 @@ namespace UpvoidMiner
                 entity.Transform,
                 new BoxShape(new vec3(1))
                 );
+            body.SetRestitution(0.5f);
             itemEntity.ContainingWorld.Physics.AddRigidBody(body);
             
             itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
