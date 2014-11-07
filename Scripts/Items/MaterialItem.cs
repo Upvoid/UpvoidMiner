@@ -101,8 +101,8 @@ namespace UpvoidMiner
             }
         }
 
-        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1):
-            base(material.Name + " " + shape, null, 1.0f, ItemCategory.Material, stackSize)
+        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1, float weight = 10.0f):
+            base(material.Name + " " + shape, null, weight, ItemCategory.Material, stackSize)
         {
             Material = material;
             Shape = shape;
@@ -313,7 +313,7 @@ namespace UpvoidMiner
 
             // Create the physical representation of the item.
             RigidBody body = new RigidBody(
-                fixedPosition ? 0f : 50f,
+                fixedPosition ? 0f : Weight,
                 entity.Transform,
                 collShape
                 );

@@ -143,7 +143,7 @@ namespace UpvoidMiner
         {
             // Create the physical representation of the item.
             RigidBody body = new RigidBody(
-                fixedPosition ? 0f : 50f,
+                fixedPosition ? 0f : Weight,
                 entity.Transform,
                 new BoxShape(new vec3(1))
                 );
