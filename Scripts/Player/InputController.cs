@@ -141,6 +141,14 @@ namespace UpvoidMiner
                             player.DropItem(player.Inventory.Selection);
                         break;
 
+                    case InputKey.P:
+                        LocalScript.doFunnyStuff();
+                        break;
+
+                    case InputKey.L:
+                        LocalScript.doFunnyStuff2();
+                        break;
+
                     // F1 resets the player position
                     case InputKey.F1:
                         player.SetPosition(Player.SpawnPosition);

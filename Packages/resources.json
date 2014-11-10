@@ -1133,5 +1133,24 @@
     "Name" : "Grassblade",
     "Path" : "~.png",
     "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File",
+        "sRGB": true
+    },
+    "Name" : "WoodPlank",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "WoodPlank",
+        "Type" : "FromCollection"
+    },
+    "Name" : "WoodPlank",
+    "Path" : "~.mat",
+    "Type" : "Material"
 }
 ]

@@ -317,7 +317,9 @@ namespace UpvoidMiner
                 entity.Transform,
                 collShape
                 );
-            body.SetRestitution(0.5f);
+            body.SetRestitution(0.1f);
+            body.SetFriction(3.0f);
+            //body.SetDamping(0.5f, 0.5f);
             itemEntity.ContainingWorld.Physics.AddRigidBody(body);
             
             itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));

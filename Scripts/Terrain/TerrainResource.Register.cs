@@ -64,6 +64,8 @@ namespace UpvoidMiner
             // Wood
             addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood"));
             addResource(new SolidTerrainResource("BirchWood", "Terrain/BirchWood", "Particles/Terrain/BirchWood"));
+            // TODO(ks) correct particle material
+            addResource(new SolidTerrainResource("WoodPlank", "WoodPlank", "Particles/Terrain/BirchWood"));
 
             // Ores + Metals
             addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));

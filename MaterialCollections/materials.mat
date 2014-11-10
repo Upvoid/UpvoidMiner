@@ -287,3 +287,14 @@
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Color: uSpecularColor, .1, .1, .1, 4
+
+[WoodPlank] : Default
+    Shader: ::Opaque/MeshTripleProjectionObject
+    Texture: uColorXZ, WoodPlank
+    Texture: uColorXY, WoodPlank
+    Texture: uColorZY, WoodPlank
+    Color: uSpecularColor, .02, .02, .02, 1
+    Parameter: uTexScaleXY, 1
+    Parameter: uTexScaleXZ, 1
+    Parameter: uTexScaleZY, 1
+    Parameter: uBlendingCoefficient, 1

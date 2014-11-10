@@ -47,13 +47,13 @@ namespace UpvoidMiner
                 if (defaultPipeline)
                 {
                     { // LoD 0-4
-                        int pipe = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredRock", UpvoidMiner.ModDomain), "Input", "Input", 0, 4);
+                        int pipe = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredRock", UpvoidMiner.ModDomain), "Input", "Decimate", 0, 4);
                         Material.AddDefaultShadowAndZPre(pipe);
                         Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                     }
 
                     { // LoD 5-max
-                        int pipe = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredRockLow", UpvoidMiner.ModDomain), "Input", "Input", 5);
+                        int pipe = Material.AddPipeline(Resources.UseGeometryPipeline("ColoredRockLow", UpvoidMiner.ModDomain), "Input", "Decimate", 5);
                         Material.AddDefaultShadowAndZPre(pipe);
                         Material.AddMeshMaterial(pipe, "Output", RenderMaterial, Renderer.Opaque.Mesh);
                     }

@@ -73,6 +73,9 @@ namespace UpvoidMiner
         public static StatUI stats = new StatUI();
         public static MemoryFailsafe memFailsafe = new MemoryFailsafe();
 
+        static int count = 0;
+        static vec3 curPos = vec3.Zero;
+
         /// <summary>
         /// Set this to true to enable free camera movement.
         /// </summary>
@@ -398,6 +401,49 @@ namespace UpvoidMiner
                 resourceDownloadTotalBytes = Download.BytesTotal;
                 resourceDownloadReceivedBytes = Download.BytesReceived;
             }
+        }
+
+
+        public static void doFunnyStuff2()
+        {
+            Engine.Physics.RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 200, player.Character.Body);
+            if (hit == null || !hit.IsValid)
+                return;
+
+            float plankLength = 5.0f;
+
+            vec3 initialPos = hit.Position;
+
+
+            ItemEntity itemEntity0 = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(10 * plankLength, 3 * 1.0f, 10 * plankLength), 1, 0), false);
+            LocalScript.world.AddEntity(itemEntity0, mat4.Translate(initialPos));
+
+            curPos = initialPos + new vec3(0, 1.51f, 0);
+        }
+        public static void doFunnyStuff()
+        {
+            /*
+            Engine.Physics.RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 200, player.Character.Body);
+            if (hit == null || !hit.IsValid)
+                return;
+             */
+
+            float plankLength = 5.0f;
+            float plankHeight = 0.3f;
+            float halfPlankGap = 1.5f;
+
+            float plankWeight = 1.0f;
+            //for (int i = 0; i < 50; ++i)
+            int i = count;
+            {
+                ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankHeight, 2.0f), 1, plankWeight), false);
+                LocalScript.world.AddEntity(itemEntity, mat4.Translate(curPos + new vec3(i % 2 == 0 ? -halfPlankGap : 0, 0, i % 2 == 1 ? halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
+                ItemEntity itemEntity2 = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankHeight, 2.0f), 1, plankWeight), false);
+                LocalScript.world.AddEntity(itemEntity2, mat4.Translate(curPos + new vec3(i % 2 == 0 ? halfPlankGap : 0, 0, i % 2 == 1 ? -halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
+            }
+
+            ++count;
+            curPos.y += 0.305f;
         }
 
         /// <summary>
