@@ -44,6 +44,7 @@ ZeroClipboard               (http://zeroclipboard.org/)                     MIT
 Prettify                    (https://code.google.com/p/google-code-prettify/)   Apache License 2.0
 MathJax                     (http://www.mathjax.org/)                       Apache License 2.0
 Chart.js                    (http://www.chartjs.org/)                       MIT
+ConcurrentQueue             (https://github.com/cameron314/concurrentqueue) Simplified BSD License
 
 
 ===========
