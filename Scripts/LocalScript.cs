@@ -422,28 +422,82 @@ namespace UpvoidMiner
         }
         public static void doFunnyStuff()
         {
-            /*
+            
             Engine.Physics.RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 200, player.Character.Body);
             if (hit == null || !hit.IsValid)
                 return;
-             */
+
+            Random random = new Random();
+
+            vec3 buildingPos = hit.Position;// curPos;
 
             float plankLength = 5.0f;
-            float plankHeight = 0.3f;
+            float plankHeight = 0.5f;
             float halfPlankGap = 1.5f;
 
-            float plankWeight = 1.0f;
+            float plankStrength = 0.1f;
+            ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankHeight, plankStrength), 1, 0.0f), false);
+
+            float angledev = 1.5f;
+
+            int doorHeight = 6;
+
+            int height = 10;
+            for (int i = 0; i < height; ++i)
+            {
+                // left
+                LocalScript.world.AddEntity(itemEntity, mat4.Translate(buildingPos + new vec3(-(plankLength - plankStrength) / 2, i * plankHeight, 0)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 90.0f));
+                // right
+                LocalScript.world.AddEntity(itemEntity, mat4.Translate(buildingPos + new vec3((plankLength - plankStrength) / 2, i * plankHeight, 0)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 90.0f));
+                // back
+                LocalScript.world.AddEntity(itemEntity, mat4.Translate(buildingPos + new vec3(0, i * plankHeight, -(plankLength + plankStrength) / 2)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 0.0f));
+                // front, upper part
+                if (i >= doorHeight)
+                    LocalScript.world.AddEntity(itemEntity, mat4.Translate(buildingPos + new vec3(0, i * plankHeight, (plankLength + plankStrength) / 2)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 0.0f));
+            }
+
+            float leftRatio = 0.3f;
+            float doorSpace = 0.3f;
+            float rightRatio = 1.0f - leftRatio - doorSpace;
+
+            for (int i = 0; i < doorHeight; ++i)
+            {
+                ItemEntity itemEntityLeft = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength * leftRatio, plankHeight, plankStrength), 1, 0.0f), false);
+                ItemEntity itemEntityRight = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength * rightRatio, plankHeight, plankStrength), 1, 0.0f), false);
+                // front left
+                LocalScript.world.AddEntity(itemEntityLeft, mat4.Translate(buildingPos + new vec3(-plankLength / 2 + plankLength * leftRatio / 2, i * plankHeight, (plankLength + plankStrength) / 2)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 0.0f));
+                LocalScript.world.AddEntity(itemEntityRight, mat4.Translate(buildingPos + new vec3(plankLength / 2 - plankLength * (rightRatio / 2), i * plankHeight, (plankLength + plankStrength) / 2)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 0.0f));
+            }
+
+
+            ItemEntity itemEntityRoof = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankStrength, plankHeight), 1, 0.0f), false);
+            int roofPlanks = 10;
+            for (int i = 0; i < roofPlanks; ++i)
+            {
+                LocalScript.world.AddEntity(itemEntityRoof, mat4.Translate(buildingPos + new vec3(0, (height - 0.5f) * plankHeight, -(i + 1.0f) / roofPlanks * plankLength + (plankLength + plankHeight) / 2)) * mat4.RotateY((float)random.NextDouble() * angledev - 0.5f * angledev + 0.0f));
+            }
+
+
+            for (int i = 0; i < 20; ++i)
+            {
+                ItemEntity itemEntityy = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(((float)random.NextDouble() * 0.6f + 0.2f) * plankLength, (float)random.NextDouble() * 0.15f + 0.08f, (float)random.NextDouble() * 0.5f + 0.3f), 1, 1.0f), false);
+                LocalScript.world.AddEntity(itemEntityy, mat4.Translate(buildingPos + new vec3(plankLength, i*0.3f, 0)) * mat4.RotateY((float)random.NextDouble() * 360.0f));
+            }
+
+            /*
+            float plankWeight = 10.0f;
             //for (int i = 0; i < 50; ++i)
             int i = count;
             {
                 ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankHeight, 2.0f), 1, plankWeight), false);
-                LocalScript.world.AddEntity(itemEntity, mat4.Translate(curPos + new vec3(i % 2 == 0 ? -halfPlankGap : 0, 0, i % 2 == 1 ? halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
+                LocalScript.world.AddEntity(itemEntity, mat4.Translate(buildingPos + new vec3(i % 2 == 0 ? -halfPlankGap : 0, 0, i % 2 == 1 ? halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
                 ItemEntity itemEntity2 = new ItemEntity(new MaterialItem(TerrainResource.FromName("WoodPlank"), MaterialShape.Cube, new vec3(plankLength, plankHeight, 2.0f), 1, plankWeight), false);
-                LocalScript.world.AddEntity(itemEntity2, mat4.Translate(curPos + new vec3(i % 2 == 0 ? halfPlankGap : 0, 0, i % 2 == 1 ? -halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
+                LocalScript.world.AddEntity(itemEntity2, mat4.Translate(buildingPos + new vec3(i % 2 == 0 ? halfPlankGap : 0, 0, i % 2 == 1 ? -halfPlankGap : 0)) * mat4.RotateY(i % 2 == 0 ? 90.0f : 0.0f));
             }
+             */
 
             ++count;
-            curPos.y += 0.305f;
+            curPos.y += plankHeight + 0.005f;
         }
 
         /// <summary>
