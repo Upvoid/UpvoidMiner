@@ -103,17 +103,12 @@ void main()
     // color modulation
     baseColor *= vColor;
 
-    //baseColor = mix(vec3(139,69,19) / 255 * .3, baseColor, min(1, vGrass * 2));
-
     // illumination
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
-    // grass modulation
-    //float gmod = (1 - smoothstep(0.7, 1.0, vGrass)) * 0.2;
-    //color *= gmod;
-
-    float gmod = smoothstep(0.66, 0.5, vGrass);
+    float gmodStrength = smoothstep(0, 1, max(0, vWorldNormal.y - 0.3) / 0.7);
+    float gmod = smoothstep(0.6, 0.5, gmodStrength * vGrass);
     gmod = mix(gmod, 1, clamp(camDis / 100, 0.5, 1));
     color *= gmod;
 
