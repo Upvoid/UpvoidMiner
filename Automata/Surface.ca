@@ -28,7 +28,7 @@ body
   # === Grass ===
 
   //this.aGrass = perlin(x,y,z) $= ::Perlin; max(0, perlin(this.x / 20, this.y / 20, this.z / 20)) * .5 + .5
-  this.aGrass = perlin(x,y,z) $= ::Perlin; max(0, perlin(this.x / 20, this.y / 20, this.z / 20)) * .5 + .5 + perlin(this.x / 7.234, this.y / 4, this.z / 8.824) * 0.4
+  this.aGrass = perlin(x,y,z) $= ::Perlin; max(0, perlin(this.x / 20, this.y / 20, this.z / 20)) * .5 + .5 + perlin(this.x / 8, this.y / 8, this.z / 8) * 0.4
 
   # === Stones ===
 

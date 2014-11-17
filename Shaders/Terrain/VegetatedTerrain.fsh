@@ -107,8 +107,7 @@ void main()
     normal = normalize(mat3(uModelMatrix) * normal);
     vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
-    float gmodStrength = smoothstep(0, 1, max(0, vWorldNormal.y - 0.3) / 0.7);
-    float gmod = smoothstep(0.6, 0.5, gmodStrength * vGrass);
+    float gmod = smoothstep(0.66, 0.5, vGrass);
     gmod = mix(gmod, 1, clamp(camDis / 100, 0.5, 1));
     color *= gmod;
 
