@@ -1,14 +1,21 @@
 This document was designed to give credit to those people and libraries on whose work the UpvoidMiner or the UpvoidEngine depend on.
-
+To all of you: Thank you so much! You are doing a great job!
 
 Resources
 ===========
 
+Textures/Models
+---------------
 Some of the used textures and models were created by Nobiax (http://nobiax.deviantart.com/).
 
+
+Music
+-----
 Some fantastic music was created by Chris Zabriskie (http://chriszabriskie.com/).
+We are using songs from his albums "Undercover Vampire Policeman" and "Cylinders".
 The song "The Temperature of the Air on the Bow of the Kaleetan" (background music in the game) is from his album "Undercover Vampire Policeman".
-He shares his songs via the Creative Commons Attribution 4.0 license. 
+The song "Cylinder Two" (also background music in the game) is from his album "Cylinders".
+Those albums are available on the Free Music Archive (http://www.freemusicarchive.org/) and are under the Creative Commons Attribution 4.0 license. 
 The conditions of that license can be found under http://creativecommons.org/licenses/by/4.0/
 
 
@@ -50,7 +57,7 @@ ConcurrentQueue             (https://github.com/cameron314/concurrentqueue) Simp
 ===========
 
 The individual license files for the libraries above can be found in the folder "LICENCES".
-However, you can find generic versions for most of the libraries at the following locations:
+However, you can find generic versions for most of the licenses at the following locations:
 
 SIL OFL 1.1 http://scripts.sil.org/OFL
 Mozilla Public License (MPL) 2.0 https://www.mozilla.org/MPL/2.0/
