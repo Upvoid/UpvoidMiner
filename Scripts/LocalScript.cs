@@ -62,10 +62,9 @@ namespace UpvoidMiner
         /// </summary>
         static FreeCameraControl cameraControl;
         public static Player player = null;
+        public static MusicQueue musicQueue = null;
         private static SoundResource birdRes;
         private static Sound birdSound;
-        private static SoundResource musicRes;
-        private static Sound music;
         // Note that these are the initial volumes for the specific sounds.
         // The "global" music volume is defined via settings
         const float musicVolume = 1.0f;
@@ -155,9 +154,18 @@ namespace UpvoidMiner
             birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
-            musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
-            music = new Sound(musicRes, vec3.Zero, true, musicVolume, 1, (int)AudioType.Music, false);
-            music.Play();
+            // Create a new (repeating) music queue with pauses of 5-10s between the songs
+            musicQueue = new MusicQueue(5, 10, true);
+
+            // Add songs to the music queue
+            SoundResource musicRes2 = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
+            musicQueue.Add(new Sound(musicRes2, vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            SoundResource musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Cylinders/Chris_Zabriskie_-_02_-_Cylinder_Two", UpvoidMiner.ModDomain);
+            musicQueue.Add(new Sound(musicRes, vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            // Do not play music. this is done by the music queue 8-)
+            //music.Play();
         }
 
         static bool generationDone = false;
@@ -342,6 +350,11 @@ namespace UpvoidMiner
             if (player != null)
             {
                 player.Update(_elapsedSeconds);
+            }
+
+            if (musicQueue != null)
+            {
+                musicQueue.update(_elapsedSeconds);
             }
 
             UpdateResourceDownloadProgress();

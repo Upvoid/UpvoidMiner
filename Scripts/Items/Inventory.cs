@@ -35,7 +35,6 @@ namespace UpvoidMiner
 
         // Click sound for slot access
         private SoundResource clickSoundResource;
-        private Sound clickSound;
 
         /// <summary>
         /// Backref to player.
@@ -71,7 +70,6 @@ namespace UpvoidMiner
 
             // Create click sound
             clickSoundResource = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::UI/Click/Click01", UpvoidMiner.ModDomain);
-            clickSound = new Sound(clickSoundResource, vec3.Zero, false, 0.2f, 1.0f, (int)AudioType.SFX, false);
         }
 
         /// <summary>
@@ -95,7 +93,8 @@ namespace UpvoidMiner
 
             if ( idx == selectedItem ) return;
 
-            // Play click sound
+            // Play click sound (Creating new instance to allow playing multiple "clicks" parallel)
+            Sound clickSound = new Sound(clickSoundResource, vec3.Zero, false, 0.2f, 1.0f, (int)AudioType.SFX, false);
             clickSound.Play();
 
             if ( quickAccessItems[selectedItem] != null )

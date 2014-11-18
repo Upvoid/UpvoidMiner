@@ -161,9 +161,7 @@ namespace UpvoidMiner
         /// Cached sound resources for digging dirt and stone
         /// </summary>
         private static SoundResource[] dirtSoundResource;
-        private static Sound[] dirtSound;
         private static SoundResource[] stoneSoundResource;
-        private static Sound[] stoneSound;
         private static vec3 diggingPosition = vec3.Zero;
 
         /// <summary>
@@ -276,22 +274,19 @@ namespace UpvoidMiner
 
 
             dirtSoundResource = new SoundResource[6];
-            dirtSound = new Sound[6];
             stoneSoundResource = new SoundResource[5];
-            stoneSound = new Sound[5];
 
-            // Add dirt digging sounds
+            // Load dirt digging sound resources
             for (int i = 1; i <= 6; ++i)
             {
                 dirtSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Dirt/Dirt" + i.ToString("00"), UpvoidMiner.ModDomain);
-                dirtSound[i - 1] = new Sound(dirtSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
+                
             }
 
-            // Add stone digging sounds
+            // Load stone digging sound resources
             for (int i = 1; i <= 5; ++i)
             {
                 stoneSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain);
-                stoneSound[i - 1] = new Sound(stoneSoundResource[i - 1], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
             }
         }
 
@@ -446,9 +441,9 @@ namespace UpvoidMiner
 
                 Sound digSound = null;
                 if(mat == 1) // Dirt material
-                    digSound = dirtSound[random.Next(0,5)];
+                    digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 else if (mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
-                    digSound = stoneSound[random.Next(0, 4)];
+                    digSound = new Sound(stoneSoundResource[random.Next(0, 4)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 else
                     return;
 
