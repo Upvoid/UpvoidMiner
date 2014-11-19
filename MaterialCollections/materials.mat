@@ -119,6 +119,7 @@
     Parameter: uFadeDistance, 35
     Culling: None
 	MaxDistance: 30
+   Parameter: uDiscardBias, .9
 
 [Flower01.ShadowDecal] : Default
     Shader: Vegetation/FoliageShadowDecal.Transparent
@@ -132,6 +133,7 @@
     Parameter: uFadeDistance, 35
     Culling: None
 	MaxDistance: 30
+   Parameter: uDiscardBias, .9
 
 [Flower02.ShadowDecal] : Default
     Shader: Vegetation/FoliageShadowDecal.Transparent
@@ -145,6 +147,7 @@
     Parameter: uFadeDistance, 35
     Culling: None
 	MaxDistance: 30
+   Parameter: uDiscardBias, .1
     
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent

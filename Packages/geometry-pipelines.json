@@ -319,7 +319,7 @@
                         "Inputs": [ "aPosition:vec3" ]
                     },
                     "aNormal": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .6",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * .4",
                         "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
                     },
                     "aTangent": {
@@ -373,7 +373,7 @@
                 "Copy": ["aPosition"],
                 "Calculated": {
                     "aColor": {
-                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 10; vec3(0.5 + perlin(p1.x, p1.y, p1.z) * .5) + vec3(0,.5,0)",
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 10; 0.7*(vec3(0.3 + perlin(p1.x, p1.y, p1.z) * .3) + vec3(0,.7,0))",
                         "Inputs": [ "aPosition:vec3" ]
                     },
                     "aNormal": {

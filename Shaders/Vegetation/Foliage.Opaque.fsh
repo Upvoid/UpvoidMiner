@@ -23,10 +23,10 @@ OUTPUT_CHANNEL_Normal(vec3)
 void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
-
+    
     float disc = uDiscardBias;
     disc = distance(vWorldPos, uCameraPosition);
-    disc = 0.901-clamp(disc/100,0,0.9);
+    disc = (1-uDiscardBias) + 0.05-clamp(disc/50,0,1-uDiscardBias);
 
     if(texColor.a < disc)
         discard;
