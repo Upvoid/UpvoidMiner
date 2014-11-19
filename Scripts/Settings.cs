@@ -329,8 +329,8 @@ namespace UpvoidMiner
 
             // Reset local setting values to those from user settings
             settingMasterVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 100);
-            settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 50);
-            settingMusicVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 50);
+            settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/SFX Volume", 50);
+            settingMusicVolume = (int)Scripting.GetUserSettingNumber("Audio/Music Volume", 50);
 
             settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
 
