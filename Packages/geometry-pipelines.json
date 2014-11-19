@@ -332,6 +332,64 @@
     }
 },
 
+
+{
+    "Type": "GeometryPipeline",
+    "Name": "Fern",
+    "Path": "~.geopipe",
+    "Descriptor" :
+    {
+        "Type" : "Json",
+        "Pipeline" :
+        {
+            "Input" :
+            {
+                "Type" : "Input"
+            },
+            "Flowers" :
+            {
+                "Type" : "Resource",
+                "Resource": "Mods/Upvoid/Resources.Vegetation/1.0.0::Fern/Fern"
+            },
+            "Seeds" :
+            {
+                "Type" : "ConsistentSeedPoint",
+                "refNormal": [0.0, 1.0, 0.0],
+                "densityDistribution": "FernDensity",
+                "gridSize": 4.0,
+                "overrideUpVector": true,
+                "maxRefDeviation": 0.8,
+                "Nodes" : ["Input"]
+            },
+            "Spawns" :
+            {
+                "Type" : "Instancing",
+                "Nodes" : ["Flowers", "Seeds"]
+            },
+            "ColoredSpawns":
+            {
+                "Type": "Attribute",
+                "Nodes" : ["Spawns"],
+                "Copy": ["aPosition"],
+                "Calculated": {
+                    "aColor": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 10; vec3(0.5 + perlin(p1.x, p1.y, p1.z) * .5) + vec3(0,.5,0)",
+                        "Inputs": [ "aPosition:vec3" ]
+                    },
+                    "aNormal": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aNormal * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.5",
+                        "Inputs": [ "aNormal:vec3", "aPosition:vec3" ]
+                    },
+                    "aTangent": {
+                        "Expression": "perlin(x,y,z) $= ::Perlin; p1 = mesh::aPosition / 11.1231; mesh::aTangent * (.8 + perlin(p1.x, p1.y, p1.z) * .4) * 1.5",
+                        "Inputs": [ "aTangent:vec3", "aPosition:vec3" ]
+                    }
+                }
+            }
+        }
+    }
+},
+
 {
     "Type": "GeometryPipeline",
     "Name": "ColoredBox",

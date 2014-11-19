@@ -138,6 +138,14 @@
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower02.Diffuse.1
     Parameter: uFadeDistance, 40
 
+[Fern] : Default
+    Shader: Vegetation/Foliage.Opaque
+    Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Fern/Fern.Diffuse
+    Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Fern/Fern.Normal
+    Parameter: uFadeDistance, 35
+    Culling: None
+	MaxDistance: 30
+    
 [Grass01.Transparent] : Default
     Shader: Vegetation/Foliage.Transparent
     Texture: uColor, GrassTest.Low
