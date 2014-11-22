@@ -82,6 +82,9 @@ namespace UpvoidMiner
         /// </summary>
         public static void Startup(Module module)
         {
+            // Set window title
+            Windows.GetWindow(0).SetTitle("Upvoid Miner");
+
             // Get and save the resource domain of the mod, needed for loading resources.
             UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
