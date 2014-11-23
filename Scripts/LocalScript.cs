@@ -82,6 +82,9 @@ namespace UpvoidMiner
         /// </summary>
         public static void Startup(Module module)
         {
+            // Set window title
+            Engine.Windows.Windows.GetWindow(0).SetTitle("Upvoid Miner");
+
             // Get and save the resource domain of the mod, needed for loading resources.
             UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
@@ -367,6 +370,9 @@ namespace UpvoidMiner
                     player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
             }
+
+            // update items
+            UpvoidMinerWorldGenerator.UpdateItems();
 
             // Update all trees and keep position of closest tree, if any
             vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);

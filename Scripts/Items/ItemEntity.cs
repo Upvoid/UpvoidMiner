@@ -30,7 +30,7 @@ namespace UpvoidMiner
     public class ItemEntity : EntityScript
     {
         public Item RepresentedItem;
-        
+
         protected List<PhysicsComponent> physicsComponents = new List<PhysicsComponent>();
         protected List<RenderComponent> renderComponents = new List<RenderComponent>();
 
@@ -85,7 +85,7 @@ namespace UpvoidMiner
         {
             // Make sure we get the message type we are expecting.
             InteractionMessage interactionMsg = msg as InteractionMessage;
-            if(interactionMsg == null)
+            if (interactionMsg == null)
                 return;
 
             // Interacting with an item means picking it up. Answer by sending the item to the sender.
@@ -93,6 +93,61 @@ namespace UpvoidMiner
 
             // And remove this entity.
             ContainingWorld.RemoveEntity(thisEntity);
+        }
+
+        /// <summary>
+        /// Last known physics pos
+        /// </summary>
+        private vec3 lastPhysicsPos = vec3.Zero;
+
+        /// <summary>
+        /// Updates physics state by teleporting item upwards if below ground
+        /// </summary>
+        public void UpdatePhysics()
+        {
+            foreach (var pc in physicsComponents)
+            {
+                var body = pc.RigidBody;
+
+                // Security: if in non-air chunk, teleport to next all-air one
+                mat4 transformation = body.GetTransformation();
+                vec3 pos = new vec3(transformation.col3);
+                if (vec3.distance(lastPhysicsPos, pos) < 0.01)
+                    return; // early abort
+
+                lastPhysicsPos = pos;
+                WorldTreeNode node = ContainingWorld.QueryWorldTreeNode(pos);
+                if (node != null && node.IsMinLod)
+                {
+                    HermiteData volumeData = node.CurrentVolume;
+                    if (volumeData != null)
+                    {
+                        if (!volumeData.HasAir)
+                        {
+                            // we are definitely in a non-air chunk here
+                            // teleport one node size above
+                            body.SetTransformation(mat4.Translate(new vec3(0, node.Size, 0)) * body.GetTransformation());
+                        }
+                        else if (!volumeData.HasAirAt(pos))
+                        {
+                            // we are in a mixed chunk, advance pos until air
+                            float offset = 0f;
+                            do
+                            {
+                                pos.y += 0.5f;
+                                offset += 0.5f;
+                            } while (!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
+
+                            // another 1.5m to ensure good ground
+                            offset += 1.5f;
+
+                            body.SetTransformation(mat4.Translate(new vec3(0, offset, 0)) * body.GetTransformation());
+                        }
+                    }
+                }
+
+                break; // only one RB supported
+            }
         }
     }
 }

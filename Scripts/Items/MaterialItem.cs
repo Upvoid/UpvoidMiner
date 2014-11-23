@@ -162,6 +162,7 @@ namespace UpvoidMiner
             
             ItemEntity itemEntity = new ItemEntity(droppedItem, true);
             player.ContainingWorld.AddEntity(itemEntity, previewPlaceMatrix);
+            UpvoidMinerWorldGenerator.ItemEntities.Add(itemEntity);
         }
 
         public override void OnSelect(Player player)
