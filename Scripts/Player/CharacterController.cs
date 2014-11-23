@@ -385,78 +385,115 @@ namespace UpvoidMiner
             if (LocalScript.NoclipEnabled)
                 return;
 
-            if (e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
-            {
-                Body.SetVelocity(vec3.Zero);
-                mat4 transformation = Body.GetTransformation();
-                vec3 pos = new vec3(transformation.col3);
-                pos.y += 20f;
-                Body.SetTransformation(mat4.Translate(pos));
-            }
 
-            // Let the default WASD-keys control the walking directions.
-            if (e.Key == InputKey.W)
+            // Do not walk around when menu or inventory is open
+            bool menuOrInventoryOpen = LocalScript.player.Gui.IsInventoryOpen || LocalScript.player.Gui.IsMenuOpen;
+            if (!menuOrInventoryOpen)
             {
-                if (e.PressType == InputPressArgs.KeyPressType.Down)
-                    walkDirForward++;
-                else
-                    walkDirForward--;
-            }
-            else if (e.Key == InputKey.S)
-            {
-                if (e.PressType == InputPressArgs.KeyPressType.Down)
-                    walkDirForward--;
-                else
-                    walkDirForward++;
-            }
-            else if (e.Key == InputKey.D)
-            {
-                if (e.PressType == InputPressArgs.KeyPressType.Down)
-                    walkDirRight++;
-                else
-                    walkDirRight--;
-            }
-            else if (e.Key == InputKey.A)
-            {
-                if (e.PressType == InputPressArgs.KeyPressType.Down)
-                    walkDirRight--;
-                else
-                    walkDirRight++;
-            }
-            else if (e.Key == InputKey.Space && e.PressType == InputPressArgs.KeyPressType.Down)
-            { //Space lets the player jump
-                if (!GodMode && TouchesGround && jumpCoolDown == 0f)
+                if (e.Key == InputKey.F && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
-                    Body.ApplyImpulse(new vec3(0, 5f * CharacterMass, 0), vec3.Zero);
-                    jumpCoolDown = 0.5f;
+                    Body.SetVelocity(vec3.Zero);
+                    mat4 transformation = Body.GetTransformation();
+                    vec3 pos = new vec3(transformation.col3);
+                    pos.y += 20f;
+                    Body.SetTransformation(mat4.Translate(pos));
                 }
+
+                // Let the default WASD-keys control the walking directions.
+                if (e.Key == InputKey.W)
+                {
+                    if (e.PressType == InputPressArgs.KeyPressType.Down)
+                        walkDirForward++;
+                    else
+                    {
+                        walkDirForward--;
+
+                        // Releasing the forward-key shall not result in moving backwards.
+                        if (walkDirForward < 0)
+                            walkDirForward = 0;
+                    }
+                        
+                }
+                else if (e.Key == InputKey.S)
+                {
+                    if (e.PressType == InputPressArgs.KeyPressType.Down)
+                        walkDirForward--;
+                    else
+                    {
+                        walkDirForward++;
+
+                        // Releasing the backward-key shall not result in moving forwards.
+                        if (walkDirForward > 0)
+                            walkDirForward = 0;
+                    }
+                }
+                else if (e.Key == InputKey.D)
+                {
+                    if (e.PressType == InputPressArgs.KeyPressType.Down)
+                        walkDirRight++;
+                    else
+                    {
+                        walkDirRight--;
+
+                        // Releasing the strafe-right-key shall not result in strafing left.
+                        if (walkDirRight < 0)
+                            walkDirRight = 0;
+                    }    
+                }
+                else if (e.Key == InputKey.A)
+                {
+                    if (e.PressType == InputPressArgs.KeyPressType.Down)
+                        walkDirRight--;
+                    else
+                    {
+                        walkDirRight++;
+
+                        // Releasing the strafe-left-key shall not result in strafing right.
+                        if (walkDirRight > 0)
+                            walkDirRight = 0;
+                    }
+                }
+                else if (e.Key == InputKey.Space && e.PressType == InputPressArgs.KeyPressType.Down)
+                { //Space lets the player jump
+                    if (!GodMode && TouchesGround && jumpCoolDown == 0f)
+                    {
+                        Body.ApplyImpulse(new vec3(0, 5f * CharacterMass, 0), vec3.Zero);
+                        jumpCoolDown = 0.5f;
+                    }
+                }
+                else if (e.Key == InputKey.Shift)
+                { // Shift controls running
+                    if (e.PressType == InputPressArgs.KeyPressType.Down)
+                        IsRunning = true;
+                    else
+                        IsRunning = false;
+                }
+                else if (e.Key == InputKey.O)
+                {
+                    Body.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * Body.GetTransformation());
+                    Body.SetVelocity(vec3.Zero);
+                }
+
+                // Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
+                if (walkDirForward < -1)
+                    walkDirForward = -1;
+                if (walkDirForward > 1)
+                    walkDirForward = 1;
+                if (walkDirRight < -1)
+                    walkDirRight = -1;
+                if (walkDirRight > 1)
+                    walkDirRight = 1;
             }
-            else if (e.Key == InputKey.Shift)
-            { // Shift controls running
-                if (e.PressType == InputPressArgs.KeyPressType.Down)
-                    IsRunning = true;
-                else
-                    IsRunning = false;
-            }
-            else if (e.Key == InputKey.O)
+            else
             {
-                Body.SetTransformation(mat4.Translate(new vec3(0, 50f, 0)) * Body.GetTransformation());
-                Body.SetVelocity(vec3.Zero);
+                // Menu was opened, stop walking.
+                walkDirForward = walkDirRight = 0;
             }
 
-            // Clamp the walking directions to [-1, 1]. The values could get out of bound, for example, when we receive two down events without an up event in between.
-            if (walkDirForward < -1)
-                walkDirForward = -1;
-            if (walkDirForward > 1)
-                walkDirForward = 1;
-            if (walkDirRight < -1)
-                walkDirRight = -1;
-            if (walkDirRight > 1)
-                walkDirRight = 1;
 
             // This hack stops the player movement immediately when we stop walking
             //TODO: do some actual friction simulation instead
-            if (walkDirRight == 0 && walkDirRight == 0 && TouchesGround && e.PressType == InputPressArgs.KeyPressType.Up)
+            if (walkDirRight == 0 && walkDirForward == 0 && TouchesGround && e.PressType == InputPressArgs.KeyPressType.Up)
             {
                 Body.SetVelocity(vec3.Zero);
             }

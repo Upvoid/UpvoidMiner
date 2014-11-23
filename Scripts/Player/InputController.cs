@@ -86,7 +86,7 @@ namespace UpvoidMiner
             }
             else if (e.Axis == AxisType.MouseX)
             {
-                if (!player.Gui.IsInventoryOpen)
+                if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
                     const float rotAzimuthSpeed = -.8f;
                     player.Lookaround(new vec2(e.RelativeChange * rotAzimuthSpeed, 0));
@@ -94,7 +94,7 @@ namespace UpvoidMiner
             }
             else if (e.Axis == AxisType.MouseY)
             {
-                if (!player.Gui.IsInventoryOpen)
+                if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
                     const float rotElevationSpeed = -.8f;
                     player.Lookaround(new vec2(0, e.RelativeChange * rotElevationSpeed));
@@ -196,23 +196,26 @@ namespace UpvoidMiner
                         break;
                 }
             }
- 
-            // Tell the player to use its current item while left mouse button is pressed
-            if (e.Key == InputKey.MouseLeft)
-            {
-                if (player.Inventory.Selection != null && e.PressType == InputPressArgs.KeyPressType.Down && !player.Gui.IsInventoryOpen)
-                    player.StartItemUse();
-                else
-                    player.StopItemUse();
-            }
 
-            if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down && !player.Gui.IsInventoryOpen)
-            {
-                player.TriggerInteraction();
-            }
+            bool menuOrInventoryOpen = player.Gui.IsInventoryOpen || player.Gui.IsMenuOpen;
 
+            if (!menuOrInventoryOpen)
+            {
+                // Tell the player to use its current item while left mouse button is pressed
+                if (e.Key == InputKey.MouseLeft)
+                {
+                    if (player.Inventory.Selection != null && e.PressType == InputPressArgs.KeyPressType.Down)
+                        player.StartItemUse();
+                    else
+                        player.StopItemUse();
+                }
+
+                if (e.Key == InputKey.E && e.PressType == InputPressArgs.KeyPressType.Down)
+                {
+                    player.TriggerInteraction();
+                }
+            }
         }
-
 
     }
 }

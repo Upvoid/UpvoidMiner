@@ -117,6 +117,10 @@ namespace UpvoidMiner
 
         private void toggleInventory()
         {
+            // Do not open inventory when menu is open. Opening menu closes inv. automatically.
+            if (IsMenuOpen)
+                return;
+
             IsInventoryOpen = !IsInventoryOpen;
             updateSocket.SendMessage("ToggleInventory");
         }
@@ -127,12 +131,13 @@ namespace UpvoidMiner
             if(IsMenuOpen)
             {
                 Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "MainMenu.html" + (Scripting.IsDeploy ? "" : "?Debug"));
-                IsInventoryOpen = true;
+
+                // Inventory will be closed by opening menu
+                IsInventoryOpen = false;
             }
             else
             {
                 Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "IngameGui.html" + (Scripting.IsDeploy ? "" : "?Debug"));
-                IsInventoryOpen = false;
             }
         }
 
@@ -184,9 +189,13 @@ namespace UpvoidMiner
                 if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     if (IsInventoryOpen)
+                    {
                         toggleInventory();
+                    }  
                     else
+                    {
                         toggleMenu();
+                    } 
                 }
             };
         }

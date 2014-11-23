@@ -240,43 +240,47 @@ namespace UpvoidMiner
             foreach (var dc in DroneConstraints)
                 dc.Update(elapsedSeconds);
 
+            bool menuOrInventoryOpen = Gui.IsInventoryOpen || Gui.IsMenuOpen;
+
             if (!LocalScript.NoclipEnabled)
             {
-                // Update direction.
-                vec3 camDir = CameraDirection;
-                vec3 camLeft = vec3.cross(vec3.UnitY, camDir).Normalized;
-                vec3 camUp = vec3.cross(camDir, camLeft);
-
-                float mix = (float)Math.Pow(0.01, elapsedSeconds);
-                vec3 targetDir = camDir;
-                vec3 dir = Direction;
-                dir.x = dir.x * mix + targetDir.x * (1 - mix);
-                dir.z = dir.z * mix + targetDir.z * (1 - mix);
-                Direction = dir.Normalized;
-
-                // Update player model.
-                vec3 up = new vec3(0, 1, 0);
-                vec3 left = vec3.cross(up, Direction);
-                mat4 viewMat = new mat4(left, up, Direction, new vec3());
-                rcTorsoShadow.Transform =
-                   viewMat * torsoTransform;
-
-                // Update camera component.
-                cameraComponent.Camera = camera;
-                
-                // Also add 10cm of forward.xz direction for a "head offset"
-                vec3 forward = Direction;
-                forward.y = 0;
-                cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
-
-                // Re-Center mouse if UI is not open.
-                if ( !Gui.IsInventoryOpen )
+                // Update camera when no menu/inventory is open
+                if (!menuOrInventoryOpen)
                 {
+                    // Update direction.
+                    vec3 camDir = CameraDirection;
+                    vec3 camLeft = vec3.cross(vec3.UnitY, camDir).Normalized;
+                    vec3 camUp = vec3.cross(camDir, camLeft);
+
+                    float mix = (float)Math.Pow(0.01, elapsedSeconds);
+                    vec3 targetDir = camDir;
+                    vec3 dir = Direction;
+                    dir.x = dir.x * mix + targetDir.x * (1 - mix);
+                    dir.z = dir.z * mix + targetDir.z * (1 - mix);
+                    Direction = dir.Normalized;
+
+                    // Update player model.
+                    vec3 up = new vec3(0, 1, 0);
+                    vec3 left = vec3.cross(up, Direction);
+                    mat4 viewMat = new mat4(left, up, Direction, new vec3());
+                    rcTorsoShadow.Transform =
+                       viewMat * torsoTransform;
+
+                    // Update camera component.
+                    cameraComponent.Camera = camera;
+
+                    // Also add 10cm of forward.xz direction for a "head offset"
+                    vec3 forward = Direction;
+                    forward.y = 0;
+                    cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
+
+                    // Re-Center mouse if UI is not open.
                     Rendering.MainViewport.SetMouseVisibility(false);
                     Rendering.MainViewport.SetMouseGrab(true);
                 }
                 else
                 {
+                    // UI is open. Show mouse.
                     Rendering.MainViewport.SetMouseVisibility(true);
                     Rendering.MainViewport.SetMouseGrab(false);
                 }
