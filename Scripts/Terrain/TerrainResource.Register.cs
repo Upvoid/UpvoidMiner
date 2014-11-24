@@ -69,7 +69,7 @@ namespace UpvoidMiner
             addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));
             addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper"));
             addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron"));
-            addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
+            //addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
 
             // Rares
             addResource(new SolidTerrainResource("BlueCrystal", "Terrain/BlueCrystal", "Particles/Terrain/BlueCrystal"));
@@ -78,6 +78,17 @@ namespace UpvoidMiner
 
             addResource(new SolidTerrainResource("OreGold", "Terrain/OreGold", "Particles/Terrain/OreGold"));
 
+
+            SolidTerrainResource water = new SolidTerrainResource("Gold", "::Water/Water.Transparent", "Particles/Terrain/Desert", false, true);
+
+            // Water material
+            {
+                int pipeline =
+                water.Material.AddMeshMaterial(water.Material.AddDefaultPipeline(), "Output", Resources.UseMaterial("::Water/Water.Transparent", UpvoidMiner.ModDomain), Renderer.Transparent.Mesh);
+            }
+
+            // Desert
+            addResource(water);
         }
 
         /// <summary>
