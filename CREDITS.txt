@@ -1,26 +1,47 @@
 This document was designed to give credit to those people and libraries on whose work the UpvoidMiner or the UpvoidEngine depend on.
 To all of you: Thank you so much! You are doing a great job!
 
-Resources
-===========
-
 Textures/Models
----------------
+===============
 Some of the used textures and models were created by Nobiax (http://nobiax.deviantart.com/).
 
 
 Music
------
-Some fantastic music was created by Chris Zabriskie (http://chriszabriskie.com/).
-We are using songs from his albums "Undercover Vampire Policeman" and "Cylinders".
-The song "The Temperature of the Air on the Bow of the Kaleetan" (background music in the game) is from his album "Undercover Vampire Policeman".
-The song "Cylinder Two" (also background music in the game) is from his album "Cylinders".
-Those albums are available on the Free Music Archive (http://www.freemusicarchive.org/) and are under the Creative Commons Attribution 4.0 license. 
-The conditions of that license can be found under http://creativecommons.org/licenses/by/4.0/
+===============
+The following is a list of the music we play in the background of UpvoidMiner.
+The List is in alphabetical order and contains artist, song name and the license under which the artist released his or her work.
+For a detailed description on the respective Creative Commons licenses (CC-BY-2.5, CC-BY-3.0) please have a look at the following links:
+http://creativecommons.org/licenses/by/2.5/
+http://creativecommons.org/licenses/by/3.0/
+
+
+"Reverie (small theme)" by "_ghost" (http://dig.ccmixter.org/people/_ghost)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+
+"Emerge" by "Alex beroza" (http://dig.ccmixter.org/people/AlexBeroza)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+
+"Improvisation On Friday..." by "Alex Beroza" (http://dig.ccmixter.org/people/AlexBeroza)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+
+First Track from Frank Nora's "New Midnight Cassette System" (Part 27, Ambient). 
+His music is under the Public Domain and can be found on his website http://mcs.franknora.com/
+
+"Chords For David" by "Pitx" (http://dig.ccmixter.org/people/Pitx)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+
+"Writing the future" by "Pitx" (http://dig.ccmixter.org/people/Pitx)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+
+"Photo theme: Window like" by "Antony Raijekov" (http://dig.ccmixter.org/people/zeos)
+Released under Creative Commons 2.5 Attribution licence (CC-BY-2.5).
+
+"Ethereal" by "Zep Hurme" (http://dig.ccmixter.org/people/zep_hurme)
+Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
 
 
 Libraries
-===========
+===============
 
 The following is a list of awesome libraries used in the UpvoidEngine or the UpvoidMiner in no particular order.
 Every list item contains the name, a URL for more information on the library and the license (or terms of service) via which it was released.
@@ -54,7 +75,7 @@ Chart.js                    (http://www.chartjs.org/)                       MIT
 ConcurrentQueue             (https://github.com/cameron314/concurrentqueue) Simplified BSD License
 
 
-===========
+===============
 
 The individual license files for the libraries above can be found in the folder "LICENCES".
 However, you can find generic versions for most of the licenses at the following locations:
@@ -66,6 +87,8 @@ GNU Lesser General Public License, Version 2.1 http://www.gnu.org/licenses/old-l
 GNU Library General Public License, Version 2.0 http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
 Apache License 2.0 http://www.apache.org/licenses/LICENSE-2.0
 MIT http://opensource.org/licenses/mit-license.html
+CC BY 2.5 http://creativecommons.org/licenses/by/2.5/
+CC BY 3.0 http://creativecommons.org/licenses/by/3.0/
 CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
 BSD 3-clause http://opensource.org/licenses/BSD-3-Clause
 Google APIs Terms of Service ("API ToS") https://developers.google.com/terms/

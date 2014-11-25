@@ -158,14 +158,40 @@ namespace UpvoidMiner
             birdSound.Play();
 
             // Create a new (repeating) music queue with pauses of 5-10s between the songs
-            musicQueue = new MusicQueue(5, 10, true);
+            musicQueue = new MusicQueue(4, 8, true);
 
             // Add songs to the music queue
-            SoundResource musicRes2 = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Undercover Vampire Policeman/Chris_Zabriskie_-_01_-_The_Temperature_of_the_Air_on_the_Bow_of_the_Kaleetan", UpvoidMiner.ModDomain);
-            musicQueue.Add(new Sound(musicRes2, vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/_ghost_-_Reverie_(small_theme)", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
-            SoundResource musicRes = Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Chris Zabriskie/Cylinders/Chris_Zabriskie_-_02_-_Cylinder_Two", UpvoidMiner.ModDomain);
-            musicQueue.Add(new Sound(musicRes, vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Improvisation_On_Friday", UpvoidMiner.ModDomain), 
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Emerge", UpvoidMiner.ModDomain), 
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/Frank_Nora_-_New_Midnight_Cassette_27_Ambient01", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/Pitx_-_Chords_For_David", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/Pitx_-_Writing_the_future", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zeos_-_Photo_theme_Window_like", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zep_hurme_-_Ethereal", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
             // Do not play music. this is done by the music queue 8-)
             //music.Play();
