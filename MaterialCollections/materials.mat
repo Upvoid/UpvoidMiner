@@ -298,3 +298,12 @@
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Color: uSpecularColor, .1, .1, .1, 4
+    
+[Flower] : Default
+   Shader: Vegetation/Flower.Opaque
+   Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower03.All
+   Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Flowers/Flower03.Normal
+   Parameter: uFadeDistance, 35
+   Culling: None
+   MaxDistance: 30
+   Parameter: uDiscardBias, .5

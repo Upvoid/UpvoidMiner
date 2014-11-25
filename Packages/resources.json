@@ -1151,5 +1151,30 @@
     "Name" : "Grassblade",
     "Path" : "~.png",
     "Type" : "Texture"
+},
+
+{
+    "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "Flower",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Flower",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
+        "Files" : [
+            "Vegetation/Flowers/Flower.Opaque.fsh",
+            "Vegetation/Flowers/Flower.vsh"
+        ],
+        "Name" : "Vegetation/Flower.Opaque",
+        "Type" : "File"
+    },
+    "Name" : "Vegetation/Flower.Opaque",
+    "Path" : "~.shader",
+    "Type" : "Shader"
 }
 ]
