@@ -76,10 +76,11 @@ namespace UpvoidMiner
         // Local variables for the current settings values
         private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
         private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
-        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
-        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
-        private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
+        private int  settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
+        private int  settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
+        private int  settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
+        private bool settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
+        private int  settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
         private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
@@ -145,7 +146,17 @@ namespace UpvoidMiner
             set
             {
                 settingMusicVolume = value;
-                Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
+                Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
+            }
+        }
+
+        [UICheckBox]
+        public bool MuteMusic
+        {
+            get { return settingMuteMusic; }
+            set { 
+                settingMuteMusic = value;
+                Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
             }
         }
 
@@ -289,6 +300,7 @@ namespace UpvoidMiner
             Scripting.SetUserSettingNumber("Audio/Master Volume", settingMasterVolume);
             Scripting.SetUserSettingNumber("Audio/SFX Volume", settingSfxVolume);
             Scripting.SetUserSettingNumber("Audio/Music Volume", settingMusicVolume);
+            Scripting.SetUserSetting("Audio/Mute Music", settingMuteMusic);
 
             // Graphics settings
             Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
@@ -331,6 +343,7 @@ namespace UpvoidMiner
             settingMasterVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 100);
             settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/SFX Volume", 50);
             settingMusicVolume = (int)Scripting.GetUserSettingNumber("Audio/Music Volume", 50);
+            settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
 
             settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
 
@@ -355,7 +368,7 @@ namespace UpvoidMiner
             // Re-apply the former settings
             Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
             Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
-            Audio.SetVolumeForSpecificAudioType(settingMusicVolume / 100f, (int)AudioType.Music);
+            Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
             LocalScript.camera.HorizontalFieldOfView = settingFieldOfView;
 
             pipelineChanges = false;
