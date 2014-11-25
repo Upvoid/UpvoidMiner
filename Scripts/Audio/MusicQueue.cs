@@ -73,6 +73,21 @@ namespace UpvoidMiner
             }
         }
 
+        public void SkipCurrentSong()
+        {
+            if (queue.Count == 0)
+                return;
+
+            Sound current = queue[0];
+            if (current.IsPlaying())
+            {
+                // Stop playing the current song
+                current.Stop();
+            }
+
+            currentPause = 0;
+        }
+
         /// <summary>
         /// Update the musicqueue
         /// </summary>

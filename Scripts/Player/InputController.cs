@@ -141,6 +141,11 @@ namespace UpvoidMiner
                             player.DropItem(player.Inventory.Selection);
                         break;
 
+                    case InputKey.Period:
+                        if(LocalScript.musicQueue != null)
+                            LocalScript.musicQueue.SkipCurrentSong();
+                        break;
+
                     // F1 resets the player position
                     case InputKey.F1:
                         player.SetPosition(Player.SpawnPosition);
