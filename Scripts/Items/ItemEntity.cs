@@ -35,6 +35,8 @@ namespace UpvoidMiner
         protected List<PhysicsComponent> physicsComponents = new List<PhysicsComponent>();
         protected List<RenderComponent> renderComponents = new List<RenderComponent>();
 
+        public float Mass { get; private set; }
+
         TriggerId AddItemTrigger;
 
         public bool FixedPosition { get; protected set; }
@@ -63,6 +65,7 @@ namespace UpvoidMiner
         {
             physicsComponents.Add(comp);
             thisEntity.AddComponent(comp);
+            Mass += comp.RigidBody.Mass;
         }
         /// <summary>
         /// Adds a render component to this entity.

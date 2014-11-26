@@ -35,8 +35,8 @@ namespace UpvoidMiner
         /// </summary>
         public readonly MaterialResource DigParticleMaterial;
 
-        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial, bool defaultPipeline = true) :
-            base(name)
+        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial, float massDensity, bool defaultPipeline = true) :
+            base(name, massDensity)
         {
             RenderMaterial = Resources.UseMaterial(renderMaterial, UpvoidMiner.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, UpvoidMiner.ModDomain);

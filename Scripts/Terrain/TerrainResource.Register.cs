@@ -39,12 +39,12 @@ namespace UpvoidMiner
             // Register some simple solid materials.
 
             // Dirt
-            addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt"));
+            addResource(new VegetatedTerrainResource("Dirt", "Terrain/Dirt", "Particles/Terrain/Dirt", 830f));
 
 
             
 
-            SolidTerrainResource desertResource = new SolidTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert");
+            SolidTerrainResource desertResource = new SolidTerrainResource("Desert", "Terrain/Desert", "Particles/Terrain/Desert", 1320f);
             desertResource.Material.AddAttributeFloat("aParviflora", 0, 0, 4);
 
             // Spawn Parviflora
@@ -59,24 +59,24 @@ namespace UpvoidMiner
 
             // Stones
             for (int i = 1; i <= 14; ++i)
-                addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00")));
+                addResource(new SolidTerrainResource("Stone." + i.ToString("00"), "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00"), 2700f));
 
             // Wood
-            addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood"));
-            addResource(new SolidTerrainResource("BirchWood", "Terrain/BirchWood", "Particles/Terrain/BirchWood"));
+            addResource(new SolidTerrainResource("Wood", "Terrain/Wood", "Particles/Terrain/Wood", 600f));
+            addResource(new SolidTerrainResource("BirchWood", "Terrain/BirchWood", "Particles/Terrain/BirchWood", 650f));
 
             // Ores + Metals
-            addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal"));
-            addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper"));
-            addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron"));
-            addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold"));
+            addResource(new SolidTerrainResource("Coal", "Terrain/Coal", "Particles/Terrain/Coal", 1300f));
+            addResource(new SolidTerrainResource("Copper", "Terrain/Copper", "Particles/Terrain/Copper", 9001f));
+            addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron", 7700f));
+            addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold", 19302f));
 
             // Rares
-            addResource(new SolidTerrainResource("BlueCrystal", "Terrain/BlueCrystal", "Particles/Terrain/BlueCrystal"));
-            addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock"));
-            addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock"));
+            addResource(new SolidTerrainResource("BlueCrystal", "Terrain/BlueCrystal", "Particles/Terrain/BlueCrystal", 3500f));
+            addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock", 2900f));
+            addResource(new SolidTerrainResource("AlienRock", "Terrain/AlienRock", "Particles/Terrain/AlienRock", 2900f));
 
-            addResource(new SolidTerrainResource("OreGold", "Terrain/OreGold", "Particles/Terrain/OreGold"));
+            addResource(new SolidTerrainResource("OreGold", "Terrain/OreGold", "Particles/Terrain/OreGold", 4000f));
 
         }
 

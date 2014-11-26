@@ -191,7 +191,7 @@ namespace UpvoidMiner
 
             // Create a capsule shaped rigid body representing the character in the physics world.
             if (GodMode)
-                Body = new RigidBody(1.0f, mat4.Identity, new SphereShape(0.3f));
+                Body = new RigidBody(10000.0f, mat4.Identity, new SphereShape(0.3f));
             else
                 Body = new RigidBody(_bodyMass, mat4.Identity, new CapsuleShape(CharacterDiameter / 2f, BodyHeight));
             ContainingWorld.Physics.AddRigidBody(Body);

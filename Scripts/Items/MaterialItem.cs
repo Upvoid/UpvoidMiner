@@ -69,27 +69,14 @@ namespace UpvoidMiner
         /// <summary>
         /// Volume of this material item.
         /// </summary>
-        public float Volume
-        {
-            get 
-            {
-                switch (Shape)
-                {
-                    case MaterialShape.Cube: return Size.x * Size.y * Size.z;
-                    case MaterialShape.Cylinder: return 2 * (float)Math.PI * Size.x * Size.y * Size.z;
-                    case MaterialShape.Sphere: return 4f / 3f * (float)Math.PI * Size.x * Size.y * Size.z;
-                    case MaterialShape.Cone: return 1f / 3f * (float)Math.PI * Size.x * Size.y * Size.z;
-                    default: Debug.Fail("Invalid shape"); return -1;
-                }
-            }
-        }
+        public float Volume { get { return VolumeOf(Shape, Size); } }
 
         /// <summary>
         /// Gets a textual description of the dimensions
         /// </summary>
         public string DimensionString
         {
-            get 
+            get
             {
                 switch (Shape)
                 {
@@ -102,8 +89,23 @@ namespace UpvoidMiner
             }
         }
 
-        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1, float weight = 10.0f):
-            base(material.Name + " " + shape, null, weight, ItemCategory.Material, stackSize)
+        /// <summary>
+        /// Returns the volume of a given shape/size combo
+        /// </summary>
+        public static float VolumeOf(MaterialShape shape, vec3 size)
+        {
+            switch (shape)
+            {
+                case MaterialShape.Cube: return size.x * size.y * size.z;
+                case MaterialShape.Cylinder: return 2 * (float)Math.PI * size.x * size.y * size.z;
+                case MaterialShape.Sphere: return 4f / 3f * (float)Math.PI * size.x * size.y * size.z;
+                case MaterialShape.Cone: return 1f / 3f * (float)Math.PI * size.x * size.y * size.z;
+                default: Debug.Fail("Invalid shape"); return -1;
+            }
+        }
+
+        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1) :
+            base(material.Name + " " + shape, null, material.MassDensity * VolumeOf(shape, size), ItemCategory.Material, stackSize)
         {
             Material = material;
             Shape = shape;
@@ -119,10 +121,10 @@ namespace UpvoidMiner
         public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
             MaterialItem item = rhs as MaterialItem;
-            if ( item == null ) return false;
-            if ( item.Material != Material ) return false;
-            if ( item.Shape != Shape ) return false;
-            if ( item.Size != Size ) return false;
+            if (item == null) return false;
+            if (item.Material != Material) return false;
+            if (item.Shape != Shape) return false;
+            if (item.Size != Size) return false;
 
             return Merge(item, subtract, force, dryrun);
         }
@@ -134,9 +136,8 @@ namespace UpvoidMiner
         {
             return new MaterialItem(Material, Shape, Size, StackSize);
         }
+        
 
-        
-        
         #region Inventory Logic
         /// <summary>
         /// Renderjob for the preview material
@@ -146,13 +147,13 @@ namespace UpvoidMiner
         private MeshRenderJob previewMaterialPlacedIndicator;
         private bool previewPlacable = false;
         private mat4 previewPlaceMatrix;
-        
+
         /// <summary>
         /// Yes, we have a preview for materials (ray for placement, update for holding).
         /// </summary>
         public override bool HasRayPreview { get { return true; } }
         public override bool HasUpdatePreview { get { return true; } }
-        
+
         public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal, Entity _hitEntity)
         {
             if (!previewPlacable || player == null)
@@ -181,11 +182,11 @@ namespace UpvoidMiner
                 material = (Material as SolidTerrainResource).RenderMaterial;
             else
                 throw new NotImplementedException("Unknown terrain resource");
-            
+
             // Create a solid object for 'holding'.
             previewMaterial = new MeshRenderJob(Renderer.Opaque.Mesh, material, mesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterial);
-            
+
             // Create an overlay object as 'placement-indicator'.
             previewMaterialPlaced = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreview", UpvoidMiner.ModDomain), mesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlaced);
@@ -193,12 +194,12 @@ namespace UpvoidMiner
             previewMaterialPlacedIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlacedIndicator);
         }
-        
-        public override void OnUseParameterChange(Player player, float _delta) 
+
+        public override void OnUseParameterChange(Player player, float _delta)
         {
             // TODO: maybe rotate?
         }
-        
+
         public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
         {
             // Hide if not visible.
@@ -219,23 +220,23 @@ namespace UpvoidMiner
             float offset;
             switch (Shape)
             {
-                case MaterialShape.Cube: 
+                case MaterialShape.Cube:
                     scaling = mat4.Scale(Size / 2f);
                     offset = Size.y / 2f;
                     break;
-                case MaterialShape.Sphere: 
+                case MaterialShape.Sphere:
                     scaling = mat4.Scale(Size);
                     offset = Size.y;
                     break;
-                case MaterialShape.Cylinder: 
-                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
+                case MaterialShape.Cylinder:
+                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z));
                     offset = Size.y / 2f;
                     break;
                 default: throw new NotImplementedException("Invalid shape");
             }
             mat4 transform = new mat4(
                 left, up, dir, _worldPos + (offset + .03f) * _worldNormal);
-            
+
             previewPlacable = true;
             previewPlaceMatrix = transform;
 
@@ -279,7 +280,7 @@ namespace UpvoidMiner
         }
         #endregion
 
-        #region Item Entity        
+        #region Item Entity
         /// <summary>
         /// Is called when an entity is created for this item (e.g. if dropped).
         /// This function is supposed to add renderjobs and physicscomponents.
@@ -293,20 +294,20 @@ namespace UpvoidMiner
             mat4 scaling;
             switch (Shape)
             {
-                case MaterialShape.Cube: 
+                case MaterialShape.Cube:
                     collShape = new BoxShape(Size / 2f);
                     scaling = mat4.Scale(Size / 2f);
                     mesh = Resources.UseMesh("Box", UpvoidMiner.ModDomain);
                     break;
-                case MaterialShape.Sphere: 
+                case MaterialShape.Sphere:
                     collShape = new SphereShape(Size.x);
                     scaling = mat4.Scale(Size);
                     mesh = Resources.UseMesh("Sphere", UpvoidMiner.ModDomain);
                     break;
-                case MaterialShape.Cylinder: 
+                case MaterialShape.Cylinder:
                     collShape = new CylinderShape(Size.x, Size.y / 2f);
                     mesh = Resources.UseMesh("Cylinder", UpvoidMiner.ModDomain);
-                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z)); 
+                    scaling = mat4.Scale(new vec3(Size.x, Size.y / 2f, Size.z));
                     break;
                 default: throw new NotImplementedException("Invalid Shape");
             }
@@ -321,15 +322,15 @@ namespace UpvoidMiner
             body.SetFriction(1f);
             body.SetDamping(0.2f, 0.4f);
             itemEntity.ContainingWorld.Physics.AddRigidBody(body);
-            
+
             itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
-            
+
             MaterialResource material;
             if (Material is SolidTerrainResource)
                 material = (Material as SolidTerrainResource).RenderMaterial;
             else
                 throw new NotImplementedException("Unknown terrain resource");
-            
+
             // Create the graphical representation of the item.
             MeshRenderJob renderJob = new MeshRenderJob(
                 Renderer.Opaque.Mesh,
@@ -338,15 +339,15 @@ namespace UpvoidMiner
                 mat4.Identity
                 );
             itemEntity.AddRenderComponent(new RenderComponent(renderJob, scaling, true));
-            
+
             MeshRenderJob renderJobShadow = new MeshRenderJob(
-                Renderer.Shadow.Mesh, 
-                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), 
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
                 mesh,
                 mat4.Identity
                 );
             itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, scaling, true));
-            
+
         }
         #endregion
     }

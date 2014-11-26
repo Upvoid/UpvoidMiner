@@ -39,14 +39,17 @@ namespace UpvoidMiner
         /// </summary>
         public readonly string Name;
 
-        public TerrainResource(string name, bool translucent = false)
+        /// <summary>
+        /// Density in kg/m^3
+        /// </summary>
+        public readonly float MassDensity;
+
+        public TerrainResource(string name, float massDensity, bool translucent = false)
         {
-            if (Scripting.IsHost)
-                Material = terrain.RegisterMaterial(name, translucent);
-            else 
-                Material = terrain.QueryMaterialFromName(name);
+            Material = Scripting.IsHost ? terrain.RegisterMaterial(name, translucent) : terrain.QueryMaterialFromName(name);
             Index = Material.MaterialIndex;
             Name = name;
+            MassDensity = massDensity;
         }
     }
 }
