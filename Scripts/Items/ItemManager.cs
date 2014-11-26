@@ -17,6 +17,11 @@ namespace UpvoidMiner.Items
         private static readonly Dictionary<Item, ItemEntity> Item2Entity = new Dictionary<Item, ItemEntity>();
 
         /// <summary>
+        /// Get all items and their entities
+        /// </summary>
+        public static IEnumerable<KeyValuePair<Item, ItemEntity>> AllItemsEntities { get { return Item2Entity; } }
+
+        /// <summary>
         /// Creates an entity for item and places it into the world at a given transformation
         /// </summary>
         public static ItemEntity InstantiateItem(Item item, mat4 transform, bool fixedPosition)

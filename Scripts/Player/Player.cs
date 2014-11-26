@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using Engine;
 using Engine.Audio;
 using Engine.Universe;
@@ -216,6 +217,7 @@ namespace UpvoidMiner
 
             Inventory.InitCraftingRules();
             generateInitialItems();
+            LoadWorldItem();
 
             SetPosition(SpawnPosition);
         }
@@ -462,7 +464,7 @@ namespace UpvoidMiner
         }
 
         [Serializable]
-        public class InventorySave
+        public class ItemSave
         {
             [Serializable]
             public class ResourceItemSave
@@ -471,6 +473,14 @@ namespace UpvoidMiner
                 public string Resource;
                 public float Volume;
             }
+
+            [Serializable]
+            public class PipetteItemSave
+            {
+                public long Id;
+                public int StackSize;
+            }
+
             [Serializable]
             public class ToolItemSave
             {
@@ -478,6 +488,7 @@ namespace UpvoidMiner
                 public ToolType Type;
                 public int StackSize;
             }
+
             [Serializable]
             public class MaterialItemSave
             {
@@ -490,12 +501,121 @@ namespace UpvoidMiner
                 public int StackSize;
             }
 
-            public List<ResourceItemSave> resourceItems = new List<ResourceItemSave>();
-            public List<ToolItemSave> toolItems = new List<ToolItemSave>();
-            public List<MaterialItemSave> materialItems = new List<MaterialItemSave>();
+            public ResourceItemSave ResourceItem;
+            public ToolItemSave ToolItem;
+            public MaterialItemSave MaterialItem;
+            public PipetteItemSave PipetteItem;
+
+            public long Id()
+            {
+                if (ResourceItem != null)
+                    return ResourceItem.Id;
+                if (ToolItem != null)
+                    return ToolItem.Id;
+                if (MaterialItem != null)
+                    return MaterialItem.Id;
+                return -1;
+            }
+
+            public Item DeserializeItem()
+            {
+                if (ResourceItem != null)
+                    return new ResourceItem(TerrainResource.FromName(ResourceItem.Resource), ResourceItem.Volume);
+                if (ToolItem != null)
+                    return new ToolItem(ToolItem.Type, ToolItem.StackSize);
+                if (MaterialItem != null)
+                    return new MaterialItem(TerrainResource.FromName(MaterialItem.Resource), MaterialItem.Shape, new vec3(MaterialItem.SizeX, MaterialItem.SizeY, MaterialItem.SizeZ), MaterialItem.StackSize);
+                if (PipetteItem != null)
+                    return new PipetteItem(PipetteItem.StackSize);
+                return null;
+            }
+        }
+
+        [Serializable]
+        public class WorldItemSave
+        {
+            [Serializable]
+            public class WorldItem
+            {
+                public ItemSave Item;
+                public mat4 Transform;
+                public bool FixedPosition;
+            }
+
+            public List<WorldItem> items = new List<WorldItem>();
+        }
+
+        [Serializable]
+        public class InventorySave
+        {
+            public const int SaveVersion = 2;
+            public int Version = SaveVersion;
+
+            public List<ItemSave> items = new List<ItemSave>();
 
             public long[] quickAccess;
             public int currentQuickAccess;
+
+            public static ItemSave saveObj(Item item)
+            {
+                if (item == null)
+                    return new ItemSave();
+
+
+                if (item is ToolItem)
+                {
+                    return new ItemSave
+                    {
+                        ToolItem = new ItemSave.ToolItemSave
+                            {
+                                Id = item.Id,
+                                StackSize = (item as ToolItem).StackSize,
+                                Type = (item as ToolItem).ToolType
+                            }
+                    };
+                }
+                else if (item is MaterialItem)
+                {
+                    return new ItemSave
+                    {
+                        MaterialItem = new ItemSave.MaterialItemSave
+                            {
+                                Id = item.Id,
+                                StackSize = (item as MaterialItem).StackSize,
+                                SizeX = (item as MaterialItem).Size.x,
+                                SizeY = (item as MaterialItem).Size.y,
+                                SizeZ = (item as MaterialItem).Size.z,
+                                Shape = (item as MaterialItem).Shape,
+                                Resource = (item as MaterialItem).Material.Name
+                            }
+                    };
+                }
+                else if (item is ResourceItem)
+                {
+                    return new ItemSave
+                    {
+                        ResourceItem = new ItemSave.ResourceItemSave
+                            {
+                                Id = item.Id,
+                                Volume = (item as ResourceItem).Volume,
+                                Resource = (item as ResourceItem).Material.Name,
+                            }
+                    };
+                }
+                else if (item is PipetteItem)
+                {
+                    return new ItemSave
+                    {
+                        PipetteItem = new ItemSave.PipetteItemSave
+                        {
+                            Id = item.Id,
+                            StackSize = (item as PipetteItem).StackSize
+                        }
+                    };
+                }
+                else
+                    throw new InvalidDataException("Unknown item type: " + item.GetType());
+            }
         }
 
         /// <summary>
@@ -504,47 +624,30 @@ namespace UpvoidMiner
         public void Save()
         {
             saveInventory();
+            saveWorld();
+        }
+
+        void saveWorld()
+        {
+            WorldItemSave save = new WorldItemSave();
+            foreach (var kvp in ItemManager.AllItemsEntities)
+            {
+                save.items.Add(new WorldItemSave.WorldItem()
+                {
+                    Item = InventorySave.saveObj(kvp.Key),
+                    Transform = kvp.Value.thisEntity.Transform,
+                    FixedPosition = kvp.Value.FixedPosition
+                });
+            }
+            Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathWorldItems).Directory.FullName);
+            File.WriteAllText(UpvoidMiner.SavePathWorldItems, JsonConvert.SerializeObject(save, Formatting.Indented));
         }
 
         void saveInventory()
         {
             InventorySave save = new InventorySave();
             foreach (var item in Inventory.Items)
-            {
-                if (item is ToolItem)
-                {
-                    save.toolItems.Add(new InventorySave.ToolItemSave
-                    {
-                        Id = item.Id,
-                        StackSize = (item as ToolItem).StackSize,
-                        Type = (item as ToolItem).ToolType
-                    });
-                }
-                else if (item is MaterialItem)
-                {
-                    save.materialItems.Add(new InventorySave.MaterialItemSave
-                    {
-                        Id = item.Id,
-                        StackSize = (item as MaterialItem).StackSize,
-                        SizeX = (item as MaterialItem).Size.x,
-                        SizeY = (item as MaterialItem).Size.y,
-                        SizeZ = (item as MaterialItem).Size.z,
-                        Shape = (item as MaterialItem).Shape,
-                        Resource = (item as MaterialItem).Material.Name
-                    });
-                }
-                else if (item is ResourceItem)
-                {
-                    save.resourceItems.Add(new InventorySave.ResourceItemSave
-                    {
-                        Id = item.Id,
-                        Volume = (item as ResourceItem).Volume,
-                        Resource = (item as ResourceItem).Material.Name,
-                    });
-                }
-                //else
-                //    throw new InvalidDataException("Unknown item type: " + item.GetType());
-            }
+                save.items.Add(InventorySave.saveObj(item));
 
             save.quickAccess = new long[Inventory.QuickAccessSlotCount];
             for (int i = 0; i < Inventory.QuickAccessSlotCount; ++i)
@@ -560,6 +663,8 @@ namespace UpvoidMiner
         /// </summary>
         void generateInitialItems()
         {
+            bool genDefault;
+
             if (GodMode)
             {
                 Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
@@ -574,8 +679,37 @@ namespace UpvoidMiner
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 1000));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 1000));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 1000));
+                genDefault = false;
             }
             else if (!File.Exists(UpvoidMiner.SavePathInventory))
+            {
+                genDefault = true;
+            }
+            else // Load inventory
+            {
+                InventorySave save = JsonConvert.DeserializeObject<InventorySave>(File.ReadAllText(UpvoidMiner.SavePathInventory));
+                if (save.Version == InventorySave.SaveVersion)
+                {
+
+                    Dictionary<long, Item> id2item = new Dictionary<long, Item>();
+                    foreach (var item in save.items)
+                    {
+                        id2item.Add(item.Id(), item.DeserializeItem());
+                        Inventory.AddItem(id2item[item.Id()]);
+                    }
+
+                    Inventory.ClearQuickAccess();
+                    for (int i = 0; i < Inventory.QuickAccessSlotCount; ++i)
+                        if (id2item.ContainsKey(save.quickAccess[i]))
+                            Inventory.SetQuickAccess(id2item[save.quickAccess[i]], i);
+                    Inventory.SelectQuickAccessSlot(save.currentQuickAccess);
+
+                    genDefault = false;
+                }
+                else genDefault = true;
+            }
+
+            if (genDefault)
             {
                 // Tools
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
@@ -600,35 +734,20 @@ namespace UpvoidMiner
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 10));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 10));
             }
-            else // Load inventory
-            {
-                InventorySave save = JsonConvert.DeserializeObject<InventorySave>(File.ReadAllText(UpvoidMiner.SavePathInventory));
-
-                Dictionary<long, Item> id2item = new Dictionary<long, Item>();
-                foreach (var item in save.toolItems)
-                {
-                    id2item.Add(item.Id, new ToolItem(item.Type, item.StackSize));
-                    Inventory.AddItem(id2item[item.Id]);
-                }
-                foreach (var item in save.materialItems)
-                {
-                    id2item.Add(item.Id, new MaterialItem(TerrainResource.FromName(item.Resource), item.Shape, new vec3(item.SizeX, item.SizeY, item.SizeZ), item.StackSize));
-                    Inventory.AddItem(id2item[item.Id]);
-                }
-                foreach (var item in save.resourceItems)
-                {
-                    id2item.Add(item.Id, new ResourceItem(TerrainResource.FromName(item.Resource), item.Volume));
-                    Inventory.AddItem(id2item[item.Id]);
-                }
-
-                Inventory.ClearQuickAccess();
-                for (int i = 0; i < Inventory.QuickAccessSlotCount; ++i)
-                    if (id2item.ContainsKey(save.quickAccess[i]))
-                        Inventory.SetQuickAccess(id2item[save.quickAccess[i]], i);
-                Inventory.SelectQuickAccessSlot(save.currentQuickAccess);
-            }
 
             Gui.OnUpdate();
+        }
+
+        private void LoadWorldItem()
+        {
+            if (File.Exists(UpvoidMiner.SavePathWorldItems))
+            {
+                WorldItemSave save = JsonConvert.DeserializeObject<WorldItemSave>(File.ReadAllText(UpvoidMiner.SavePathWorldItems));
+                foreach (var item in save.items)
+                {
+                    ItemManager.InstantiateItem(item.Item.DeserializeItem(), item.Transform, item.FixedPosition);
+                }
+            }
         }
 
         /// <summary>
@@ -661,7 +780,7 @@ namespace UpvoidMiner
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Network.GCManager.CurrentUserID);
         }
         /// <summary>
-        /// Removes a drone from drone contraints.
+        /// Removes a drone from drone constraints.
         /// </summary>
         public void RemoveDrone(Drone drone)
         {
@@ -791,7 +910,6 @@ namespace UpvoidMiner
             // Add the received item to the inventory.
             Inventory.AddItem(addItemMsg.PickedItem);
         }
-
     }
 }
 
