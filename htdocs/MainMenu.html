@@ -4,23 +4,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
+    <link rel="stylesheet" href="paper.bootstrap.min.css">
     <title>UpvoidMiner</title>
     <style type="text/css">
       .upvoid-debug
       {
          display:none !Important;
       }
-      .upvoid-debug-menu
-      {
-         /*max-height: 527px;*/
-         max-height: 453px;
-      }
     </style>
 </head>
 <body style="background: transparent; padding: 1%; height: 100%; overflow: hidden;">
   <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px;"><i class="fa fa-warning"></i> This is an alpha version. Expect crashes and bugs. <br> Please report any problems at community.upvoid.com.</p>
-    <div class="panel panel-default upvoid-debug-menu InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; height:90%; overflow-y:auto;">
+    <div id="menu" class="panel panel-default upvoid-debug-menu InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; overflow-y:auto;">
         <div class="panel-body text-center">
             <h1>UpvoidMiner</h1>
 
@@ -87,6 +82,15 @@
          $('.upvoid-debug').removeClass("upvoid-debug");
          $('.upvoid-debug-menu').css("max-height", "527px");
       }
+
+      function menuResize() {
+        var menu = $('#menu');
+        var top = menu.offset().top;
+        var winheight = $(window).height();
+        menu.css("max-height", (winheight - top - 32) + "px");
+      }
+      $(function() { menuResize(); });
+      $(window).resize(function() { menuResize(); });
 
     </script>
 

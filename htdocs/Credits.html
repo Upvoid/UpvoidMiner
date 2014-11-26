@@ -3,13 +3,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="paper.bootstrap.min.css">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
     <title>Credits</title>
 </head>
 <body style="background: transparent; padding: 1em;">
-    <div class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto;">
-        <div class="panel-body text-center InputConsumer" style="max-height:500px; overflow-y: auto;">
+    <div id="menu" class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto; overflow-y: auto;">
+        <div class="panel-body text-center InputConsumer">
             <h1>Credits</h1>
 <p>UpvoidMiner and UpvoidEngine are developed by</p>
             <h5>Philip Trettner</h5>
@@ -31,6 +31,15 @@
         function clickUrl(url) {
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url="+url);
         }
+
+      function menuResize() {
+        var menu = $('#menu');
+        var top = menu.offset().top;
+        var winheight = $(window).height();
+        menu.css("max-height", (winheight - top - 32) + "px");
+      }
+      $(function() { menuResize(); });
+      $(window).resize(function() { menuResize(); });
     </script>
 
 </body>
