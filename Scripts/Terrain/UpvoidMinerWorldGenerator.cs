@@ -71,7 +71,6 @@ namespace UpvoidMiner
         }
         public static EntitySave entitySave = new EntitySave();
         public static List<Tree> trees = new List<Tree>();
-        public static List<ItemEntity> ItemEntities = new List<ItemEntity>(); 
 
         // Updates all trees and returns position of closest one
         public static vec3 UpdateTrees(vec3 refPos)
@@ -335,14 +334,6 @@ namespace UpvoidMiner
             t.Position = pos;
             world.AddEntity(t, transform1);
             trees.Add(t);
-        }
-
-        public static void UpdateItems()
-        {
-            foreach (var itemEntity in ItemEntities)
-            {
-                itemEntity.UpdatePhysics();
-            }
         }
     }
 }

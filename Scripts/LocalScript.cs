@@ -32,6 +32,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
 using EfficientUI;
+using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
@@ -398,7 +399,7 @@ namespace UpvoidMiner
             }
 
             // update items
-            UpvoidMinerWorldGenerator.UpdateItems();
+            ItemManager.Update();
 
             // Update all trees and keep position of closest tree, if any
             vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);

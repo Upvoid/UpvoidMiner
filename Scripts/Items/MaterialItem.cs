@@ -20,6 +20,7 @@ using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
 using Engine.Physics;
+using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
@@ -159,10 +160,8 @@ namespace UpvoidMiner
 
             Item droppedItem = new MaterialItem(Material, Shape, Size);
             player.Inventory.RemoveItem(droppedItem);
-            
-            ItemEntity itemEntity = new ItemEntity(droppedItem, true);
-            player.ContainingWorld.AddEntity(itemEntity, previewPlaceMatrix);
-            UpvoidMinerWorldGenerator.ItemEntities.Add(itemEntity);
+
+            ItemManager.InstantiateItem(droppedItem, previewPlaceMatrix, false);
         }
 
         public override void OnSelect(Player player)

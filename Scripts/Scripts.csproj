@@ -57,6 +57,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Audio\MusicQueue.cs" />
+    <Compile Include="Items\ItemManager.cs" />
     <Compile Include="Items\PipetteItem.cs" />
     <Compile Include="LocalScript.cs" />
     <Compile Include="HostScript.cs" />

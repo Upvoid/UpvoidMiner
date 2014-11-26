@@ -28,6 +28,7 @@ using Engine.Network;
 using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
+using UpvoidMiner.Items;
 
 
 namespace UpvoidMiner
@@ -35,7 +36,7 @@ namespace UpvoidMiner
     /// <summary>
     /// Contains the game logic and the internal state of the player character.
     /// </summary>
-    public class Player: EntityScript
+    public class Player : EntityScript
     {
         /// <summary>
         /// The render component for the torso.
@@ -131,16 +132,16 @@ namespace UpvoidMiner
         /// </summary>
         public List<DroneConstraint> DroneConstraints = new List<DroneConstraint>();
 
-		/// <summary>
-		/// True iff the player is physically frozen because the world around him is not yet generated.
-		/// </summary>
-		/// <value>The position.</value>
-		public bool IsFrozen { get { return character.Body.IsFrozen; } }
+        /// <summary>
+        /// True iff the player is physically frozen because the world around him is not yet generated.
+        /// </summary>
+        /// <value>The position.</value>
+        public bool IsFrozen { get { return character.Body.IsFrozen; } }
 
-		/// <summary>
-		/// The Value of IsFrozen from the last update frame.
-		/// </summary>
-		bool WasFrozen = false;
+        /// <summary>
+        /// The Value of IsFrozen from the last update frame.
+        /// </summary>
+        bool WasFrozen = false;
 
         public bool GodMode { get; protected set; }
 
@@ -160,7 +161,7 @@ namespace UpvoidMiner
         }
 
 
-		public DiggingController.DigShape CurrentDiggingShape { get; set; }
+        public DiggingController.DigShape CurrentDiggingShape { get; set; }
         public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
 
         public DiggingController.AddMode CurrentDiggingAddMode { get; set; }
@@ -292,7 +293,7 @@ namespace UpvoidMiner
                 Rendering.MainViewport.SetMouseGrab(false);
             }
 
-            mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset; 
+            mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset;
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
             vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
@@ -334,10 +335,10 @@ namespace UpvoidMiner
             if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
                 Inventory.Selection.OnUpdatePreview(this, elapsedSeconds);
 
-			// Notify the gui if the player freezing status has changed since the last update frame.
-			if (WasFrozen != IsFrozen)
-				Gui.OnUpdate();
-			WasFrozen = IsFrozen;
+            // Notify the gui if the player freezing status has changed since the last update frame.
+            if (WasFrozen != IsFrozen)
+                Gui.OnUpdate();
+            WasFrozen = IsFrozen;
         }
 
         public void Lookaround(vec2 angleDelta)
@@ -435,21 +436,19 @@ namespace UpvoidMiner
             if (item.IsDroppable)
             {
                 Item droppedItem = item.Clone();
-                
-                if(droppedItem is DiscreteItem)
+
+                if (droppedItem is DiscreteItem)
                 {
                     var dItem = droppedItem as DiscreteItem;
                     dItem.StackSize = 1;
                 }
 
                 // Keep all items in god mode
-                if(!GodMode)
+                if (!GodMode)
                     Inventory.RemoveItem(droppedItem);
 
-                ItemEntity itemEntity = new ItemEntity(droppedItem, false);
-                ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + vec3.UnitY*1f + CameraDirection*1f));
-                itemEntity.ApplyImpulse(CameraDirection * 200f, new vec3(0, .3f, 0));
-                UpvoidMinerWorldGenerator.ItemEntities.Add(itemEntity);
+                var entity = ItemManager.InstantiateItem(droppedItem, mat4.Translate(Position + vec3.UnitY * 1f + CameraDirection * 1f), false);
+                entity.ApplyImpulse(CameraDirection * 200f, new vec3(0, .3f, 0));
             }
         }
 
@@ -466,21 +465,21 @@ namespace UpvoidMiner
         public class InventorySave
         {
             [Serializable]
-            public class ResourceItemSave 
+            public class ResourceItemSave
             {
                 public long Id;
                 public string Resource;
                 public float Volume;
             }
             [Serializable]
-            public class ToolItemSave 
+            public class ToolItemSave
             {
                 public long Id;
                 public ToolType Type;
                 public int StackSize;
             }
             [Serializable]
-            public class MaterialItemSave 
+            public class MaterialItemSave
             {
                 public long Id;
                 public MaterialShape Shape;
@@ -490,7 +489,7 @@ namespace UpvoidMiner
                 public string Resource;
                 public int StackSize;
             }
-            
+
             public List<ResourceItemSave> resourceItems = new List<ResourceItemSave>();
             public List<ToolItemSave> toolItems = new List<ToolItemSave>();
             public List<MaterialItemSave> materialItems = new List<MaterialItemSave>();
@@ -686,7 +685,7 @@ namespace UpvoidMiner
         /// </summary>
         public vec3 AlignPlacementPosition(vec3 pos)
         {
-            
+
             if (CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned)
                 return new vec3(
                     (int)Math.Round(pos.x * 2),
@@ -724,7 +723,7 @@ namespace UpvoidMiner
         }
 
         /// <summary>
-		/// Places the current digging shape shape of a given material
+        /// Places the current digging shape shape of a given material
         /// </summary>
         public void PlaceMaterial(TerrainResource material, vec3 worldNormal, vec3 position, float radius)
         {
@@ -733,8 +732,8 @@ namespace UpvoidMiner
             var filterMats = CurrentDiggingAddMode != DiggingController.AddMode.AirOnly ? null : new int[] { 0 };
             bool allowAirChange = CurrentDiggingAddMode != DiggingController.AddMode.NonAirOnly;
 
-			switch(CurrentDiggingShape)
-			{
+            switch (CurrentDiggingShape)
+            {
                 case DiggingController.DigShape.Sphere:
                     digging.DigSphere(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
@@ -747,19 +746,19 @@ namespace UpvoidMiner
                 case DiggingController.DigShape.Cone:
                     digging.DigCone(worldNormal, position, radius, filterMats, material.Index, DiggingController.DigMode.Add, allowAirChange);
                     break;
-				default:
-					throw new Exception("Unsupported digging shape used");
-			}
+                default:
+                    throw new Exception("Unsupported digging shape used");
+            }
         }
         /// <summary>
-		/// Places the current digging shape at a given position with a given radius.
+        /// Places the current digging shape at a given position with a given radius.
         /// </summary>
         public void DigMaterial(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
             position = AlignPlacementPosition(position);
 
-			switch (CurrentDiggingShape)
-			{
+            switch (CurrentDiggingShape)
+            {
                 case DiggingController.DigShape.Sphere:
                     digging.DigSphere(worldNormal, position, radius, filterMaterials);
                     break;
@@ -772,9 +771,9 @@ namespace UpvoidMiner
                 case DiggingController.DigShape.Cone:
                     digging.DigCone(worldNormal, position, radius, filterMaterials);
                     break;
-				default:
-					throw new Exception("Unsupported digging shape used");
-			}
+                default:
+                    throw new Exception("Unsupported digging shape used");
+            }
         }
 
         /// <summary>

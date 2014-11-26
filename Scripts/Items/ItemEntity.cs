@@ -20,6 +20,7 @@ using Engine.Resources;
 using Engine.Universe;
 using Engine.Physics;
 using System.Collections.Generic;
+using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
@@ -92,7 +93,7 @@ namespace UpvoidMiner
             interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(RepresentedItem);
 
             // And remove this entity.
-            ContainingWorld.RemoveEntity(thisEntity);
+            ItemManager.RemoveItemFromWorld(this);
         }
 
         /// <summary>

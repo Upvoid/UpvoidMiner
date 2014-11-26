@@ -12,6 +12,7 @@
                 "UI/StatUI.cs",
                 "UI/MemoryFailsafe.cs",
                 "Items/Item.cs",
+                "Items/ItemManager.cs",
                 "Items/ItemCollection.cs",
                 "Items/ItemCategory.cs",
                 "Items/Inventory.cs",
