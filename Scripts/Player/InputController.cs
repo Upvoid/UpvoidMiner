@@ -47,6 +47,9 @@ namespace UpvoidMiner
         private SoundResource shutterSoundResource;
         private Sound shutterSound;
 
+        private bool wasMenuOpenX;
+        private bool wasMenuOpenY;
+
         public InputController(Player _player)
         {
             player = _player;
@@ -88,21 +91,35 @@ namespace UpvoidMiner
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
+                    if (wasMenuOpenX)
+                    {
+                        wasMenuOpenX = false;
+                        return;
+                    }
+
                     float rotAzimuthSpeed = -.4f;
                     float sensitivity = Settings.settings.MouseSensitivityF;
-                    rotAzimuthSpeed *= (float)Math.Pow(2, sensitivity * 10 - 5);
+                    rotAzimuthSpeed *= (float)Math.Pow(2, sensitivity * 10 - 7);
                     player.Lookaround(new vec2(e.RelativeChange * rotAzimuthSpeed, 0));
                 }
+                else wasMenuOpenX = true;
             }
             else if (e.Axis == AxisType.MouseY)
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
+                    if (wasMenuOpenY)
+                    {
+                        wasMenuOpenY = false;
+                        return;
+                    }
+
                     float rotElevationSpeed = -.4f;
                     float sensitivity = Settings.settings.MouseSensitivityF;
-                    rotElevationSpeed *= (float)Math.Pow(2, sensitivity * 10 - 5);
+                    rotElevationSpeed *= (float)Math.Pow(2, sensitivity * 10 - 7);
                     player.Lookaround(new vec2(0, e.RelativeChange * rotElevationSpeed));
                 }
+                else wasMenuOpenY = true;
             }
         }
 

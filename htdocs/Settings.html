@@ -158,10 +158,12 @@
                         <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-input').collapse('toggle')">Input <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-input">
                             <div class="panel-body">
+                                Sensitivity:
                                 <table>
-                                    <tr><td>Mouse&nbsp;Sensitivity:</td>
+                                    <tr><td>Mouse:</td>
                                     <td class="slider-cell">
-                                        <uislider options="{range:'min'}" class="input-slider" name="MouseSensitivity"></uislider></td>
+                                        <uislider onvalue="function(el, value) { $('#mouseValue').html(value + ''); }" options="{range:'min'}" class="input-slider" name="MouseSensitivity"></uislider></td>
+                                        <td><span id="mouseValue"></span></td></tr>
                                     </tr>
                                 </table>
                             </div>
