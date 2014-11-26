@@ -195,6 +195,11 @@ namespace UpvoidMiner
                 WalkSpeed *= 3;
                 WalkSpeedRunning *= 3;
             }
+            else
+            {
+                WalkSpeed *= 1.5f;
+                WalkSpeedRunning *= 1.5f;
+            }
 
             // Create a capsule shaped rigid body representing the character in the physics world.
             if (GodMode)
