@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>UpvoidMiner</title>
+    <link rel="stylesheet" href="paper.bootstrap.min.css">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
+    <style>
+      body {
+        background: #fff;
+        padding: 1em;
+      }
+
+      #logo {
+        width: 256px;
+        height: 256px;
+        margin: -128px 0px 0px -127px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+      }
+
+    </style>
+
+</head>
+<body style="background: #fff;">
+
+  <img id="logo" src="/Resource/Texture/::Icon" alt="">
+
+  <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); text-align:center; padding: 5px; left:50%; width: 300px; margin-left:-150px; bottom:8px;">
+    <i class="fa fa-warning"></i> Shutting down, please wait...
+  </p>
+
+  <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+  <script>
+    $(function() {
+      window.setTimeout(function() {
+        $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/QuitGameReally");
+      }, 500);
+    });
+
+  </script>
+</body>
+</html>

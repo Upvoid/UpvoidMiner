@@ -139,7 +139,10 @@ namespace UpvoidMiner
             UIProxyManager.AddProxy(stats);
             UIProxyManager.AddProxy(memFailsafe);
 
-            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame", (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame",
+                (WebRequest request, WebResponse response) => Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html"));
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGameReally",
+                (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;
@@ -167,11 +170,11 @@ namespace UpvoidMiner
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
             musicQueue.Add(new Sound(
-                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Improvisation_On_Friday", UpvoidMiner.ModDomain), 
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Improvisation_On_Friday", UpvoidMiner.ModDomain),
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
             musicQueue.Add(new Sound(
-                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Emerge", UpvoidMiner.ModDomain), 
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/AlexBeroza_-_Emerge", UpvoidMiner.ModDomain),
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
             musicQueue.Add(new Sound(
@@ -280,6 +283,7 @@ namespace UpvoidMiner
 
             Scripting.OnEngineShutdown += (sender, args) =>
             {
+                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
                 player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
             };
