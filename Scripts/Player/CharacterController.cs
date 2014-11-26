@@ -170,7 +170,7 @@ namespace UpvoidMiner
 
 
         SoundResource movementNoiseResource;
-        Sound movementNoiseSound;
+        readonly Sound movementNoiseSound;
 
         public CharacterController(GenericCamera _camera, World _containingWorld, bool _godMode = false, float _characterHeight = 1.85f, float _bodyDiameter = 0.45f, float _bodyMass = 70f)
         {
@@ -188,6 +188,13 @@ namespace UpvoidMiner
             IsRunning = false;
             WalkSpeed = 2.7f;
             WalkSpeedRunning = 6f;
+
+            // faster if godmode
+            if (GodMode)
+            {
+                WalkSpeed *= 3;
+                WalkSpeedRunning *= 3;
+            }
 
             // Create a capsule shaped rigid body representing the character in the physics world.
             if (GodMode)
