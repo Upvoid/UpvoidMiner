@@ -47,8 +47,8 @@ namespace UpvoidMiner
         private SoundResource shutterSoundResource;
         private Sound shutterSound;
 
-        private bool wasMenuOpenX;
-        private bool wasMenuOpenY;
+        private int wasMenuOpenX;
+        private int wasMenuOpenY;
 
         public InputController(Player _player)
         {
@@ -91,9 +91,9 @@ namespace UpvoidMiner
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
-                    if (wasMenuOpenX)
+                    if (wasMenuOpenX > 0)
                     {
-                        wasMenuOpenX = false;
+                        --wasMenuOpenX;
                         return;
                     }
 
@@ -102,15 +102,15 @@ namespace UpvoidMiner
                     rotAzimuthSpeed *= (float)Math.Pow(2, sensitivity * 10 - 7);
                     player.Lookaround(new vec2(e.RelativeChange * rotAzimuthSpeed, 0));
                 }
-                else wasMenuOpenX = true;
+                else wasMenuOpenX = 3;
             }
             else if (e.Axis == AxisType.MouseY)
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
-                    if (wasMenuOpenY)
+                    if (wasMenuOpenY > 0)
                     {
-                        wasMenuOpenY = false;
+                        --wasMenuOpenY;
                         return;
                     }
 
@@ -119,7 +119,7 @@ namespace UpvoidMiner
                     rotElevationSpeed *= (float)Math.Pow(2, sensitivity * 10 - 7);
                     player.Lookaround(new vec2(0, e.RelativeChange * rotElevationSpeed));
                 }
-                else wasMenuOpenY = true;
+                else wasMenuOpenY = 3;
             }
         }
 
