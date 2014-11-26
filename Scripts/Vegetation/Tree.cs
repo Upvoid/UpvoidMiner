@@ -167,7 +167,7 @@ namespace UpvoidMiner
             int numberOfWoodCylinders = 3*(int)(amountOfWood + 1.0f);
             for (int i = 0; i < numberOfWoodCylinders; ++i)
             {
-                ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder, new vec3(0.2f, cylinderHeight, 0.2f)), false);
+                ItemEntity itemEntity = new ItemEntity(new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder, new vec3(0.2f, cylinderHeight, 0.2f), 1, 1.0f), false);
                 ContainingWorld.AddEntity(itemEntity, mat4.Translate(Position + new vec3(0, (i + 1.0f) * (cylinderHeight + 0.05f), 0)));
                 UpvoidMinerWorldGenerator.ItemEntities.Add(itemEntity);
             }
