@@ -52,14 +52,14 @@ namespace UpvoidMiner
         [Serializable]
         public enum DigMode
         {
-            Subtract=1,
+            Subtract = 1,
             Add
         }
 
         [Serializable]
         public enum DigShape
         {
-            Sphere=1,
+            Sphere = 1,
             Box,
             Cylinder,
             Cone
@@ -74,7 +74,7 @@ namespace UpvoidMiner
             /// <summary>
             /// Align the shape along the coordinate system (no rotation) 
             /// </summary>
-            Axis=1,
+            Axis = 1,
             /// <summary>
             /// Align the shape along the viewing direction of the player
             /// </summary>
@@ -98,7 +98,7 @@ namespace UpvoidMiner
             /// <summary>
             /// Place the shape on the ground where the center of the screen is pointing at (or nowhere if that position is too far away or non-existent)
             /// </summary>
-            Ground=1,
+            Ground = 1,
             FixedDistance
         }
 
@@ -112,7 +112,7 @@ namespace UpvoidMiner
             /// <summary>
             /// Fill the whole digging shape with material
             /// </summary>
-            Overwrite=1,
+            Overwrite = 1,
             /// <summary>
             /// Fill only the parts inside the digging shape that are air
             /// </summary>
@@ -176,7 +176,7 @@ namespace UpvoidMiner
             {
                 resource = res;
 
-                particlesStones = new CpuParticleSystem(2,0.05);
+                particlesStones = new CpuParticleSystem(2, 0.05);
 
                 // aPosition [m]
                 // TIMESTEP  [s]
@@ -212,7 +212,7 @@ namespace UpvoidMiner
                 particlesStones.AddDeathCondition(new CpuParticleDeathCondition(lifeAttributes, deathExpression, null));
 
                 LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(particlesStones, mat4.Identity));
-                
+
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                     (new CpuParticleRenderJob(particlesStones,
                         Renderer.Opaque.CpuParticles,
@@ -279,14 +279,14 @@ namespace UpvoidMiner
             // Load dirt digging sound resources
             for (int i = 1; i <= 6; ++i)
             {
-                dirtSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Dirt/Dirt" + i.ToString("00"), UpvoidMiner.ModDomain);
-                
+                dirtSoundResource[i - 1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Dirt/Dirt" + i.ToString("00"), UpvoidMiner.ModDomain);
+
             }
 
             // Load stone digging sound resources
             for (int i = 1; i <= 5; ++i)
             {
-                stoneSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain);
+                stoneSoundResource[i - 1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Digging/Stone/Stone" + i.ToString("00"), UpvoidMiner.ModDomain);
             }
         }
 
@@ -362,7 +362,8 @@ namespace UpvoidMiner
             // Callback for statistical purposes.
             CsgStatCallback finalNode = new CsgStatCallback(collapser, 4, 4);
             finalNode.AddSimpleVolumeCallback("UpvoidMiner", UpvoidMiner.ModDomain, "UpvoidMiner.DiggingController", "StatCallback");
-            finalNode.AddVolumeChangePointCallback("UpvoidMiner", UpvoidMiner.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
+            if (Settings.settings.DigParticles)
+                finalNode.AddVolumeChangePointCallback("UpvoidMiner", UpvoidMiner.ModDomain, "UpvoidMiner.DiggingController", "PointCallback");
 
             world.Terrain.ModifyTerrain(shapeBoundary, finalNode);
         }
@@ -440,7 +441,7 @@ namespace UpvoidMiner
                 // Depending on whether we dig dirt or stone, play a random digging sound
 
                 Sound digSound = null;
-                if(mat == 1) // Dirt material
+                if (mat == 1) // Dirt material
                     digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 else if (mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
                     digSound = new Sound(stoneSoundResource[random.Next(0, 4)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
@@ -448,7 +449,7 @@ namespace UpvoidMiner
                     return;
 
                 // +/- 15% pitching
-                digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f); 
+                digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f);
                 digSound.Position = diggingPosition;
                 digSound.Play();
 

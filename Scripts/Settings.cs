@@ -88,9 +88,17 @@ namespace UpvoidMiner
         private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
+        private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
         private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
 
         private bool pipelineChanges = false;
+
+        [UICheckBox]
+        public bool DigParticles
+        {
+            get { return settingDigParticles; }
+            set { settingDigParticles = value; }
+        }
 
         private Settings()
             : base("Settings")
@@ -326,6 +334,7 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
 
             Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
+            Scripting.SetUserSetting("Graphics/Enable Dig Particles", settingDigParticles);
 
             Scripting.SetUserSettingNumber("Input/Mouse Sensitivity", settingMouseSensitivity);
 
@@ -369,6 +378,7 @@ namespace UpvoidMiner
             settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
             settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
             settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
+            settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
 
             settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
 
