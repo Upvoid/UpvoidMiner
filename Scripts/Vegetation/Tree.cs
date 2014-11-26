@@ -53,12 +53,12 @@ namespace UpvoidMiner
             /// Foliage of this log.
             /// </summary>
             public readonly List<Foliage> Foliage = new List<Foliage>();
-            
+
             /// <summary>
             /// All render components of this log.
             /// </summary>
             public readonly List<RenderComponent> RenderComps = new List<RenderComponent>();
-            
+
             /// <summary>
             /// All physics components of this log.
             /// </summary>
@@ -96,7 +96,7 @@ namespace UpvoidMiner
         public readonly List<Foliage> Leaves = new List<Foliage>();
 
         public vec3 Position;
-        
+
         public List<RenderComponent> RjTrunk = new List<RenderComponent>();
         public List<RenderComponent> RjLeaves0 = new List<RenderComponent>();
 
@@ -104,7 +104,7 @@ namespace UpvoidMiner
         float amountOfWood;
 
         [Serializable]
-        public enum TreeType 
+        public enum TreeType
         {
             Birch,
             Cactus
@@ -140,7 +140,7 @@ namespace UpvoidMiner
             base.Init();
 
             AddTriggerSlot("Hit");
-            
+
             foreach (var r in RjLeaves0)
                 thisEntity.AddComponent(r);
             foreach (var r in RjTrunk)
@@ -148,10 +148,10 @@ namespace UpvoidMiner
 
             InitComps();
         }
-        
+
         public void Hit(object message)
         {
-            if(!(message is HitMessage))
+            if (!(message is HitMessage))
                 return;
 
             // Tree has been hit (by an axe), so we create some wood cylinders the player can pick up
@@ -165,12 +165,12 @@ namespace UpvoidMiner
                 return;
 
             float cylinderHeight = 0.7f;
-            int numberOfWoodCylinders = 3*(int)(amountOfWood + 1.0f);
+            int numberOfWoodCylinders = 3 * (int)(amountOfWood + 1.0f);
             for (int i = 0; i < numberOfWoodCylinders; ++i)
             {
                 var item = new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder,
-                    new vec3(0.2f, cylinderHeight, 0.2f));
-                var trans = mat4.Translate(Position + new vec3(0, (i + 1.0f)*(cylinderHeight + 0.05f), 0));
+                    new vec3(0.2f, cylinderHeight, 0.2f), 1, 1f);
+                var trans = mat4.Translate(Position + new vec3(0, (i + 1.0f) * (cylinderHeight + 0.05f), 0));
                 ItemManager.InstantiateItem(item, trans, false);
             }
         }
