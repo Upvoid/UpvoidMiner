@@ -88,7 +88,9 @@ namespace UpvoidMiner
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
-                    const float rotAzimuthSpeed = -.8f;
+                    float rotAzimuthSpeed = -.4f;
+                    float sensitivity = Settings.settings.MouseSensitivityF;
+                    rotAzimuthSpeed *= (float)Math.Pow(2, sensitivity * 10 - 5);
                     player.Lookaround(new vec2(e.RelativeChange * rotAzimuthSpeed, 0));
                 }
             }
@@ -96,7 +98,9 @@ namespace UpvoidMiner
             {
                 if (!player.Gui.IsInventoryOpen && !player.Gui.IsMenuOpen)
                 {
-                    const float rotElevationSpeed = -.8f;
+                    float rotElevationSpeed = -.4f;
+                    float sensitivity = Settings.settings.MouseSensitivityF;
+                    rotElevationSpeed *= (float)Math.Pow(2, sensitivity * 10 - 5);
                     player.Lookaround(new vec2(0, e.RelativeChange * rotElevationSpeed));
                 }
             }
@@ -106,7 +110,7 @@ namespace UpvoidMiner
         {
             if (!Rendering.MainViewport.HasFocus)
                 return;
-            
+
             // Scale the area using + and - keys.
             // Translate it using up down left right (x, z)
             // and PageUp PageDown (y).
@@ -142,7 +146,7 @@ namespace UpvoidMiner
                         break;
 
                     case InputKey.Period:
-                        if(LocalScript.musicQueue != null)
+                        if (LocalScript.musicQueue != null)
                             LocalScript.musicQueue.SkipCurrentSong();
                         break;
 
@@ -150,7 +154,7 @@ namespace UpvoidMiner
                     case InputKey.F1:
                         player.SetPosition(Player.SpawnPosition);
                         break;
-                        
+
                     // Tab and shift-Tab cycle between digging shapes
                     case InputKey.Tab:
 
@@ -175,7 +179,7 @@ namespace UpvoidMiner
                         }
 
                         break;
-                        
+
                     default:
                         break;
                 }

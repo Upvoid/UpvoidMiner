@@ -36,6 +36,7 @@
       .audio-slider .ui-slider-range { background: #88f; }
       .fov-slider .ui-slider-range { background: #8f8; }
       .lod-slider .ui-slider-range { background: #00f; }
+      .input-slider .ui-slider-range { background: yellow; }
 
       .slider-cell { padding-left: 1em; padding-right: 1em; width: 100%; }
 
@@ -143,6 +144,20 @@
                                     <td class="slider-cell">
                                         <uislider onvalue="function(el, value) { $('#fovValue').html(value+'°'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider></td>
                                         <td><span id="fovValue"></span></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-input').collapse('toggle')">Input <span class="caret"></span></div>
+                        <div class="panel-collapse collapse" id="group-input">
+                            <div class="panel-body">
+                                <table>
+                                    <tr><td>Mouse Sensitivity:</td>
+                                    <td class="slider-cell">
+                                        <uislider options="{range:'min'}" class="input-slider" name="MouseSensitivity"></uislider></td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>

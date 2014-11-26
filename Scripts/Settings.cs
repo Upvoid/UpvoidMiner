@@ -76,11 +76,11 @@ namespace UpvoidMiner
         // Local variables for the current settings values
         private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
         private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-        private int  settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
-        private int  settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
-        private int  settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
+        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
+        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
+        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
         private bool settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
-        private int  settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
+        private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
         private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
@@ -88,10 +88,12 @@ namespace UpvoidMiner
         private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
+        private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
 
         private bool pipelineChanges = false;
 
-        private Settings() : base("Settings")
+        private Settings()
+            : base("Settings")
         {
             // Read the supported video modes
             var modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
@@ -99,7 +101,7 @@ namespace UpvoidMiner
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
 
             // Add native resolution
-            supportedVideoModes = new List<VideoMode> {new VideoMode(-1, -1)};
+            supportedVideoModes = new List<VideoMode> { new VideoMode(-1, -1) };
             foreach (string vidMode in modes)
                 supportedVideoModes.Add(StringToVideoMode(vidMode));
         }
@@ -154,7 +156,8 @@ namespace UpvoidMiner
         public bool MuteMusic
         {
             get { return settingMuteMusic; }
-            set { 
+            set
+            {
                 settingMuteMusic = value;
                 Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
             }
@@ -185,7 +188,8 @@ namespace UpvoidMiner
             set
             {
                 if (settingShadows != value) pipelineChanges = true;
-                settingShadows = value; }
+                settingShadows = value;
+            }
         }
 
         [UICheckBox]
@@ -273,7 +277,7 @@ namespace UpvoidMiner
 
         [UISlider(10, 50)]
         public int LodFalloff
-        { 
+        {
             get { return (int)LocalScript.world.LodSettings.LodFalloff; }
             set { LocalScript.world.LodSettings.LodFalloff = value; }
         }
@@ -284,6 +288,15 @@ namespace UpvoidMiner
             get { return (int)LocalScript.world.LodSettings.MinLodDistance; }
             set { LocalScript.world.LodSettings.MinLodDistance = value; }
         }
+
+        [UISlider(0, 100)]
+        public int MouseSensitivity
+        {
+            get { return (int)(settingMouseSensitivity * 100); }
+            set { settingMouseSensitivity = value / 100.0; }
+        }
+
+        public float MouseSensitivityF { get { return MouseSensitivity / 100f; } }
 
         [UISlider(10, 500)]
         public int MaxTrees { get; set; }
@@ -313,6 +326,8 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
 
             Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
+
+            Scripting.SetUserSettingNumber("Input/Mouse Sensitivity", settingMouseSensitivity);
 
             Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
             Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
@@ -353,6 +368,9 @@ namespace UpvoidMiner
             settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
             settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
             settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
+            settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
+
+            settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
 
             // property in order to trigger rebuilt
             Grass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
