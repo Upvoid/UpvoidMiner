@@ -1,0 +1,46 @@
+<style type="text/css">
+	.tutorial-msg .panel {
+		margin-bottom: 0;
+		margin-top: 23px;
+	}
+	.tut-condition {
+		text-align: right;
+	}
+</style>
+
+<uitemplate name="TutorialMessage">
+	<uiobject class="tutorial-msg" name="Name" onvalue="function(el, val) { $(el).empty(); $(el).append($('#'+val).clone()); }"></uiobject>
+	<uiobject name="Progress" onvalue="function(el, val) { $(el).parent().find('.tut-progress').html(val); }"></uiobject>
+</uitemplate>
+
+<div id="MsgIntro" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Tutorial Introduction</h3></div>
+	<div class="panel-body">
+		Welcome to the <b>UpvoidMiner</b>!<br>
+		Move around using [W/A/S/D].<br>
+		Camera movement is done via mouse.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Move <b class="tut-progress"></b>m
+	</div>
+</div>
+
+<div id="MsgQuickMove" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Movement</h3></div>
+	<div class="panel-body">
+		Hold [Shift] to move faster.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Sprint <b class="tut-progress"></b>m
+	</div>
+</div>
+
+<div id="MsgJump" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Movement</h3></div>
+	<div class="panel-body">
+		Press [Space] to jump.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Jump <b class="tut-progress"></b> times
+	</div>
+</div>

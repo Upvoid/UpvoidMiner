@@ -11,6 +11,7 @@
                 "Audio/MusicQueue.cs",
                 "UI/StatUI.cs",
                 "UI/MemoryFailsafe.cs",
+                "UI/Tutorials.cs",
                 "Items/Item.cs",
                 "Items/ItemManager.cs",
                 "Items/ItemCollection.cs",

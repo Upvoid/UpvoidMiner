@@ -33,6 +33,7 @@ using System.IO;
 using System.Diagnostics;
 using EfficientUI;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -287,6 +288,9 @@ namespace UpvoidMiner
                 player.Save();
                 UpvoidMinerWorldGenerator.SaveEntities();
             };
+
+            // Start tutorial
+            Tutorials.Init();
         }
 
         /// Bezier Camera Path Feature

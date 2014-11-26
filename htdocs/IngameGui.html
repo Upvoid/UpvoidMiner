@@ -6,10 +6,11 @@
       <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
       <link rel="stylesheet" href="IngameGui.css">
 
-       <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-ui.min.js" type="text/javascript" charset="utf-8" defer></script>
-       <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js" defer></script>
-       <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js" defer></script>
-       <script src="/Mods/Upvoid/EfficientUI/1.0.0/js/efficientUI.js" type="text/javascript" charset="utf-8" defer></script>
+        <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
+       <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+       <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
+       <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
+       <script src="/Mods/Upvoid/EfficientUI/1.0.0/js/efficientUI.js" type="text/javascript" charset="utf-8"></script>
        <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/jquery-ui.min.css">
   </head>
   <body id="ui-body">
@@ -97,13 +98,28 @@
         <i class="fa fa-cog fa-spin"></i> Generating
     </div>
 
-    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
     <script src="IngameGui.js"></script>
     <script>
         $(function() {
             setupGui();
         });
     </script>
+
+    <!-- Tutorial -->
+    <style type="text/css">
+        #tutorials {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: 8px;
+        }
+    </style>
+    <script type="text/javascript">
+        EfficientUI.addTemplateUrl("Tutorials.html");
+    </script>
+    <hud name="Tutorial" id="tutorials">
+        <uicollection name="TutorialMsgs"></uicollection>
+    </hud>
 
     <!-- Stats -->
     <style type="text/css">

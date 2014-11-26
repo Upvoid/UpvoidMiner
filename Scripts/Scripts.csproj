@@ -88,6 +88,7 @@
     <Compile Include="Terrain\TerrainResource.Register.cs" />
     <Compile Include="Terrain\SolidTerrainResource.cs" />
     <Compile Include="Terrain\VegetatedTerrainResource.cs" />
+    <Compile Include="UI\Tutorials.cs" />
     <Compile Include="Vegetation\Tree.cs" />
     <Compile Include="Vegetation\TreeGenerator.cs" />
     <Compile Include="UpvoidMiner.cs" />

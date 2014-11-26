@@ -23,6 +23,7 @@ using Engine.Resources;
 using Engine.Scripting;
 using Engine.Webserver;
 using Engine.Rendering;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -279,7 +280,7 @@ namespace UpvoidMiner
                             {
                                 pos.y += 0.5f;
                                 offset += 0.5f;
-                            } while(!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
+                            } while (!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
 
                             // another 1.5m to ensure good ground
                             offset += 1.5f;
@@ -317,6 +318,9 @@ namespace UpvoidMiner
                 }
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
+
+                Tutorials.MsgIntro.Report(moveDir.Length * _elapsedSeconds);
+                if (IsRunning) Tutorials.MsgQuickMove.Report(moveDir.Length * _elapsedSeconds);
             }
             else // Otherwise, we can do some subtile acceleration in air
             {
@@ -339,6 +343,9 @@ namespace UpvoidMiner
                 newVelocity.y = Body.GetVelocity().y;
 
                 Body.ApplyImpulse((newVelocity - Body.GetVelocity()) * CharacterMass, vec3.Zero);
+
+                Tutorials.MsgIntro.Report(moveDir.Length * _elapsedSeconds);
+                if (IsRunning) Tutorials.MsgQuickMove.Report(moveDir.Length * _elapsedSeconds);
             }
 
             // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
@@ -375,7 +382,7 @@ namespace UpvoidMiner
             if (!GodMode)
             {
                 RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 500f, 0), Body);
-                
+
                 if (hit != null)
                 {
                     distanceToGround = Position.y - BodyHeight * 0.5f - hit.Position.y;
@@ -424,7 +431,7 @@ namespace UpvoidMiner
                         if (walkDirForward < 0)
                             walkDirForward = 0;
                     }
-                        
+
                 }
                 else if (e.Key == InputKey.S)
                 {
@@ -450,7 +457,7 @@ namespace UpvoidMiner
                         // Releasing the strafe-right-key shall not result in strafing left.
                         if (walkDirRight < 0)
                             walkDirRight = 0;
-                    }    
+                    }
                 }
                 else if (e.Key == InputKey.A)
                 {
@@ -471,6 +478,7 @@ namespace UpvoidMiner
                     {
                         Body.ApplyImpulse(new vec3(0, 5f * CharacterMass, 0), vec3.Zero);
                         jumpCoolDown = 0.5f;
+                        Tutorials.MsgJump.Report(1);
                     }
                 }
                 else if (e.Key == InputKey.Shift)
