@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using EfficientUI;
 using Newtonsoft.Json;
 using Engine.Webserver;
 using Engine.Gui;
@@ -30,6 +31,26 @@ namespace UpvoidMiner
     /// </summary>
     public class PlayerGui
     {
+        public class CrosshairUI : UIProxy
+        {
+            [UIObject]
+            public CrosshairInfo Type
+            {
+                get { return LocalScript.player == null ? null : LocalScript.player.Crosshair; }
+            }
+
+            public CrosshairUI() :
+                base("Crosshair")
+            {
+                UIProxyManager.AddProxy(this);
+            }
+        }
+
+        /// <summary>
+        /// Crosshair UI
+        /// </summary>
+        private CrosshairUI crosshairUI = new CrosshairUI();
+
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
         /// </summary>

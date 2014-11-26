@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 using System;
+using Engine.Physics;
 using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
@@ -172,8 +173,12 @@ namespace UpvoidMiner
             useRadius = Math.Max(0.5f, Math.Min(5f, useRadius + _delta / 5f));
         }
 
-        public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
+        public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)
         {
+            var _visible = rayHit != null;
+            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
+            var _worldNormal = rayHit == null ? vec3.UnitY : rayHit.Normal;
+
             _worldPos = _player.AlignPlacementPosition(_worldPos);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);

@@ -14,7 +14,29 @@
   </head>
   <body id="ui-body">
     <!-- Crosshair -->
-    <div style="width: 10px; height: 10px; color: #fff; text-align: center; position: fixed; top: 50%; left: 50%; margin: -5px; text-shadow: 0px 0px 1px #000;"><i class="fa fa-plus"></i></div>
+    <div id="crosshair" style="width: 26px; height: 26px; color: #fff; text-align: center; position: fixed; top: 50%; left: 50%; margin: -13px; text-shadow: 0px 0px 1px #000;">
+        <span class="fa-stack">
+            <i id="crosshair-icon" class="fa fa-stack-1x fa-plus"></i>
+            <i id="crosshair-disabled" style="visibility:hidden;" class="fa fa-stack-2x fa-flip-horizontal fa-ban text-danger"></i>
+        </span>
+    </div>
+    <ui name="Crosshair">
+        <script type="text/javascript">
+            function onCrosshairUpdate(el, val)
+            {
+                if (val)
+                {
+                    var ci = $('#crosshair-icon');
+                    ci.attr('class', 'fa fa-stack-1x fa-' + val.IconClass);
+                    ci.css('color', val.IconColor);
+
+                    var cd = $('#crosshair-disabled');
+                    cd.css('visibility', val.Disabled ? 'visible' : 'hidden');
+                }
+            }
+        </script>
+        <uiobject name="Type" onvalue="function(el, val) { onCrosshairUpdate(el, val); }"></uiobject>
+    </ui>
 
     <!-- Inventory -->
     <div id="quickaccess"><ul id="quickaccess-list"></ul><div class="clear-float"></div></div>

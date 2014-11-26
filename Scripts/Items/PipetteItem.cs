@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Engine;
+using Engine.Physics;
 using Engine.Universe;
 
 namespace UpvoidMiner
 {
-    public class PipetteItem: DiscreteItem
+    public class PipetteItem : DiscreteItem
     {
-        public PipetteItem(int stackSize = 1):
+        public PipetteItem(int stackSize = 1) :
             base("Pipette", "A tool to autmatically select the material under the cursor for building.", 1.0f, ItemCategory.Tools, stackSize)
         {
             Icon = "Pipette";
@@ -31,7 +33,14 @@ namespace UpvoidMiner
 
         public override Item Clone()
         {
- 	        return new PipetteItem();
+            return new PipetteItem();
+        }
+        public override bool HasRayPreview { get { return true; } }
+
+        public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)
+        {
+            crosshair.IconClass = "eyedropper";
+            crosshair.Disabled = rayHit == null || !rayHit.HasTerrainCollision;
         }
 
         public override void OnUse(Player player, Engine.vec3 _worldPos, Engine.vec3 _worldNormal, Engine.Universe.Entity _hitEntity)

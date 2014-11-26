@@ -200,19 +200,20 @@ namespace UpvoidMiner
             // TODO: maybe rotate?
         }
 
-        public override void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible)
+        public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)
         {
             // Hide if not visible.
-            if (!_visible)
+            if (rayHit == null)
             {
                 previewMaterialPlaced.ModelMatrix = mat4.Scale(0f);
                 previewMaterialPlacedIndicator.ModelMatrix = mat4.Scale(0f);
                 previewPlacable = false;
+                crosshair.Disabled = true;
                 return;
             }
 
             vec3 dir = _player.CameraDirection;
-            vec3 up = _worldNormal;
+            vec3 up = rayHit.Normal;
             vec3 left = vec3.cross(up, dir).Normalized;
             dir = vec3.cross(left, up);
 
@@ -235,7 +236,7 @@ namespace UpvoidMiner
                 default: throw new NotImplementedException("Invalid shape");
             }
             mat4 transform = new mat4(
-                left, up, dir, _worldPos + (offset + .03f) * _worldNormal);
+                left, up, dir, rayHit.Position + (offset + .03f) * rayHit.Normal);
 
             previewPlacable = true;
             previewPlaceMatrix = transform;
@@ -243,10 +244,10 @@ namespace UpvoidMiner
             // The placed object is scaled accordingly
             previewMaterialPlaced.ModelMatrix = previewPlaceMatrix * scaling;
             // Indicator is always in the center and relatively small.
-            previewMaterialPlacedIndicator.ModelMatrix = mat4.Translate(_worldPos) * mat4.Scale(.1f);
+            previewMaterialPlacedIndicator.ModelMatrix = mat4.Translate(rayHit.Position) * mat4.Scale(.1f);
         }
 
-        public override void OnUpdatePreview(Player _player, float _elapsedSeconds)
+        public override void OnUpdatePreview(Player _player, float _elapsedSeconds, CrosshairInfo crosshair)
         {
             mat4 scaling;
             switch (Shape)

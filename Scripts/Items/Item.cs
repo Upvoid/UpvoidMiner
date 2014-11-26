@@ -108,11 +108,11 @@ namespace UpvoidMiner
         /// Is executed when this item is selected and a preview ray point was found.
         /// If not _visible, _worldPos is zero, otherwise it is the point where the player looks at (with _worldNormal being the surface normal at that position).
         /// </summary>
-        public virtual void OnRayPreview(Player _player, vec3 _worldPos, vec3 _worldNormal, bool _visible) { }
+        public virtual void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair) { }
         /// <summary>
         /// Is executed continuously when this item is selected.
         /// </summary>
-        public virtual void OnUpdatePreview(Player _player, float _elapsedSeconds) { }
+        public virtual void OnUpdatePreview(Player _player, float _elapsedSeconds, CrosshairInfo crosshair) { }
 
         /// <summary>
         /// Index for quickaccess, -1 for none.

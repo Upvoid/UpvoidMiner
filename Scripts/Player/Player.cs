@@ -34,6 +34,20 @@ using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
+    public class CrosshairInfo
+    {
+        public string IconClass;
+        public string IconColor;
+        public bool Disabled;
+
+        public void Reset()
+        {
+            IconClass = "plus";
+            IconColor = "#fff";
+            Disabled = false;
+        }
+    }
+
     /// <summary>
     /// Contains the game logic and the internal state of the player character.
     /// </summary>
@@ -59,6 +73,11 @@ namespace UpvoidMiner
         private const int millisecondsBetweenItemUsages = 250;
 
         public static vec3 SpawnPosition = new vec3(150, 5, 150);
+
+        /// <summary>
+        /// Current crosshair info
+        /// </summary>
+        public readonly CrosshairInfo Crosshair = new CrosshairInfo();
 
         /// <summary>
         /// The direction in which this player is facing.
@@ -220,6 +239,9 @@ namespace UpvoidMiner
             LoadWorldItem();
 
             SetPosition(SpawnPosition);
+
+            // reset crosshair
+            Crosshair.Reset();
         }
 
         public void Update(float elapsedSeconds)
@@ -329,13 +351,22 @@ namespace UpvoidMiner
                     vec3 pos = hit.Position - camera.ForwardDirection * .04f;
 
                     if (selection != null)
-                        selection.OnRayPreview(this, pos, hit.Normal, true);
+                    {
+                        Crosshair.Reset();
+                        selection.OnRayPreview(this, hit, Crosshair);
+                    }
                 }
                 else if (selection != null)
-                    selection.OnRayPreview(this, vec3.Zero, vec3.Zero, false);
+                {
+                    Crosshair.Reset();
+                    selection.OnRayPreview(this, null, Crosshair);
+                }
             }
             if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
-                Inventory.Selection.OnUpdatePreview(this, elapsedSeconds);
+                Inventory.Selection.OnUpdatePreview(this, elapsedSeconds, Crosshair);
+
+            if (Inventory.Selection == null)
+                Crosshair.Reset();
 
             // Notify the gui if the player freezing status has changed since the last update frame.
             if (WasFrozen != IsFrozen)
