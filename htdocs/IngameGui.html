@@ -121,7 +121,7 @@
     <!-- Inventory -->
     <div id="quickaccess"><ul id="quickaccess-list"></ul><div class="clear-float"></div></div>
     <div class="ingame-overlay">
-        <div id="inventory" class="panel InputConsumer">
+        <div id="inventory" class="panel InputConsumer" style="display:none;">
             <h4>All Items</h4>
             <div id="inventory-list"></div>
             <div class="clearfix"></div>
@@ -134,8 +134,8 @@
             position: absolute;
             right: 50%;
             margin-right: 100px;
-            top: 100px;
-            bottom: 100px;
+            top: 30px;
+            bottom: 30px;
             white-space: nowrap;
         }
         #cl-menu:before {
@@ -151,17 +151,76 @@
             vertical-align: middle;
             width: 420px;
         }
+        .inv-item {
+            float: left;
+            position: relative;
+            padding: 4px;
+            border-radius: 2px;
+            box-shadow: 0 1px 6px rgba(0,0,0,.12),0 1px 6px rgba(0,0,0,.12);
+            margin: 4px;
+        }
+        .inv-item:hover {
+            background-color: #555;
+            cursor: pointer;
+        }
+        .itemstack {
+            position: relative;
+            width: 32px;
+            height: 32px;
+        }
+        .itemstack img {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .inv-bag {
+            max-height: 174px;
+            overflow-y: auto;
+        }
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
             <div style="height:32px;">&nbsp;</div>
             <!-- Inventory -->
-            <ui name="Inventory" class="panel panel-default" style="visibility:hidden;">
-                ITEMS!!!
+            <ui name="Inventory">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Tools</div>
+                    <div class="panel-body inv-bag">
+                        <uicollection name="ToolItems" class="inv-items"></uicollection>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Terrain Resources</div>
+                    <div class="panel-body inv-bag">
+                        <uicollection name="ResourceItems" class="inv-items"></uicollection>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Physics Items</div>
+                    <div class="panel-body inv-bag">
+                        <uicollection name="MaterialItems" class="inv-items"></uicollection>
+                    </div>
+                </div>
 
                 <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); }"></uiobject>
                 <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); }"></uiobject>
             </ui>
+            <uitemplate name="ToolItem" class="inv-item">
+                <uicollection name="IconStack" class="itemstack"></uicollection>
+            </uitemplate>
+            <uitemplate name="ResourceItem" class="inv-item">
+                <uicollection name="IconStack" class="itemstack"></uicollection>
+                <uistring name="Volume"></uistring>
+            </uitemplate>
+            <uitemplate name="MaterialItem" class="inv-item">
+                <uicollection name="IconStack" class="itemstack"></uicollection>
+                <uistring name="StackSize"></uistring>
+            </uitemplate>
+            <uitemplate name="ItemIcon">
+                <uiimage name="Icon" width="32" height="32" class="img-rounded"></uiimage>
+            </uitemplate>
         </div>
     </div>
 
@@ -171,8 +230,8 @@
             position: absolute;
             left: 50%;
             margin-left: 100px;
-            top: 100px;
-            bottom: 100px;
+            top: 30px;
+            bottom: 30px;
             white-space: nowrap;
         }
         #cr-menu:before {
