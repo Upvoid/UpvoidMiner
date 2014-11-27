@@ -8,6 +8,8 @@ namespace UpvoidMiner
 {
     public class InventoryUI : UIProxy
     {
+
+
         public InventoryUI()
             : base("Inventory")
         {
