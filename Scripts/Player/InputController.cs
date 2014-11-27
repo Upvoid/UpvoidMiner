@@ -188,12 +188,7 @@ namespace UpvoidMiner
                             player.CurrentDiggingAlignment = (DiggingController.DigAlignment)(((uint)player.CurrentDiggingAlignment - 1 + offset) % vals + 1);
                         }
 
-                        // Reselect to refresh shape
-                        if (player.Inventory.Selection != null)
-                        {
-                            player.Inventory.Selection.OnDeselect(player);
-                            player.Inventory.Selection.OnSelect(player);
-                        }
+                        player.RefreshSelection();
 
                         break;
 

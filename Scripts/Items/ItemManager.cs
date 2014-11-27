@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Engine;
+using Engine.Physics;
 
 namespace UpvoidMiner.Items
 {
@@ -38,6 +39,7 @@ namespace UpvoidMiner.Items
         public static void RemoveItemFromWorld(ItemEntity entity)
         {
             Item2Entity.Remove(entity.RepresentedItem);
+            LocalScript.world.Physics.WakeUpRigidbodies(new BoundingSphere(entity.thisEntity.Position, 3f));
             LocalScript.world.RemoveEntity(entity.thisEntity);
         }
 

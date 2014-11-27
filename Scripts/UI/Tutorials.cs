@@ -33,6 +33,9 @@ namespace UpvoidMiner.UI
             [UIObject]
             public string Progress { get; set; }
 
+            [UIObject]
+            public string ProgressPercentage { get; set; }
+
             public MsgUI(string name)
             {
                 Name = name;
@@ -64,6 +67,7 @@ namespace UpvoidMiner.UI
                 Current += amount;
                 progress = progFunc(Current, Target);
                 TutorialUI.Msgs[Name].Progress = progress;
+                TutorialUI.Msgs[Name].ProgressPercentage = (Current / Target * 100).ToString("0") + "%";
                 if (Current >= Target)
                     Clear();
             }
@@ -96,7 +100,7 @@ namespace UpvoidMiner.UI
                 if (Cleared || Visible) return;
 
                 Visible = true;
-                TutorialUI.Msgs.Add(Name, new TutorialUI.MsgUI(Name) { Progress = progress });
+                TutorialUI.Msgs.Add(Name, new TutorialUI.MsgUI(Name) { Progress = progress, ProgressPercentage = "0%" });
             }
 
             public void Reset()

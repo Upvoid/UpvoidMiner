@@ -6,11 +6,30 @@
 	.tut-condition {
 		text-align: right;
 	}
+	.tutorial-progress-bar {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;		
+		margin: 0;
+		border-radius: 2px;
+	}
+	.tutorial-progress-bar .progress-bar {
+	    -webkit-transition: none !Important;
+	    -moz-transition: none !Important;
+	    -ms-transition: none !Important;
+	    -o-transition: none !Important;
+	    transition: none !Important;
+	}​
 </style>
 
-<uitemplate name="TutorialMessage">
+<uitemplate name="TutorialMessage" style="position:relative;">
 	<uiobject class="tutorial-msg" name="Name" onvalue="function(el, val) { $(el).empty(); $(el).append($('#'+val).clone()); }"></uiobject>
 	<uiobject name="Progress" onvalue="function(el, val) { $(el).parent().find('.tut-progress').html(val); }"></uiobject>
+	<uiobject name="ProgressPercentage" onvalue="function(el, val) { $(el).parent().find('.progress-bar').css('width', val); }"></uiobject>
+	<div class="progress progress-striped active tutorial-progress-bar">
+	  <div class="progress-bar progress-bar-warning" style="width: 0%"></div>
+	</div>
 </uitemplate>
 
 <div id="MsgIntro" class="panel panel-info">

@@ -46,10 +46,23 @@ namespace UpvoidMiner
             }
         }
 
+
         /// <summary>
         /// Crosshair UI
         /// </summary>
         private CrosshairUI crosshairUI = new CrosshairUI();
+        /// <summary>
+        /// Crafting UI
+        /// </summary>
+        private CraftingUI craftingUI = new CraftingUI();
+        /// <summary>
+        /// Inventory UI
+        /// </summary>
+        private InventoryUI inventoryUI = new InventoryUI();
+        /// <summary>
+        /// Digging UI
+        /// </summary>
+        private UsageUI usageUI = new UsageUI();
 
         /// <summary>
         /// Returns true if any form of UI is open (and mouse should be visible and movable).
@@ -57,7 +70,7 @@ namespace UpvoidMiner
         public bool IsUIOpen { get; set; }
 
         public bool IsInventoryOpen { get; set; }
-        
+
         public bool IsMenuOpen { get; set; }
 
         Player player;
@@ -70,7 +83,8 @@ namespace UpvoidMiner
         class GuiInfo
         {
             [Serializable]
-            public class GuiItem {
+            public class GuiItem
+            {
 
                 public GuiItem() { }
 
@@ -85,14 +99,14 @@ namespace UpvoidMiner
                     isVolumetric = false;
 
                     VolumeItem volumeItem = item as VolumeItem;
-                    if(volumeItem != null)
+                    if (volumeItem != null)
                     {
                         isVolumetric = true;
                         quantity = volumeItem.Volume;
                     }
 
                     DiscreteItem discreteItem = item as DiscreteItem;
-                    if(discreteItem != null)
+                    if (discreteItem != null)
                     {
                         quantity = discreteItem.StackSize;
                     }
@@ -114,7 +128,7 @@ namespace UpvoidMiner
                 public static Dictionary<string, GuiItem> FromItemCollection(IEnumerable<Item> items)
                 {
                     Dictionary<string, GuiItem> guiItems = new Dictionary<string, GuiItem>();
-                    foreach(Item item in items)
+                    foreach (Item item in items)
                     {
                         guiItems.Add(item.Identifier, new GuiItem(item));
                     }
@@ -133,7 +147,6 @@ namespace UpvoidMiner
         private void toggleUI()
         {
             IsUIOpen = !IsUIOpen;
-            updateSocket.SendMessage("ToggleUI");
         }
 
         private void toggleInventory()
@@ -143,13 +156,12 @@ namespace UpvoidMiner
                 return;
 
             IsInventoryOpen = !IsInventoryOpen;
-            updateSocket.SendMessage("ToggleInventory");
         }
 
         private void toggleMenu()
         {
             IsMenuOpen = !IsMenuOpen;
-            if(IsMenuOpen)
+            if (IsMenuOpen)
             {
                 Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "MainMenu.html" + (Scripting.IsDeploy ? "" : "?Debug"));
 
@@ -189,9 +201,9 @@ namespace UpvoidMiner
             // Workaround for missing keyboard input in the Gui: Toggle the inventory from here
             Input.OnPressInput += (object sender, InputPressArgs e) =>
             {
-                if(e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down)
+                if (e.Key == InputKey.I && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
-                    if ( !IsUIOpen )
+                    if (!IsUIOpen)
                         toggleUI();
                     toggleInventory();
                 }
@@ -201,22 +213,22 @@ namespace UpvoidMiner
                         toggleUI();
                     toggleInventory();
                 }
-                if(e.Key == InputKey.F4 && e.PressType == InputPressArgs.KeyPressType.Down)
+                if (e.Key == InputKey.F4 && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     toggleUI();
-                    if ( !IsUIOpen && IsInventoryOpen )
+                    if (!IsUIOpen && IsInventoryOpen)
                         toggleInventory();
                 }
-                if(e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
+                if (e.Key == InputKey.Escape && e.PressType == InputPressArgs.KeyPressType.Down)
                 {
                     if (IsInventoryOpen)
                     {
                         toggleInventory();
-                    }  
+                    }
                     else
                     {
                         toggleMenu();
-                    } 
+                    }
                 }
             };
         }
@@ -235,7 +247,7 @@ namespace UpvoidMiner
             // Compile all relevant info for the gui into a GuiInfo instance and send it to the GUI client.
             GuiInfo info = new GuiInfo();
 
-                        info.playerIsFrozen = player.IsFrozen;
+            info.playerIsFrozen = player.IsFrozen;
 
             info.inventory = GuiInfo.GuiItem.FromItemCollection(player.Inventory.Items);
 
@@ -336,7 +348,8 @@ namespace UpvoidMiner
                 return;
 
             // For dismantling, we need a crafting rule that results in the given item
-            foreach (var cr in player.Inventory.DiscoveredRules) {
+            foreach (var cr in player.Inventory.DiscoveredRules)
+            {
                 if (cr.CouldBeDismantled(item))
                 {
                     //TODO: perform dismantling
@@ -356,7 +369,8 @@ namespace UpvoidMiner
                 return;
 
             // For crafting, we need a crafting rule that results in the given item
-            foreach (var cr in player.Inventory.DiscoveredRules) {
+            foreach (var cr in player.Inventory.DiscoveredRules)
+            {
                 if (cr.CouldBeCraftable(item))
                 {
                     cr.Craft(item, player.Inventory.Items);
@@ -372,10 +386,10 @@ namespace UpvoidMiner
             JsonTextReader jsonReader = new JsonTextReader(reader);
             DiggingController.DiggingSettings diggingSettings =
                 json.Deserialize<DiggingController.DiggingSettings>(jsonReader);
-            
+
             if (diggingSettings == null)
                 return;
-            
+
             player.CurrentDiggingShape = diggingSettings.Shape;
             player.CurrentDiggingAlignment = diggingSettings.Alignment;
             player.CurrentDiggingAddMode = diggingSettings.AddMode;

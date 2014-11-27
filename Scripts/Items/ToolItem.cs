@@ -243,7 +243,6 @@ namespace UpvoidMiner
 
             TerrainMaterial mat = _visible ? _player.ContainingWorld.Terrain.QueryMaterialAtPosition(_worldPos, true) : null;
 
-            _worldPos = _player.AlignPlacementPosition(_worldPos);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
             mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
@@ -272,6 +271,7 @@ namespace UpvoidMiner
                     useRadius = digRadiusShovel; break;
                 default: break;
             }
+            _worldPos = _player.AlignPlacementPosition(_worldPos, useRadius);
             // Set uniform for position and radius
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             previewShape.SetColor("uDigDirX", new vec4(dx, 0));

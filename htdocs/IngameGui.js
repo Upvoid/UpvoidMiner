@@ -62,14 +62,6 @@ function setupGui()
 
         if(data == "Update")
             $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IngameGuiData", "", updateGui, "json");
-        else if(data == "ToggleInventory")
-        {
-            $("#ingame-overlay").toggle();
-        }
-        else if(data == "ToggleUI")
-        {
-        	$("#ui-body").toggle();
-        }
     });
 
     WebsocketHandler.register("/Mods/Upvoid/UpvoidMiner/0.0.1/ResourceDownloadProgress", handleResourceDownloadProgress);
@@ -305,67 +297,6 @@ function craftItem(itemIdentifier)
 function dismantleItem(itemId)
 {
     $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/DismantleItem", {"itemId": itemId});
-}
-
-function buildDiggingSettings()
-{
-    var shapeName = "Invalid Value";
-    switch(diggingSettings.Shape)
-    {
-        case 1:
-            shapeName = "Sphere Shape";
-            break;
-        case 2:
-            shapeName = "Box Shape";
-            break;
-        case 3:
-            shapeName = "Cylinder Shape";
-            break;
-		case 4:
-            shapeName = "Cone Shape";
-            break;
-    }
-    $('#digging-setting-shape-value').text(shapeName);
-    
-    var alignmentName = "Invalid Value";
-    switch(diggingSettings.Alignment)
-    {
-        case 1:
-            alignmentName = "Axis Alignment";
-            break;
-        case 2:
-            alignmentName = "Camera Alignment";
-            break;
-        case 3:
-            alignmentName = "Surface Alignment";
-            break;
-    }
-    $('#digging-setting-alignment-value').text(alignmentName);
-
-    var addmodeName = "Invalid Value";
-    switch(diggingSettings.AddMode)
-    {
-        case 1:
-            addmodeName = "Replace All";
-            break;
-        case 2:
-            addmodeName = "Replace Air";
-            break;
-        case 3:
-            addmodeName
-            = "Replace Material";
-            break;
-    }
-    $('#digging-setting-addmode-value').text(addmodeName);
-
-}
-
-function setDiggingSetting(name, value)
-{
-    diggingSettings[name] = value;
-    buildDiggingSettings();
-    var settingsString = JSON.stringify(diggingSettings);
-    $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/SetToolSettings", {"DiggingSettings": settingsString}, null, "json");
 }
 
 var lastKnownDownloadProgress = 1;

@@ -40,6 +40,7 @@ namespace UpvoidMiner
         {
             RenderMaterial = Resources.UseMaterial(renderMaterial, UpvoidMiner.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, UpvoidMiner.ModDomain);
+            Icon = Resources.UseTextureData("Items/Icons/" + name, UpvoidMiner.ModDomain);
 
             if (Scripting.IsHost)
             {

@@ -39,49 +39,331 @@
         <uiobject name="Type" onvalue="function(el, val) { onCrosshairUpdate(el, val); }"></uiobject>
     </ui>
 
+    <!-- Tutorial -->
+    <style type="text/css">
+        #tutorials {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            padding: 8px;
+        }
+        .ingame-overlay {
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        EfficientUI.addTemplateUrl("Tutorials.html");
+
+        function onCraftTypeSelect(val)
+        {
+            for(var i = 0; i < 3; ++i)
+            {
+                var el = $('.btn-craft-' + i);
+                if (i == val)
+                {
+                    el.removeClass('btn-default');
+                    el.addClass('btn-primary');
+                }
+                else
+                {
+                    el.addClass('btn-default');
+                    el.removeClass('btn-primary');
+                }
+            }
+            if (val == 0)
+                $('.btn-craft').html("Craft a Box");
+            else if (val == 1)
+                $('.btn-craft').html("Craft a Sphere");
+            else if (val == 2)
+                $('.btn-craft').html("Craft a Cylinder");
+        }
+
+        function onUsageCurrent(val, type, max)
+        {
+            for(var i = 1; i <= max; ++i)
+            {
+                var el = $('.btn-'+type+'-' + i);
+                if (i == val)
+                {
+                    el.removeClass('btn-default');
+                    el.addClass('btn-primary');
+                }
+                else
+                {
+                    el.addClass('btn-default');
+                    el.removeClass('btn-primary');
+                }
+            }
+        }
+
+        function onCanCraft(val)
+        {
+            var btn = $('.btn-craft');
+            var text = $('.req-volume');
+            if (val)
+            {
+                btn.removeClass('disabled');
+                text.addClass('text-info');
+                text.removeClass('text-danger');
+            }
+            else 
+            {
+                btn.addClass('disabled');
+                text.removeClass('text-info');
+                text.addClass('text-danger');
+            }
+        }
+    </script>
+    <hud name="Tutorial" id="tutorials">
+        <uicollection name="TutorialMsgs"></uicollection>
+    </hud>
+
     <!-- Inventory -->
     <div id="quickaccess"><ul id="quickaccess-list"></ul><div class="clear-float"></div></div>
-    <div id="ingame-overlay">
-        <div id="tool-settings" class="clear-float InputConsumer">
-            <nav class="navbar navbar-default" role="navigation">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a><b>Tool Settings</b></a></li>
-                    <li class="dropdown" id="digging-setting-shape">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-shape-value">Sphere Shape</span> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:setDiggingSetting('Shape', 1);">Sphere Shape</a></li>
-                            <li><a href="javascript:setDiggingSetting('Shape', 2);">Box Shape</a></li>
-                            <li><a href="javascript:setDiggingSetting('Shape', 3);">Cylinder Shape</a></li>
-							<li><a href="javascript:setDiggingSetting('Shape', 4);">Cone Shape</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" id="digging-setting-alignment">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-alignment-value">Axis Alignment</span> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:setDiggingSetting('Alignment', 1);">Axis Alignment</a></li>
-                            <li><a href="javascript:setDiggingSetting('Alignment', 2);">Camera Alignment</a></li>
-                            <li><a href="javascript:setDiggingSetting('Alignment', 3);">Surface Alignment</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" id="digging-setting-addmode">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="digging-setting-addmode-value">Replace Air</span> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="javascript:setDiggingSetting('AddMode', 1);">Replace All</a></li>
-                            <li><a href="javascript:setDiggingSetting('AddMode', 2);">Replace Air</a></li>
-                            <li><a href="javascript:setDiggingSetting('AddMode', 3);">Replace Material</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+    <div class="ingame-overlay">
         <div id="inventory" class="panel InputConsumer">
             <h4>All Items</h4>
             <div id="inventory-list"></div>
             <div class="clearfix"></div>
         </div>
-        <div id="workbench" class="col-md-8 InputConsumer">
-            <div class="well" id="item-info">
+    </div>
+
+    <!-- Left-centered -->
+    <style type="text/css">
+        #cl-menu {
+            position: absolute;
+            right: 50%;
+            margin-right: 100px;
+            top: 100px;
+            bottom: 100px;
+            white-space: nowrap;
+        }
+        #cl-menu:before {
+            content: "";
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            margin-right: -.25em;
+            height: 100%;
+        }
+        #cl-menu > .valign {
+            display: inline-block;
+            vertical-align: middle;
+            width: 420px;
+        }
+    </style>
+    <div id="cl-menu" class="ingame-overlay">
+        <div class="valign">
+            <div style="height:32px;">&nbsp;</div>
+            <!-- Inventory -->
+            <ui name="Inventory" class="panel panel-default">
+                ITEMS!!!
+
+                <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); }"></uiobject>
+            </ui>
+        </div>
+    </div>
+
+    <!-- Right-centerd -->
+    <style type="text/css">
+        #cr-menu {
+            position: absolute;
+            left: 50%;
+            margin-left: 100px;
+            top: 100px;
+            bottom: 100px;
+            white-space: nowrap;
+        }
+        #cr-menu:before {
+            content: "";
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            margin-right: -.25em;
+            height: 100%;
+        }
+        #cr-menu > .valign {
+            display: inline-block;
+            vertical-align: middle;
+            width: 420px;
+        }
+        #cr-menu .btn-table tr:first-child td {
+            padding-top: 0;
+        }
+        #cr-menu .btn-table td:first-child {
+            padding-right: 12px;      
+        }
+        #cr-menu .btn-table td {
+            padding-top: 8px;
+        }
+        .craft-slider .ui-slider-range { background: #4caf50; }
+      .slider-cell { padding-left: 1em; padding-right: 1em; width: 100%; }
+      .craft-settings-table td {
+        vertical-align: middle;
+      }
+      .material-icon {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        margin-top: -16px;
+      }
+    </style>
+    <div id="cr-menu" class="ingame-overlay">
+        <div class="valign">
+            <div style="height:32px;">&nbsp;</div>
+            <!-- Digging settings -->
+            <div class="usage-settings">
+            <ui name="Digging" class="panel panel-default">
+                <div class="panel-heading"><uistring name="Title" tag="span"></uistring> Settings</div>
+                <div class="panel-body">
+                    <table class="btn-table">
+                    <tr class="sap-settings">
+                        <td>Shape</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="ShapeSphere" tag="a" class="btn btn-sm btn-primary btn-shape-1">Sphere</uibutton>
+                              <uibutton name="ShapeBox" tag="a" class="btn btn-sm btn-default btn-shape-2">Box</uibutton>
+                              <uibutton name="ShapeCylinder" tag="a" class="btn btn-sm btn-default btn-shape-3">Cylinder</uibutton>
+                              <uibutton name="ShapeCone" tag="a" class="btn btn-sm btn-default btn-shape-4">Cone</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="sap-settings">
+                        <td>Alignment</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="AlignAxis" tag="a" class="btn btn-sm btn-primary btn-align-1">Axis</uibutton>
+                              <uibutton name="AlignView" tag="a" class="btn btn-sm btn-default btn-align-2">View</uibutton>
+                              <uibutton name="AlignTerrain" tag="a" class="btn btn-sm btn-default btn-align-3">Terrain</uibutton>
+                              <uibutton name="AlignGrid" tag="a" class="btn btn-sm btn-default btn-align-4">Grid</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="sap-settings">
+                        <td>Pivot</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="PivotTop" tag="a" class="btn btn-sm btn-default btn-pivot-1">Top</uibutton>
+                              <uibutton name="PivotCenter" tag="a" class="btn btn-sm btn-primary btn-pivot-2">Center</uibutton>
+                              <uibutton name="PivotBottom" tag="a" class="btn btn-sm btn-default btn-pivot-3">Bottom</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="physics-settings">
+                        <td>Physics</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="PhysicsThrown" tag="a" class="btn btn-sm btn-default btn-physics-1">Thrown</uibutton>
+                              <uibutton name="PhysicsDynamic" tag="a" class="btn btn-sm btn-primary btn-physics-2">Dynamic</uibutton>
+                              <uibutton name="PhysicsStatic" tag="a" class="btn btn-sm btn-default btn-physics-3">Static</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr class="replacement-settings">
+                        <td>Replacement</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="ReplaceAir" tag="a" class="btn btn-sm btn-primary btn-replace-2">Air</uibutton>
+                              <uibutton name="ReplaceMaterial" tag="a" class="btn btn-sm btn-default btn-replace-3">Material</uibutton>
+                              <uibutton name="ReplaceAll" tag="a" class="btn btn-sm btn-default btn-replace-1">All</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+                    </table>
+                    <uiobject name="HasReplacement" onvalue="function(el, val) { $('.replacement-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasPhysics" onvalue="function(el, val) { $('.physics-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasShapePivotAlignment" onvalue="function(el, val) { $('.sap-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+
+                    <uiobject name="CurrentShape" onvalue="function(el, val) { onUsageCurrent(val, 'shape', 4); }"></uiobject>
+                    <uiobject name="CurrentAlign" onvalue="function(el, val) { onUsageCurrent(val, 'align', 4); }"></uiobject>
+                    <uiobject name="CurrentPivot" onvalue="function(el, val) { onUsageCurrent(val, 'pivot', 3); }"></uiobject>
+                    <uiobject name="CurrentReplace" onvalue="function(el, val) { onUsageCurrent(val, 'replace', 3); }"></uiobject>
+                    <uiobject name="CurrentPhysics" onvalue="function(el, val) { onUsageCurrent(val, 'physics', 3); }"></uiobject>
+                </div>
+                <uiobject name="HasUsageSettings" onvalue="function(el, val) { $('.usage-settings').css('display', val ? 'block' : 'none'); }"></uiobject>
+            </ui>
             </div>
+            <!-- Crafting -->
+            <div class="crafting">
+            <ui name="Crafting" class="panel panel-default">
+                <div class="panel-heading">Craft Items from Terrain Materials</div>
+                <div class="panel-body">
+                    <div class="btn-group btn-group-justified">
+                        <uibutton name="BtnBox" tag="a" class="btn btn-sm btn-default btn-craft-0">Box</uibutton>
+                        <uibutton name="BtnSphere" tag="a" class="btn btn-sm btn-default btn-craft-1">Sphere</uibutton>
+                        <uibutton name="BtnCylinder" tag="a" class="btn btn-sm btn-default btn-craft-2">Cylinder</uibutton>
+                    </div>
+
+                    <br>
+                    <uicollection name="BoxSettings"></uicollection>
+                    <uicollection name="SphereSettings"></uicollection>
+                    <uicollection name="CylinderSettings"></uicollection>
+                    <br>
+
+                    <p style="position:relative;">
+                        Selected Material: <uistring name="SelectedMaterialName" tag="b" class="text-info"></uistring><br>
+                        <uiimage name="SelectedMaterialIcon" class="img-rounded material-icon" width="32" height="32" hideOnEmpty></uiimage>
+
+                        Required Volume: <b class="text-info req-volume"><uistring name="RequiredVolumeInCubicMeter" tag="span"></uistring> m&sup3;</b> 
+                        (of <b class="text-info"><uistring name="CurrentVolumeInCubicMeter" tag="span"></uistring> m&sup3;</b>)
+                    </p>
+
+                    <div style="text-align:center">
+                        <uibutton name="BtnCraft" class="btn btn-primary disabled btn-craft" tag="a">Craft a XYZ</uibutton>
+                    </div>
+                </div>
+                <uiobject name="HasCraftingSettings" onvalue="function(el, val) { $('.crafting').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="TypeSelection" onvalue="function(el, val) { onCraftTypeSelect(val); }"></uiobject>
+                <uiobject name="CanCraft" onvalue="function(el, val) { onCanCraft(val); }"></uiobject>
+            </ui>
+            <uitemplate name="CraftBoxSettings">
+                <table class="craft-settings-table">
+                    <tr>
+                        <td>Width</td>
+                        <td class="slider-cell"><uislider name="Width" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="WidthInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                    <tr>
+                        <td>Height</td>
+                        <td class="slider-cell"><uislider name="Height" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="HeightInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                    <tr>
+                        <td>Depth</td>
+                        <td class="slider-cell"><uislider name="Depth" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="DepthInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                </table>
+            </uitemplate>
+            <uitemplate name="CraftSphereSettings">
+                <table class="craft-settings-table">
+                    <tr>
+                        <td>Radius</td>
+                        <td class="slider-cell"><uislider name="Radius" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="RadiusInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                </table>
+            </uitemplate>
+            <uitemplate name="CraftCylinderSettings">
+                <table class="craft-settings-table">
+                    <tr>
+                        <td>Radius</td>
+                        <td class="slider-cell"><uislider name="Radius" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="RadiusInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                    <tr>
+                        <td>Height</td>
+                        <td class="slider-cell"><uislider name="Height" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td><uistring name="HeightInMeter" class="text-info" tag="span"></uistring></td>
+                    </tr>
+                </table>
+            </uitemplate>
+        </div>
         </div>
     </div>
 
@@ -104,22 +386,6 @@
             setupGui();
         });
     </script>
-
-    <!-- Tutorial -->
-    <style type="text/css">
-        #tutorials {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            padding: 8px;
-        }
-    </style>
-    <script type="text/javascript">
-        EfficientUI.addTemplateUrl("Tutorials.html");
-    </script>
-    <hud name="Tutorial" id="tutorials">
-        <uicollection name="TutorialMsgs"></uicollection>
-    </hud>
 
     <!-- Stats -->
     <style type="text/css">

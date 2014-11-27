@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 using System;
+using Engine.Resources;
 using Engine.Universe;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -43,6 +44,11 @@ namespace UpvoidMiner
         /// Density in kg/m^3
         /// </summary>
         public readonly float MassDensity;
+
+        /// <summary>
+        /// Icon of this resource
+        /// </summary>
+        public TextureDataResource Icon { get; protected set; }
 
         public TerrainResource(string name, float massDensity, bool translucent = false)
         {

@@ -65,6 +65,22 @@ namespace UpvoidMiner
             Cone
         }
 
+        [Serializable]
+        public enum DigPivot
+        {
+            Top = 1,
+            Center,
+            Bottom
+        }
+
+        [Serializable]
+        public enum PhysicsMode
+        {
+            Thrown = 1,
+            Dynamic,
+            Static
+        }
+
         /// <summary>
         /// Describes how the digging shape should be rotated
         /// </summary>

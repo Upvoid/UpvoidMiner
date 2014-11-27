@@ -183,6 +183,8 @@ namespace UpvoidMiner
 
         public DiggingController.DigShape CurrentDiggingShape { get; set; }
         public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
+        public DiggingController.DigPivot CurrentDiggingPivot { get; set; }
+        public DiggingController.PhysicsMode CurrentPhysicsMode { get; set; }
 
         public DiggingController.AddMode CurrentDiggingAddMode { get; set; }
 
@@ -194,6 +196,8 @@ namespace UpvoidMiner
             CurrentDiggingShape = DiggingController.DigShape.Sphere;
             CurrentDiggingAlignment = DiggingController.DigAlignment.Axis;
             CurrentDiggingAddMode = DiggingController.AddMode.AirOnly;
+            CurrentDiggingPivot = DiggingController.DigPivot.Center;
+            CurrentPhysicsMode = DiggingController.PhysicsMode.Dynamic;
             Inventory = new Inventory(this);
         }
 
@@ -702,14 +706,8 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Axe));
                 Inventory.AddItem(new PipetteItem());
-                IEnumerable<TerrainResource> resources = TerrainResource.ListResources();
-                foreach (var resource in resources)
-                {
+                foreach (var resource in TerrainResource.ListResources())
                     Inventory.AddResource(resource, 1e9f);
-                }
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 1000));
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 1000));
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 1000));
                 genDefault = false;
             }
             else if (!File.Exists(UpvoidMiner.SavePathInventory))
@@ -718,11 +716,11 @@ namespace UpvoidMiner
             }
             else // Load inventory
             {
-                InventorySave save = JsonConvert.DeserializeObject<InventorySave>(File.ReadAllText(UpvoidMiner.SavePathInventory));
+                var save = JsonConvert.DeserializeObject<InventorySave>(File.ReadAllText(UpvoidMiner.SavePathInventory));
                 if (save.Version == InventorySave.SaveVersion)
                 {
 
-                    Dictionary<long, Item> id2item = new Dictionary<long, Item>();
+                    var id2item = new Dictionary<long, Item>();
                     foreach (var item in save.items)
                     {
                         id2item.Add(item.Id(), item.DeserializeItem());
@@ -761,9 +759,9 @@ namespace UpvoidMiner
                 Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cube, new vec3(2)));
                 Inventory.AddItem(new MaterialItem(stone06, MaterialShape.Cylinder, new vec3(1,2,2)));
                 Inventory.AddItem(new MaterialItem(dirt, MaterialShape.Sphere, new vec3(1)));*/
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 10));
+                /*Inventory.AddItem(new MaterialItem(TerrainResource.FromName("BlueCrystal"), MaterialShape.Sphere, new vec3(1), 10));
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("FireRock"), MaterialShape.Cube, new vec3(1), 10));
-                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 10));
+                Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 10));*/
             }
 
             Gui.OnUpdate();
@@ -833,16 +831,29 @@ namespace UpvoidMiner
         /// <summary>
         /// Aligns a position according to the current alignment rules
         /// </summary>
-        public vec3 AlignPlacementPosition(vec3 pos)
+        public vec3 AlignPlacementPosition(vec3 pos, float height)
         {
+            vec3 offset = vec3.Zero;
+            switch (CurrentDiggingPivot)
+            {
+                case DiggingController.DigPivot.Top:
+                    offset = -vec3.UnitY * height;
+                    break;
+                case DiggingController.DigPivot.Center:
+                    offset = vec3.Zero;
+                    break;
+                case DiggingController.DigPivot.Bottom:
+                    offset = vec3.UnitY * height;
+                    break;
+            }
 
             if (CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned)
                 return new vec3(
                     (int)Math.Round(pos.x * 2),
                     (int)Math.Round(pos.y * 2),
                     (int)Math.Round(pos.z * 2)
-                ) * 0.5f;
-            else return pos;
+                ) * 0.5f + offset;
+            else return pos + offset;
         }
 
         /// <summary>
@@ -877,7 +888,7 @@ namespace UpvoidMiner
         /// </summary>
         public void PlaceMaterial(TerrainResource material, vec3 worldNormal, vec3 position, float radius)
         {
-            position = AlignPlacementPosition(position);
+            position = AlignPlacementPosition(position, radius);
 
             var filterMats = CurrentDiggingAddMode != DiggingController.AddMode.AirOnly ? null : new int[] { 0 };
             bool allowAirChange = CurrentDiggingAddMode != DiggingController.AddMode.NonAirOnly;
@@ -905,7 +916,7 @@ namespace UpvoidMiner
         /// </summary>
         public void DigMaterial(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
-            position = AlignPlacementPosition(position);
+            position = AlignPlacementPosition(position, radius);
 
             switch (CurrentDiggingShape)
             {
@@ -940,6 +951,16 @@ namespace UpvoidMiner
 
             // Add the received item to the inventory.
             Inventory.AddItem(addItemMsg.PickedItem);
+        }
+
+        public void RefreshSelection()
+        {
+            // Reselect to refresh shape
+            if (Inventory.Selection != null)
+            {
+                Inventory.Selection.OnDeselect(this);
+                Inventory.Selection.OnSelect(this);
+            }
         }
     }
 }
