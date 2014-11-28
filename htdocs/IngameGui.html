@@ -177,6 +177,49 @@
             max-height: 174px;
             overflow-y: auto;
         }
+        .inv-hotkey {
+            position: absolute;
+            padding: 0 4px;
+            font-size: 0.8em;
+            color:#fff;
+            top: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.7);
+            border-radius: 2px;
+        }
+        .inv-stacksize,
+        .inv-volume {
+            position: absolute;
+            padding: 0 4px;
+            font-size: 0.8em;
+            color:#fff;
+            left: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            border-radius: 2px;
+        }
+        .item-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+        }
+        #matitem-popover {
+            /*display: none;*/
+        }
+        .inv-item-info {
+            display: none;
+        }
+        .item-info-desc {
+
+        }
+        .item-info-table td 
+        {
+            text-align: center;
+            padding: 0 8px;
+        }
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
@@ -209,17 +252,82 @@
             </ui>
             <uitemplate name="ToolItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
+                <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
+                <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
+                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ResourceItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
-                <uistring name="Volume"></uistring>
+                <uistring name="Volume" tag="div" class="inv-volume"></uistring>
+                <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
+                <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
+                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="MaterialItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
-                <uistring name="StackSize"></uistring>
+                <uistring name="StackSize" tag="div" class="inv-stacksize"></uistring>
+                <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
+                <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
+                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe');"></a>
+                <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ItemIcon">
                 <uiimage name="Icon" width="32" height="32" class="img-rounded"></uiimage>
+            </uitemplate>
+            <script type="text/javascript">
+                function setupItemPopover(el)
+                {
+                    var item = $(el).closest('.inv-item');
+                    var itemInfo = item.children('.inv-item-info');
+                    var popover = item.children('.item-btn');
+                    popover.on('show.bs.popover', function() { 
+                        popover.attr('data-content', itemInfo.html()); 
+                    });
+                }
+            </script>
+            <uitemplate name="ItemInfo" class="InputConsumer" oninstance="function(el) { setupItemPopover(el); }">
+                <uistring name="Description" class="item-info-desc" tag="em"></uistring>
+                <table class="item-info-table">
+                    <tr>
+                        <td>Actions</td>
+                        <td>Shortcut</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop</a>
+                            <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy</a>
+                            <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                            <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                        </td>
+                        <td>
+                            <div class="shortcut-field">
+                                <div>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 0 });">1</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 1 });">2</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 2 });">3</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 3 });">4</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 4 });">5</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 5 });">6</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="btn-group btn-group-xs" role="group">
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 6 });">7</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 7 });">8</a>
+                                        <a class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'SetHotkey', { idx: 8 });">9</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </uitemplate>
         </div>
     </div>
@@ -266,6 +374,9 @@
         right: 4px;
         top: 50%;
         margin-top: -16px;
+      }
+      .shortcut-field > div {
+        height: 21px;
       }
     </style>
     <div id="cr-menu" class="ingame-overlay">
@@ -369,7 +480,9 @@
                         <uiimage name="SelectedMaterialIcon" class="img-rounded material-icon" width="32" height="32" hideOnEmpty></uiimage>
 
                         Required Volume: <b class="text-info req-volume"><uistring name="RequiredVolumeInCubicMeter" tag="span"></uistring> m&sup3;</b> 
-                        (of <b class="text-info"><uistring name="CurrentVolumeInCubicMeter" tag="span"></uistring> m&sup3;</b>)
+                        (of <b class="text-info"><uistring name="CurrentVolumeInCubicMeter" tag="span"></uistring> m&sup3;</b>)<br>
+
+                        Weight: <b class="text-info"><uistring name="MassInKg" tag="span"></uistring> kg</b> 
                     </p>
 
                     <div style="text-align:center">

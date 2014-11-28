@@ -467,8 +467,9 @@ namespace UpvoidMiner
 
         /// <summary>
         /// Drops an item.
+        /// An optional position for the direction of throw
         /// </summary>
-        public void DropItem(Item item)
+        public void DropItem(Item item, vec3? worldPos = null)
         {
             if (item.IsDroppable)
             {
@@ -484,8 +485,9 @@ namespace UpvoidMiner
                 if (!GodMode)
                     Inventory.RemoveItem(droppedItem);
 
+                var dir = worldPos.HasValue ? (worldPos.Value - Position).Normalized : CameraDirection;
                 var entity = ItemManager.InstantiateItem(droppedItem, mat4.Translate(Position + vec3.UnitY * 1f + CameraDirection * 1f), false);
-                entity.ApplyImpulse(CameraDirection * entity.Mass * 10f, new vec3(0, .3f, 0));
+                entity.ApplyImpulse(dir * entity.Mass * 10f, new vec3(0, .3f, 0));
             }
         }
 

@@ -118,6 +118,16 @@ namespace UpvoidMiner
             }
         }
 
+        [UIString]
+        public string MassInKg
+        {
+            get
+            {
+                return (RequiredVolume *
+                    (SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.MassDensity : 0f)).ToString("0");
+            }
+        }
+
         public float RequiredVolume
         {
             get

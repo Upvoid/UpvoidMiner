@@ -30,8 +30,55 @@ namespace UpvoidMiner
             [UIString]
             public string Description { get { return item.Description; } }
 
+            [UIString]
+            public string Hotkey { get { return item.QuickAccessIndex < 0 ? "" : ((item.QuickAccessIndex + 1) % 10).ToString(); } }
+
             [UICollection("ItemIcon")]
             public List<IconUI> IconStack { get; private set; }
+
+            [UICollection("ItemInfo")]
+            public ItemUI ItemInfo { get { return this; } }
+
+            [UIObject]
+            public bool IsDroppable { get { return item.IsDroppable; } }
+            [UIObject]
+            public bool IsDestructible { get { return item is MaterialItem; } }
+
+            [UICallback]
+            public void SetHotkey(int idx)
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.Inventory.SetQuickAccess(item, idx);
+            }
+
+            [UICallback]
+            public void BtnDrop()
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.DropItem(item);
+            }
+
+            [UICallback]
+            public void BtnDestroy()
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.Inventory.RemoveItem(item);
+            }
+
+            [UICallback]
+            public void SelectMe()
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.Inventory.SelectItem(item);
+            }
 
             public ItemUI(Item item)
             {
@@ -47,7 +94,7 @@ namespace UpvoidMiner
             private readonly ResourceItem item;
 
             [UIString]
-            public string Volume { get { return item.Volume.ToString("0.0") + "m&sup3;"; } }
+            public string Volume { get { return item.Volume >= 1000 ? "&gt;999m&sup3;" : item.Volume.ToString("0.0") + "m&sup3;"; } }
 
             public ResourceItemUI(ResourceItem item)
                 : base(item)

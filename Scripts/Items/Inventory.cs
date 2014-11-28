@@ -65,7 +65,7 @@ namespace UpvoidMiner
         {
             this.player = player;
 
-            Items.OnAdd += item => setDefaultQuickAccess(item);
+            Items.OnAdd += setDefaultQuickAccess;
             Items.OnRemove += removeFromQuickAccess;
 
             // Create click sound
@@ -91,16 +91,16 @@ namespace UpvoidMiner
         {
             Debug.Assert(0 <= idx && idx < QuickAccessSlotCount);
 
-            if ( idx == selectedItem ) return;
+            if (idx == selectedItem) return;
 
             // Play click sound (Creating new instance to allow playing multiple "clicks" parallel)
             Sound clickSound = new Sound(clickSoundResource, vec3.Zero, false, 0.2f, 1.0f, (int)AudioType.SFX, false);
             clickSound.Play();
 
-            if ( quickAccessItems[selectedItem] != null )
+            if (quickAccessItems[selectedItem] != null)
                 quickAccessItems[selectedItem].OnDeselect(player);
             selectedItem = idx;
-            if ( quickAccessItems[selectedItem] != null )
+            if (quickAccessItems[selectedItem] != null)
                 quickAccessItems[selectedItem].OnSelect(player);
 
             if (OnSelectionChanged != null)
@@ -125,7 +125,7 @@ namespace UpvoidMiner
             }
 
             // If we got here, the item is not in the quick access slot. Place the item in the quick access slot and select it.
-            SetQuickAccess(item, QuickAccessSlotCount-1);
+            SetQuickAccess(item, QuickAccessSlotCount - 1);
             SelectQuickAccessSlot(QuickAccessSlotCount - 1);
         }
 
@@ -133,7 +133,7 @@ namespace UpvoidMiner
         {
             // If appended and enough space, also add it to quickAccess.
             // Caution: highest quick access idx is only temporary.
-            for (int i = 0; i < QuickAccessSlotCount - 1; ++i)
+            for (int i = 0; i < QuickAccessSlotCount; ++i)
             {
                 if (quickAccessItems[i] == null)
                 {
@@ -165,19 +165,23 @@ namespace UpvoidMiner
         {
             Debug.Assert(0 <= idx && idx <= 9);
 
+            // deselect item from old pos
+            if (item != null && item.QuickAccessIndex != -1)
+                SetQuickAccess(null, item.QuickAccessIndex);
+
             if (quickAccessItems[idx] != null)
             {
-                if ( idx == selectedItem )
+                if (idx == selectedItem)
                     quickAccessItems[idx].OnDeselect(player);
                 quickAccessItems[idx].QuickAccessIndex = -1;
             }
 
             quickAccessItems[idx] = item;
 
-            if ( item != null )
+            if (item != null)
             {
-                item.QuickAccessIndex = idx;                
-                if ( idx == selectedItem )
+                item.QuickAccessIndex = idx;
+                if (idx == selectedItem)
                     item.OnSelect(player);
             }
 
@@ -223,7 +227,7 @@ namespace UpvoidMiner
         {
             Debug.Assert(mat != null);
 
-            if ( amount > 0 )
+            if (amount > 0)
                 AddItem(new ResourceItem(mat, amount));
             else
                 RemoveItem(new ResourceItem(mat, -amount));
@@ -239,7 +243,7 @@ namespace UpvoidMiner
             {
                 List<CraftingRule> rules = new List<CraftingRule>();
                 foreach (var rule in craftingRules)
-                    if ( rule.Discovered ) 
+                    if (rule.Discovered)
                         rules.Add(rule);
                 return rules;
             }

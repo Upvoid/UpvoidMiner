@@ -136,13 +136,12 @@ namespace UpvoidMiner
         {
             return new MaterialItem(Material, Shape, Size, StackSize);
         }
-        
+
 
         #region Inventory Logic
         /// <summary>
         /// Renderjob for the preview material
         /// </summary>
-        private MeshRenderJob previewMaterial;
         private MeshRenderJob previewMaterialPlaced;
         private MeshRenderJob previewMaterialPlacedIndicator;
         private bool previewPlacable = false;
@@ -160,9 +159,25 @@ namespace UpvoidMiner
                 return;
 
             Item droppedItem = new MaterialItem(Material, Shape, Size);
-            player.Inventory.RemoveItem(droppedItem);
 
-            ItemManager.InstantiateItem(droppedItem, previewPlaceMatrix, false);
+            switch (player.CurrentPhysicsMode)
+            {
+                case DiggingController.PhysicsMode.Dynamic:
+                    if (!player.GodMode) // don't remove in godmode
+                        player.Inventory.RemoveItem(droppedItem);
+                    ItemManager.InstantiateItem(droppedItem, previewPlaceMatrix, false);
+                    break;
+
+                case DiggingController.PhysicsMode.Static:
+                    if (!player.GodMode) // don't remove in godmode
+                        player.Inventory.RemoveItem(droppedItem);
+                    ItemManager.InstantiateItem(droppedItem, previewPlaceMatrix, true);
+                    break;
+
+                case DiggingController.PhysicsMode.Thrown:
+                    player.DropItem(droppedItem, _worldPos);
+                    break;
+            }
         }
 
         public override void OnSelect(Player player)
@@ -170,23 +185,12 @@ namespace UpvoidMiner
             MeshResource mesh;
             switch (Shape)
             {
-                case MaterialShape.Cube: mesh = Resources.UseMesh("::Debug/Box", null); break;
-                case MaterialShape.Sphere: mesh = Resources.UseMesh("::Debug/Sphere", null); break;
-                case MaterialShape.Cylinder: mesh = Resources.UseMesh("::Debug/Cylinder", null); break;
-                case MaterialShape.Cone: mesh = Resources.UseMesh("::Debug/Cone", null); break;
+                case MaterialShape.Cube: mesh = Resources.UseMesh("::Debug/Box", UpvoidMiner.ModDomain); break;
+                case MaterialShape.Sphere: mesh = Resources.UseMesh("::Debug/Sphere", UpvoidMiner.ModDomain); break;
+                case MaterialShape.Cylinder: mesh = Resources.UseMesh("::Debug/Cylinder", UpvoidMiner.ModDomain); break;
                 default: throw new NotImplementedException("Invalid shape");
             }
-
-            MaterialResource material;
-            if (Material is SolidTerrainResource)
-                material = (Material as SolidTerrainResource).RenderMaterial;
-            else
-                throw new NotImplementedException("Unknown terrain resource");
-
-            // Create a solid object for 'holding'.
-            previewMaterial = new MeshRenderJob(Renderer.Opaque.Mesh, material, mesh, mat4.Scale(0f));
-            LocalScript.world.AddRenderJob(previewMaterial);
-
+            
             // Create an overlay object as 'placement-indicator'.
             previewMaterialPlaced = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreview", UpvoidMiner.ModDomain), mesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlaced);
@@ -249,33 +253,13 @@ namespace UpvoidMiner
 
         public override void OnUpdatePreview(Player _player, float _elapsedSeconds, CrosshairInfo crosshair)
         {
-            mat4 scaling;
-            switch (Shape)
-            {
-                case MaterialShape.Cube: scaling = mat4.Scale(.15f); break;
-                case MaterialShape.Sphere: scaling = mat4.Scale(.2f); break;
-                case MaterialShape.Cylinder: scaling = mat4.Scale(.2f); break;
-                default: throw new NotImplementedException("Invalid shape");
-            }
-
-            // Position the item preview in the right-lower corner of the screen.
-            // FIXME: find proper alignment, current one is quite empirical.
-            vec3 dir = _player.CameraDirection;
-            vec3 up = vec3.UnitY;
-            vec3 left = vec3.cross(up, dir).Normalized;
-            vec3 offset = up * -.15f + left * -.7f + dir * 0.6f;
-            mat4 transform = _player.Transformation * mat4.Translate(offset);
-
-            previewMaterial.ModelMatrix = transform * scaling;
         }
 
         public override void OnDeselect(Player player)
         {
             // Remove and delete it on deselect.
-            LocalScript.world.RemoveRenderJob(previewMaterial);
             LocalScript.world.RemoveRenderJob(previewMaterialPlaced);
             LocalScript.world.RemoveRenderJob(previewMaterialPlacedIndicator);
-            previewMaterial = null;
             previewMaterialPlaced = null;
             previewMaterialPlacedIndicator = null;
         }
