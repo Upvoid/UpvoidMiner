@@ -292,7 +292,7 @@ namespace UpvoidMiner
             };
 
             // Start tutorial
-            Tutorials.Init();
+            Tutorials.Init(godMode);
         }
 
         /// Bezier Camera Path Feature

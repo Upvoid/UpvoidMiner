@@ -45,23 +45,31 @@ namespace UpvoidMiner.UI
 
     public static class Tutorials
     {
+        public enum Modes
+        {
+            Both,
+            Adventure,
+            God
+        }
 
         public class TutorialMessage
         {
             private readonly Func<float, float, string> progFunc;
             public bool Visible = false;
             public bool Cleared = false;
+            public bool Skipped = false;
 
             public string Name;
 
             public List<string> EnableMsgs = new List<string>();
 
             public float Target;
+            private readonly Modes mode;
             public float Current;
 
             public void Report(float amount)
             {
-                if(!Visible)
+                if (!Visible)
                     return;
 
                 Current += amount;
@@ -74,12 +82,14 @@ namespace UpvoidMiner.UI
 
             private string progress;
 
-            public TutorialMessage(Func<float, float, string> progFunc, float target, params string[] enableMsgs)
+            public TutorialMessage(Func<float, float, string> progFunc, float target, string followMsg, Modes mode = Modes.Both)
             {
                 Target = target;
+                this.mode = mode;
                 progress = progFunc(Current, Target);
                 this.progFunc = progFunc;
-                EnableMsgs.AddRange(enableMsgs);
+                if (!String.IsNullOrEmpty(followMsg))
+                    EnableMsgs.Add(followMsg);
             }
 
             /// <summary>
@@ -99,6 +109,15 @@ namespace UpvoidMiner.UI
             {
                 if (Cleared || Visible) return;
 
+                if ((mode == Modes.Adventure && godMode)
+                    || (mode == Modes.God && !godMode))
+                {
+                    Skipped = true;
+                    foreach (var msg in EnableMsgs)
+                        AllMessages[msg].TriggerShow();
+                    return;
+                }
+
                 Visible = true;
                 TutorialUI.Msgs.Add(Name, new TutorialUI.MsgUI(Name) { Progress = progress, ProgressPercentage = "0%" });
             }
@@ -108,6 +127,7 @@ namespace UpvoidMiner.UI
                 Current = 0;
                 Visible = false;
                 Cleared = false;
+                Skipped = false;
             }
         }
 
@@ -116,10 +136,25 @@ namespace UpvoidMiner.UI
         /// </summary>
         public static readonly TutorialUI TutorialUI = new TutorialUI();
 
-        #region Messages
-        public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgQuickMove");
-        public readonly static TutorialMessage MsgQuickMove = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgJump");
-        public readonly static TutorialMessage MsgJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5);
+        private static bool godMode = false;
+
+        #region Tutorials
+        public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementSprint");
+
+        public readonly static TutorialMessage MsgMovementSprint = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementJump");
+        public readonly static TutorialMessage MsgMovementJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5, "MsgBasicDiggingDirt", Modes.Adventure);
+
+        public readonly static TutorialMessage MsgBasicDiggingDirt = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgBasicDiggingStone", Modes.Adventure);
+        public readonly static TutorialMessage MsgBasicDiggingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgBasicDiggingGod", Modes.Adventure);
+        public readonly static TutorialMessage MsgBasicDiggingGod = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgBasicBuildingDirt", Modes.God);
+
+        public readonly static TutorialMessage MsgBasicBuildingDirt = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgBasicBuildingStone");
+        public readonly static TutorialMessage MsgBasicBuildingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgBasicCraftingDirtCube");
+
+        public readonly static TutorialMessage MsgBasicCraftingDirtCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingDirtCubePlace");
+        public readonly static TutorialMessage MsgBasicCraftingDirtCubePlace = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingStoneNonCube");
+        public readonly static TutorialMessage MsgBasicCraftingStoneNonCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, null);
+
         #endregion
 
         public readonly static Dictionary<string, TutorialMessage> AllMessages = new Dictionary<string, TutorialMessage>();
@@ -127,8 +162,10 @@ namespace UpvoidMiner.UI
         /// <summary>
         /// Loads tutorials from file
         /// </summary>
-        public static void Init()
+        /// <param name="isGodMode"></param>
+        public static void Init(bool isGodMode)
         {
+            godMode = isGodMode;
             foreach (var fieldInfo in typeof(Tutorials).GetFields())
             {
                 if (fieldInfo.FieldType == typeof(TutorialMessage))

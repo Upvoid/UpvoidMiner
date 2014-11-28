@@ -23,6 +23,7 @@ using Engine.Resources;
 using Engine.Rendering;
 using Engine.Physics;
 using System.Collections.Generic;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -476,6 +477,27 @@ namespace UpvoidMiner
                 // Add proper amount of material to player inventory.
                 // If the material changed by a negative volume we want to collect a positive amount.
                 instance.player.Inventory.AddResource(material, -volume);
+
+                // Tutorial
+                if (instance.player.Inventory.Selection is ToolItem &&
+                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Shovel &&
+                    material.Name == "Dirt")
+                    Tutorials.MsgBasicDiggingDirt.Report(-volume);
+
+                if (instance.player.Inventory.Selection is ToolItem &&
+                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Pickaxe &&
+                    material.Name.StartsWith("Stone"))
+                    Tutorials.MsgBasicDiggingStone.Report(-volume);
+
+                if (instance.player.Inventory.Selection is ToolItem &&
+                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.GodsShovel)
+                    Tutorials.MsgBasicDiggingGod.Report(-volume);
+
+                if (volume > 0 && material.Name.StartsWith("Stone"))
+                    Tutorials.MsgBasicBuildingStone.Report(volume);
+
+                if (volume > 0 && material.Name == "Dirt")
+                    Tutorials.MsgBasicBuildingDirt.Report(volume);
             }
         }
 
