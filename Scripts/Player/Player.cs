@@ -183,6 +183,7 @@ namespace UpvoidMiner
 
         public DiggingController.DigShape CurrentDiggingShape { get; set; }
         public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
+        public int DiggingAlignmentAxisRotation { get; set; }
         public DiggingController.DigPivot CurrentDiggingPivot { get; set; }
         public DiggingController.PhysicsMode CurrentPhysicsMode { get; set; }
 
@@ -195,6 +196,7 @@ namespace UpvoidMiner
             camera = _camera;
             CurrentDiggingShape = DiggingController.DigShape.Sphere;
             CurrentDiggingAlignment = DiggingController.DigAlignment.Axis;
+            DiggingAlignmentAxisRotation = 0;
             CurrentDiggingAddMode = DiggingController.AddMode.AirOnly;
             CurrentDiggingPivot = DiggingController.DigPivot.Center;
             CurrentPhysicsMode = DiggingController.PhysicsMode.Dynamic;
@@ -850,11 +852,22 @@ namespace UpvoidMiner
             }
 
             if (CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned)
-                return new vec3(
-                    (int)Math.Round(pos.x * 2),
-                    (int)Math.Round(pos.y * 2),
-                    (int)Math.Round(pos.z * 2)
+            {
+                float alpha = (float)(DiggingAlignmentAxisRotation * 5 * Math.PI / 180);
+                var dirX = new vec3((float)Math.Cos(alpha), 0, (float)-Math.Sin(alpha));
+                var dirY = vec3.UnitY;
+                var dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
+                var rotMat = new mat3(dirX, dirY, dirZ);
+                var rotPos = rotMat * pos;
+                
+                var snapPos = new vec3(
+                    (int)Math.Round(rotPos.x * 2),
+                    (int)Math.Round(rotPos.y * 2),
+                    (int)Math.Round(rotPos.z * 2)
                 ) * 0.5f + offset;
+
+                return rotMat.Inverse * snapPos;
+            }
             else return pos + offset;
         }
 
@@ -867,9 +880,10 @@ namespace UpvoidMiner
             {
                 case DiggingController.DigAlignment.GridAligned: // fall-through intended
                 case DiggingController.DigAlignment.Axis:
-                    dirX = vec3.UnitX;
+                    float alpha = (float)(DiggingAlignmentAxisRotation * 5 * Math.PI / 180);
+                    dirX = new vec3((float)Math.Cos(alpha), 0, (float) -Math.Sin(alpha));
                     dirY = vec3.UnitY;
-                    dirZ = vec3.UnitZ;
+                    dirZ = new vec3((float)Math.Sin(alpha), 0, (float) Math.Cos(alpha));
                     break;
                 case DiggingController.DigAlignment.View:
                     dirX = camera.RightDirection.Normalized;
