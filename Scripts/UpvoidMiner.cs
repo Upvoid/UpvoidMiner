@@ -42,6 +42,10 @@ namespace UpvoidMiner
         /// </summary>
         public static string SavePathInventory = null;
         /// <summary>
+        /// Save path for the turorial.
+        /// </summary>
+        public static string SavePathTutorial = null;
+        /// <summary>
         /// Save path for the inventory.
         /// </summary>
         public static string SavePathWorldItems = null;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using EfficientUI;
+using Newtonsoft.Json;
 
 namespace UpvoidMiner.UI
 {
@@ -176,15 +178,75 @@ namespace UpvoidMiner.UI
                 }
             }
 
+            bool restartTut = true;
+            try
+            {
+                if (File.Exists(UpvoidMiner.SavePathTutorial))
+                {
+                    var save = JsonConvert.DeserializeObject<List<TutorialSave>>(File.ReadAllText(UpvoidMiner.SavePathTutorial));
+
+                    if (save != null)
+                    {
+                        foreach (var s in save)
+                        {
+                            if (!AllMessages.ContainsKey(s.Name))
+                                continue;
+
+                            var msg = AllMessages[s.Name];
+                            msg.Cleared = s.Cleared;
+                            msg.Current = s.Current;
+                            if (s.Visible)
+                            {
+                                msg.TriggerShow();
+                                msg.Report(0f);
+                            }
+                        }
+                        restartTut = false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                restartTut = true;
+            }
+
             // show intro
-            MsgIntro.TriggerShow();
+            if (restartTut)
+                MsgIntro.TriggerShow();
+        }
+
+        public static void SaveState()
+        {
+            var save = AllMessages.Select(message => new TutorialSave(message.Value)).ToList();
+
+            Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathTutorial).Directory.FullName);
+            File.WriteAllText(UpvoidMiner.SavePathTutorial, JsonConvert.SerializeObject(save, Formatting.Indented));
         }
 
         public static void ResetTutorials()
         {
             foreach (var message in AllMessages)
-            {
                 message.Value.Reset();
+            TutorialUI.Msgs.Clear();
+
+            // show intro
+            MsgIntro.TriggerShow();
+        }
+
+        public class TutorialSave
+        {
+            public string Name;
+            public bool Cleared;
+            public bool Visible;
+            public float Current;
+
+            public TutorialSave() { }
+            public TutorialSave(TutorialMessage msg)
+            {
+                Name = msg.Name;
+                Cleared = msg.Cleared;
+                Visible = msg.Visible;
+                Current = msg.Current;
             }
         }
     }

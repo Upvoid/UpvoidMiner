@@ -29,6 +29,7 @@ using Engine.Webserver;
 using Engine.Network;
 using Newtonsoft.Json;
 using EfficientUI;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -356,6 +357,12 @@ namespace UpvoidMiner
             //if (pipelineChanges)
             //    Rendering.SetupDefaultPipeline(LocalScript.camera);
             pipelineChanges = false;
+        }
+
+        [UIButton]
+        public void ResetTutorial()
+        {
+            Tutorials.ResetTutorials();
         }
 
         [UIButton]

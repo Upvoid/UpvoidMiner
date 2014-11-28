@@ -255,6 +255,7 @@ namespace UpvoidMiner
             UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
             UpvoidMiner.SavePathWorldItems = UpvoidMiner.SavePathBase + "/WorldItems";
             UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
+            UpvoidMiner.SavePathTutorial = UpvoidMiner.SavePathBase + "/Tutorial";
 
             // Activate camera movement
             cameraControl = new FreeCameraControl(-10f, camera);
@@ -280,14 +281,22 @@ namespace UpvoidMiner
             // Register save callback
             Savegame.OnSave += s =>
             {
-                player.Save();
+                if (player != null)
+                {
+                    player.Save();
+                    Tutorials.SaveState();
+                }
                 UpvoidMinerWorldGenerator.SaveEntities();
             };
 
             Scripting.OnEngineShutdown += (sender, args) =>
             {
                 Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
-                player.Save();
+                if (player != null)
+                {
+                    player.Save();
+                    Tutorials.SaveState();
+                }
                 UpvoidMinerWorldGenerator.SaveEntities();
             };
 
@@ -405,7 +414,10 @@ namespace UpvoidMiner
                 lastSave = DateTime.Now;
 
                 if (player != null)
+                {
                     player.Save();
+                    Tutorials.SaveState();
+                }
                 UpvoidMinerWorldGenerator.SaveEntities();
             }
 
