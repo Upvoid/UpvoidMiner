@@ -607,7 +607,8 @@
     <hud name="EngineStats" id="stats" class="well well-sm" style="display:none;">
         <uiobject name="Visible" onvalue="function(el, val) { $('#stats').css('visibility', val ? 'visible' : 'hidden'); }" tag="span"></uiobject>
 
-        FPS: <uistring name="FPS" tag="span"></uistring> (<uistring name="MsPerFrame" tag="span"></uistring> ms)
+        FPS: <span id="stat-fps"><uistring name="FPS" tag="span"></uistring> (<uistring name="MsPerFrame" tag="span"></uistring> ms)</span>
+        <span id="stat-fps-danger" class="text-danger"><b>&lt; 10 FPS</b></span>
         <br>
         RAM: <uistring name="RamUsage" tag="span"></uistring>
         <br>
@@ -616,6 +617,8 @@
         Cam Pos: (<uistring name="CameraPos" tag="span"></uistring>)
         <br>
         Ray: <uistring name="RayResult" tag="span"></uistring>
+
+        <uiobject name="Below10FPS" onvalue="function(el, val) { $('#stat-fps').css('display', val ? 'none' : 'inline'); $('#stat-fps-danger').css('display', !val ? 'none' : 'inline'); }"></uiobject>
     </hud>
 
     <!-- Memory failsafe -->
