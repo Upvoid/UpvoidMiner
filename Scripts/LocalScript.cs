@@ -86,6 +86,8 @@ namespace UpvoidMiner
         {
             // Set window title
             Engine.Windows.Windows.GetWindow(0).SetTitle("Upvoid Miner");
+            Engine.Windows.Windows.GetWindow(0).SetMinimumWidth(1100);
+            Engine.Windows.Windows.GetWindow(0).SetMinimumHeight(700);
 
             // Get and save the resource domain of the mod, needed for loading resources.
             UpvoidMiner.Mod = module;
