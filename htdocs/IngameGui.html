@@ -14,6 +14,7 @@
        <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/jquery-ui.min.css">
   </head>
   <body id="ui-body">
+
     <!-- Crosshair -->
     <div id="crosshair" style="width: 26px; height: 26px; color: #fff; text-align: center; position: fixed; top: 50%; left: 50%; margin: -13px; text-shadow: 0px 0px 1px #000;">
         <span class="fa-stack">
@@ -220,12 +221,27 @@
             text-align: center;
             padding: 0 8px;
         }
+        .delete-menu-div {
+            display: none;
+        }
+        .delete-menu {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+        }
+        .delete-menu-btns {
+            text-align: center;
+            width: 100%;
+        }
+        .delete-menu-btns .btn {
+            /*margin: 4px;*/
+        }
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
             <div style="height:32px;">&nbsp;</div>
             <!-- Inventory -->
-            <ui name="Inventory">
+            <ui name="Inventory" id="inv-ui" onAdd="function(ui) { $(ui).find('.delete-menu').popover(); }">
                 <div class="panel panel-default">
                     <div class="panel-heading">Tools</div>
                     <div class="panel-body inv-bag">
@@ -241,20 +257,39 @@
                 </div>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Physics Items</div>
+                    <div class="panel-heading" style="position:relative;">Physics Items 
+                        <a tabindex="0" class="btn btn-default btn-sm delete-menu" role="button" data-html="true" data-placement="auto bottom" data-trigger="focus" data-container="body" data-toggle="popover" title="For low physics performance" data-content="content">Delete Menu</a>
+                    </div>
                     <div class="panel-body inv-bag">
                         <uicollection name="MaterialItems" class="inv-items"></uicollection>
                     </div>
                 </div>
 
+                <div class="delete-menu-div">
+                    <div class="delete-menu-btns btn-group-vertical InputConsumer" style="margin-bottom:8px;">
+                        <a class="btn btn-danger" onclick="EfficientUI.SendCallback($('#inv-ui'), 'DeletePhysics', {del: true, dyn: false});">Delete All Static Items</a>
+                        <a class="btn btn-danger" onclick="EfficientUI.SendCallback($('#inv-ui'), 'DeletePhysics', {del: true, dyn: true});">Delete All Dynamic Items</a>
+                    </div>
+                    <div class="delete-menu-btns btn-group-vertical InputConsumer">
+                        <a class="btn btn-warning" onclick="EfficientUI.SendCallback($('#inv-ui'), 'DeletePhysics', {del: false, dyn: false});">Collect All Static Items</a>
+                        <a class="btn btn-warning" onclick="EfficientUI.SendCallback($('#inv-ui'), 'DeletePhysics', {del: false, dyn: true});">Collect All Dynamic Items</a>
+                    </div>
+                </div>
+
                 <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); }"></uiobject>
                 <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="CanDeletePhysics" onvalue="function(el, val) { $('.delete-menu').css('display', val ? 'block' : 'none'); }"></uiobject>
             </ui>
+            <script type="text/javascript">
+                $(function(){
+                    $('.delete-menu').attr('data-content', $('.delete-menu-div').html());
+                });
+            </script>
             <uitemplate name="ToolItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
-                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ResourceItem" class="inv-item">
