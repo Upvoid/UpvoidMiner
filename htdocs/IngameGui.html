@@ -400,7 +400,7 @@
         #cr-menu .btn-table td {
             padding-top: 8px;
         }
-        .craft-slider .ui-slider-range { background: #4caf50; }
+        .sliderbar .ui-slider-range { background: #2196f3; }
       .slider-cell { padding-left: 1em; padding-right: 1em; width: 100%; }
       .craft-settings-table td {
         vertical-align: middle;
@@ -437,18 +437,6 @@
                     </tr>
                     
                     <tr class="sap-settings">
-                        <td>Alignment</td>
-                        <td>
-                            <div class="btn-group btn-group-justified">
-                              <uibutton name="AlignAxis" tag="a" class="btn btn-sm btn-primary btn-align-1">Axis</uibutton>
-                              <uibutton name="AlignView" tag="a" class="btn btn-sm btn-default btn-align-2">View</uibutton>
-                              <uibutton name="AlignTerrain" tag="a" class="btn btn-sm btn-default btn-align-3">Terrain</uibutton>
-                              <uibutton name="AlignGrid" tag="a" class="btn btn-sm btn-default btn-align-4">Grid</uibutton>
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    <tr class="sap-settings">
                         <td>Pivot</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -480,10 +468,35 @@
                             </div>
                         </td>
                     </tr>
+                    
+                    <tr class="sap-settings">
+                        <td>Alignment</td>
+                        <td>
+                            <div class="btn-group btn-group-justified">
+                              <uibutton name="AlignAxis" tag="a" class="btn btn-sm btn-primary btn-align-1">Axis</uibutton>
+                              <uibutton name="AlignView" tag="a" class="btn btn-sm btn-default btn-align-2">View</uibutton>
+                              <uibutton name="AlignTerrain" tag="a" class="btn btn-sm btn-default btn-align-3">Terrain</uibutton>
+                              <uibutton name="AlignGrid" tag="a" class="btn btn-sm btn-default btn-align-4">Grid</uibutton>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="angle-settings">
+                        <td>Grid Angle</td>
+                        <td>
+                            <table style="width:100%;">
+                                <tr>                              
+                                    <td style="width:100%;"><uislider name="AxisAngle" options="{range:'min'}" class="sliderbar"></uislider></td>
+                                    <td style="width:24px;"><uistring name="AxisAngleString" tag="span" style="width:24px;"></uistring></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                     </table>
                     <uiobject name="HasReplacement" onvalue="function(el, val) { $('.replacement-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasPhysics" onvalue="function(el, val) { $('.physics-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasShapePivotAlignment" onvalue="function(el, val) { $('.sap-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasGridAngle" onvalue="function(el, val) { $('.angle-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
 
                     <uiobject name="CurrentShape" onvalue="function(el, val) { onUsageCurrent(val, 'shape', 4); }"></uiobject>
                     <uiobject name="CurrentAlign" onvalue="function(el, val) { onUsageCurrent(val, 'align', 4); }"></uiobject>
@@ -533,17 +546,17 @@
                 <table class="craft-settings-table">
                     <tr>
                         <td>Width</td>
-                        <td class="slider-cell"><uislider name="Width" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td class="slider-cell"><uislider name="Width" options="{range:'min'}" class="sliderbar"></uislider></td>
                         <td><uistring name="WidthInMeter" class="text-info" tag="span"></uistring></td>
                     </tr>
                     <tr>
                         <td>Height</td>
-                        <td class="slider-cell"><uislider name="Height" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td class="slider-cell"><uislider name="Height" options="{range:'min'}" class="sliderbar"></uislider></td>
                         <td><uistring name="HeightInMeter" class="text-info" tag="span"></uistring></td>
                     </tr>
                     <tr>
                         <td>Depth</td>
-                        <td class="slider-cell"><uislider name="Depth" options="{range:'min'}" class="craft-slider"></uislider></td>
+                        <td class="slider-cell"><uislider name="Depth" options="{range:'min'}" class="sliderbar"></uislider></td>
                         <td><uistring name="DepthInMeter" class="text-info" tag="span"></uistring></td>
                     </tr>
                 </table>
