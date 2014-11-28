@@ -588,7 +588,7 @@ namespace UpvoidMiner
         public class InventorySave
         {
             public const int SaveVersion = 2;
-            public int Version = SaveVersion;
+            public int Version = -1;
 
             public List<ItemSave> items = new List<ItemSave>();
 
@@ -685,6 +685,7 @@ namespace UpvoidMiner
         void saveInventory()
         {
             InventorySave save = new InventorySave();
+            save.Version = InventorySave.SaveVersion;
             foreach (var item in Inventory.Items)
                 save.items.Add(InventorySave.saveObj(item));
 

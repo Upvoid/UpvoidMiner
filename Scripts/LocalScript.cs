@@ -85,9 +85,10 @@ namespace UpvoidMiner
         public static void Startup(Module module)
         {
             // Set window title
-            Engine.Windows.Windows.GetWindow(0).SetTitle("Upvoid Miner");
-            Engine.Windows.Windows.GetWindow(0).SetMinimumWidth(1100);
-            Engine.Windows.Windows.GetWindow(0).SetMinimumHeight(700);
+            var window = Engine.Windows.Windows.GetWindow(0);
+            window.SetTitle("Upvoid Miner");
+            window.SetMinimumWidth(1100);
+            window.SetMinimumHeight(700);
 
             // Get and save the resource domain of the mod, needed for loading resources.
             UpvoidMiner.Mod = module;
@@ -112,11 +113,10 @@ namespace UpvoidMiner
                 generationProgressSocket = new WebSocketHandler();
                 Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "GenerationProgressSocket", generationProgressSocket);
 
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer",
-                                                                  (WebRequest request, WebResponse response) => ActivatePlayer(request.GetQuery("GodMode") == "true"));
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (WebRequest request, WebResponse response) => response.AppendBody((player != null).ToString()));
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "ActivatePlayer", (request, response) => ActivatePlayer(request.GetQuery("GodMode") == "true"));
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "IsPlayerActivated", (request, response) => response.AppendBody((player != null).ToString()));
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "GenerationProgressQuery", webGenerationProgress);
-                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (WebRequest request, WebResponse response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
+                Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (request, response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
             }
 
             // Create a simple camera that allows free movement.
@@ -292,7 +292,7 @@ namespace UpvoidMiner
             };
 
             // Start tutorial
-            Tutorials.Init();
+            Tutorials.Init(godMode);
         }
 
         /// Bezier Camera Path Feature

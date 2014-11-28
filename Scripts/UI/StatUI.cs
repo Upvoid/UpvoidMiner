@@ -25,7 +25,7 @@ namespace UpvoidMiner
     public class StatUI : UIProxy
     {
         [UIObject]
-        public bool Visible { get { return Settings.settings == null ? false : Settings.settings.ShowStats; } }
+        public bool Visible { get { return Settings.settings != null && (Settings.settings.ShowStats || Universe.Below10FPS); } }
 
         [UIString]
         public int FPS
@@ -37,6 +37,9 @@ namespace UpvoidMiner
                 return Universe.TicksPerSecond;
             }
         }
+
+        [UIObject]
+        public bool Below10FPS { get { return Universe.Below10FPS; } }
 
         [UIString]
         public int MsPerFrame

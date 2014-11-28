@@ -5,6 +5,7 @@ using System.Text;
 using EfficientUI;
 using Engine;
 using Engine.Resources;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -201,8 +202,14 @@ namespace UpvoidMiner
             }
             if (LocalScript.player == null)
                 return;
-            LocalScript.player.Inventory.AddItem(item);
+            var newItem = LocalScript.player.Inventory.AddItem(item);
             LocalScript.player.Inventory.RemoveItem(new ResourceItem(mat, RequiredVolume));
+
+            // Tutorial
+            if (newItem && TypeSelection == 0 && mat.Name == "Dirt")
+                Tutorials.MsgBasicCraftingDirtCube.Report(1);
+            if (newItem && TypeSelection != 0 && mat.Name.StartsWith("Stone"))
+                Tutorials.MsgBasicCraftingStoneNonCube.Report(1);
         }
     }
 }

@@ -2,6 +2,7 @@
 	.tutorial-msg .panel {
 		margin-bottom: 0;
 		margin-top: 23px;
+		max-width: 350px;
 	}
 	.tut-condition {
 		text-align: right;
@@ -32,6 +33,7 @@
 	</div>
 </uitemplate>
 
+<!-- Intro -->
 <div id="MsgIntro" class="panel panel-info">
 	<div class="panel-heading"><h3 class="panel-title">Tutorial Introduction</h3></div>
 	<div class="panel-body">
@@ -44,7 +46,8 @@
 	</div>
 </div>
 
-<div id="MsgQuickMove" class="panel panel-info">
+<!-- Movement -->
+<div id="MsgMovementSprint" class="panel panel-info">
 	<div class="panel-heading"><h3 class="panel-title">Movement</h3></div>
 	<div class="panel-body">
 		Hold [Shift] to move faster.
@@ -54,12 +57,97 @@
 	</div>
 </div>
 
-<div id="MsgJump" class="panel panel-info">
+<div id="MsgMovementJump" class="panel panel-info">
 	<div class="panel-heading"><h3 class="panel-title">Movement</h3></div>
 	<div class="panel-body">
 		Press [Space] to jump.
 	</div>
 	<div class="panel-footer tut-condition text-warning">
 		Jump <b class="tut-progress"></b> times
+	</div>
+</div>
+
+<!-- Basic Digging -->
+<div id="MsgBasicDiggingDirt" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Digging</h3></div>
+	<div class="panel-body">
+		Use the Shovel (Default [1]) to dig Dirt/Grass terrain.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Dig <b class="tut-progress"></b>m&sup3; Dirt using the Shovel
+	</div>
+</div>
+
+<div id="MsgBasicDiggingStone" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Digging</h3></div>
+	<div class="panel-body">
+		Use the Pickaxe (Default [2]) to dig Stone terrain.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Dig <b class="tut-progress"></b>m&sup3; Stone using the Pickaxe
+	</div>
+</div>
+
+<div id="MsgBasicDiggingGod" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Digging</h3></div>
+	<div class="panel-body">
+		Use the GodShovel (Default [1]) to dig any terrain.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Dig <b class="tut-progress"></b>m&sup3; using the GodShovel
+	</div>
+</div>
+
+<!-- Basic Building -->
+<div id="MsgBasicBuildingDirt" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Building</h3></div>
+	<div class="panel-body">
+		Select the collected Dirt terrain material (either by shortcut or by opening the inventory using [I] or [Right-Click]) and place it in the world.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Place <b class="tut-progress"></b>m&sup3; Dirt
+	</div>
+</div>
+
+<div id="MsgBasicBuildingStone" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Building</h3></div>
+	<div class="panel-body">
+		Select the collected Stone terrain material and place it in the world.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Place <b class="tut-progress"></b>m&sup3; Stone
+	</div>
+</div>
+
+<!-- Basic Crafting -->
+<div id="MsgBasicCraftingDirtCube" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Crafting</h3></div>
+	<div class="panel-body">
+		Select Dirt material and open the inventory ([I] or [Right-Click]) to access the Crafting Menu.
+		Select the Cube shape, configure the dimensions, and craft two cubes of dirt with different sizes.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Craft <b class="tut-progress"></b> different Cubes of Dirt
+	</div>
+</div>
+
+<div id="MsgBasicCraftingDirtCubePlace" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Crafting</h3></div>
+	<div class="panel-body">
+		Select the newly crafted Cubes of Dirt (in the Physics Items inventory category) and place them via [Left-Click] in the world.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Place <b class="tut-progress"></b> Cubes of Dirt in the world
+	</div>
+</div>
+
+<div id="MsgBasicCraftingStoneNonCube" class="panel panel-info">
+	<div class="panel-heading"><h3 class="panel-title">Basic Crafting</h3></div>
+	<div class="panel-body">
+		Select Stone material and open the inventory ([I] or [Right-Click]) to access the Crafting Menu.
+		Select the Sphere or Cylinder shape, configure the dimensions, and craft two different physics items of stone.
+	</div>
+	<div class="panel-footer tut-condition text-warning">
+		Craft <b class="tut-progress"></b> different Non-Cubes of Stone
 	</div>
 </div>

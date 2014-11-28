@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using EfficientUI;
 using Engine.Resources;
+using Engine.Universe;
+using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
@@ -134,6 +136,27 @@ namespace UpvoidMiner
         [UICollection("ResourceItem")]
         public List<ResourceItemUI> ResourceItems { get; private set; }
 
+        [UIObject]
+        public bool DeleteMenuRed { get { return Universe.Below10FPS; } }
+
+        [UIObject]
+        public bool CanDeletePhysics { get { return ItemManager.AllItemsEntities.Any(); } }
+
+        [UICallback]
+        public void DeletePhysics(bool del, bool dyn)
+        {
+            foreach (var kvp in ItemManager.AllItemsEntities.ToArray())
+            {
+                if (kvp.Value.FixedPosition == dyn)
+                    continue;
+
+                ItemManager.RemoveItemFromWorld(kvp.Value);
+
+                if (!del && LocalScript.player != null)
+                    LocalScript.player.Inventory.AddItem(kvp.Key);
+            }
+        }
+
         public InventoryUI()
             : base("Inventory")
         {
@@ -168,6 +191,7 @@ namespace UpvoidMiner
         {
             get { return LocalScript.player != null && LocalScript.player.Gui != null && LocalScript.player.Gui.IsInventoryOpen; }
         }
+
         [UIObject]
         public bool IsUIOpen
         {

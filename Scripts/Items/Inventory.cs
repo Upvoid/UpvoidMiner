@@ -192,15 +192,16 @@ namespace UpvoidMiner
 
         /// <summary>
         /// Adds an item. Is automatically assigned to quickAcess if free.
+        /// Returns true if a new item was appended.
         /// </summary>
-        public void AddItem(Item item)
+        public bool AddItem(Item item)
         {
             Debug.Assert(item != null);
 
-            Items.AddItem(item);
+            return Items.AddItem(item);
 
             // Check if new rules were discovered
-            return; // DEBUG: Disable crafting
+            // DEBUG: Disable crafting
             /*foreach (var rule in craftingRules) 
             {
                 if ( rule.Discovered ) continue;

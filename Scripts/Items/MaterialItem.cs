@@ -21,6 +21,7 @@ using Engine.Rendering;
 using Engine.Resources;
 using Engine.Physics;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -178,6 +179,10 @@ namespace UpvoidMiner
                     player.DropItem(droppedItem, _worldPos);
                     break;
             }
+
+            // Tutorial
+            if (Shape == MaterialShape.Cube && Material.Name == "Dirt")
+                Tutorials.MsgBasicCraftingDirtCubePlace.Report(1);
         }
 
         public override void OnSelect(Player player)
@@ -190,7 +195,7 @@ namespace UpvoidMiner
                 case MaterialShape.Cylinder: mesh = Resources.UseMesh("::Debug/Cylinder", UpvoidMiner.ModDomain); break;
                 default: throw new NotImplementedException("Invalid shape");
             }
-            
+
             // Create an overlay object as 'placement-indicator'.
             previewMaterialPlaced = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreview", UpvoidMiner.ModDomain), mesh, mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlaced);
