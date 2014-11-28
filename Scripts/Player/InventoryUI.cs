@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using EfficientUI;
 using Engine.Resources;
+using Engine.Universe;
 using UpvoidMiner.Items;
 
 namespace UpvoidMiner
@@ -135,6 +136,8 @@ namespace UpvoidMiner
         [UICollection("ResourceItem")]
         public List<ResourceItemUI> ResourceItems { get; private set; }
 
+        [UIObject]
+        public bool DeleteMenuRed { get { return Universe.Below10FPS; } }
 
         [UIObject]
         public bool CanDeletePhysics { get { return ItemManager.AllItemsEntities.Any(); } }

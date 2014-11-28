@@ -279,6 +279,7 @@
                 <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); }"></uiobject>
                 <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); }"></uiobject>
                 <uiobject name="CanDeletePhysics" onvalue="function(el, val) { $('.delete-menu').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="DeleteMenuRed" onvalue="function(el, val) { $('.delete-menu').attr('class', val ? 'btn btn-danger btn-sm delete-menu' : 'btn btn-default btn-sm delete-menu'); }"></uiobject>
             </ui>
             <script type="text/javascript">
                 $(function(){
