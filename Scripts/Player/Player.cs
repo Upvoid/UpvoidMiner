@@ -924,7 +924,7 @@ namespace UpvoidMiner
                     dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                     break;
                 case DiggingController.DigAlignment.View:
-                    dirX = camera.RightDirection.Normalized;
+                    dirX = -camera.RightDirection.Normalized;
                     dirZ = camera.UpDirection.Normalized;
                     dirY = -camera.ForwardDirection.Normalized;
                     break;
