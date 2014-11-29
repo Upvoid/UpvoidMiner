@@ -348,7 +348,7 @@ namespace UpvoidMiner
 
                 Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
 
-                Tutorials.MsgIntro.Report(moveDir.Length * _elapsedSeconds);
+                Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
                 if (IsRunning) Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
             }
             else // Otherwise, we can do some subtile acceleration in air
@@ -373,7 +373,7 @@ namespace UpvoidMiner
 
                 Body.ApplyImpulse((newVelocity - Body.GetVelocity()) * CharacterMass, vec3.Zero);
 
-                Tutorials.MsgIntro.Report(moveDir.Length * _elapsedSeconds);
+                Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
                 if (IsRunning) Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
             }
 

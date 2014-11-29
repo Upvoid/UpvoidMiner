@@ -53,7 +53,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return HasShapePivotAlignment && LocalScript.player != null && (LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.Axis || LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned);
+                return HasPivotAlignment && LocalScript.player != null && (LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.Axis || LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned);
             }
         }
         [UIObject]
@@ -61,16 +61,25 @@ namespace UpvoidMiner
         {
             get
             {
-                return HasShapePivotAlignment && LocalScript.player != null && LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
+                return HasPivotAlignment && LocalScript.player != null && LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
             }
         }
 
         [UIObject]
-        public bool HasShapePivotAlignment
+        public bool HasShape
         {
             get
             {
                 return !(SelectedItem is MaterialItem);
+            }
+        }
+
+        [UIObject]
+        public bool HasPivotAlignment
+        {
+            get
+            {
+                return true;
             }
         }
 

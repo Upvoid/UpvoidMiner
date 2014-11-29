@@ -236,6 +236,9 @@
         .delete-menu-btns .btn {
             /*margin: 4px;*/
         }
+        .item-info-table {
+            width: 100%;
+        }
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
@@ -332,12 +335,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="btn-group">
-                                <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop</a>
-                                <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy</a>
+                            <div class="btn-group btn-group-vertical btn-group-sm">
+                                <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop One</a>
+                                <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy All</a>
                             </div>
-                            <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
-                            <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                            <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().find('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                            <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().find('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
                         </td>
                         <td>
                             <div class="shortcut-field">
@@ -366,6 +369,20 @@
                         </td>
                     </tr>
                 </table>
+                <table class="item-convert" style="width:100%; text-align:center; margin-top:12px;">
+                    <tr>
+                        <td>
+                            Convert to Terrain Resource:
+                            <div>
+                                <div class="btn-group">
+                                    <a name="BtnConvertOne" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertOne');">One</a>
+                                    <a name="BtnConvertAll" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertAll');">All</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <uiobject name="IsConvertible" onvalue="function(el, val) { var btn = $(el).parent().children('.item-convert').css('display', val ? 'table' : 'none'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
             </uitemplate>
         </div>
     </div>
@@ -426,7 +443,7 @@
                 <div class="panel-heading"><uistring name="Title" tag="span"></uistring> Settings</div>
                 <div class="panel-body">
                     <table class="btn-table">
-                    <tr class="sap-settings">
+                    <tr class="s-settings">
                         <td>Shape</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -438,7 +455,7 @@
                         </td>
                     </tr>
                     
-                    <tr class="sap-settings">
+                    <tr class="p-settings">
                         <td>Pivot</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -471,7 +488,7 @@
                         </td>
                     </tr>
                     
-                    <tr class="sap-settings">
+                    <tr class="p-settings">
                         <td>Alignment</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -509,7 +526,8 @@
                     </table>
                     <uiobject name="HasReplacement" onvalue="function(el, val) { $('.replacement-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasPhysics" onvalue="function(el, val) { $('.physics-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
-                    <uiobject name="HasShapePivotAlignment" onvalue="function(el, val) { $('.sap-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasShape" onvalue="function(el, val) { $('.s-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasPivotAlignment" onvalue="function(el, val) { $('.p-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasGridAngle" onvalue="function(el, val) { $('.angle-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasGridSize" onvalue="function(el, val) { $('.gridsize-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
 

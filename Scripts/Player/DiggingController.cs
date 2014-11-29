@@ -544,7 +544,8 @@ namespace UpvoidMiner
 
                     if (instance.player.Inventory.Selection is ToolItem &&
                         instance.player.CurrentDiggingShape == DigShape.Cylinder &&
-                        instance.player.CurrentDiggingAlignment == DigAlignment.View)
+                        instance.player.CurrentDiggingAlignment == DigAlignment.View &&
+                        instance.player.CurrentDiggingPivot == DigPivot.Center)
                         Tutorials.MsgAdvancedDiggingView.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ToolItem &&
@@ -552,6 +553,12 @@ namespace UpvoidMiner
                         instance.player.CurrentDiggingAlignment == DigAlignment.GridAligned &&
                         instance.player.DiggingAlignmentAxisRotation == 45 / 5)
                         Tutorials.MsgAdvancedDiggingAngle.Report(-volume);
+
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        instance.player.CurrentDiggingShape == DigShape.Sphere &&
+                        instance.player.CurrentDiggingAlignment == DigAlignment.GridAligned &&
+                        instance.player.DiggingGridSize == 2 * 2)
+                        Tutorials.MsgAdvancedDiggingGridSize.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ResourceItem &&
                         instance.player.CurrentDiggingAddMode == AddMode.NonAirOnly &&

@@ -497,6 +497,34 @@ namespace UpvoidMiner
         }
 
         /// <summary>
+        /// Converts one item to terrain resource
+        /// </summary>
+        public void Convert(Item item, bool convertAll)
+        {
+            if (item.IsDroppable && item is MaterialItem && item is DiscreteItem)
+            {
+                var matItem = item as MaterialItem;
+                if (convertAll)
+                {
+                    Inventory.AddResource(matItem.Material, matItem.Volume * (item as DiscreteItem).StackSize);
+                    if (!GodMode)
+                        Inventory.RemoveItem(item);
+                    return;
+                }
+                Item droppedItem = item.Clone();
+
+                var dItem = droppedItem as DiscreteItem;
+                dItem.StackSize = 1;
+
+                Inventory.AddResource(matItem.Material, matItem.Volume);
+
+                // Keep all items in god mode
+                if (!GodMode)
+                    Inventory.RemoveItem(droppedItem);
+            }
+        }
+
+        /// <summary>
         /// Adds all active drone constraints to a Csg Diff Node.
         /// </summary>
         public void AddDroneConstraints(CsgOpDiff diffNode, vec3 refPos)
@@ -896,7 +924,7 @@ namespace UpvoidMiner
                     dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                     break;
                 case DiggingController.DigAlignment.View:
-                    dirX = camera.RightDirection.Normalized;
+                    dirX = -camera.RightDirection.Normalized;
                     dirZ = camera.UpDirection.Normalized;
                     dirY = -camera.ForwardDirection.Normalized;
                     break;

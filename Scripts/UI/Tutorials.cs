@@ -151,8 +151,9 @@ namespace UpvoidMiner.UI
         private static bool godMode = false;
 
         #region Tutorials
-        public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementSprint");
+        public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 1, "MsgMovementMove");
 
+        public readonly static TutorialMessage MsgMovementMove = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementSprint");
         public readonly static TutorialMessage MsgMovementSprint = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementJump");
         public readonly static TutorialMessage MsgMovementJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicDiggingDirt", Modes.Adventure);
 
@@ -175,21 +176,24 @@ namespace UpvoidMiner.UI
         public readonly static TutorialMessage MsgAdvancedDiggingNonSphere = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingBottom");
         public readonly static TutorialMessage MsgAdvancedDiggingBottom = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgAdvancedDiggingView");
         public readonly static TutorialMessage MsgAdvancedDiggingView = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingAngle");
-        public readonly static TutorialMessage MsgAdvancedDiggingAngle = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedBuildingTerrainAligned");
+        public readonly static TutorialMessage MsgAdvancedDiggingAngle = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingGridSize");
+        public readonly static TutorialMessage MsgAdvancedDiggingGridSize = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedBuildingTerrainAligned");
 
         public readonly static TutorialMessage MsgAdvancedBuildingTerrainAligned = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceMaterial");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceMaterial = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceAll");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceAll = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingPipette");
         public readonly static TutorialMessage MsgAdvancedBuildingPipette = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 1, "MsgAdvancedBuildingPlaceDrone", Modes.God);
         public readonly static TutorialMessage MsgAdvancedBuildingPlaceDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedBuildingPlaceConstrained");
-        public readonly static TutorialMessage MsgAdvancedBuildingPlaceConstrained = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingCollectDrone");
+        public readonly static TutorialMessage MsgAdvancedBuildingPlaceConstrained = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedBuildingCollectDrone");
         public readonly static TutorialMessage MsgAdvancedBuildingCollectDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingThrowQ");
 
         public readonly static TutorialMessage MsgAdvancedCraftingThrowQ = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingThrowUse");
         public readonly static TutorialMessage MsgAdvancedCraftingThrowUse = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingStaticUse");
         public readonly static TutorialMessage MsgAdvancedCraftingStaticUse = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingCollectAllDynamic");
         public readonly static TutorialMessage MsgAdvancedCraftingCollectAllDynamic = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgAdvancedCraftingCollectAllStatic");
-        public readonly static TutorialMessage MsgAdvancedCraftingCollectAllStatic = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, null);
+        public readonly static TutorialMessage MsgAdvancedCraftingCollectAllStatic = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgFinal");
+
+        public readonly static TutorialMessage MsgFinal = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, null);
 
         #endregion
 

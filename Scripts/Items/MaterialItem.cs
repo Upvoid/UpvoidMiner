@@ -250,9 +250,16 @@ namespace UpvoidMiner
                     break;
                 default: throw new NotImplementedException("Invalid shape");
             }
-            mat4 transform = new mat4(
-                left, up, dir, rayHit.Position + (offset + .03f) * rayHit.Normal);
 
+            var dirX = vec3.Zero;
+            var dirY = vec3.Zero;
+            var dirZ = vec3.Zero;
+            _player.AlignmentSystem(up,out dirX,out dirY,out dirZ);
+            var pos = rayHit.Position;
+            pos = _player.AlignPlacementPosition(pos, up, offset);
+
+            mat4 transform = new mat4(
+                dirX, dirY, dirZ, pos);
             previewPlacable = true;
             previewPlaceMatrix = transform;
 

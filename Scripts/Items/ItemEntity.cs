@@ -115,6 +115,9 @@ namespace UpvoidMiner
         /// </summary>
         public void UpdatePhysics()
         {
+            if (FixedPosition)
+                return; // no update on fixed
+
             foreach (var pc in physicsComponents)
             {
                 var body = pc.RigidBody;

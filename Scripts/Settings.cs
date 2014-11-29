@@ -98,6 +98,9 @@ namespace UpvoidMiner
 
         private bool pipelineChanges = false;
 
+        [UITextBox]
+        public string InternalSize { get; set; }
+
         [UICheckBox]
         public bool DigParticles
         {
@@ -116,7 +119,13 @@ namespace UpvoidMiner
             // Add native resolution
             supportedVideoModes = new List<VideoMode> { new VideoMode(-1, -1) };
             foreach (string vidMode in modes)
-                supportedVideoModes.Add(StringToVideoMode(vidMode));
+            {
+                var mode = StringToVideoMode(vidMode);
+                if (mode.Width > 0 && mode.Height > 0 &&
+                    (mode.Width < 1100 || mode.Height < 700) )
+                    continue;
+                supportedVideoModes.Add(mode);
+            }
         }
 
         [UIObject]

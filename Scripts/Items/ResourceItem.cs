@@ -188,6 +188,7 @@ namespace UpvoidMiner
 
             var savPos = _worldPos;
 
+            var indPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, .1f);
             _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
@@ -243,7 +244,7 @@ namespace UpvoidMiner
             materialAlignmentGridRenderComp.Transform = gridAlignmentVisible ? mat4.Translate(_worldPos) * mat4.Scale(2f * _player.DiggingGridSize) * rotMat : mat4.Scale(0f);
 
             // Indicator is always in the center and relatively small.
-            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
+            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(indPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnDeselect(Player player)
