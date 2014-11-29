@@ -517,10 +517,12 @@ namespace UpvoidMiner
 
                     if (instance.player.Inventory.Selection is ToolItem &&
                         instance.player.CurrentDiggingShape == DigShape.Box &&
+                        instance.player.CurrentDiggingAlignment == DigAlignment.GridAligned &&
                         instance.player.DiggingAlignmentAxisRotation == 45 / 5)
                         Tutorials.MsgAdvancedDiggingAngle.Report(-volume);
 
-                    if (instance.player.CurrentDiggingAddMode == AddMode.NonAirOnly &&
+                    if (instance.player.Inventory.Selection is ResourceItem &&
+                        instance.player.CurrentDiggingAddMode == AddMode.NonAirOnly &&
                         material.Name == "Dirt")
                         Tutorials.MsgAdvancedBuildingReplaceMaterial.Report(-volume);
                 }

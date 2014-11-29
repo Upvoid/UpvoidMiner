@@ -161,11 +161,11 @@ namespace UpvoidMiner
                     case InputKey.Q:
                         if (player.Inventory.Selection != null)
                         {
-                            player.DropItem(player.Inventory.Selection);
-
-                            // Tutorial
+                            // Tutorial: Important! before: dropping
                             if (player.Inventory.Selection is MaterialItem)
                                 Tutorials.MsgAdvancedCraftingThrowQ.Report(1);
+
+                            player.DropItem(player.Inventory.Selection);
                         }
                         break;
 
