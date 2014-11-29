@@ -440,7 +440,7 @@
                 <div class="panel-heading"><uistring name="Title" tag="span"></uistring> Settings</div>
                 <div class="panel-body">
                     <table class="btn-table">
-                    <tr class="sap-settings">
+                    <tr class="s-settings">
                         <td>Shape</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -452,7 +452,7 @@
                         </td>
                     </tr>
                     
-                    <tr class="sap-settings">
+                    <tr class="p-settings">
                         <td>Pivot</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -485,7 +485,7 @@
                         </td>
                     </tr>
                     
-                    <tr class="sap-settings">
+                    <tr class="p-settings">
                         <td>Alignment</td>
                         <td>
                             <div class="btn-group btn-group-justified">
@@ -523,7 +523,8 @@
                     </table>
                     <uiobject name="HasReplacement" onvalue="function(el, val) { $('.replacement-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasPhysics" onvalue="function(el, val) { $('.physics-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
-                    <uiobject name="HasShapePivotAlignment" onvalue="function(el, val) { $('.sap-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasShape" onvalue="function(el, val) { $('.s-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasPivotAlignment" onvalue="function(el, val) { $('.p-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasGridAngle" onvalue="function(el, val) { $('.angle-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasGridSize" onvalue="function(el, val) { $('.gridsize-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
 
