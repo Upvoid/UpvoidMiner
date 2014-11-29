@@ -469,24 +469,24 @@ namespace UpvoidMiner
 
 
                 DateTime currentTime = DateTime.Now;
-                const int soundCooldownMs = 30;
+                const int soundCooldownMs = 100;
 
                 // Depending on whether we dig dirt or stone, play a random digging sound
 
                 Sound digSound = null;
-                if (material.Name == "Dirt" && currentTime > instance.timeDirtSound.AddMilliseconds(soundCooldownMs))
+                if (material.Name == "Dirt" && currentTime > instance.timeDirtSound + TimeSpan.FromMilliseconds(soundCooldownMs))
                 {
                     // Dirt material
                     instance.timeDirtSound = currentTime;
                     digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 }
-                else if (material.Name.StartsWith("Stone") && currentTime > instance.timeStoneSound.AddMilliseconds(soundCooldownMs))
+                else if (material.Name.StartsWith("Stone") && currentTime > instance.timeStoneSound + TimeSpan.FromMilliseconds(soundCooldownMs))
                 {
                     // Any material beginning with "Stone"
                     instance.timeStoneSound = currentTime;
                     digSound = new Sound(stoneSoundResource[random.Next(0, 4)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 }
-                else if (!material.Name.StartsWith("Stone") && currentTime > instance.timeDirtSound.AddMilliseconds(soundCooldownMs))
+                else if (!material.Name.StartsWith("Stone") && currentTime > instance.timeDirtSound + TimeSpan.FromMilliseconds(soundCooldownMs))
                 {
                     // Fallback, i.e. all other materials
                     instance.timeDirtSound = currentTime;
