@@ -215,6 +215,9 @@ namespace UpvoidMiner
             // Prevent bouncing
             Body.SetRestitution(0f);
 
+            // No friction
+            Body.SetFriction(0f);
+
             // This event handler is used to catch the keyboard input that steers the character.
             Input.OnPressInput += HandleInput;
 
