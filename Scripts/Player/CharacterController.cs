@@ -229,6 +229,20 @@ namespace UpvoidMiner
         /// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
         public void Update(float _elapsedSeconds)
         {
+
+            // When falling, clamp maximum player speed to 55m/s (air friction)
+            if(!GodMode && !TouchesGround)
+            {
+                const float maxSpeed = 55.0f;
+                vec3 curVel = Body.GetVelocity();
+                float speed = curVel.Length;
+                if (speed > maxSpeed)
+                {
+                    Body.SetVelocity(maxSpeed * curVel.Normalized);
+                }
+            }
+
+            // Movement noise
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
                 // Resume movement noise (This is a no-op if sound is already playing)
