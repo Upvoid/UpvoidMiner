@@ -855,13 +855,13 @@ namespace UpvoidMiner
             switch (CurrentDiggingPivot)
             {
                 case DiggingController.DigPivot.Top:
-                    offset = dirY * height;
+                    offset = -dirY * height;
                     break;
                 case DiggingController.DigPivot.Center:
                     offset = vec3.Zero;
                     break;
                 case DiggingController.DigPivot.Bottom:
-                    offset = -dirY * height;
+                    offset = dirY * height;
                     break;
             }
 
@@ -898,7 +898,7 @@ namespace UpvoidMiner
                 case DiggingController.DigAlignment.View:
                     dirX = camera.RightDirection.Normalized;
                     dirZ = camera.UpDirection.Normalized;
-                    dirY = camera.ForwardDirection.Normalized;
+                    dirY = -camera.ForwardDirection.Normalized;
                     break;
                 case DiggingController.DigAlignment.Terrain:
                     dirY = worldNormal.Normalized;

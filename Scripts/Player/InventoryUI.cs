@@ -57,6 +57,24 @@ namespace UpvoidMiner
             }
 
             [UICallback]
+            public void BtnConvertOne()
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.DropItem(item);
+            }
+
+            [UICallback]
+            public void BtnConvertAll()
+            {
+                if (LocalScript.player == null)
+                    return;
+
+                LocalScript.player.DropItem(item);
+            }
+
+            [UICallback]
             public void BtnDrop()
             {
                 if (LocalScript.player == null)
