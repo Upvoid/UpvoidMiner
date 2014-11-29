@@ -332,8 +332,10 @@
                     </tr>
                     <tr>
                         <td>
-                            <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop</a>
-                            <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy</a>
+                            <div class="btn-group">
+                                <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop</a>
+                                <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy</a>
+                            </div>
                             <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
                             <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
                         </td>
