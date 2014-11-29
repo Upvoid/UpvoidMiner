@@ -53,7 +53,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return LocalScript.player != null && (LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.Axis || LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned);
+                return HasShapePivotAlignment && LocalScript.player != null && (LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.Axis || LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned);
             }
         }
         [UIObject]
@@ -61,7 +61,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return LocalScript.player != null && LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
+                return HasShapePivotAlignment && LocalScript.player != null && LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
             }
         }
 
