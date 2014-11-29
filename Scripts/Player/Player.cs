@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.Serialization;
 using Engine;
 using Engine.Audio;
@@ -770,6 +771,11 @@ namespace UpvoidMiner
                 Inventory.AddItem(new MaterialItem(TerrainResource.FromName("AlienRock"), MaterialShape.Cylinder, new vec3(1), 10));*/
             }
 
+            // Resupply drones
+            var drones = Inventory.Items.Sum(i => i is ToolItem && (i as ToolItem).ToolType == ToolType.DroneChain ? (i as ToolItem).StackSize : 0);
+            if (drones < 5)
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5 - drones));
+
             Gui.OnUpdate();
         }
 
@@ -861,7 +867,7 @@ namespace UpvoidMiner
                 var dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                 var rotMat = new mat3(dirX, dirY, dirZ);
                 var rotPos = rotMat * pos;
-                
+
                 var snapPos = new vec3(
                     (int)Math.Round(rotPos.x * 2),
                     (int)Math.Round(rotPos.y * 2),
@@ -883,9 +889,9 @@ namespace UpvoidMiner
                 case DiggingController.DigAlignment.GridAligned: // fall-through intended
                 case DiggingController.DigAlignment.Axis:
                     float alpha = (float)(DiggingAlignmentAxisRotation * 5 * Math.PI / 180);
-                    dirX = new vec3((float)Math.Cos(alpha), 0, (float) -Math.Sin(alpha));
+                    dirX = new vec3((float)Math.Cos(alpha), 0, (float)-Math.Sin(alpha));
                     dirY = vec3.UnitY;
-                    dirZ = new vec3((float)Math.Sin(alpha), 0, (float) Math.Cos(alpha));
+                    dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                     break;
                 case DiggingController.DigAlignment.View:
                     dirX = camera.RightDirection.Normalized;
