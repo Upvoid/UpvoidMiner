@@ -179,6 +179,7 @@ namespace UpvoidMiner
             var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
             var _worldNormal = rayHit == null ? vec3.UnitY : rayHit.Normal;
 
+            var indPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, .1f);
             _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
@@ -223,7 +224,7 @@ namespace UpvoidMiner
             previewShapeLimited.SetColor("uDigDirY", new vec4(dy, 0));
             previewShapeLimited.SetColor("uDigDirZ", new vec4(dz, 0));
             // Indicator is always in the center and relatively small.
-            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
+            previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(indPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
 
         public override void OnDeselect(Player player)
