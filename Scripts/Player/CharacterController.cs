@@ -115,12 +115,12 @@ namespace UpvoidMiner
         /// <summary>
         /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
         /// </summary>
-        public float StrafeSpeed = 1f;
+        public float StrafeSpeed = 2f;
 
         /// <summary>
         /// The velocity of the character when strafing while running (meters per second). Default is 3.0 (11 km/h).
         /// </summary>
-        public float StrafeSpeedRunning = 3f;
+        public float StrafeSpeedRunning = 4.5f;
 
         /// <summary>
         /// The velocity of the character when running (meters per second). Default is 6.
@@ -229,6 +229,20 @@ namespace UpvoidMiner
         /// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
         public void Update(float _elapsedSeconds)
         {
+
+            // When falling, clamp maximum player speed to 55m/s (air friction)
+            if(!GodMode && !TouchesGround)
+            {
+                const float maxSpeed = 55.0f;
+                vec3 curVel = Body.GetVelocity();
+                float speed = curVel.Length;
+                if (speed > maxSpeed)
+                {
+                    Body.SetVelocity(maxSpeed * curVel.Normalized);
+                }
+            }
+
+            // Movement noise
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
                 // Resume movement noise (This is a no-op if sound is already playing)
