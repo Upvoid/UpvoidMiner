@@ -249,6 +249,18 @@ namespace UpvoidMiner
             if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
             {
                 // Resume movement noise (This is a no-op if sound is already playing)
+                // Note that changing sound attributes is a no-op when old and new value are equal,
+                // So no unnecessary openal calls will be executed
+
+                if(IsRunning)
+                {
+                    movementNoiseSound.Pitch = 1.7f;
+                }
+                else
+                {
+                    movementNoiseSound.Pitch = 1.0f;
+                }
+
                 movementNoiseSound.Resume();
                 movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
             }

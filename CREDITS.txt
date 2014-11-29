@@ -16,28 +16,28 @@ http://creativecommons.org/licenses/by/3.0/
 
 
 "Reverie (small theme)" by "_ghost" (http://dig.ccmixter.org/people/_ghost)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 "Emerge" by "Alex beroza" (http://dig.ccmixter.org/people/AlexBeroza)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 "Improvisation On Friday..." by "Alex Beroza" (http://dig.ccmixter.org/people/AlexBeroza)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 First Track from Frank Nora's "New Midnight Cassette System" (Part 27, Ambient). 
 His music is under the Public Domain and can be found on his website http://mcs.franknora.com/
 
 "Chords For David" by "Pitx" (http://dig.ccmixter.org/people/Pitx)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 "Writing the future" by "Pitx" (http://dig.ccmixter.org/people/Pitx)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 "Photo theme: Window like" by "Antony Raijekov" (http://dig.ccmixter.org/people/zeos)
-Released under Creative Commons 2.5 Attribution licence (CC-BY-2.5).
+Released under Creative Commons 2.5 Attribution license (CC-BY-2.5).
 
 "Ethereal" by "Zep Hurme" (http://dig.ccmixter.org/people/zep_hurme)
-Released under Creative Commons 3.0 Attribution licence (CC-BY-3.0).
+Released under Creative Commons 3.0 Attribution license (CC-BY-3.0).
 
 
 Libraries
@@ -77,7 +77,7 @@ ConcurrentQueue             (https://github.com/cameron314/concurrentqueue) Simp
 
 ===============
 
-The individual license files for the libraries above can be found in the folder "LICENCES".
+The individual license files for the libraries above can be found in the folder "licenseS".
 However, you can find generic versions for most of the licenses at the following locations:
 
 SIL OFL 1.1 http://scripts.sil.org/OFL
