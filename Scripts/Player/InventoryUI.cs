@@ -6,6 +6,7 @@ using EfficientUI;
 using Engine.Resources;
 using Engine.Universe;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -155,6 +156,12 @@ namespace UpvoidMiner
                 if (!del && LocalScript.player != null)
                     LocalScript.player.Inventory.AddItem(kvp.Key);
             }
+
+            // Tutorial
+            if (dyn)
+                Tutorials.MsgAdvancedCraftingCollectAllDynamic.Report(1);
+            if (!dyn)
+                Tutorials.MsgAdvancedCraftingCollectAllStatic.Report(1);
         }
 
         public InventoryUI()

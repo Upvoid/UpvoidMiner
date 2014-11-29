@@ -180,7 +180,7 @@ namespace UpvoidMiner.UI
         public readonly static TutorialMessage MsgAdvancedBuildingTerrainAligned = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceMaterial");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceMaterial = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceAll");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceAll = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingPipette");
-        public readonly static TutorialMessage MsgAdvancedBuildingPipette = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingPlaceDrone", Modes.God);
+        public readonly static TutorialMessage MsgAdvancedBuildingPipette = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 1, "MsgAdvancedBuildingPlaceDrone", Modes.God);
         public readonly static TutorialMessage MsgAdvancedBuildingPlaceDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedBuildingPlaceConstrained");
         public readonly static TutorialMessage MsgAdvancedBuildingPlaceConstrained = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingCollectDrone");
         public readonly static TutorialMessage MsgAdvancedBuildingCollectDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingThrowQ");

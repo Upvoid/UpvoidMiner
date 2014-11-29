@@ -7,6 +7,7 @@ using Engine.Physics;
 using Engine.Rendering;
 using Engine.Resources;
 using Engine.Universe;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -135,6 +136,9 @@ namespace UpvoidMiner
 
         private static SoundResource[] chopSoundResource;
         private static Sound[]  chopSound;
+
+        public float DigRadiusShovel { get { return digRadiusShovel; } }
+        public float DigRadiusPickaxe { get { return digRadiusPickaxe; } }
 
         public override void OnSelect(Player player)
         {
@@ -322,6 +326,9 @@ namespace UpvoidMiner
                     player.AddDrone(_worldPos);
                     // Remove that drone from inventory.
                     player.Inventory.RemoveItem(new ToolItem(ToolType));
+
+                    // Tutorial
+                    Tutorials.MsgAdvancedBuildingPlaceDrone.Report(1);
                     return;
 
                 case ToolType.Hammer:
