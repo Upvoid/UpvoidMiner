@@ -56,6 +56,14 @@ namespace UpvoidMiner
                 return LocalScript.player != null && (LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.Axis || LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned);
             }
         }
+        [UIObject]
+        public bool HasGridSize
+        {
+            get
+            {
+                return LocalScript.player != null && LocalScript.player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
+            }
+        }
 
         [UIObject]
         public bool HasShapePivotAlignment
@@ -104,6 +112,23 @@ namespace UpvoidMiner
         }
         [UIString]
         public string AxisAngleString { get { return (AxisAngle * 5) + "&deg;"; } }
+
+        [UISlider(1, 20)]
+        public int GridSize
+        {
+            get
+            {
+                return LocalScript.player == null ? 0 : LocalScript.player.DiggingGridSize;
+            }
+            set
+            {
+                if (LocalScript.player == null)
+                    return;
+                LocalScript.player.DiggingGridSize = value;
+            }
+        }
+        [UIString]
+        public string GridSizeString { get { return (GridSize*0.5f) + "m"; } }
 
         public UsageUI()
             : base("Digging")
