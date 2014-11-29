@@ -236,6 +236,9 @@
         .delete-menu-btns .btn {
             /*margin: 4px;*/
         }
+        .item-info-table {
+            width: 100%;
+        }
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
@@ -332,12 +335,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="btn-group">
-                                <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop</a>
-                                <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy</a>
+                            <div class="btn-group btn-group-vertical btn-group-sm">
+                                <a name="BtnDrop" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnDrop');">Drop One</a>
+                                <a name="BtnDestroy" class="btn btn-danger" onclick="EfficientUI.SendCallback(this, 'BtnDestroy');">Destroy All</a>
                             </div>
-                            <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
-                            <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().children('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                            <uiobject name="IsDroppable" onvalue="function(el, val) { var btn = $(el).parent().find('[name=BtnDrop]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                            <uiobject name="IsDestructible" onvalue="function(el, val) { var btn = $(el).parent().find('[name=BtnDestroy]'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
                         </td>
                         <td>
                             <div class="shortcut-field">
@@ -366,11 +369,11 @@
                         </td>
                     </tr>
                 </table>
-                <table class="item-convert" style="width:100%; text-align:center;">
+                <table class="item-convert" style="width:100%; text-align:center; margin-top:12px;">
                     <tr>
                         <td>
                             Convert to Terrain Resource:
-                            <div style="width:100%; text-align:center;">
+                            <div>
                                 <div class="btn-group">
                                     <a name="BtnConvertOne" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertOne');">One</a>
                                     <a name="BtnConvertAll" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertAll');">All</a>
@@ -379,7 +382,7 @@
                         </td>
                     </tr>
                 </table>
-                <uiobject name="IsConvertible" onvalue="function(el, val) { var btn = $(el).parent().children('.item-convert').css('display',val ? 'block' : 'none'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
+                <uiobject name="IsConvertible" onvalue="function(el, val) { var btn = $(el).parent().children('.item-convert').css('display', val ? 'table' : 'none'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
             </uitemplate>
         </div>
     </div>
