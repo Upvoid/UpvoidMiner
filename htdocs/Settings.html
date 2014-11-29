@@ -136,12 +136,18 @@
                                 <div class="well well-sm">
                                     <!--<div style="text-align:center;"><p style="color: #f90;"><i class="fa fa-warning"></i> Changes are effective after pressing 'Apply'.</p></div>-->
                                     <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
-                                    <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
-                                    <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
-                                    <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
-                                    <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
-                                    <uicheckbox name="Fog">Enable Fog</uicheckbox>
-                                    <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                    
+                                    <p style="margin-bottom:20px; font-size:125%;">
+                                       <uicheckbox name="MinimalGraphics" onvalue="function(el, val) { $('.graphicsSettings').css('display', val ? 'none' : 'block'); }">Minimal Graphics mode</uicheckbox>
+                                    </p>
+                                    <div class="graphicsSettings">
+                                       <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
+                                       <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
+                                       <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
+                                       <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
+                                       <uicheckbox name="Fog">Enable Fog</uicheckbox>
+                                       <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                    </div>
                                 </div>
                                 <uicheckbox name="Grass">Enable Grass</uicheckbox>
                                 <uicheckbox name="DigParticles">Enable Digging Particles</uicheckbox>

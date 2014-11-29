@@ -81,7 +81,11 @@ namespace UpvoidMiner
         private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
         private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
         private bool settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
+
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
+
+        private bool settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", false);
+
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
         private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
@@ -188,6 +192,17 @@ namespace UpvoidMiner
         {
             get { return settingFullscreen; }
             set { settingFullscreen = value; }
+        }
+
+        [UICheckBox]
+        public bool MinimalGraphics
+        {
+            get { return settingMinimalGraphics; }
+            set
+            {
+                if (settingMinimalGraphics != value) pipelineChanges = true;
+                settingMinimalGraphics = value;
+            }
         }
 
         [UICheckBox]
@@ -327,6 +342,8 @@ namespace UpvoidMiner
             // Graphics settings
             Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
 
+            Scripting.SetUserSetting("Debug/Minimal Graphics", settingMinimalGraphics);
+
             Scripting.SetUserSetting("Graphics/Enable Shadows", settingShadows);
             Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
             Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", settingVolumetricScattering);
@@ -377,6 +394,8 @@ namespace UpvoidMiner
             settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
 
             settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
+
+            settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", false);
 
             settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", settingShadows);
             settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
