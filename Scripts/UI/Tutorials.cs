@@ -171,7 +171,7 @@ namespace UpvoidMiner.UI
         public readonly static TutorialMessage MsgBasicChoppingTree = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicChoppingCollect");
         public readonly static TutorialMessage MsgBasicChoppingCollect = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5, "MsgAdvancedDiggingSmall");
 
-        public readonly static TutorialMessage MsgAdvancedDiggingSmall = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedDiggingNonSphere");
+        public readonly static TutorialMessage MsgAdvancedDiggingSmall = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 5, "MsgAdvancedDiggingNonSphere");
         public readonly static TutorialMessage MsgAdvancedDiggingNonSphere = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingBottom");
         public readonly static TutorialMessage MsgAdvancedDiggingBottom = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgAdvancedDiggingView");
         public readonly static TutorialMessage MsgAdvancedDiggingView = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingAngle");
