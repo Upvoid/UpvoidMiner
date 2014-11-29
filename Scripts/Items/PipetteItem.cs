@@ -52,7 +52,7 @@ namespace UpvoidMiner
             else
             {
                 // Get the material at the position where the tool has been used
-                TerrainMaterial mat = player.ContainingWorld.Terrain.QueryMaterialAtPosition(_worldPos, true);
+                TerrainMaterial mat = player.ContainingWorld.Terrain.QueryMaterialAtPosition(_worldPos - _worldNormal.Normalized * .05f, true);
                 // Look for the material in the player's inventory and select it
                 foreach (var item in player.Inventory.Items)
                 {
