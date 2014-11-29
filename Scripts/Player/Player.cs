@@ -710,6 +710,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Axe));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5));
                 Inventory.AddItem(new PipetteItem());
                 foreach (var resource in TerrainResource.ListResources())
                     Inventory.AddResource(resource, 1e9f);
