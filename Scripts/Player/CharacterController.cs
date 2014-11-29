@@ -115,12 +115,12 @@ namespace UpvoidMiner
         /// <summary>
         /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
         /// </summary>
-        public float StrafeSpeed = 1f;
+        public float StrafeSpeed = 2f;
 
         /// <summary>
         /// The velocity of the character when strafing while running (meters per second). Default is 3.0 (11 km/h).
         /// </summary>
-        public float StrafeSpeedRunning = 3f;
+        public float StrafeSpeedRunning = 4.5f;
 
         /// <summary>
         /// The velocity of the character when running (meters per second). Default is 6.
