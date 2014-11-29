@@ -16,6 +16,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using Engine;
 using Engine.Audio;
 using Engine.Universe;
@@ -479,25 +480,69 @@ namespace UpvoidMiner
                 instance.player.Inventory.AddResource(material, -volume);
 
                 // Tutorial
-                if (instance.player.Inventory.Selection is ToolItem &&
-                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Shovel &&
-                    material.Name == "Dirt")
-                    Tutorials.MsgBasicDiggingDirt.Report(-volume);
+                if (volume < 0)
+                {
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Shovel &&
+                        material.Name == "Dirt")
+                        Tutorials.MsgBasicDiggingDirt.Report(-volume);
 
-                if (instance.player.Inventory.Selection is ToolItem &&
-                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Pickaxe &&
-                    material.Name.StartsWith("Stone"))
-                    Tutorials.MsgBasicDiggingStone.Report(-volume);
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Pickaxe &&
+                        material.Name.StartsWith("Stone"))
+                        Tutorials.MsgBasicDiggingStone.Report(-volume);
 
-                if (instance.player.Inventory.Selection is ToolItem &&
-                    (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.GodsShovel)
-                    Tutorials.MsgBasicDiggingGod.Report(-volume);
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.GodsShovel)
+                        Tutorials.MsgBasicDiggingGod.Report(-volume);
 
-                if (volume > 0 && material.Name.StartsWith("Stone"))
-                    Tutorials.MsgBasicBuildingStone.Report(volume);
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        ((instance.player.Inventory.Selection as ToolItem).DigRadiusShovel < 0.6 ||
+                         (instance.player.Inventory.Selection as ToolItem).DigRadiusPickaxe < 0.6))
+                        Tutorials.MsgAdvancedDiggingSmall.Report(-volume);
 
-                if (volume > 0 && material.Name == "Dirt")
-                    Tutorials.MsgBasicBuildingDirt.Report(volume);
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        instance.player.CurrentDiggingShape != DigShape.Sphere)
+                        Tutorials.MsgAdvancedDiggingNonSphere.Report(-volume);
+
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        instance.player.CurrentDiggingShape == DigShape.Box &&
+                        instance.player.CurrentDiggingPivot == DigPivot.Bottom)
+                        Tutorials.MsgAdvancedDiggingBottom.Report(-volume);
+
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        instance.player.CurrentDiggingShape == DigShape.Cylinder &&
+                        instance.player.CurrentDiggingAlignment == DigAlignment.View)
+                        Tutorials.MsgAdvancedDiggingView.Report(-volume);
+
+                    if (instance.player.Inventory.Selection is ToolItem &&
+                        instance.player.CurrentDiggingShape == DigShape.Box &&
+                        instance.player.DiggingAlignmentAxisRotation == 45 / 5)
+                        Tutorials.MsgAdvancedDiggingAngle.Report(-volume);
+
+                    if (instance.player.CurrentDiggingAddMode == AddMode.NonAirOnly &&
+                        material.Name == "Dirt")
+                        Tutorials.MsgAdvancedBuildingReplaceMaterial.Report(-volume);
+                }
+                else if (volume > 0)
+                {
+                    if (material.Name.StartsWith("Stone"))
+                        Tutorials.MsgBasicBuildingStone.Report(volume);
+
+                    if (material.Name == "Dirt")
+                        Tutorials.MsgBasicBuildingDirt.Report(volume);
+
+                    if (instance.player.CurrentDiggingAlignment == DigAlignment.Terrain &&
+                        instance.player.CurrentDiggingShape == DigShape.Cylinder)
+                        Tutorials.MsgAdvancedBuildingTerrainAligned.Report(volume);
+
+                    if (instance.player.CurrentDiggingAddMode == AddMode.Overwrite)
+                        Tutorials.MsgAdvancedBuildingReplaceAll.Report(volume);
+
+                    if (material.Name == "Dirt" &&
+                        instance.player.DroneConstraints.Any(dc => dc.Drones.Count >= 2))
+                        Tutorials.MsgAdvancedBuildingPlaceConstrained.Report(volume);
+                }
             }
         }
 

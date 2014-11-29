@@ -31,7 +31,7 @@ namespace UpvoidMiner
         /// <summary>
         /// List of participating drones.
         /// </summary>
-        private List<Drone> drones = new List<Drone>();
+        public readonly List<Drone> Drones = new List<Drone>();
 
         /// <summary>
         /// List of renderjobs for boundary indicators.
@@ -51,18 +51,18 @@ namespace UpvoidMiner
         {
             get
             {
-                Debug.Assert(drones.Count > 0);
-                return drones[0];
+                Debug.Assert(Drones.Count > 0);
+                return Drones[0];
             }
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpvoidMiner.DroneConstraint"/> class.
+        /// Initializes a new instance of the <see cref="DroneConstraint"/> class.
         /// A drone constraint creates a digging/construction constraint between two nearby drones.
         /// </summary>
         /// <param name="_firstDrone">First drone, initially added to this constraint.</param>
         public DroneConstraint(Drone _firstDrone)
         {
-            drones.Add(_firstDrone);
+            Drones.Add(_firstDrone);
         }
 
         
@@ -72,7 +72,7 @@ namespace UpvoidMiner
         /// <returns><c>true</c>, iff at least one drone is attached, <c>false</c> otherwise.</returns>
         public bool ContainsDrones()
         {
-            return drones.Count > 0;
+            return Drones.Count > 0;
         }
 
 
@@ -99,7 +99,7 @@ namespace UpvoidMiner
         /// </summary>
         public void RemoveDrone(Drone drone)
         {
-            drones.Remove(drone);
+            Drones.Remove(drone);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace UpvoidMiner
         {
             Debug.Assert(IsAddable(_drone));
 
-            drones.Add(_drone);
+            Drones.Add(_drone);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace UpvoidMiner
         /// </summary>
         public void Update(float _elapsedSeconds)
         {
-            if (drones.Count > 0)
+            if (Drones.Count > 0)
             {
 
                 Drone refDrone = ReferenceDrone;
@@ -148,10 +148,10 @@ namespace UpvoidMiner
                 switch (refDrone.Type)
                 {
                     case DroneType.Chain:
-                        for (int i = 0; i < drones.Count - 1; ++i)
+                        for (int i = 0; i < Drones.Count - 1; ++i)
                         {
-                            Drone first = drones[i];
-                            Drone second = drones[i + 1];
+                            Drone first = Drones[i];
+                            Drone second = Drones[i + 1];
 
                             // Swap every other drone.
                             if (i % 2 == 1)
@@ -200,7 +200,7 @@ namespace UpvoidMiner
                 }
             }
             // Remove old ones.
-            while ( boundaryIndicators.Count > Math.Max(0, drones.Count -1))
+            while ( boundaryIndicators.Count > Math.Max(0, Drones.Count -1))
             {
                 LocalScript.world.RemoveRenderJob(boundaryIndicators[boundaryIndicators.Count - 1]);
                 LocalScript.world.RemoveRenderJob(boundaryIndicatorsDistort[boundaryIndicators.Count - 1]);
@@ -258,10 +258,10 @@ namespace UpvoidMiner
             switch (refDrone.Type)
             {
                 case DroneType.Chain:
-                    for (int i = 0; i < drones.Count - 1; ++i)
+                    for (int i = 0; i < Drones.Count - 1; ++i)
                     {
-                        Drone first = drones[i];
-                        Drone second = drones[i+1];
+                        Drone first = Drones[i];
+                        Drone second = Drones[i+1];
                         CsgExpression expr = constraintExpression[i];
 
                         configureVerticalConstraintExpression(refPos, first, second, expr);

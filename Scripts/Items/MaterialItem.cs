@@ -173,10 +173,16 @@ namespace UpvoidMiner
                     if (!player.GodMode) // don't remove in godmode
                         player.Inventory.RemoveItem(droppedItem);
                     ItemManager.InstantiateItem(droppedItem, previewPlaceMatrix, true);
+
+                    // Tutorial
+                    Tutorials.MsgAdvancedCraftingStaticUse.Report(1);
                     break;
 
                 case DiggingController.PhysicsMode.Thrown:
                     player.DropItem(droppedItem, _worldPos);
+
+                    // Tutorial
+                    Tutorials.MsgAdvancedCraftingThrowUse.Report(1);
                     break;
             }
 
