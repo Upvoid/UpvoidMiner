@@ -868,7 +868,7 @@ namespace UpvoidMiner
                 var dirY = vec3.UnitY;
                 var dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                 var rotMat = new mat3(dirX, dirY, dirZ);
-                var rotPos = rotMat * pos;
+                var rotPos = rotMat.Transpose * pos;
 
                 var snapPos = new vec3(
                     (int)Math.Round(rotPos.x * (2.0f/DiggingGridSize)),
@@ -876,7 +876,7 @@ namespace UpvoidMiner
                     (int)Math.Round(rotPos.z * (2.0f/DiggingGridSize))
                 ) * (DiggingGridSize/2.0f) + offset;
 
-                return rotMat.Inverse * snapPos;
+                return rotMat * snapPos;
             }
             else return pos + offset;
         }
