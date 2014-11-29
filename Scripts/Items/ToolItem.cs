@@ -271,7 +271,7 @@ namespace UpvoidMiner
                     useRadius = digRadiusShovel; break;
                 default: break;
             }
-            _worldPos = _player.AlignPlacementPosition(_worldPos, useRadius);
+            _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             // Set uniform for position and radius
             previewShape.SetColor("uMidPointAndRadius", new vec4(_worldPos, useRadius));
             previewShape.SetColor("uDigDirX", new vec4(dx, 0));

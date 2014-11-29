@@ -845,28 +845,28 @@ namespace UpvoidMiner
         /// <summary>
         /// Aligns a position according to the current alignment rules
         /// </summary>
-        public vec3 AlignPlacementPosition(vec3 pos, float height)
+        public vec3 AlignPlacementPosition(vec3 pos, vec3 worldNormal, float height)
         {
             vec3 offset = vec3.Zero;
+            var dirX = vec3.Zero;
+            var dirY = vec3.Zero;
+            var dirZ = vec3.Zero;
+            AlignmentSystem(worldNormal, out dirX, out dirY, out dirZ);
             switch (CurrentDiggingPivot)
             {
                 case DiggingController.DigPivot.Top:
-                    offset = -vec3.UnitY * height;
+                    offset = dirY * height;
                     break;
                 case DiggingController.DigPivot.Center:
                     offset = vec3.Zero;
                     break;
                 case DiggingController.DigPivot.Bottom:
-                    offset = vec3.UnitY * height;
+                    offset = -dirY * height;
                     break;
             }
 
             if (CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned)
             {
-                float alpha = (float)(DiggingAlignmentAxisRotation * 5 * Math.PI / 180);
-                var dirX = new vec3((float)Math.Cos(alpha), 0, (float)-Math.Sin(alpha));
-                var dirY = vec3.UnitY;
-                var dirZ = new vec3((float)Math.Sin(alpha), 0, (float)Math.Cos(alpha));
                 var rotMat = new mat3(dirX, dirY, dirZ);
                 var rotPos = rotMat.Transpose * pos;
 
@@ -914,7 +914,7 @@ namespace UpvoidMiner
         /// </summary>
         public void PlaceMaterial(TerrainResource material, vec3 worldNormal, vec3 position, float radius)
         {
-            position = AlignPlacementPosition(position, radius);
+            position = AlignPlacementPosition(position, worldNormal, radius);
 
             var filterMats = CurrentDiggingAddMode != DiggingController.AddMode.AirOnly ? null : new int[] { 0 };
             bool allowAirChange = CurrentDiggingAddMode != DiggingController.AddMode.NonAirOnly;
@@ -942,7 +942,7 @@ namespace UpvoidMiner
         /// </summary>
         public void DigMaterial(vec3 worldNormal, vec3 position, float radius, IEnumerable<int> filterMaterials)
         {
-            position = AlignPlacementPosition(position, radius);
+            position = AlignPlacementPosition(position, worldNormal, radius);
 
             switch (CurrentDiggingShape)
             {
