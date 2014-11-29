@@ -169,6 +169,10 @@ namespace UpvoidMiner
 
             // Add songs to the music queue
             musicQueue.Add(new Sound(
+                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zep_hurme_-_Ethereal", UpvoidMiner.ModDomain),
+                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
+
+            musicQueue.Add(new Sound(
                 Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/_ghost_-_Reverie_(small_theme)", UpvoidMiner.ModDomain),
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
@@ -196,9 +200,6 @@ namespace UpvoidMiner
                 Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zeos_-_Photo_theme_Window_like", UpvoidMiner.ModDomain),
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
-            musicQueue.Add(new Sound(
-                Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zep_hurme_-_Ethereal", UpvoidMiner.ModDomain),
-                vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
             // Do not play music. this is done by the music queue 8-)
             //music.Play();
