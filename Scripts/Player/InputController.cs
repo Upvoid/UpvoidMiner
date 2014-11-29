@@ -28,6 +28,7 @@ using Engine.Network;
 using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
+using UpvoidMiner.UI;
 
 
 namespace UpvoidMiner
@@ -159,7 +160,13 @@ namespace UpvoidMiner
 
                     case InputKey.Q:
                         if (player.Inventory.Selection != null)
+                        {
+                            // Tutorial: Important! before: dropping
+                            if (player.Inventory.Selection is MaterialItem)
+                                Tutorials.MsgAdvancedCraftingThrowQ.Report(1);
+
                             player.DropItem(player.Inventory.Selection);
+                        }
                         break;
 
                     case InputKey.Period:

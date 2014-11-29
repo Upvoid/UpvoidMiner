@@ -20,6 +20,7 @@ using Engine.Universe;
 using Engine.Rendering;
 using Engine.Resources;
 using Engine.Physics;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -183,6 +184,9 @@ namespace UpvoidMiner
             Owner.RemoveDrone(this);
             // And remove this entity.
             ContainingWorld.RemoveEntity(thisEntity);
+
+            // Tutorial
+            Tutorials.MsgAdvancedBuildingCollectDrone.Report(1);
         }
     }
 }

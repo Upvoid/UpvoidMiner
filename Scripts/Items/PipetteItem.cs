@@ -5,6 +5,7 @@ using System.Text;
 using Engine;
 using Engine.Physics;
 using Engine.Universe;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -61,6 +62,10 @@ namespace UpvoidMiner
                     if (resItem.Material.Material == mat)
                         player.Inventory.SelectItem(item);
                 }
+
+                // Tutorial
+                if (mat != null && mat.Name.StartsWith("Stone"))
+                    Tutorials.MsgAdvancedBuildingPipette.Report(1);
             }
 
         }
