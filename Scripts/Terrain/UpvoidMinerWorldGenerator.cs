@@ -251,7 +251,9 @@ namespace UpvoidMiner
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("DesertVegetation", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
             
-            concat.AddNode(new CsgCollapseNode());
+            
+            // No collapsing terrain for now
+            //concat.AddNode(new CsgCollapseNode());
 
 
 			return concat;

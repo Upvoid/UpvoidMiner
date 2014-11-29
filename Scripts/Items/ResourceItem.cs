@@ -74,9 +74,11 @@ namespace UpvoidMiner
         private MeshRenderJob previewShape;
         private MeshRenderJob previewShapeLimited;
         private MeshRenderJob previewShapeIndicator;
+        private MeshRenderJob materialAlignmentGrid;
         private RenderComponent previewShapeRenderComp;
         private RenderComponent previewShapeLimitedRenderComp;
         private RenderComponent previewShapeIndicatorRenderComp;
+        private RenderComponent materialAlignmentGridRenderComp;
         /// <summary>
         /// Radius of terrain material that is placed if "use"d.
         /// </summary>
@@ -165,6 +167,11 @@ namespace UpvoidMiner
             previewShapeIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), shapeMesh, mat4.Scale(0f));
             previewShapeIndicatorRenderComp = new RenderComponent(previewShapeIndicator, mat4.Identity);
             LocalScript.ShapeIndicatorEntity.AddComponent(previewShapeIndicatorRenderComp);
+
+            // And a fourth one for the alignment grid.
+            materialAlignmentGrid = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/GridAlignment", UpvoidMiner.ModDomain), Resources.UseMesh("Triplequad", UpvoidMiner.ModDomain), mat4.Scale(0f));
+            materialAlignmentGridRenderComp = new RenderComponent(materialAlignmentGrid, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(materialAlignmentGridRenderComp);
         }
 
         public override void OnUseParameterChange(Player player, float _delta) 
@@ -178,6 +185,8 @@ namespace UpvoidMiner
             var _visible = rayHit != null;
             var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
             var _worldNormal = rayHit == null ? vec3.UnitY : rayHit.Normal;
+
+            var savPos = _worldPos;
 
             _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             vec3 dx, dy, dz;
@@ -222,6 +231,17 @@ namespace UpvoidMiner
             previewShapeLimited.SetColor("uDigDirX", new vec4(dx, 0));
             previewShapeLimited.SetColor("uDigDirY", new vec4(dy, 0));
             previewShapeLimited.SetColor("uDigDirZ", new vec4(dz, 0));
+
+            materialAlignmentGrid.SetColor("uMidPointAndRadius", new vec4(_worldPos, _player.DiggingGridSize / 2.0f));
+            materialAlignmentGrid.SetColor("uCursorPos", new vec4(savPos, 0));
+            materialAlignmentGrid.SetColor("uTerrainNormal", new vec4(_worldNormal, 0));
+            materialAlignmentGrid.SetColor("uDigDirX", new vec4(dx, 0));
+            materialAlignmentGrid.SetColor("uDigDirY", new vec4(dy, 0));
+            materialAlignmentGrid.SetColor("uDigDirZ", new vec4(dz, 0));
+
+            bool gridAlignmentVisible = _player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
+            materialAlignmentGridRenderComp.Transform = gridAlignmentVisible ? mat4.Translate(_worldPos) * mat4.Scale(2f * _player.DiggingGridSize) * rotMat : mat4.Scale(0f);
+
             // Indicator is always in the center and relatively small.
             previewShapeIndicatorRenderComp.Transform = _visible ? mat4.Translate(_worldPos) * mat4.Scale(.1f) * rotMat : mat4.Scale(0f);
         }
@@ -232,9 +252,11 @@ namespace UpvoidMiner
             LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeRenderComp);
             LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeLimitedRenderComp);
             LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeIndicatorRenderComp);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(materialAlignmentGridRenderComp);
             previewShape = null;
             previewShapeLimited = null;
             previewShapeIndicator = null;
+            materialAlignmentGrid = null;
         }
         #endregion
     }

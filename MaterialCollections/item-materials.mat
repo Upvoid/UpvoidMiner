@@ -4,6 +4,11 @@
     Texture: uColor, Items/ItemDummy
     Color: uSpecularColor, .0, .0, .0, 4
 
+[Items/GridAlignment] : Default
+    Shader: ShapeIndicators/GridAlignment
+    Color: uColor, 1,1,1,0.3
+    Culling: None
+    
 [Items/ResourcePreview] : Default
     Shader: ::Overlay/MeshFresnelColored
     Color: uColor, 1,1,1, .2

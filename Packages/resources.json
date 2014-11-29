@@ -1024,6 +1024,19 @@
 {
     "Descriptor" : {
         "Files" : [
+            "ShapeIndicators/GridAlignment.fsh",
+            "ShapeIndicators/Colored.vsh"
+        ],
+        "Name" : "ShapeIndicators/GridAlignment",
+        "Type" : "File"
+    },
+    "Name" : "ShapeIndicators/GridAlignment",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+{
+    "Descriptor" : {
+        "Files" : [
             "ShapeIndicators/SphereShapeCoverColored.fsh",
             "ShapeIndicators/Colored.vsh"
         ],
@@ -1176,5 +1189,11 @@
     "Name" : "Vegetation/Flower.Opaque",
     "Path" : "~.shader",
     "Type" : "Shader"
+},
+{
+    "Type": "Mesh",
+    "Name": "Triplequad",
+    "Path": "~.obj",
+    "Descriptor": "File"
 }
 ]

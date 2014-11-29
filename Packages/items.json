@@ -226,6 +226,22 @@
     "Name" : "Items/DigPreview",
     "Path" : "~.mat",
     "Type" : "Material"
+},
+{
+    "Descriptor" : {
+        "Collection" : "item-materials",
+        "Name" : "Items/GridAlignment",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Items/GridAlignment",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+{
+    "Type": "Mesh",
+    "Name": "Triplequad",
+    "Path": "~.obj",
+    "Descriptor": "File"
 }
 
 ]

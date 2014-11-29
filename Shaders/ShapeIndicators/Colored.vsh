@@ -10,6 +10,7 @@ in vec3 aNormal;
 out vec3 vNormal;
 out vec3 vEyePos;
 out vec3 vWorldPos;
+out vec3 vWorldCenter;
 
 void main()
 {
@@ -19,9 +20,11 @@ void main()
     vWorldPos = vec3(uModelMatrix * vec4(aPosition, 1.0));
     // eye space position:
     vEyePos = vec3(uViewMatrix * vec4(vWorldPos,1));
+    
+    vWorldCenter = vec3(uModelMatrix * vec4(vec3(0), 1.0));
 
     // projected vertex position used for the interpolation
-    gl_Position  = uProjectionMatrix * vec4(vEyePos, 1.0);
+    gl_Position = uProjectionMatrix * vec4(vEyePos, 1.0);
 
     // avoid z-clipping :D
     gl_Position.z = 0.00;

@@ -382,7 +382,9 @@ namespace UpvoidMiner
 
             // Float elimination
             CsgOpConcat collapser = new CsgOpConcat(filterNode);
-            collapser.AddNode(new CsgCollapseNode());
+
+            // No collapsing terrain for now
+            //collapser.AddNode(new CsgCollapseNode());
 
             // Callback for statistical purposes.
             CsgStatCallback finalNode = new CsgStatCallback(collapser, 4, 4);
