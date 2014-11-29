@@ -13,11 +13,11 @@ namespace UpvoidMiner
     {
         public class BoxSettingsUI : UIProxy
         {
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Width { get; set; }
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Height { get; set; }
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Depth { get; set; }
 
             public float RequiredVolume { get { return Width * Height * Depth * 0.1f * 0.1f * 0.1f; } }
@@ -38,7 +38,7 @@ namespace UpvoidMiner
         }
         public class SphereSettingsUI : UIProxy
         {
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Radius { get; set; }
 
             public float RequiredVolume { get { return 4f / 3f * (float)Math.PI * (float)Math.Pow(Radius * 0.1f, 3f); } }
@@ -55,9 +55,9 @@ namespace UpvoidMiner
         }
         public class CylinderSettingsUI : UIProxy
         {
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Radius { get; set; }
-            [UISlider(1, 30)]
+            [UISlider(3, 30)]
             public int Height { get; set; }
 
             public float RequiredVolume { get { return 2f * (float)Math.PI * (float)Math.Pow(Radius * 0.1f, 2f) * Height * 0.1f; } }

@@ -144,7 +144,7 @@ namespace UpvoidMiner.UI
         public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementSprint");
 
         public readonly static TutorialMessage MsgMovementSprint = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementJump");
-        public readonly static TutorialMessage MsgMovementJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5, "MsgBasicDiggingDirt", Modes.Adventure);
+        public readonly static TutorialMessage MsgMovementJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicDiggingDirt", Modes.Adventure);
 
         public readonly static TutorialMessage MsgBasicDiggingDirt = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgBasicDiggingStone", Modes.Adventure);
         public readonly static TutorialMessage MsgBasicDiggingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgBasicDiggingGod", Modes.Adventure);
@@ -155,7 +155,11 @@ namespace UpvoidMiner.UI
 
         public readonly static TutorialMessage MsgBasicCraftingDirtCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingDirtCubePlace");
         public readonly static TutorialMessage MsgBasicCraftingDirtCubePlace = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingStoneNonCube");
-        public readonly static TutorialMessage MsgBasicCraftingStoneNonCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, null);
+        public readonly static TutorialMessage MsgBasicCraftingStoneNonCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingCollect");
+        public readonly static TutorialMessage MsgBasicCraftingCollect = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicChoppingTree");
+
+        public readonly static TutorialMessage MsgBasicChoppingTree = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicChoppingCollect");
+        public readonly static TutorialMessage MsgBasicChoppingCollect = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5, null);
 
         #endregion
 

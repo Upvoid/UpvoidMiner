@@ -21,6 +21,7 @@ using Engine.Universe;
 using Engine.Physics;
 using System.Collections.Generic;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -97,6 +98,11 @@ namespace UpvoidMiner
 
             // And remove this entity.
             ItemManager.RemoveItemFromWorld(this);
+
+            // Tutorial
+            Tutorials.MsgBasicCraftingCollect.Report(1);
+            if (RepresentedItem is MaterialItem && (RepresentedItem as MaterialItem).Material.Name.Contains("Wood"))
+                Tutorials.MsgBasicChoppingCollect.Report(1);
         }
 
         /// <summary>

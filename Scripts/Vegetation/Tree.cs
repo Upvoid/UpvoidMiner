@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Engine.Universe;
 using Engine;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -172,6 +173,9 @@ namespace UpvoidMiner
                 var trans = mat4.Translate(Position + new vec3(0, (i + 1.0f) * (cylinderHeight + 0.05f), 0));
                 ItemManager.InstantiateItem(item, trans, false);
             }
+
+            // Tutorial
+            Tutorials.MsgBasicChoppingTree.Report(1);
         }
 
     }
