@@ -542,7 +542,8 @@ namespace UpvoidMiner
 
                     if (instance.player.Inventory.Selection is ToolItem &&
                         instance.player.CurrentDiggingShape == DigShape.Cylinder &&
-                        instance.player.CurrentDiggingAlignment == DigAlignment.View)
+                        instance.player.CurrentDiggingAlignment == DigAlignment.View &&
+                        instance.player.CurrentDiggingPivot == DigPivot.Center)
                         Tutorials.MsgAdvancedDiggingView.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ToolItem &&

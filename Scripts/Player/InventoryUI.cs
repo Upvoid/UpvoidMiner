@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using EfficientUI;
@@ -34,7 +35,7 @@ namespace UpvoidMiner
             public string Description { get { return item.Description; } }
 
             [UIString]
-            public string Hotkey { get { return item.QuickAccessIndex < 0 ? "" : ((item.QuickAccessIndex + 1) % 10).ToString(); } }
+            public string Hotkey { get { return item.QuickAccessIndex < 0 ? "" : ((item.QuickAccessIndex + 1) % 10).ToString(CultureInfo.InvariantCulture); } }
 
             [UICollection("ItemIcon")]
             public List<IconUI> IconStack { get; private set; }
