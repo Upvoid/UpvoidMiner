@@ -174,6 +174,13 @@ namespace UpvoidMiner
         /// </summary>
         CsgExpression playerNode;
 
+
+        /// <summary>
+        /// Time the last stat callback was executed
+        /// </summary>
+        DateTime timeDirtSound = DateTime.Now;
+        DateTime timeStoneSound = DateTime.Now;
+
         /// <summary>
         /// Cached sound resources for digging dirt and stone
         /// </summary>
@@ -455,24 +462,47 @@ namespace UpvoidMiner
         {
             if (mat != 0)
             {
-                // Depending on whether we dig dirt or stone, play a random digging sound
-
-                Sound digSound = null;
-                if (mat == 1) // Dirt material
-                    digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
-                else if (mat == 11) // Rock material TODO(ks): no hardcoded magic numbers!
-                    digSound = new Sound(stoneSoundResource[random.Next(0, 4)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
-                else
-                    return;
-
-                // +/- 15% pitching
-                digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f);
-                digSound.Position = diggingPosition;
-                digSound.Play();
 
                 // Resolve terrain material.
                 TerrainResource material = TerrainResource.FromIndex(mat);
                 Debug.Assert(material != null, "Invalid terrain material");
+
+
+                DateTime currentTime = DateTime.Now;
+                const int soundCooldownMs = 30;
+
+                // Depending on whether we dig dirt or stone, play a random digging sound
+
+                Sound digSound = null;
+                if (material.Name == "Dirt" && currentTime > instance.timeDirtSound.AddMilliseconds(soundCooldownMs))
+                {
+                    // Dirt material
+                    instance.timeDirtSound = currentTime;
+                    digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
+                }
+                else if (material.Name.StartsWith("Stone") && currentTime > instance.timeStoneSound.AddMilliseconds(soundCooldownMs))
+                {
+                    // Any material beginning with "Stone"
+                    instance.timeStoneSound = currentTime;
+                    digSound = new Sound(stoneSoundResource[random.Next(0, 4)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
+                }
+                else if (!material.Name.StartsWith("Stone") && currentTime > instance.timeDirtSound.AddMilliseconds(soundCooldownMs))
+                {
+                    // Fallback, i.e. all other materials
+                    instance.timeDirtSound = currentTime;
+                    digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
+                }
+
+                if(digSound != null)
+                {
+                    // +/- 15% pitching
+                    digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f);
+                    digSound.Position = diggingPosition;
+                    digSound.Play();
+                }
+                
+
+                
 
                 // Add proper amount of material to player inventory.
                 // If the material changed by a negative volume we want to collect a positive amount.
