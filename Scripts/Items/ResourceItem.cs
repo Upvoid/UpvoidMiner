@@ -179,7 +179,7 @@ namespace UpvoidMiner
             var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
             var _worldNormal = rayHit == null ? vec3.UnitY : rayHit.Normal;
 
-            _worldPos = _player.AlignPlacementPosition(_worldPos, useRadius);
+            _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
             mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
