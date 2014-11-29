@@ -494,11 +494,24 @@
                             </table>
                         </td>
                     </tr>
+
+                    <tr class="gridsize-settings">
+                        <td>Grid Size</td>
+                        <td>
+                            <table style="width:100%;">
+                                <tr>                              
+                                    <td style="width:100%;"><uislider name="GridSize" options="{range:'min'}" class="sliderbar"></uislider></td>
+                                    <td style="width:24px;"><uistring name="GridSizeString" tag="span" style="width:24px;"></uistring></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                     </table>
                     <uiobject name="HasReplacement" onvalue="function(el, val) { $('.replacement-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasPhysics" onvalue="function(el, val) { $('.physics-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasShapePivotAlignment" onvalue="function(el, val) { $('.sap-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
                     <uiobject name="HasGridAngle" onvalue="function(el, val) { $('.angle-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
+                    <uiobject name="HasGridSize" onvalue="function(el, val) { $('.gridsize-settings').css('display', val ? 'table-row' : 'none'); }"></uiobject>
 
                     <uiobject name="CurrentShape" onvalue="function(el, val) { onUsageCurrent(val, 'shape', 4); }"></uiobject>
                     <uiobject name="CurrentAlign" onvalue="function(el, val) { onUsageCurrent(val, 'align', 4); }"></uiobject>

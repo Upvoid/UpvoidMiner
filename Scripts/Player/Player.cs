@@ -185,6 +185,7 @@ namespace UpvoidMiner
         public DiggingController.DigShape CurrentDiggingShape { get; set; }
         public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
         public int DiggingAlignmentAxisRotation { get; set; }
+        public int DiggingGridSize { get; set; }
         public DiggingController.DigPivot CurrentDiggingPivot { get; set; }
         public DiggingController.PhysicsMode CurrentPhysicsMode { get; set; }
 
@@ -198,6 +199,7 @@ namespace UpvoidMiner
             CurrentDiggingShape = DiggingController.DigShape.Sphere;
             CurrentDiggingAlignment = DiggingController.DigAlignment.Axis;
             DiggingAlignmentAxisRotation = 0;
+            DiggingGridSize = 2;
             CurrentDiggingAddMode = DiggingController.AddMode.AirOnly;
             CurrentDiggingPivot = DiggingController.DigPivot.Center;
             CurrentPhysicsMode = DiggingController.PhysicsMode.Dynamic;
@@ -869,10 +871,10 @@ namespace UpvoidMiner
                 var rotPos = rotMat * pos;
 
                 var snapPos = new vec3(
-                    (int)Math.Round(rotPos.x * 2),
-                    (int)Math.Round(rotPos.y * 2),
-                    (int)Math.Round(rotPos.z * 2)
-                ) * 0.5f + offset;
+                    (int)Math.Round(rotPos.x * (2.0f/DiggingGridSize)),
+                    (int)Math.Round(rotPos.y * (2.0f/DiggingGridSize)),
+                    (int)Math.Round(rotPos.z * (2.0f/DiggingGridSize))
+                ) * (DiggingGridSize/2.0f) + offset;
 
                 return rotMat.Inverse * snapPos;
             }
