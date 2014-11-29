@@ -38,6 +38,13 @@ namespace UpvoidMiner.UI
             [UIObject]
             public string ProgressPercentage { get; set; }
 
+            [UICallback]
+            public void FinishMe()
+            {
+                if (Tutorials.AllMessages.ContainsKey(Name))
+                    Tutorials.AllMessages[Name].Report(Tutorials.AllMessages[Name].Target + 1);
+            }
+
             public MsgUI(string name)
             {
                 Name = name;
@@ -68,6 +75,7 @@ namespace UpvoidMiner.UI
             public float Target;
             private readonly Modes mode;
             public float Current;
+
 
             public void Report(float amount)
             {
