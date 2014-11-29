@@ -366,6 +366,20 @@
                         </td>
                     </tr>
                 </table>
+                <table class="item-convert" style="width:100%; text-align:center;">
+                    <tr>
+                        <td>
+                            Convert to Terrain Resource:
+                            <div style="width:100%; text-align:center;">
+                                <div class="btn-group">
+                                    <a name="BtnConvertOne" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertOne');">One</a>
+                                    <a name="BtnConvertAll" class="btn btn-primary" onclick="EfficientUI.SendCallback(this, 'BtnConvertAll');">All</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <uiobject name="IsConvertible" onvalue="function(el, val) { var btn = $(el).parent().children('.item-convert').css('display',val ? 'block' : 'none'); if (val) btn.removeClass('disabled'); else btn.addClass('disabled'); }"></uiobject>
             </uitemplate>
         </div>
     </div>

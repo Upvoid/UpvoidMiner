@@ -47,6 +47,8 @@ namespace UpvoidMiner
             public bool IsDroppable { get { return item.IsDroppable; } }
             [UIObject]
             public bool IsDestructible { get { return item is MaterialItem; } }
+            [UIObject]
+            public bool IsConvertible { get { return item is MaterialItem; } }
 
             [UICallback]
             public void SetHotkey(int idx)
@@ -63,7 +65,7 @@ namespace UpvoidMiner
                 if (LocalScript.player == null)
                     return;
 
-                LocalScript.player.DropItem(item);
+                LocalScript.player.Convert(item, false);
             }
 
             [UICallback]
@@ -72,7 +74,7 @@ namespace UpvoidMiner
                 if (LocalScript.player == null)
                     return;
 
-                LocalScript.player.DropItem(item);
+                LocalScript.player.Convert(item, true);
             }
 
             [UICallback]
