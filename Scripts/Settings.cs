@@ -343,6 +343,7 @@ namespace UpvoidMiner
             Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
 
             Scripting.SetUserSetting("Debug/Minimal Graphics", settingMinimalGraphics);
+            Scripting.SetUserSetting("Debug/Show Stats", ShowStats);
 
             Scripting.SetUserSetting("Graphics/Enable Shadows", settingShadows);
             Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
@@ -396,8 +397,9 @@ namespace UpvoidMiner
             settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
 
             settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", false);
+            ShowStats = Scripting.GetUserSetting("Debug/Show Stats", false);
 
-            settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", settingShadows);
+            settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", false);
             settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
             settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
             settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
