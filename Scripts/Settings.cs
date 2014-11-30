@@ -84,7 +84,7 @@ namespace UpvoidMiner
 
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
 
-        private bool settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", false);
+        private bool settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", Rendering.AreGraphicsMinimal());
 
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
@@ -405,7 +405,7 @@ namespace UpvoidMiner
 
             settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
 
-            settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", false);
+            settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", Rendering.AreGraphicsMinimal());
             ShowStats = Scripting.GetUserSetting("Debug/Show Stats", false);
 
             settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", false);
