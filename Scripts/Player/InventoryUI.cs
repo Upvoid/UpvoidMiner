@@ -54,6 +54,9 @@ namespace UpvoidMiner
             [UIObject]
             public bool IsConvertible { get { return item is MaterialItem; } }
 
+            [UIObject]
+            public bool IsSelected { get { return LocalScript.player != null && LocalScript.player.Inventory.Selection == item; } }
+
             [UICallback]
             public void SetHotkey(int idx)
             {
@@ -121,6 +124,9 @@ namespace UpvoidMiner
         {
             private readonly ResourceItem item;
 
+            [UICollection("ResourceItem")]
+            public ItemUI ThisItem { get { return this; } }
+
             [UIString]
             public string Volume { get { return LocalScript.player == null || LocalScript.player.GodMode ? "" 
                     : item.Volume >= 1000 ? "&gt;999m&sup3;" : item.Volume.ToString("0.0") + "m&sup3;"; } }
@@ -135,6 +141,13 @@ namespace UpvoidMiner
         public class ToolItemUI : ItemUI
         {
             private readonly Item item;
+            
+            [UICollection("ToolItem")]
+            public ItemUI ThisItem { get { return this; } }
+
+            [UIString]
+            public string StackSize { get { return LocalScript.player == null || LocalScript.player.GodMode || !(item is DiscreteItem) || (item as DiscreteItem).StackSize == 1 ? "" 
+                    : (item as DiscreteItem).StackSize + "x"; } }
 
             public ToolItemUI(Item item)
                 : base(item)
@@ -145,6 +158,9 @@ namespace UpvoidMiner
         public class MaterialItemUI : ItemUI
         {
             private readonly MaterialItem item;
+            
+            [UICollection("MaterialItem")]
+            public ItemUI ThisItem { get { return this; } }
 
             [UIString]
             public string StackSize { get { return LocalScript.player == null || LocalScript.player.GodMode ? "" 
@@ -190,6 +206,35 @@ namespace UpvoidMiner
             if (!dyn)
                 Tutorials.MsgAdvancedCraftingCollectAllStatic.Report(1);
         }
+
+        public class QuickAccessUI : UIProxy
+        {
+            [UICollection("QuickItem")]
+            public ItemUI[] Bar { get; private set; }
+
+            public QuickAccessUI() : base("QuickAccess")
+            {
+                Bar = new ItemUI[LocalScript.player.Inventory.QuickAccessItems.Length];
+                UIProxyManager.AddProxy(this);
+                LocalScript.player.Inventory.OnQuickAccessChanged += UpdateItem;
+                for (int i = 0; i < Bar.Length; ++i)
+                    UpdateItem(i, LocalScript.player.Inventory.QuickAccessItems[i]);
+            }
+
+            public void UpdateItem(int idx, Item item)
+            {
+                if (item is MaterialItem)
+                    Bar[idx] = new MaterialItemUI(item as MaterialItem);
+                else if (item is ResourceItem)
+                    Bar[idx] = new ResourceItemUI(item as ResourceItem);
+                else if (item != null)
+                    Bar[idx] = new ToolItemUI(item);
+                else 
+                    Bar[idx] = null;
+            }
+        }
+
+        private QuickAccessUI quickAccess = new QuickAccessUI();
 
         public InventoryUI()
             : base("Inventory")

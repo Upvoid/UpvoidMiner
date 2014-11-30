@@ -12,7 +12,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +30,6 @@ using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
 using UpvoidMiner.Items;
-
 
 namespace UpvoidMiner
 {
@@ -57,24 +55,20 @@ namespace UpvoidMiner
         /// <summary>
         /// The render component for the torso.
         /// </summary>
-        private RenderComponent rcTorsoShadow;
+        //private RenderComponent rcTorsoShadow;
         //private CpuParticleSystemBase psTorsoSteam;
         private mat4 torsoSteamOffset = mat4.Translate(new vec3(.13090f, .53312f, -.14736f));
         /// <summary>
         /// Relative torso transformation.
         /// </summary>
         private mat4 torsoTransform = mat4.Scale(2f) * mat4.Translate(new vec3(0, -.5f, 0));
-
         /// <summary>
         /// Minimum and maximum ranges for ray querys for first-person and no-clip mode, resp.
         /// </summary>
         const float maxRayQueryDistancePlayer = 10.0f;
         const float maxRayQueryDistanceNoClip = 200.0f;
-
         private const int millisecondsBetweenItemUsages = 250;
-
         public static vec3 SpawnPosition = new vec3(150, 5, 150);
-
         /// <summary>
         /// Current crosshair info
         /// </summary>
@@ -85,6 +79,7 @@ namespace UpvoidMiner
         /// Is not the same as the camera, but follows it.
         /// </summary>
         public vec3 Direction { get; private set; }
+
         /// <summary>
         /// Azimuth angle in degree (around y-axis).
         /// </summary>
@@ -93,6 +88,7 @@ namespace UpvoidMiner
         /// Elevation angle in degree (0 = horizontal)
         /// </summary>
         private float AngleElevation = 0;
+
         /// <summary>
         /// Gets the camera direction.
         /// </summary>
@@ -116,7 +112,6 @@ namespace UpvoidMiner
         /// Component used for synchronizing camera to player
         /// </summary>
         CameraComponent cameraComponent;
-
         /// <summary>
         /// This takes control of the rigid body attached to this entity and lets us walk around.
         /// </summary>
@@ -128,7 +123,6 @@ namespace UpvoidMiner
         /// Controller for digging and its constraints.
         /// </summary>
         DiggingController digging;
-
         /// <summary>
         /// Controller for input handling.
         /// </summary>
@@ -143,7 +137,6 @@ namespace UpvoidMiner
         /// A list of items representing the inventory of the player.
         /// </summary>
         public readonly Inventory Inventory;
-
         /// <summary>
         /// List of drones of the player.
         /// </summary>
@@ -173,6 +166,7 @@ namespace UpvoidMiner
         {
             get { return character.Position; }
         }
+
         /// <summary>
         /// Character transformation matrix.
         /// </summary>
@@ -181,12 +175,16 @@ namespace UpvoidMiner
             get { return character.Transformation; }
         }
 
-
         public DiggingController.DigShape CurrentDiggingShape { get; set; }
+
         public DiggingController.DigAlignment CurrentDiggingAlignment { get; set; }
+
         public int DiggingAlignmentAxisRotation { get; set; }
+
         public int DiggingGridSize { get; set; }
+
         public DiggingController.DigPivot CurrentDiggingPivot { get; set; }
+
         public DiggingController.PhysicsMode CurrentPhysicsMode { get; set; }
 
         public DiggingController.AddMode CurrentDiggingAddMode { get; set; }
@@ -206,7 +204,6 @@ namespace UpvoidMiner
             Inventory = new Inventory(this);
         }
 
-
         protected override void Init()
         {
             // Create a character controller that allows us to walk around.
@@ -222,13 +219,13 @@ namespace UpvoidMiner
             // For now, attach this entity to a simple sphere physics object.
             character.Body.SetTransformation(thisEntity.Transform);
             thisEntity.AddComponent(new PhysicsComponent(
-                                         character.Body,
-                                         mat4.Translate(new vec3(0, (GodMode ? 0f : character.EyeOffset), 0))));
+                character.Body,
+                mat4.Translate(new vec3(0, (GodMode ? 0f : character.EyeOffset), 0))));
 
             // Add Torso mesh.
-            thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
+            /*thisEntity.AddComponent(rcTorsoShadow = new RenderComponent(new MeshRenderJob(Renderer.Shadow.Mesh, Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain), Resources.UseMesh("Miner/Torso", UpvoidMiner.ModDomain), mat4.Identity),
                                                                         torsoTransform,
-                                                                        true));
+                                                                        true));*/
             /*psTorsoSteam = CpuParticleSystem.Create2D(new vec3(), ContainingWorld);
             LocalScript.ParticleEntity.AddComponent(new CpuParticleComponent(psTorsoSteam, mat4.Identity));*/
 
@@ -297,8 +294,8 @@ namespace UpvoidMiner
                     vec3 up = new vec3(0, 1, 0);
                     vec3 left = vec3.cross(up, Direction);
                     mat4 viewMat = new mat4(left, up, Direction, new vec3());
-                    rcTorsoShadow.Transform =
-                       viewMat * torsoTransform;
+                    /*rcTorsoShadow.Transform =
+                       viewMat * torsoTransform;*/
 
                     // Update camera component.
                     cameraComponent.Camera = camera;
@@ -326,10 +323,10 @@ namespace UpvoidMiner
                 Rendering.MainViewport.SetMouseGrab(false);
             }
 
-            mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset;
+            /*mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset;
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
-            vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));
+            vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));*/
             /*psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
                                       steamVeloMin, steamVeloMax,
                                       new vec4(new vec3(.9f), .8f), new vec4(new vec3(.99f), .9f),
@@ -387,8 +384,10 @@ namespace UpvoidMiner
         {
             AngleAzimuth += angleDelta.x;
             float newAngle = AngleElevation + angleDelta.y;
-            if (newAngle < -89.8f) newAngle = -89.8f;
-            if (newAngle > 89.8f) newAngle = 89.8f;
+            if (newAngle < -89.8f)
+                newAngle = -89.8f;
+            if (newAngle > 89.8f)
+                newAngle = 89.8f;
             AngleElevation = newAngle;
         }
 
@@ -620,9 +619,7 @@ namespace UpvoidMiner
         {
             public const int SaveVersion = 2;
             public int Version = -1;
-
             public List<ItemSave> items = new List<ItemSave>();
-
             public long[] quickAccess;
             public int currentQuickAccess;
 
@@ -772,7 +769,8 @@ namespace UpvoidMiner
 
                     genDefault = false;
                 }
-                else genDefault = true;
+                else
+                    genDefault = true;
             }
 
             if (genDefault)
@@ -850,6 +848,7 @@ namespace UpvoidMiner
             // Add the drone as new entity.
             ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Network.GCManager.CurrentUserID);
         }
+
         /// <summary>
         /// Removes a drone from drone constraints.
         /// </summary>
@@ -899,14 +898,15 @@ namespace UpvoidMiner
                 var rotPos = rotMat.Transpose * pos;
 
                 var snapPos = new vec3(
-                    (int)Math.Round(rotPos.x * (2.0f/DiggingGridSize)),
-                    (int)Math.Round(rotPos.y * (2.0f/DiggingGridSize)),
-                    (int)Math.Round(rotPos.z * (2.0f/DiggingGridSize))
-                ) * (DiggingGridSize/2.0f) + offset;
+                    (int)Math.Round(rotPos.x * (2.0f / DiggingGridSize)),
+                    (int)Math.Round(rotPos.y * (2.0f / DiggingGridSize)),
+                    (int)Math.Round(rotPos.z * (2.0f / DiggingGridSize))
+                ) * (DiggingGridSize / 2.0f) + offset;
 
                 return rotMat * snapPos;
             }
-            else return pos + offset;
+            else
+                return pos + offset;
         }
 
         /// <summary>
@@ -933,7 +933,8 @@ namespace UpvoidMiner
                     dirX = vec3.cross(camera.ForwardDirection, dirY).Normalized;
                     dirZ = vec3.cross(dirX, dirY).Normalized;
                     break;
-                default: throw new InvalidOperationException("Unknown alignment");
+                default:
+                    throw new InvalidOperationException("Unknown alignment");
             }
         }
 
@@ -965,6 +966,7 @@ namespace UpvoidMiner
                     throw new Exception("Unsupported digging shape used");
             }
         }
+
         /// <summary>
         /// Places the current digging shape at a given position with a given radius.
         /// </summary>

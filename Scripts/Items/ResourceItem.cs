@@ -189,6 +189,7 @@ namespace UpvoidMiner
             var savPos = _worldPos;
 
             var indPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, .1f);
+            var oldWorldPos = _worldPos;
             _worldPos = _player.AlignPlacementPosition(_worldPos, _worldNormal, useRadius);
             vec3 dx, dy, dz;
             _player.AlignmentSystem(_worldNormal, out dx, out dy, out dz);
@@ -218,7 +219,8 @@ namespace UpvoidMiner
             if (_visible && useVolume > Volume)
             {
                 float availableRadius = (float)Math.Pow(Volume / volumeFactor, 1 / 3f);
-                previewShapeLimitedRenderComp.Transform = mat4.Translate(_worldPos) * mat4.Scale(availableRadius) * rotMat;
+                var limPos = _player.AlignPlacementPosition(oldWorldPos, _worldNormal, availableRadius);
+                previewShapeLimitedRenderComp.Transform = mat4.Translate(limPos) * mat4.Scale(availableRadius) * rotMat;
                 previewShapeLimited.SetColor("uMidPointAndRadius", new vec4(_worldPos, availableRadius));
             }
             else previewShapeLimitedRenderComp.Transform = mat4.Scale(0f);
