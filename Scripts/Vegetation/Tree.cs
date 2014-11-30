@@ -17,6 +17,8 @@ using System;
 using System.Collections.Generic;
 using Engine.Universe;
 using Engine;
+using Engine.Audio;
+using Engine.Resources;
 using UpvoidMiner.Items;
 using UpvoidMiner.UI;
 
@@ -27,6 +29,10 @@ namespace UpvoidMiner
     /// </summary>
     public class Tree : EntityScript
     {
+        private static Random random = new Random();
+        private static SoundResource[] chopSoundResource;
+        private static Sound[] chopSound;
+
         /// Foliage are render-only leaves and small branches of a tree.
         public class Foliage
         {
@@ -140,6 +146,20 @@ namespace UpvoidMiner
         {
             base.Init();
 
+            // Create sound resources
+            if (chopSoundResource == null && chopSound == null)
+            {
+                chopSoundResource = new SoundResource[5];
+                chopSound = new Sound[5];
+
+                // Add dirt digging sounds
+                for (int i = 1; i <= 5; ++i)
+                {
+                    chopSoundResource[i - 1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Chopping/Wood/Wood" + i.ToString("00"), UpvoidMiner.ModDomain);
+                    chopSound[i - 1] = new Sound(chopSoundResource[i - 1], vec3.Zero, false, 1, 1);
+                }
+            }
+
             AddTriggerSlot("Hit");
 
             foreach (var r in RjLeaves0)
@@ -155,8 +175,14 @@ namespace UpvoidMiner
             if (!(message is HitMessage))
                 return;
 
-            // Tree has been hit (by an axe), so we create some wood cylinders the player can pick up
-
+            // Tree has been hit (by an axe), so we play a sound...
+            Sound woodSound = chopSound[random.Next(0, 4)];
+            // +/- 15% pitching
+            woodSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f);
+            woodSound.Position = this.Position;
+            woodSound.Play();
+            
+            // ...and we create some wood cylinders the player can pick up
             ContainingWorld.RemoveEntity(thisEntity);
             // remove tree from trees list
             UpvoidMinerWorldGenerator.trees.Remove(this);
