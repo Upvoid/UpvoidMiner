@@ -145,6 +145,8 @@ namespace UpvoidMiner
         /// </summary>
         private MeshRenderJob previewMaterialPlaced;
         private MeshRenderJob previewMaterialPlacedIndicator;
+        private MeshRenderJob materialAlignmentGrid;
+        private RenderComponent materialAlignmentGridRenderComp;
         private bool previewPlacable = false;
         private mat4 previewPlaceMatrix;
 
@@ -208,6 +210,10 @@ namespace UpvoidMiner
             // And a second one for indicating the center.
             previewMaterialPlacedIndicator = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/ResourcePreviewIndicator", UpvoidMiner.ModDomain), Resources.UseMesh("::Debug/Sphere", null), mat4.Scale(0f));
             LocalScript.world.AddRenderJob(previewMaterialPlacedIndicator);
+            // And a third one for the alignment grid.
+            materialAlignmentGrid = new MeshRenderJob(Renderer.Overlay.Mesh, Resources.UseMaterial("Items/GridAlignment", UpvoidMiner.ModDomain), Resources.UseMesh("Triplequad", UpvoidMiner.ModDomain), mat4.Scale(0f));
+            materialAlignmentGridRenderComp = new RenderComponent(materialAlignmentGrid, mat4.Identity);
+            LocalScript.ShapeIndicatorEntity.AddComponent(materialAlignmentGridRenderComp);
         }
 
         public override void OnUseParameterChange(Player player, float _delta)
@@ -232,6 +238,9 @@ namespace UpvoidMiner
             vec3 left = vec3.cross(up, dir).Normalized;
             dir = vec3.cross(left, up);
 
+            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
+            var savPos = _worldPos;
+
             mat4 scaling;
             float offset;
             switch (Shape)
@@ -251,17 +260,24 @@ namespace UpvoidMiner
                 default: throw new NotImplementedException("Invalid shape");
             }
 
-            var dirX = vec3.Zero;
-            var dirY = vec3.Zero;
-            var dirZ = vec3.Zero;
-            _player.AlignmentSystem(up,out dirX,out dirY,out dirZ);
-            var pos = rayHit.Position;
-            pos = _player.AlignPlacementPosition(pos, up, offset);
-
-            mat4 transform = new mat4(
-                dirX, dirY, dirZ, pos);
+            vec3 dx, dy, dz;
+            _player.AlignmentSystem(up, out dx, out dy, out dz);
+            mat4 rotMat = new mat4(dx, dy, dz, vec3.Zero);
+            _worldPos = _player.AlignPlacementPosition(_worldPos, up, offset);
+            
             previewPlacable = true;
-            previewPlaceMatrix = transform;
+            previewPlaceMatrix = mat4.Translate(_worldPos) * rotMat;
+
+            materialAlignmentGrid.SetColor("uMidPointAndRadius", new vec4(_worldPos, _player.DiggingGridSize / 2.0f));
+            materialAlignmentGrid.SetColor("uCursorPos", new vec4(savPos, 0));
+            materialAlignmentGrid.SetColor("uTerrainNormal", new vec4(up, 0));
+            materialAlignmentGrid.SetColor("uDigDirX", new vec4(dx, 0));
+            materialAlignmentGrid.SetColor("uDigDirY", new vec4(dy, 0));
+            materialAlignmentGrid.SetColor("uDigDirZ", new vec4(dz, 0));
+
+            bool gridAlignmentVisible = _player.CurrentDiggingAlignment == DiggingController.DigAlignment.GridAligned;
+            materialAlignmentGridRenderComp.Transform = gridAlignmentVisible ? mat4.Translate(_worldPos) * mat4.Scale(2f * _player.DiggingGridSize) * rotMat : mat4.Scale(0f);
+
 
             // The placed object is scaled accordingly
             previewMaterialPlaced.ModelMatrix = previewPlaceMatrix * scaling;
@@ -278,8 +294,10 @@ namespace UpvoidMiner
             // Remove and delete it on deselect.
             LocalScript.world.RemoveRenderJob(previewMaterialPlaced);
             LocalScript.world.RemoveRenderJob(previewMaterialPlacedIndicator);
+            LocalScript.ShapeIndicatorEntity.RemoveComponent(materialAlignmentGridRenderComp);
             previewMaterialPlaced = null;
             previewMaterialPlacedIndicator = null;
+            materialAlignmentGrid = null;
         }
         #endregion
 
