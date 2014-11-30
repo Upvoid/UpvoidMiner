@@ -113,11 +113,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Engine\Scripts\Engine.csproj">
-      <Project>{61dd35b1-5494-40e2-8aaa-513f9de65976}</Project>
+      <Project>{61DD35B1-5494-40E2-8AAA-513F9DE65976}</Project>
       <Name>Engine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\EfficientUI\1.0.0\EfficientUI.csproj">
-      <Project>{23b4d993-8c84-4837-84f0-4b24aab0ebe1}</Project>
+      <Project>{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}</Project>
       <Name>EfficientUI</Name>
     </ProjectReference>
   </ItemGroup>

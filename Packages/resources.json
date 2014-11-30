@@ -1189,11 +1189,5 @@
     "Name" : "Vegetation/Flower.Opaque",
     "Path" : "~.shader",
     "Type" : "Shader"
-},
-{
-    "Type": "Mesh",
-    "Name": "Triplequad",
-    "Path": "~.obj",
-    "Descriptor": "File"
 }
 ]
