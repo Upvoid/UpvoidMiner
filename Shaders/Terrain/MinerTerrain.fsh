@@ -31,6 +31,7 @@ in vec3 vWorldPos;
 in vec3 vObjectPos;
 in vec3 vObjectNormal;
 in vec3 vWorldNormal;
+in vec3 vScaling;
 
 OUTPUT_CHANNEL_Color(vec3)
 OUTPUT_CHANNEL_Normal(vec3)
@@ -39,9 +40,9 @@ OUTPUT_CHANNEL_Position(vec3)
 void terrainFunction(float scale, out vec3 color, out vec3 normal)
 {
     // texturing
-    vec3 xyColor = texture(uColorXY, vObjectPos.xy / (uTexScaleXY * scale)).rgb;
-    vec3 xzColor = texture(uColorXZ, vObjectPos.xz / (uTexScaleXZ * scale)).rgb;
-    vec3 zyColor = texture(uColorZY, vObjectPos.zy / (uTexScaleZY * scale)).rgb;
+    vec3 xyColor = texture(uColorXY, vScaling.xy * vObjectPos.xy / (uTexScaleXY * scale)).rgb;
+    vec3 xzColor = texture(uColorXZ, vScaling.xz * vObjectPos.xz / (uTexScaleXZ * scale)).rgb;
+    vec3 zyColor = texture(uColorZY, vScaling.zy * vObjectPos.zy / (uTexScaleZY * scale)).rgb;
 
     // for AMD, pow(vec3(0, y, z), w) always returns zero for non-const vec3.
     // this is a hotfix.
@@ -52,9 +53,9 @@ void terrainFunction(float scale, out vec3 color, out vec3 normal)
     vec3 baseColor = xyColor * weights.z + xzColor * weights.y + zyColor * weights.x;
 
     // normal mapping
-    vec3 xyNormalMap = unpack8bitNormalmap(texture(uNormalXY, vObjectPos.xy / (uTexScaleXY * scale)).rgb);
-    vec3 xzNormalMap = unpack8bitNormalmap(texture(uNormalXZ, vObjectPos.xz / (uTexScaleXZ * scale)).rgb);
-    vec3 zyNormalMap = unpack8bitNormalmap(texture(uNormalZY, vObjectPos.zy / (uTexScaleZY * scale)).rgb);
+    vec3 xyNormalMap = unpack8bitNormalmap(texture(uNormalXY, vScaling.xy * vObjectPos.xy / (uTexScaleXY * scale)).rgb);
+    vec3 xzNormalMap = unpack8bitNormalmap(texture(uNormalXZ, vScaling.xz * vObjectPos.xz / (uTexScaleXZ * scale)).rgb);
+    vec3 zyNormalMap = unpack8bitNormalmap(texture(uNormalZY, vScaling.zy * vObjectPos.zy / (uTexScaleZY * scale)).rgb);
 
     vec3 xyNormal = xyNormalMap.xyz * sign(vObjectNormal.z);
     vec3 xzNormal = xzNormalMap.xzy * sign(vObjectNormal.y);

@@ -15,6 +15,7 @@ out vec3 vWorldPos;
 out vec3 vObjectPos;
 out vec3 vObjectNormal;
 out vec3 vWorldNormal;
+out vec3 vScaling;
 
 void main()
 {
@@ -29,6 +30,8 @@ void main()
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
     vWorldPos = worldPos.xyz;
+    
+    vScaling = vec3(length(uModelMatrix[0]), length(uModelMatrix[1]), length(uModelMatrix[2]));
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;
