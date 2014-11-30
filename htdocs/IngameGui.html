@@ -120,7 +120,7 @@
     </hud>
 
     <!-- Inventory -->
-    <div id="quickaccess"><ul id="quickaccess-list" class="InputConsumer"></ul><div class="clear-float"></div></div>
+    <div id="quickaccess" style="display:none;"><ul id="quickaccess-list" class="InputConsumer"></ul><div class="clear-float"></div></div>
     <div class="ingame-overlay">
         <div id="inventory" class="panel InputConsumer" style="display:none;">
             <h4>All Items</h4>
@@ -191,13 +191,17 @@
         .inv-stacksize,
         .inv-volume {
             position: absolute;
+            left: 0;
+            bottom: -2px;
+        }
+        .inv-stacksize-inner,
+        .inv-volume-inner {
             padding: 0 4px;
             font-size: 0.8em;
             color:#fff;
-            left: 0;
-            bottom: 0;
             background-color: rgba(0,0,0,0.7);
             border-radius: 2px;
+            display: inline-block;
         }
         .item-btn {
             position: absolute;
@@ -206,6 +210,23 @@
             right: 0;
             bottom: 0;
             background-color: transparent;
+        }
+        .qa-bar .inv-item:hover {
+            background-color: #555 !Important;
+        }
+        .qa-bar .inv-item-empty:hover {
+            background-color: transparent !Important;
+        }
+        .qa-bar .inv-item {
+            margin: 4px 8px;
+        }
+        .qa-bar .inv-stacksize,
+        .qa-bar .inv-volume {
+            bottom: -24px;
+            width: 60px;
+            left: 50%;
+            margin-left: -30px;
+            text-align: center;
         }
         #matitem-popover {
             /*display: none;*/
@@ -236,8 +257,19 @@
         .delete-menu-btns .btn {
             /*margin: 4px;*/
         }
+        .inv-item-empty {
+            background-color: rgba(255,255,255,0.5);
+        }
         .item-info-table {
             width: 100%;
+        }
+        .qa-bar {
+            position: absolute;
+            left: 50%;
+            margin-left: -280px;
+            width: 560px;
+            top: 8px;
+            text-align: center;
         }
     </style>
     <div id="cl-menu" class="ingame-overlay">
@@ -292,13 +324,14 @@
             <uitemplate name="ToolItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
+                <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
                 <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ResourceItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
-                <uistring name="Volume" tag="div" class="inv-volume"></uistring>
+                <div class="inv-volume"><uistring name="Volume" tag="div" class="inv-volume-inner"></uistring></div>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
                 <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
@@ -306,7 +339,7 @@
             </uitemplate>
             <uitemplate name="MaterialItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
-                <uistring name="StackSize" tag="div" class="inv-stacksize"></uistring>
+                <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
                 <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe');"></a>
@@ -621,6 +654,19 @@
         </div>
     </div>
 
+    <!-- Quick Access -->
+    <ui name="QuickAccess" class="qa-bar">
+        <uicollection name="Bar"></uicollection>
+    </ui>
+    <uitemplate name="QuickItem">
+        <uicollection name="ThisItem"></uicollection>
+        <uiobject name="IsSelected" onvalue="function(el, val) { $(el).parent().find('.inv-item').css('background', val ? 'rgba(255,0,0,0.5)' : 'rgba(255,255,255,0.5)'); }"></uiobject>
+    </uitemplate>
+    <uitemplate name="QuickItem" empty>
+        <div class="inv-item inv-item-empty" style="width:40px; height: 40px;"></div>
+    </uitemplate>
+
+    <!-- Resource progress -->
     <div id="resource-download-progress" class="panel panel-default" style="display: none;">
         <span class="text-info">loading assets from resource server...</span>
         <div class="progress progress-striped active" style="position: relative;">

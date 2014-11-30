@@ -21,7 +21,6 @@ namespace UpvoidMiner
         Axe,
         Hammer,
         GodsShovel,
-
         DroneChain
     }
 
@@ -31,7 +30,6 @@ namespace UpvoidMiner
     public class ToolItem : DiscreteItem
     {
         private static Random random = new Random();
-
         /// <summary>
         /// Type of tool.
         /// </summary>
@@ -73,8 +71,8 @@ namespace UpvoidMiner
                         // Add dirt digging sounds
                         for (int i = 1; i <= 5; ++i)
                         {
-                            chopSoundResource[i-1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Chopping/Wood/Wood" + i.ToString("00"), UpvoidMiner.ModDomain); 
-                            chopSound[i-1] = new Sound(chopSoundResource[i-1], vec3.Zero, false, 1, 1);
+                            chopSoundResource[i - 1] = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Chopping/Wood/Wood" + i.ToString("00"), UpvoidMiner.ModDomain); 
+                            chopSound[i - 1] = new Sound(chopSoundResource[i - 1], vec3.Zero, false, 1, 1);
                         }
                     }
                     break;
@@ -92,7 +90,9 @@ namespace UpvoidMiner
                     Description = "Drone used for creating chains of vertical digging constraints.";
                     break;
 
-                default: Debug.Fail("Unknown tool type"); break;
+                default:
+                    Debug.Fail("Unknown tool type");
+                    break;
             }
         }
 
@@ -102,8 +102,10 @@ namespace UpvoidMiner
         public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
             ToolItem item = rhs as ToolItem;
-            if ( item == null ) return false;
-            if ( item.ToolType != ToolType ) return false;
+            if (item == null)
+                return false;
+            if (item.ToolType != ToolType)
+                return false;
             
             return Merge(item, subtract, force, dryrun);
         }
@@ -125,21 +127,19 @@ namespace UpvoidMiner
         private RenderComponent previewShapeRenderComp;
         private RenderComponent previewShapeIndicatorRenderComp;
         private RenderComponent materialAlignmentGridRenderComp;
-
         /// <summary>
         /// Radius of terrain material that is removed if dug/picked
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
         private const float digRadiusMinFactor = 0.4f;
-
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
-
         private static SoundResource[] chopSoundResource;
-        private static Sound[]  chopSound;
+        private static Sound[] chopSound;
 
         public float DigRadiusShovel { get { return digRadiusShovel; } }
+
         public float DigRadiusPickaxe { get { return digRadiusPickaxe; } }
 
         public override void OnSelect(Player player)
@@ -346,7 +346,8 @@ namespace UpvoidMiner
                     // Add a drone to the use-position.
                     player.AddDrone(_worldPos);
                     // Remove that drone from inventory.
-                    player.Inventory.RemoveItem(new ToolItem(ToolType));
+                    if (!player.GodMode)
+                        player.Inventory.RemoveItem(new ToolItem(ToolType));
 
                     // Tutorial
                     Tutorials.MsgAdvancedBuildingPlaceDrone.Report(1);
