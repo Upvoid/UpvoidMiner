@@ -255,8 +255,6 @@ namespace UpvoidMiner
             }
 
             // Initialize the savegame paths
-            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
-            UpvoidMiner.SavePathWorldItems = UpvoidMiner.SavePathBase + "/WorldItems";
             UpvoidMiner.SavePathInventory = UpvoidMiner.SavePathBase + "/Inventory" + (godMode ? "GodMode" : "AdventureMode");
             UpvoidMiner.SavePathTutorial = UpvoidMiner.SavePathBase + "/Tutorial";
 

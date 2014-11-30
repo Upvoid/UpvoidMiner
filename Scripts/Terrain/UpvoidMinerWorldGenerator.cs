@@ -167,6 +167,9 @@ namespace UpvoidMiner
             Instance.terrainDesert = TerrainResource.FromName("Desert");
             Instance.terrainOreGold = TerrainResource.FromName("OreGold");
 
+            UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
+            UpvoidMiner.SavePathWorldItems = UpvoidMiner.SavePathBase + "/WorldItems";
+
             // load entities
             LoadEntities();
 
