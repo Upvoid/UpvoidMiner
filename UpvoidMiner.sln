@@ -59,16 +59,42 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automata", "Automata", "{3F
 		Automata\Trees.ca = Automata\Trees.ca
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "..\..\..\..\Engine\Scripts\Engine.csproj", "{61DD35B1-5494-40E2-8AAA-513F9DE65976}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfficientUI", "..\..\EfficientUI\1.0.0\EfficientUI.csproj", "{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Debug|x64.ActiveCfg = Debug|x64
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Debug|x64.Build.0 = Debug|x64
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Debug|x86.ActiveCfg = Debug|x86
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Debug|x86.Build.0 = Debug|x86
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Release|x64.ActiveCfg = Release|x64
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Release|x64.Build.0 = Release|x64
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Release|x86.ActiveCfg = Release|x86
+		{23B4D993-8C84-4837-84F0-4B24AAB0EBE1}.Release|x86.Build.0 = Release|x86
+		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Debug|x64.ActiveCfg = Debug|x64
+		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Debug|x64.Build.0 = Debug|x64
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Debug|x86.ActiveCfg = Debug|x86
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Debug|x86.Build.0 = Debug|x86
+		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x64.ActiveCfg = Release|x64
+		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x64.Build.0 = Release|x64
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x86.ActiveCfg = Release|x86
 		{5BF4DFAB-5196-4628-A729-A4D2DCE3CF54}.Release|x86.Build.0 = Release|x86
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Debug|x64.ActiveCfg = Debug|x64
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Debug|x64.Build.0 = Debug|x64
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Debug|x86.ActiveCfg = Debug|x86
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Debug|x86.Build.0 = Debug|x86
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Release|x64.ActiveCfg = Release|x64
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Release|x64.Build.0 = Release|x64
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Release|x86.ActiveCfg = Release|x86
+		{61DD35B1-5494-40E2-8AAA-513F9DE65976}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
