@@ -238,7 +238,7 @@ namespace UpvoidMiner
             vec3 left = vec3.cross(up, dir).Normalized;
             dir = vec3.cross(left, up);
 
-            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
+            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position + rayHit.Normal.Normalized * (0.01f / 7f) /* small security offset */;
             var savPos = _worldPos;
 
             mat4 scaling;

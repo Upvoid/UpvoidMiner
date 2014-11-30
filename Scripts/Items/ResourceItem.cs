@@ -183,7 +183,7 @@ namespace UpvoidMiner
         public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)
         {
             var _visible = rayHit != null;
-            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position;
+            var _worldPos = rayHit == null ? vec3.Zero : rayHit.Position + rayHit.Normal.Normalized * (0.01f / 7f) /* small security offset */;
             var _worldNormal = rayHit == null ? vec3.UnitY : rayHit.Normal;
 
             var savPos = _worldPos;
