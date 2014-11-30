@@ -164,7 +164,7 @@ namespace UpvoidMiner
             birdSound.ReferenceDistance = 2.0f;
             birdSound.Play();
 
-            // Create a new (repeating) music queue with pauses of 5-10s between the songs
+            // Create a new (repeating) music queue with pauses of 4-8s between the songs
             musicQueue = new MusicQueue(4, 8, true);
 
             // Add songs to the music queue
@@ -200,6 +200,8 @@ namespace UpvoidMiner
                 Resources.UseSound("Mods/Upvoid/Resources.Music/1.0.0::Miscellaneous/zeos_-_Photo_theme_Window_like", UpvoidMiner.ModDomain),
                 vec3.Zero, false, musicVolume, 1, (int)AudioType.Music, false));
 
+
+            Scripting.RegisterUpdateFunction(musicQueue.update, UpvoidMiner.Mod);
 
             // Do not play music. this is done by the music queue 8-)
             //music.Play();
@@ -401,11 +403,6 @@ namespace UpvoidMiner
             if (player != null)
             {
                 player.Update(_elapsedSeconds);
-            }
-
-            if (musicQueue != null)
-            {
-                musicQueue.update(_elapsedSeconds);
             }
 
             UpdateResourceDownloadProgress();
