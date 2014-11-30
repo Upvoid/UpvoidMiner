@@ -12,7 +12,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -120,7 +119,6 @@ namespace UpvoidMiner
             FixedDistance
         }
 
-
         /// <summary>
         /// Describes where material should be added
         /// </summary>
@@ -149,39 +147,31 @@ namespace UpvoidMiner
         /// Backref to player.
         /// </summary>
         Player player;
-
         /// <summary>
         /// Cached CSG Sphere.
         /// </summary>
         CsgExpression sphereNode;
-
         /// <summary>
         /// Cached CSG Cube.
         /// </summary>
         CsgExpression boxNode;
-
         /// <summary>
         /// Cached CSG Cylinder.
         /// </summary>
         CsgExpression cylinderNode;
-
         /// <summary>
         /// Cached CSG Cone.
         /// </summary>
         CsgExpression coneNode;
-
         /// <summary>
         /// Cached Player safety margin.
         /// </summary>
         CsgExpression playerNode;
-
-
         /// <summary>
         /// Time the last stat callback was executed
         /// </summary>
         DateTime timeDirtSound = DateTime.Now;
         DateTime timeStoneSound = DateTime.Now;
-
         /// <summary>
         /// Cached sound resources for digging dirt and stone
         /// </summary>
@@ -240,23 +230,24 @@ namespace UpvoidMiner
 
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                     (new CpuParticleRenderJob(particlesStones,
-                        Renderer.Opaque.CpuParticles,
-                        res.DigParticleMaterial,
-                        Resources.UseMesh("::Particles/Rock", null),
-                        mat4.Identity)),
+                                              Renderer.Opaque.CpuParticles,
+                                              res.DigParticleMaterial,
+                                              Resources.UseMesh("::Particles/Rock", null),
+                                              mat4.Identity)),
                     mat4.Identity,
                     true));
 
                 LocalScript.ParticleEntity.AddComponent(new RenderComponent(
                     (new CpuParticleRenderJob(particlesStones,
-                        Renderer.Shadow.CpuParticles,
-                        Resources.UseMaterial("Particles/Shadow/Mesh", UpvoidMiner.ModDomain),
-                        Resources.UseMesh("::Particles/Rock", null),
-                        mat4.Identity)),
+                                              Renderer.Shadow.CpuParticles,
+                                              Resources.UseMaterial("Particles/Shadow/Mesh", UpvoidMiner.ModDomain),
+                                              Resources.UseMesh("::Particles/Rock", null),
+                                              mat4.Identity)),
                     mat4.Identity,
                     true));
             }
         };
+
         private Dictionary<int, StoneParticles> stoneParticles = new Dictionary<int, StoneParticles>();
 
         public DiggingController(World world, Player player)
@@ -496,7 +487,7 @@ namespace UpvoidMiner
                     digSound = new Sound(dirtSoundResource[random.Next(0, 5)], vec3.Zero, false, 1, 1, (int)AudioType.SFX, true);
                 }
 
-                if(digSound != null)
+                if (digSound != null)
                 {
                     // +/- 15% pitching
                     digSound.Pitch = 1.0f + (0.3f * (float)random.NextDouble() - 0.15f);
@@ -509,7 +500,9 @@ namespace UpvoidMiner
 
                 // Add proper amount of material to player inventory.
                 // If the material changed by a negative volume we want to collect a positive amount.
-                instance.player.Inventory.AddResource(material, -volume);
+                // only do if non-god
+                if (!instance.player.GodMode)
+                    instance.player.Inventory.AddResource(material, -volume);
 
                 // Tutorial
                 if (volume < 0)
@@ -530,7 +523,7 @@ namespace UpvoidMiner
 
                     if (instance.player.Inventory.Selection is ToolItem &&
                         ((instance.player.Inventory.Selection as ToolItem).DigRadiusShovel < 0.6 ||
-                         (instance.player.Inventory.Selection as ToolItem).DigRadiusPickaxe < 0.6))
+                        (instance.player.Inventory.Selection as ToolItem).DigRadiusPickaxe < 0.6))
                         Tutorials.MsgAdvancedDiggingSmall.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ToolItem &&
@@ -640,16 +633,15 @@ namespace UpvoidMiner
                     axisToRotateAbout *= rotSpeed;
 
                     particles.particlesStones.AddParticle(
-                        partPos.x.ToString() + ";" + partPos.y.ToString() + ";" + partPos.z.ToString() + ";" +  // pos xyz
-                        partVel.x.ToString() + ";" + partVel.y.ToString() + ";" + partVel.z.ToString() + ";" +  // vel xyz
-                        partSize.ToString() + ";" + curLife.ToString() + ";" + maxLife.ToString() + ";" +  // size, life, lifeMax
-                        tangent.x.ToString() + ";" + tangent.y.ToString() + ";" + tangent.z.ToString() + ";" +  // tangent xyz
-                        biTangent.x.ToString() + ";" + biTangent.y.ToString() + ";" + biTangent.z.ToString() + ";" +  // bitangent xyz
+                        partPos.x.ToString() + ";" + partPos.y.ToString() + ";" + partPos.z.ToString() + ";" + // pos xyz
+                        partVel.x.ToString() + ";" + partVel.y.ToString() + ";" + partVel.z.ToString() + ";" + // vel xyz
+                        partSize.ToString() + ";" + curLife.ToString() + ";" + maxLife.ToString() + ";" + // size, life, lifeMax
+                        tangent.x.ToString() + ";" + tangent.y.ToString() + ";" + tangent.z.ToString() + ";" + // tangent xyz
+                        biTangent.x.ToString() + ";" + biTangent.y.ToString() + ";" + biTangent.z.ToString() + ";" + // bitangent xyz
                         axisToRotateAbout.x.ToString() + ";" + axisToRotateAbout.y.ToString() + ";" + axisToRotateAbout.z.ToString());  // axisToRotateAbout xyz
                 }
             }
         }
-
         /*
         public void construct(vec3 position, CsgNode diggingShape, float influencingRadius)
         {

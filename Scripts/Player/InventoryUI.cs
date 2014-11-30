@@ -27,10 +27,12 @@ namespace UpvoidMiner
         public class ItemUI : UIProxy
         {
             private readonly Item item;
+
             public Item Item { get { return item; } }
 
             [UIString]
             public string Name { get { return item.Name; } }
+
             [UIString]
             public string Description { get { return item.Description; } }
 
@@ -45,8 +47,10 @@ namespace UpvoidMiner
 
             [UIObject]
             public bool IsDroppable { get { return item.IsDroppable; } }
+
             [UIObject]
             public bool IsDestructible { get { return item is MaterialItem; } }
+
             [UIObject]
             public bool IsConvertible { get { return item is MaterialItem; } }
 
@@ -118,7 +122,8 @@ namespace UpvoidMiner
             private readonly ResourceItem item;
 
             [UIString]
-            public string Volume { get { return item.Volume >= 1000 ? "&gt;999m&sup3;" : item.Volume.ToString("0.0") + "m&sup3;"; } }
+            public string Volume { get { return LocalScript.player == null || LocalScript.player.GodMode ? "" 
+                    : item.Volume >= 1000 ? "&gt;999m&sup3;" : item.Volume.ToString("0.0") + "m&sup3;"; } }
 
             public ResourceItemUI(ResourceItem item)
                 : base(item)
@@ -142,7 +147,8 @@ namespace UpvoidMiner
             private readonly MaterialItem item;
 
             [UIString]
-            public string StackSize { get { return item.StackSize + "x"; } }
+            public string StackSize { get { return LocalScript.player == null || LocalScript.player.GodMode ? "" 
+                    : item.StackSize + "x"; } }
 
             public MaterialItemUI(MaterialItem item)
                 : base(item)

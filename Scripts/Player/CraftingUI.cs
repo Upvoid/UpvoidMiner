@@ -15,8 +15,10 @@ namespace UpvoidMiner
         {
             [UISlider(3, 30)]
             public int Width { get; set; }
+
             [UISlider(3, 30)]
             public int Height { get; set; }
+
             [UISlider(3, 30)]
             public int Depth { get; set; }
 
@@ -24,8 +26,10 @@ namespace UpvoidMiner
 
             [UIString]
             public string WidthInMeter { get { return (Width * 0.1f).ToString("0.0") + "m"; } }
+
             [UIString]
             public string HeightInMeter { get { return (Height * 0.1f).ToString("0.0") + "m"; } }
+
             [UIString]
             public string DepthInMeter { get { return (Depth * 0.1f).ToString("0.0") + "m"; } }
 
@@ -36,6 +40,7 @@ namespace UpvoidMiner
                 Width = Height = Depth = 10;
             }
         }
+
         public class SphereSettingsUI : UIProxy
         {
             [UISlider(3, 30)]
@@ -53,10 +58,12 @@ namespace UpvoidMiner
                 Radius = 10;
             }
         }
+
         public class CylinderSettingsUI : UIProxy
         {
             [UISlider(3, 30)]
             public int Radius { get; set; }
+
             [UISlider(3, 30)]
             public int Height { get; set; }
 
@@ -64,8 +71,10 @@ namespace UpvoidMiner
 
             [UIString]
             public string RadiusInMeter { get { return (Radius * 0.1f).ToString("0.0") + "m"; } }
+
             [UIString]
             public string HeightInMeter { get { return (Height * 0.1f).ToString("0.0") + "m"; } }
+
             public vec3 Size { get { return new vec3(Radius, Height, Radius) * 0.1f; } }
 
             public CylinderSettingsUI()
@@ -88,8 +97,10 @@ namespace UpvoidMiner
 
         [UICollection("CraftBoxSettings")]
         public BoxSettingsUI BoxSettings { get { return TypeSelection == 0 ? boxSettings : null; } }
+
         [UICollection("CraftSphereSettings")]
         public SphereSettingsUI SphereSettings { get { return TypeSelection == 1 ? sphereSettings : null; } }
+
         [UICollection("CraftCylinderSettings")]
         public CylinderSettingsUI CylinderSettings { get { return TypeSelection == 2 ? cylinderSettings : null; } }
 
@@ -101,6 +112,7 @@ namespace UpvoidMiner
                 return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.Name : "";
             }
         }
+
         [UIImage]
         public TextureDataResource SelectedMaterialIcon
         {
@@ -141,8 +153,11 @@ namespace UpvoidMiner
 
         [UIString]
         public string RequiredVolumeInCubicMeter { get { return RequiredVolume.ToString("0.000"); } }
+
         [UIString]
-        public string CurrentVolumeInCubicMeter { get { return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Volume.ToString("0.000") : ""; } }
+        public string CurrentVolumeInCubicMeter { get { 
+                return (LocalScript.player == null || LocalScript.player.GodMode) ? "&nbsp;&infin;&nbsp;" :
+                    SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Volume.ToString("0.000") : ""; } }
 
         [UIObject]
         public int TypeSelection { get; private set; }
@@ -164,11 +179,13 @@ namespace UpvoidMiner
         {
             TypeSelection = 0;
         }
+
         [UIButton]
         public void BtnSphere()
         {
             TypeSelection = 1;
         }
+
         [UIButton]
         public void BtnCylinder()
         {
@@ -203,7 +220,10 @@ namespace UpvoidMiner
             if (LocalScript.player == null)
                 return;
             var newItem = LocalScript.player.Inventory.AddItem(item);
-            LocalScript.player.Inventory.RemoveItem(new ResourceItem(mat, RequiredVolume));
+
+            // only if non-god
+            if (!LocalScript.player.GodMode)
+                LocalScript.player.Inventory.RemoveItem(new ResourceItem(mat, RequiredVolume));
 
             // Tutorial
             if (newItem && TypeSelection == 0 && mat.Name == "Dirt")
