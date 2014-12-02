@@ -31,7 +31,7 @@ namespace UpvoidMiner
         public int FPS
         {
             get
-            { 
+            {
                 if (!Visible)
                     return -1;
                 return Universe.TicksPerSecond;
@@ -45,7 +45,7 @@ namespace UpvoidMiner
         public int MsPerFrame
         {
             get
-            { 
+            {
                 if (!Visible)
                     return -1;
                 return (int)(Universe.Timestep * 1000);
@@ -103,7 +103,7 @@ namespace UpvoidMiner
 
                 if (camera == null)
                     return "no camera";
-                
+
                 if (world == null)
                     return "no world";
                 if (world.Physics == null)
@@ -111,7 +111,7 @@ namespace UpvoidMiner
 
                 var cbody = LocalScript.player == null ? null : LocalScript.player.Character.Body;
 
-                RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 1000.0f, cbody);
+                RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 100.0f, cbody);
                 if (hit == null)
                     return "no hit";
 

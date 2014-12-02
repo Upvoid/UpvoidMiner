@@ -410,7 +410,7 @@ namespace UpvoidMiner
             // Recalc distance to ground
             if (!GodMode)
             {
-                RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 500f, 0), Body);
+                RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 50f, 0), Body);
 
                 if (hit != null)
                 {
