@@ -90,7 +90,6 @@ namespace UpvoidMiner
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
         private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
         private bool settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-        private bool settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
         private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
@@ -259,17 +258,6 @@ namespace UpvoidMiner
         }
 
         [UICheckBox]
-        public bool Fog
-        {
-            get { return settingFog; }
-            set
-            {
-                if (settingFog != value) pipelineChanges = true;
-                settingFog = value;
-            }
-        }
-
-        [UICheckBox]
         public bool FXAA
         {
             get { return settingFXAA; }
@@ -358,7 +346,6 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
             Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", settingVolumetricScattering);
             Scripting.SetUserSetting("Graphics/Enable Tonemapping", settingTonemapping);
-            Scripting.SetUserSetting("Graphics/Enable Fog", settingFog);
             Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
 
             Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
@@ -412,7 +399,6 @@ namespace UpvoidMiner
             settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
             settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
             settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-            settingFog = Scripting.GetUserSetting("Graphics/Enable Fog", true);
             settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
             settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
             settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
