@@ -138,6 +138,12 @@
     "Path": "~.obj",
     "Descriptor": "File"
 },
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree03/Leaves_medium",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
 
 {
     "Descriptor" : {

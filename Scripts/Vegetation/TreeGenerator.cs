@@ -79,19 +79,21 @@ namespace UpvoidMiner
             MeshRenderJob leavesOpaque = new MeshRenderJob(
                 Renderer.Opaque.Mesh,
                 Resources.UseMaterial("TreeLeaves01", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_medium" : "Vegetation/Tree03/Leaves_medium", UpvoidMiner.ModDomain),
                 transform2);
 
+            /*
             MeshRenderJob leavesZPre = new MeshRenderJob(
                 Renderer.zPre.Mesh,
                 Resources.UseMaterial("TreeLeaves01.zPre", UpvoidMiner.ModDomain),
                 Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
                 transform2);
+             */
 
             MeshRenderJob leavesShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh,
                 Resources.UseMaterial("TreeLeaves01.Shadow", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_medium" : "Vegetation/Tree03/Leaves_medium", UpvoidMiner.ModDomain),
                 transform2);
 
             MeshRenderJob trunkOpaque = new MeshRenderJob(
@@ -119,7 +121,7 @@ namespace UpvoidMiner
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
 
             t.RjLeaves0.Add(new RenderComponent(leavesOpaque, transform2));
-            t.RjLeaves0.Add(new RenderComponent(leavesZPre, transform2));
+            //t.RjLeaves0.Add(new RenderComponent(leavesZPre, transform2));
             t.RjLeaves0.Add(new RenderComponent(leavesShadow, transform2));
             t.RjTrunk.Add(new RenderComponent(trunkOpaque, transform2));
             t.RjTrunk.Add(new RenderComponent(trunkShadow, transform2));

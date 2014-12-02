@@ -134,7 +134,7 @@
     "Descriptor" : {
         "Files" : [
             "Vegetation/Trees/TreeTrunk.fsh",
-            "Vegetation/Trees/Tree.vsh"
+            "Vegetation/Trees/TreeTrunk.vsh"
         ],
         "Name" : "Vegetation/TreeTrunk",
         "Type" : "File"
@@ -147,7 +147,7 @@
     "Descriptor" : {
         "Files" : [
             "Vegetation/Trees/TreeLeaves.Opaque.fsh",
-            "Vegetation/Trees/Tree.vsh"
+            "Vegetation/Trees/TreeLeaves.vsh"
         ],
         "Name" : "Vegetation/TreeLeaves.Opaque",
         "Type" : "File"
@@ -160,7 +160,7 @@
     "Descriptor" : {
         "Files" : [
             "Vegetation/Trees/TreeLeaves.Transparent.fsh",
-            "Vegetation/Trees/Tree.vsh"
+            "Vegetation/Trees/TreeLeaves.vsh"
         ],
         "Name" : "Vegetation/TreeLeaves.Transparent",
         "Type" : "File"
@@ -173,7 +173,7 @@
     "Descriptor" : {
         "Files" : [
             "Vegetation/Trees/TreeLeaves.zPre.fsh",
-            "Vegetation/Trees/Tree.vsh"
+            "Vegetation/Trees/TreeLeaves.vsh"
         ],
         "Name" : "Vegetation/TreeLeaves.zPre",
         "Type" : "File"
@@ -199,7 +199,7 @@
     "Descriptor" : {
         "Files" : [
             "Vegetation/Trees/TreeLeavesNormalmap.Opaque.fsh",
-            "Vegetation/Trees/Tree.vsh"
+            "Vegetation/Trees/TreeLeaves.vsh"
         ],
         "Name" : "Vegetation/TreeLeavesNormalmap.Opaque",
         "Type" : "File"
