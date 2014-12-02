@@ -26,6 +26,7 @@ using Engine.Rendering;
 using Engine.Physics;
 using Engine.Network;
 using Engine.Input;
+using Engine.Gui;
 using System.IO;
 using Newtonsoft.Json;
 using UpvoidMiner.UI;
@@ -226,6 +227,11 @@ namespace UpvoidMiner
             }
 
             bool menuOrInventoryOpen = player.Gui.IsInventoryOpen || player.Gui.IsMenuOpen;
+
+            if (menuOrInventoryOpen)
+                Gui.DefaultUI.EnableInputProcessing();
+            else
+                Gui.DefaultUI.DisableInputProcessing();
 
             if (!menuOrInventoryOpen)
             {
