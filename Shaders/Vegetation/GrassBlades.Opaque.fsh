@@ -19,11 +19,11 @@ OUTPUT_CHANNEL_Position(vec3)
 void main()
 {
    INIT_CHANNELS;
-   
+
    float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(vWorldPos, uCameraPosition));
    if(int(13.479*gl_FragCoord.x + gl_FragCoord.y * 273.524 * gl_FragCoord.x) % 200 >= posFactor * 250)
       discard;
-   
+
    /*
    float dirX = (vX - 0.5) * 2.0;
    float adX = abs(dirX);
@@ -41,11 +41,11 @@ void main()
 
 
    vec3 vColor = texture(uColor, vec2(vX, vY)).rgb * vY;
-   
+
    // COLOR END =========================
 
    // Shadowing
-   vec3 color = vColor * mix(0.07, 1, shadowFactor(vWorldPos));
+   vec3 color = vColor;
 
    OUTPUT_Color(color);
    OUTPUT_Normal(normal);

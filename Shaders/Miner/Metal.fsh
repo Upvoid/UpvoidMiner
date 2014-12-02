@@ -66,7 +66,7 @@ void main()
     // Skybox reflection
     vec3 reflDir = reflect(normalize(vWorldPos - uCameraPosition), normal);
     vec3 skyColor = sampleSkybox(reflDir).rgb;
-    float reflFactor = .6 * shadowFactor(vWorldPos);
+    float reflFactor = .6;
     color = mix(color, skyColor, reflFactor);
 
     //color.rgb = reflDir;

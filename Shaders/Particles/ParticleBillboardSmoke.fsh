@@ -33,8 +33,5 @@ void main()
     transColor.a *= 1-smoothstep(0.7, 1, vLife);
     transColor.a *= smoothstep(0.0, .2, vLife);
 
-    // DEBUG: no illumination!
-    //transColor.rgb *= shadowFactor(vWorldPos.xyz);
-
     OUTPUT_TransparentColor(transColor);
 }
