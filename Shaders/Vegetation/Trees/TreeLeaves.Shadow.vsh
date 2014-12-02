@@ -11,8 +11,6 @@ in vec3 aNormal;
 in vec3 aTangent;
 in vec2 aTexCoord;
 
-out vec3 vNormal;
-out vec3 vTangent;
 out vec3 vWorldPos;
 out vec2 vTexCoord;
 
@@ -27,8 +25,6 @@ vec3 windOffset(float height, vec3 pos)
 void main()
 {
     // world space normal:
-    vNormal = mat3(uModelMatrix) * aNormal;
-    vTangent = mat3(uModelMatrix) * aTangent;
     vTexCoord = aTexCoord;
     // world space position:
     vec4 worldPos = uModelMatrix * vec4(aPosition, 1.0);
@@ -41,7 +37,6 @@ void main()
     vWorldPos = worldPos.xyz;
 
     // projected vertex position used for the interpolation
-
     worldPos = uShadowViewProjectionMatrix * worldPos;
     vZ = worldPos.z;
     gl_Position  = worldPos;

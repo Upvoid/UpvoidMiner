@@ -1,43 +1,26 @@
 #version 140
 #pragma Pipeline
 
-#pragma ACGLimport <Common/Lighting.fsh>
-#pragma ACGLimport <Common/Camera.csh>
-#pragma ACGLimport <Common/Normalmapping.fsh>
-
 // material:
 uniform sampler2D uColor;
-uniform sampler2D uNormal;
-
-uniform float uDiscardBias = 0.5;
 
 in vec2 vTexCoord;
-in vec3 vTangent;
-in vec3 vNormal;
-in vec3 vWorldPos;
 in vec3 vColor;
+in float vDisc;
 
 OUTPUT_CHANNEL_Color(vec3)
 OUTPUT_CHANNEL_Normal(vec3)
 
 void main()
 {
-    vec4 texColor = texture(uColor, vTexCoord);
-    
-    float disc = uDiscardBias;
-    disc = distance(vWorldPos, uCameraPosition);
-    disc = (1-uDiscardBias) + 0.05-clamp(disc/50,0,1-uDiscardBias);
+   vec4 texColor = texture(uColor, vTexCoord);
 
-    if(texColor.a < disc)
-        discard;
+   if(texColor.a < vDisc)
+      discard;
 
-    texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
-    texColor.rgb *= vColor;
+   texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
+   texColor.rgb *= 0.5 + 0.5 * vColor;
 
-    vec3 normal = applyNormalmap(vNormal, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));
-
-    vec3 color = leafLighting(vWorldPos, normal, 1.0, texColor.rgb, vec4(vec3(0),1));
-
-    OUTPUT_Color(color);
-    OUTPUT_Normal(normal);
+   OUTPUT_Color(texColor.rgb);
+   OUTPUT_Normal("Fix me!");
 }
