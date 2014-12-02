@@ -12,7 +12,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 using System;
 using Engine;
 using Engine.Audio;
@@ -20,6 +19,7 @@ using Engine.Universe;
 using Engine.Physics;
 using Engine.Input;
 using Engine.Resources;
+using Engine.Statistics;
 using Engine.Scripting;
 using Engine.Webserver;
 using Engine.Rendering;
@@ -49,6 +49,7 @@ namespace UpvoidMiner
                 return new vec3(Body.GetTransformation().col3);
             }
         }
+
         /// <summary>
         /// Gets the transformation matrix of the controlled character.
         /// </summary>
@@ -106,22 +107,18 @@ namespace UpvoidMiner
         /// The physical impulse (meters per second) that will be applied to the body for a jump.
         /// </summary>
         public float JumpImpulse = 300f;
-
         /// <summary>
         /// The velocity of the character when walking (meters per second). Default is 2.7.
         /// </summary>
         public float WalkSpeed = 2.7f;
-
         /// <summary>
         /// The velocity of the character when strafing (meters per second). Default is 1.0 (3.6 km/h).
         /// </summary>
         public float StrafeSpeed = 2f;
-
         /// <summary>
         /// The velocity of the character when strafing while running (meters per second). Default is 3.0 (11 km/h).
         /// </summary>
         public float StrafeSpeedRunning = 4.5f;
-
         /// <summary>
         /// The velocity of the character when running (meters per second). Default is 6.
         /// </summary>
@@ -151,25 +148,19 @@ namespace UpvoidMiner
         /// This camera is used to determine the directions we are walking. Forward means the direction the camera is currently pointing.
         /// </summary>
         GenericCamera camera;
-
         /// <summary>
         /// Forward/neutral/backward encoded in -1/0/1
         /// </summary>
         int walkDirForward = 0;
-
         /// <summary>
         /// Left/neutral/right encoded in -1/0/1
         /// </summary>
         int walkDirRight = 0;
-
         /// <summary>
         /// The last known distance to the ground.
         /// </summary>
         float distanceToGround = 0;
-
         float jumpCoolDown = 0f;
-
-
         SoundResource movementNoiseResource;
         readonly Sound movementNoiseSound;
 
@@ -232,194 +223,199 @@ namespace UpvoidMiner
         /// <param name="_elapsedSeconds">The elapsed seconds since the last call.</param>
         public void Update(float _elapsedSeconds)
         {
-
-            // When falling, clamp maximum player speed to 55m/s (air friction)
-            if(!GodMode && !TouchesGround)
+            using (new ProfileAction("CharacterController::Update", UpvoidMiner.Mod))
             {
-                const float maxSpeed = 55.0f;
-                vec3 curVel = Body.GetVelocity();
-                float speed = curVel.Length;
-                if (speed > maxSpeed)
+
+                // When falling, clamp maximum player speed to 55m/s (air friction)
+                if (!GodMode && !TouchesGround)
                 {
-                    Body.SetVelocity(maxSpeed * curVel.Normalized);
+                    const float maxSpeed = 55.0f;
+                    vec3 curVel = Body.GetVelocity();
+                    float speed = curVel.Length;
+                    if (speed > maxSpeed)
+                    {
+                        Body.SetVelocity(maxSpeed * curVel.Normalized);
+                    }
                 }
-            }
 
-            // Movement noise
-            if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
-            {
-                // Resume movement noise (This is a no-op if sound is already playing)
-                // Note that changing sound attributes is a no-op when old and new value are equal,
-                // So no unnecessary openal calls will be executed
-
-                if(IsRunning)
+                // Movement noise
+                if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
                 {
-                    movementNoiseSound.Pitch = 1.7f;
+                    // Resume movement noise (This is a no-op if sound is already playing)
+                    // Note that changing sound attributes is a no-op when old and new value are equal,
+                    // So no unnecessary openal calls will be executed
+
+                    if (IsRunning)
+                    {
+                        movementNoiseSound.Pitch = 1.7f;
+                    }
+                    else
+                    {
+                        movementNoiseSound.Pitch = 1.0f;
+                    }
+
+                    movementNoiseSound.Resume();
+                    movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
                 }
                 else
                 {
-                    movementNoiseSound.Pitch = 1.0f;
+                    // Pause movement noise
+                    movementNoiseSound.Pause();
                 }
 
-                movementNoiseSound.Resume();
-                movementNoiseSound.Position = camera.Position + new vec3(0, -2, 0);
-            }
-            else
-            {
-                // Pause movement noise
-                movementNoiseSound.Pause();
-            }
-
-            // Don't do anything when noclip is enabled
-            if (LocalScript.NoclipEnabled)
-            {
-                walkDirRight = 0;
-                walkDirForward = 0;
-                IsRunning = false;
-                Body.SetVelocity(vec3.Zero);
-                Body.SetGravity(new vec3(0, -9.807f, 0));
-                return;
-            }
-            else if (GodMode)
-            {
-                Body.SetGravity(vec3.Zero);
-            }
-
-            // Security: if in non-air chunk, teleport to next all-air one
-            {
-                mat4 transformation = Body.GetTransformation();
-                vec3 pos = new vec3(transformation.col3);
-                WorldTreeNode node = ContainingWorld.QueryWorldTreeNode(pos);
-                if (node != null && node.IsMinLod)
+                // Don't do anything when noclip is enabled
+                if (LocalScript.NoclipEnabled)
                 {
-                    HermiteData volumeData = node.CurrentVolume;
-                    if (volumeData != null)
+                    walkDirRight = 0;
+                    walkDirForward = 0;
+                    IsRunning = false;
+                    Body.SetVelocity(vec3.Zero);
+                    Body.SetGravity(new vec3(0, -9.807f, 0));
+                    return;
+                }
+                else if (GodMode)
+                {
+                    Body.SetGravity(vec3.Zero);
+                }
+
+                // Security: if in non-air chunk, teleport to next all-air one
+                {
+                    mat4 transformation = Body.GetTransformation();
+                    vec3 pos = new vec3(transformation.col3);
+                    WorldTreeNode node = ContainingWorld.QueryWorldTreeNode(pos);
+                    if (node != null && node.IsMinLod)
                     {
-                        if (!volumeData.HasAir)
+                        HermiteData volumeData = node.CurrentVolume;
+                        if (volumeData != null)
                         {
-                            // we are definitely in a non-air chunk here
-                            // teleport one node size above
-                            Body.SetTransformation(mat4.Translate(new vec3(0, node.Size, 0)) * Body.GetTransformation());
-                        }
-                        else if (!volumeData.HasAirAt(pos))
-                        {
-                            // we are in a mixed chunk, advance pos until air
-                            float offset = 0f;
-                            do
+                            if (!volumeData.HasAir)
                             {
-                                pos.y += 0.5f;
-                                offset += 0.5f;
-                            } while (!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
+                                // we are definitely in a non-air chunk here
+                                // teleport one node size above
+                                Body.SetTransformation(mat4.Translate(new vec3(0, node.Size, 0)) * Body.GetTransformation());
+                            }
+                            else if (!volumeData.HasAirAt(pos))
+                            {
+                                // we are in a mixed chunk, advance pos until air
+                                float offset = 0f;
+                                do
+                                {
+                                    pos.y += 0.5f;
+                                    offset += 0.5f;
+                                } while (!volumeData.HasAirAt(pos) || !volumeData.HasAirAt(pos + new vec3(0, 1.5f, 0)));
 
-                            // another 1.5m to ensure good ground
-                            offset += 1.5f;
+                                // another 1.5m to ensure good ground
+                                offset += 1.5f;
 
-                            Body.SetTransformation(mat4.Translate(new vec3(0, offset, 0)) * Body.GetTransformation());
+                                Body.SetTransformation(mat4.Translate(new vec3(0, offset, 0)) * Body.GetTransformation());
+                            }
                         }
                     }
                 }
-            }
 
-            jumpCoolDown -= _elapsedSeconds;
+                jumpCoolDown -= _elapsedSeconds;
 
-            // Jumping cooldown is reset instantly when moving down in any way.
-            if (Body.GetVelocity().y <= 0f)
-                jumpCoolDown = 0f;
+                // Jumping cooldown is reset instantly when moving down in any way.
+                if (Body.GetVelocity().y <= 0f)
+                    jumpCoolDown = 0f;
 
-            if (jumpCoolDown < 0f)
-                jumpCoolDown = 0f;
+                if (jumpCoolDown < 0f)
+                    jumpCoolDown = 0f;
 
-            // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
-            if ((TouchesGround && jumpCoolDown <= 0f) || GodMode)
-            {
+                // When touching the ground, we can walk around with full control over our velocity. In Godmode, we can always 'walk'.
+                if ((TouchesGround && jumpCoolDown <= 0f) || GodMode)
+                {
 
-                float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
-                float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
+                    float forwardSpeed = IsRunning ? WalkSpeedRunning : WalkSpeed;
+                    float strafeSpeed = IsRunning ? StrafeSpeedRunning : StrafeSpeed;
 
-                // Use the forward and right directions of the camera. When not in god mode, remove the y component, and we have our walking direction.
-                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
-                vec3 velocity = Body.GetVelocity();
+                    // Use the forward and right directions of the camera. When not in god mode, remove the y component, and we have our walking direction.
+                    vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
+                    vec3 velocity = Body.GetVelocity();
 
+                    if (!GodMode)
+                    {
+                        moveDir.y = 0;
+                        velocity.y = 0;
+                    }
+
+                    Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
+
+                    Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
+                    if (IsRunning)
+                        Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
+                }
+                else // Otherwise, we can do some subtile acceleration in air
+                {
+                    float forwardSpeed = StrafeSpeed * 0.25f;
+                    float strafeSpeed = StrafeSpeed * 0.25f;
+
+                    // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
+                    vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
+                    moveDir.y = 0;
+
+                    vec3 oldVelocity = Body.GetVelocity();
+                    oldVelocity.y = 0;
+
+                    float oldVelocityLength = oldVelocity.Length;
+                    vec3 newVelocity = oldVelocity + moveDir;
+                    float newVelocityLength = newVelocity.Length;
+                    if (oldVelocityLength > 1f && newVelocityLength > oldVelocityLength)
+                        newVelocity *= oldVelocityLength / newVelocityLength;
+
+                    newVelocity.y = Body.GetVelocity().y;
+
+                    Body.ApplyImpulse((newVelocity - Body.GetVelocity()) * CharacterMass, vec3.Zero);
+
+                    Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
+                    if (IsRunning)
+                        Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
+                }
+
+                // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
+                // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
+                // Also, only tinker with the gravcity if the player is moving relatively slow
+                if (!GodMode && distanceToGround < HoverHeight + 0.1f && jumpCoolDown <= 0f && Body.GetVelocity().Length < WalkSpeedRunning * 1.5f)
+                {
+                    vec3 velocity = Body.GetVelocity();
+
+                    // Never move down when more than 10cm below the desired height.
+                    if (distanceToGround < HoverHeight - 0.1f && velocity.y < 0f)
+                    {
+                        Body.ApplyImpulse(Body.Mass * new vec3(0, -velocity.y, 0), vec3.Zero);
+                        velocity.y = 0f;
+                    }
+
+                    float convergenceSpeed = Math.Max(0.1f, _elapsedSeconds * 1.2f);
+                    float distanceToHoverHeight = distanceToGround - HoverHeight;
+
+                    float customGravity = -2f * (distanceToHoverHeight + velocity.y * convergenceSpeed) / (convergenceSpeed * convergenceSpeed);
+
+                    if (customGravity < -20f)
+                        customGravity = -20f;
+                    else if (customGravity > 20f)
+                        customGravity = 20f;
+
+                    Body.SetGravity(new vec3(0, customGravity, 0));
+
+                }
+                else if (!GodMode)
+                    Body.SetGravity(new vec3(0, -9.807f, 0));
+
+                // Recalc distance to ground
                 if (!GodMode)
                 {
-                    moveDir.y = 0;
-                    velocity.y = 0;
+                    RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 50f, 0), Body);
+
+                    if (hit != null)
+                    {
+                        distanceToGround = Position.y - BodyHeight * 0.5f - hit.Position.y;
+                    }
+                    else
+                        distanceToGround = 5f;
+
+                    TouchesGround = (jumpCoolDown <= 0f) && (Math.Abs(distanceToGround) < HoverHeight + 0.3f);
                 }
-
-                Body.ApplyImpulse((moveDir - velocity) * CharacterMass, vec3.Zero);
-
-                Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
-                if (IsRunning) Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
-            }
-            else // Otherwise, we can do some subtile acceleration in air
-            {
-                float forwardSpeed = StrafeSpeed * 0.25f;
-                float strafeSpeed = StrafeSpeed * 0.25f;
-
-                // Use the forward and right directions of the camera. Remove the y component, and we have our walking direction.
-                vec3 moveDir = camera.ForwardDirection * walkDirForward * forwardSpeed + camera.RightDirection * walkDirRight * strafeSpeed;
-                moveDir.y = 0;
-
-                vec3 oldVelocity = Body.GetVelocity();
-                oldVelocity.y = 0;
-
-                float oldVelocityLength = oldVelocity.Length;
-                vec3 newVelocity = oldVelocity + moveDir;
-                float newVelocityLength = newVelocity.Length;
-                if (oldVelocityLength > 1f && newVelocityLength > oldVelocityLength)
-                    newVelocity *= oldVelocityLength / newVelocityLength;
-
-                newVelocity.y = Body.GetVelocity().y;
-
-                Body.ApplyImpulse((newVelocity - Body.GetVelocity()) * CharacterMass, vec3.Zero);
-
-                Tutorials.MsgMovementMove.Report(moveDir.Length * _elapsedSeconds);
-                if (IsRunning) Tutorials.MsgMovementSprint.Report(moveDir.Length * _elapsedSeconds);
-            }
-
-            // Let the character hover over the ground by applying a custom gravity. We apply the custom gravity when the body is below the desired height plus 0.1 meters.
-            // Our custom gravity pushes the body to its desired height and becomes smaller the closer it gets to prevent rubber band effects.
-            // Also, only tinker with the gravcity if the player is moving relatively slow
-            if (!GodMode && distanceToGround < HoverHeight + 0.1f && jumpCoolDown <= 0f && Body.GetVelocity().Length < WalkSpeedRunning * 1.5f)
-            {
-                vec3 velocity = Body.GetVelocity();
-
-                // Never move down when more than 10cm below the desired height.
-                if (distanceToGround < HoverHeight - 0.1f && velocity.y < 0f)
-                {
-                    Body.ApplyImpulse(Body.Mass * new vec3(0, -velocity.y, 0), vec3.Zero);
-                    velocity.y = 0f;
-                }
-
-                float convergenceSpeed = Math.Max(0.1f, _elapsedSeconds * 1.2f);
-                float distanceToHoverHeight = distanceToGround - HoverHeight;
-
-                float customGravity = -2f * (distanceToHoverHeight + velocity.y * convergenceSpeed) / (convergenceSpeed * convergenceSpeed);
-
-                if (customGravity < -20f)
-                    customGravity = -20f;
-                else if (customGravity > 20f)
-                    customGravity = 20f;
-
-                Body.SetGravity(new vec3(0, customGravity, 0));
-
-            }
-            else if (!GodMode)
-                Body.SetGravity(new vec3(0, -9.807f, 0));
-
-            // Recalc distance to ground
-            if (!GodMode)
-            {
-                RayHit hit = ContainingWorld.Physics.RayTest(Position, Position - new vec3(0, 50f, 0), Body);
-
-                if (hit != null)
-                {
-                    distanceToGround = Position.y - BodyHeight * 0.5f - hit.Position.y;
-                }
-                else
-                    distanceToGround = 5f;
-
-                TouchesGround = (jumpCoolDown <= 0f) && (Math.Abs(distanceToGround) < HoverHeight + 0.3f);
             }
         }
 

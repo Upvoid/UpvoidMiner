@@ -26,6 +26,7 @@ using Engine.Webserver;
 using Engine.Windows;
 using Engine.Gui;
 using Engine.Network;
+using Engine.Statistics;
 using Common.Cameras;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -392,64 +393,67 @@ namespace UpvoidMiner
         /// </summary>
         public static void Update(float _elapsedSeconds)
         {
-            if (NoclipEnabled && cameraControl != null)
+            using (new ProfileAction("LocalScript::Update", UpvoidMiner.Mod))
             {
-                // Bezier Path
-                if (PathPlaying && PathPositions.Count >= 2)
+                if (NoclipEnabled && cameraControl != null)
                 {
-                    PathCurrPos += _elapsedSeconds;
-                    while (PathCurrPos > PathPositions.Count)
-                        PathCurrPos -= PathPositions.Count;
-                    vec3 pos = bezierOf(PathPositions, PathTmps, PathCurrPos / (float)PathPositions.Count);
-                    vec3 dir = bezierOf(PathDirections, PathTmps, PathCurrPos / (float)PathPositions.Count);
-                    camera.Position = pos;
-                    camera.SetTarget(pos + dir, vec3.UnitY);
+                    // Bezier Path
+                    if (PathPlaying && PathPositions.Count >= 2)
+                    {
+                        PathCurrPos += _elapsedSeconds;
+                        while (PathCurrPos > PathPositions.Count)
+                            PathCurrPos -= PathPositions.Count;
+                        vec3 pos = bezierOf(PathPositions, PathTmps, PathCurrPos / (float)PathPositions.Count);
+                        vec3 dir = bezierOf(PathDirections, PathTmps, PathCurrPos / (float)PathPositions.Count);
+                        camera.Position = pos;
+                        camera.SetTarget(pos + dir, vec3.UnitY);
+                    }
+                    cameraControl.Update(_elapsedSeconds);
                 }
-                cameraControl.Update(_elapsedSeconds);
-            }
-
-            if (player != null)
-            {
-                player.Update(_elapsedSeconds);
-            }
-
-            UpdateResourceDownloadProgress();
-
-            if ((DateTime.Now - lastSave).TotalSeconds > 10)
-            {
-                lastSave = DateTime.Now;
 
                 if (player != null)
                 {
-                    player.Save();
-                    Tutorials.SaveState();
+                    player.Update(_elapsedSeconds);
                 }
-                UpvoidMinerWorldGenerator.SaveEntities();
-            }
 
-            // update items
-            ItemManager.Update();
+                UpdateResourceDownloadProgress();
 
-            // Update all trees and keep position of closest tree, if any
-            vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);
-
-            // Handle bird sound volume (depending on distance to closest tree)
-            if (birdSound != null)
-            {
-                float distToTrees = Math.Max(0.01f, vec3.distance(closestTree, camera.Position));
-
-                if (distToTrees < 50.0f)
+                if ((DateTime.Now - lastSave).TotalSeconds > 10)
                 {
-                    // Set bird sound position to position of the closest tree
-                    birdSound.Position = closestTree + new vec3(0, 2, 0);
+                    lastSave = DateTime.Now;
 
-                    // Attenuation (by distance) will be handled by Audio-Engine automatically
-                    birdSound.Volume = birdVolume;
+                    if (player != null)
+                    {
+                        player.Save();
+                        Tutorials.SaveState();
+                    }
+                    UpvoidMinerWorldGenerator.SaveEntities();
                 }
-                else
+
+                // update items
+                ItemManager.Update();
+
+                // Update all trees and keep position of closest tree, if any
+                vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);
+
+                // Handle bird sound volume (depending on distance to closest tree)
+                if (birdSound != null)
                 {
-                    // No close tree / birds at all...
-                    birdSound.Volume = 0.0f;
+                    float distToTrees = Math.Max(0.01f, vec3.distance(closestTree, camera.Position));
+
+                    if (distToTrees < 50.0f)
+                    {
+                        // Set bird sound position to position of the closest tree
+                        birdSound.Position = closestTree + new vec3(0, 2, 0);
+
+                        // Attenuation (by distance) will be handled by Audio-Engine automatically
+                        birdSound.Volume = birdVolume;
+                    }
+                    else
+                    {
+                        // No close tree / birds at all...
+                        birdSound.Volume = 0.0f;
+                    }
                 }
             }
         }

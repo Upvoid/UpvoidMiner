@@ -24,6 +24,7 @@ using Engine.Modding;
 using Engine.Resources;
 using Engine.Scripting;
 using Engine.Rendering;
+using Engine.Statistics;
 using Engine.Physics;
 using Engine.Network;
 using Engine.Input;
@@ -255,79 +256,81 @@ namespace UpvoidMiner
             // Update character controller
             Character.Update(elapsedSeconds);
 
-            // Tell AudioEngine where the listener is at the moment
-            Audio.SetListenerPosition(camera);
-
-            // Use current item?
-            if (isUsingItem && (DateTime.Now - lastItemUse).TotalMilliseconds > millisecondsBetweenItemUsages)
+            using (new ProfileAction("Player::Update", UpvoidMiner.Mod))
             {
-                TriggerItemUse();
-                lastItemUse = DateTime.Now;
-            }
+                // Tell AudioEngine where the listener is at the moment
+                Audio.SetListenerPosition(camera);
 
-            // Update drones.
-            foreach (var drone in Drones)
-                drone.Update(elapsedSeconds);
-            foreach (var dc in DroneConstraints)
-                dc.Update(elapsedSeconds);
-
-            bool menuOrInventoryOpen = Gui.IsInventoryOpen || Gui.IsMenuOpen;
-
-            if (!LocalScript.NoclipEnabled)
-            {
-                // Update camera when no menu/inventory is open
-                if (!menuOrInventoryOpen)
+                // Use current item?
+                if (isUsingItem && (DateTime.Now - lastItemUse).TotalMilliseconds > millisecondsBetweenItemUsages)
                 {
-                    // Update direction.
-                    vec3 camDir = CameraDirection;
-                    vec3 camLeft = vec3.cross(vec3.UnitY, camDir).Normalized;
-                    vec3 camUp = vec3.cross(camDir, camLeft);
+                    TriggerItemUse();
+                    lastItemUse = DateTime.Now;
+                }
 
-                    float mix = (float)Math.Pow(0.01, elapsedSeconds);
-                    vec3 targetDir = camDir;
-                    vec3 dir = Direction;
-                    dir.x = dir.x * mix + targetDir.x * (1 - mix);
-                    dir.z = dir.z * mix + targetDir.z * (1 - mix);
-                    Direction = dir.Normalized;
+                // Update drones.
+                foreach (var drone in Drones)
+                    drone.Update(elapsedSeconds);
+                foreach (var dc in DroneConstraints)
+                    dc.Update(elapsedSeconds);
 
-                    // Update player model.
-                    vec3 up = new vec3(0, 1, 0);
-                    vec3 left = vec3.cross(up, Direction);
-                    mat4 viewMat = new mat4(left, up, Direction, new vec3());
-                    /*rcTorsoShadow.Transform =
+                bool menuOrInventoryOpen = Gui.IsInventoryOpen || Gui.IsMenuOpen;
+
+                if (!LocalScript.NoclipEnabled)
+                {
+                    // Update camera when no menu/inventory is open
+                    if (!menuOrInventoryOpen)
+                    {
+                        // Update direction.
+                        vec3 camDir = CameraDirection;
+                        vec3 camLeft = vec3.cross(vec3.UnitY, camDir).Normalized;
+                        vec3 camUp = vec3.cross(camDir, camLeft);
+
+                        float mix = (float)Math.Pow(0.01, elapsedSeconds);
+                        vec3 targetDir = camDir;
+                        vec3 dir = Direction;
+                        dir.x = dir.x * mix + targetDir.x * (1 - mix);
+                        dir.z = dir.z * mix + targetDir.z * (1 - mix);
+                        Direction = dir.Normalized;
+
+                        // Update player model.
+                        vec3 up = new vec3(0, 1, 0);
+                        vec3 left = vec3.cross(up, Direction);
+                        mat4 viewMat = new mat4(left, up, Direction, new vec3());
+                        /*rcTorsoShadow.Transform =
                        viewMat * torsoTransform;*/
 
-                    // Update camera component.
-                    cameraComponent.Camera = camera;
+                        // Update camera component.
+                        cameraComponent.Camera = camera;
 
-                    // Also add 10cm of forward.xz direction for a "head offset"
-                    vec3 forward = Direction;
-                    forward.y = 0;
-                    cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
+                        // Also add 10cm of forward.xz direction for a "head offset"
+                        vec3 forward = Direction;
+                        forward.y = 0;
+                        cameraComponent.Transform = new mat4(-camLeft, camUp, -camDir, new vec3()) * mat4.Translate(forward * .1f);
 
-                    // Re-Center mouse if UI is not open.
-                    Rendering.MainViewport.SetMouseVisibility(false);
-                    Rendering.MainViewport.SetMouseGrab(true);
+                        // Re-Center mouse if UI is not open.
+                        Rendering.MainViewport.SetMouseVisibility(false);
+                        Rendering.MainViewport.SetMouseGrab(true);
+                    }
+                    else
+                    {
+                        // UI is open. Show mouse.
+                        Rendering.MainViewport.SetMouseVisibility(true);
+                        Rendering.MainViewport.SetMouseGrab(false);
+                    }
                 }
                 else
                 {
-                    // UI is open. Show mouse.
+                    cameraComponent.Camera = null;
                     Rendering.MainViewport.SetMouseVisibility(true);
                     Rendering.MainViewport.SetMouseGrab(false);
                 }
-            }
-            else
-            {
-                cameraComponent.Camera = null;
-                Rendering.MainViewport.SetMouseVisibility(true);
-                Rendering.MainViewport.SetMouseGrab(false);
-            }
 
-            /*mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset;
+                /*mat4 steamTransform = thisEntity.Transform * rcTorsoShadow.Transform * torsoSteamOffset;
             vec3 steamOrigin = new vec3(steamTransform * new vec4(0, 0, 0, 1));
             vec3 steamVeloMin = new vec3(steamTransform * new vec4(.13f, 0.05f, 0, 0));
             vec3 steamVeloMax = new vec3(steamTransform * new vec4(.16f, 0.07f, 0, 0));*/
-            /*psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
+                /*psTorsoSteam.SetSpawner2D(.03f, new BoundingSphere(steamOrigin, .01f), 
                                       steamVeloMin, steamVeloMax,
                                       new vec4(new vec3(.9f), .8f), new vec4(new vec3(.99f), .9f),
                                       2.0f, 3.4f,
@@ -335,49 +338,50 @@ namespace UpvoidMiner
                                       0, 360,
                                       -.2f, .2f);*/
 
-            // Update item preview.
-            if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
-            {
-                float maxRayQueryRange;
-                if (!LocalScript.NoclipEnabled && !GodMode)
+                // Update item preview.
+                if (Inventory.Selection != null && Inventory.Selection.HasRayPreview)
                 {
-                    maxRayQueryRange = maxRayQueryDistancePlayer;
-                }
-                else
-                {
-                    maxRayQueryRange = maxRayQueryDistanceNoClip;
-                }
+                    float maxRayQueryRange;
+                    if (!LocalScript.NoclipEnabled && !GodMode)
+                    {
+                        maxRayQueryRange = maxRayQueryDistancePlayer;
+                    }
+                    else
+                    {
+                        maxRayQueryRange = maxRayQueryDistanceNoClip;
+                    }
 
-                // Send a ray query to find the position on the terrain we are looking at.
-                RayHit hit = ContainingWorld.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * maxRayQueryRange, character.Body);
-                Item selection = Inventory.Selection;
-                if (hit != null)
-                {
-                    /// Subtract a few cm toward camera to increase stability near constraints.
-                    vec3 pos = hit.Position - camera.ForwardDirection * .04f;
+                    // Send a ray query to find the position on the terrain we are looking at.
+                    RayHit hit = ContainingWorld.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * maxRayQueryRange, character.Body);
+                    Item selection = Inventory.Selection;
+                    if (hit != null)
+                    {
+                        /// Subtract a few cm toward camera to increase stability near constraints.
+                        vec3 pos = hit.Position - camera.ForwardDirection * .04f;
 
-                    if (selection != null)
+                        if (selection != null)
+                        {
+                            Crosshair.Reset();
+                            selection.OnRayPreview(this, hit, Crosshair);
+                        }
+                    }
+                    else if (selection != null)
                     {
                         Crosshair.Reset();
-                        selection.OnRayPreview(this, hit, Crosshair);
+                        selection.OnRayPreview(this, null, Crosshair);
                     }
                 }
-                else if (selection != null)
-                {
+                if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
+                    Inventory.Selection.OnUpdatePreview(this, elapsedSeconds, Crosshair);
+
+                if (Inventory.Selection == null)
                     Crosshair.Reset();
-                    selection.OnRayPreview(this, null, Crosshair);
-                }
+
+                // Notify the gui if the player freezing status has changed since the last update frame.
+                if (WasFrozen != IsFrozen)
+                    Gui.OnUpdate();
+                WasFrozen = IsFrozen;
             }
-            if (Inventory.Selection != null && Inventory.Selection.HasUpdatePreview)
-                Inventory.Selection.OnUpdatePreview(this, elapsedSeconds, Crosshair);
-
-            if (Inventory.Selection == null)
-                Crosshair.Reset();
-
-            // Notify the gui if the player freezing status has changed since the last update frame.
-            if (WasFrozen != IsFrozen)
-                Gui.OnUpdate();
-            WasFrozen = IsFrozen;
         }
 
         public void Lookaround(vec2 angleDelta)

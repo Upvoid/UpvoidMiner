@@ -12,11 +12,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>
-
 using System;
 using Engine.Universe;
 using Engine.Resources;
 using Engine.Rendering;
+using Engine.Statistics;
 using System.Text;
 using Engine;
 using System.Runtime.InteropServices;
@@ -45,15 +45,13 @@ namespace UpvoidMiner
         /// Backref to the world
         /// </summary>
         private World world;
-
         /// <summary>
         /// Dirt terrain resource.
         /// </summary>
         private TerrainResource terrainDirt;
-                private TerrainResource terrainRock;
-                private TerrainResource terrainDesert;
+        private TerrainResource terrainRock;
+        private TerrainResource terrainDesert;
         private TerrainResource terrainOreGold;
-
 
         [Serializable]
         public class EntitySave
@@ -69,85 +67,88 @@ namespace UpvoidMiner
 
             public List<TreeSave> trees = new List<TreeSave>();
         }
+
         public static EntitySave entitySave = new EntitySave();
         public static List<Tree> trees = new List<Tree>();
-
         // Updates all trees and returns position of closest one
         public static vec3 UpdateTrees(vec3 refPos)
         {
-            // Settings
-            int maxTrunks = (int)(Settings.settings.MaxTrees);
-            int maxLeaves = (int)(Settings.settings.MaxTrees);
-            int maxDisTrunks = (int)(Settings.settings.MaxTreeDistance);
-            int maxDisLeaves = (int)(Settings.settings.MaxTreeDistance);
-
-            float minDist = float.MaxValue;
-            vec3 closestTree = new vec3(float.MaxValue);
-
-            int visCountTrunk = 0;
-            int visCountLeaves = 0;
-            List<Tree> trunks = new List<Tree>();
-            List<Tree> leaves = new List<Tree>();
-            foreach (Tree t in trees)
+            using (new ProfileAction("UpdateTrees", UpvoidMiner.Mod))
             {
-                float dis = vec3.distance(refPos, t.Position);
+                // Settings
+                int maxTrunks = (int)(Settings.settings.MaxTrees);
+                int maxLeaves = (int)(Settings.settings.MaxTrees);
+                int maxDisTrunks = (int)(Settings.settings.MaxTreeDistance);
+                int maxDisLeaves = (int)(Settings.settings.MaxTreeDistance);
 
-                // Keep distance to closest tree
-                if (dis < minDist)
+                float minDist = float.MaxValue;
+                vec3 closestTree = new vec3(float.MaxValue);
+
+                int visCountTrunk = 0;
+                int visCountLeaves = 0;
+                List<Tree> trunks = new List<Tree>();
+                List<Tree> leaves = new List<Tree>();
+                foreach (Tree t in trees)
                 {
-                    minDist = dis;
-                    closestTree = t.Position;
+                    float dis = vec3.distance(refPos, t.Position);
+
+                    // Keep distance to closest tree
+                    if (dis < minDist)
+                    {
+                        minDist = dis;
+                        closestTree = t.Position;
+                    }
+
+                    bool vTrunk = dis < maxDisTrunks;
+                    bool vLeaves0 = dis < maxDisLeaves;
+
+                    if (vTrunk)
+                    {
+                        ++visCountTrunk;
+                        trunks.Add(t);
+                    }
+                    else
+                        foreach (var r in t.RjTrunk)
+                            r.Visible = false;
+
+                    if (vLeaves0)
+                    {
+                        ++visCountLeaves;
+                        leaves.Add(t);
+                    }
+                    else
+                        foreach (var r in t.RjLeaves0)
+                            r.Visible = false;
                 }
 
-                bool vTrunk = dis < maxDisTrunks;
-                bool vLeaves0 = dis < maxDisLeaves;
-
-                if (vTrunk)
+                // Max trees
+                if (visCountTrunk > maxTrunks)
                 {
-                    ++visCountTrunk;
-                    trunks.Add(t);
+                    trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
+                    for (int i = 0; i < trunks.Count; ++i)
+                        foreach (var r in trunks[i].RjTrunk)
+                            r.Visible = i < maxTrunks;
                 }
                 else
-                    foreach (var r in t.RjTrunk)
-                        r.Visible = false;
+                    foreach (var t in trunks)
+                        foreach (var r in t.RjTrunk)
+                            r.Visible = true;
 
-                if (vLeaves0)
+                if (visCountLeaves > maxLeaves)
                 {
-                    ++visCountLeaves;
-                    leaves.Add(t);
+                    trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
+                    for (int i = 0; i < trunks.Count; ++i)
+                        foreach (var r in trunks[i].RjLeaves0)
+                            r.Visible = i < maxLeaves;
                 }
                 else
-                    foreach (var r in t.RjLeaves0)
-                        r.Visible = false;
-            }
+                    foreach (var t in leaves)
+                        foreach (var r in t.RjLeaves0)
+                            r.Visible = true;
 
-            // Max trees
-            if (visCountTrunk > maxTrunks)
-            {
-                trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
-                for (int i = 0; i < trunks.Count; ++i)
-                    foreach (var r in trunks[i].RjTrunk)
-                        r.Visible = i < maxTrunks;
+                // Return distance to closest tree
+                return closestTree;
             }
-            else
-                foreach (var t in trunks)
-                    foreach (var r in t.RjTrunk)
-                        r.Visible = true;
-
-            if (visCountLeaves > maxLeaves)
-            {
-                trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
-                for (int i = 0; i < trunks.Count; ++i)
-                    foreach (var r in trunks[i].RjLeaves0)
-                        r.Visible = i < maxLeaves;
-            }
-            else
-                foreach (var t in leaves)
-                    foreach (var r in t.RjLeaves0)
-                        r.Visible = true;
-
-            // Return distance to closest tree
-            return closestTree;
         }
 
         /// <summary>
@@ -178,7 +179,6 @@ namespace UpvoidMiner
             world.TerrainGenerator.SetCsgNode(Instance.createTerrain());
         }
 
-
         /// <summary>
         /// Creates the CSG node network for the terrain generation.
         /// </returns>
@@ -193,7 +193,7 @@ namespace UpvoidMiner
                 // Introduce variables.
                 hillsDefines.Append("pos = vec3(x, y, z);");
                 // Import perlin noise.
-                                hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
+                hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
                 hillsDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
                 // Hill structue.
                 //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
@@ -202,10 +202,10 @@ namespace UpvoidMiner
                 string hillsDef = hillsDefines.ToString();
 
                 var texture = new TextureSampleNode(Resources.UseTextureData("Heightmap", UpvoidMiner.ModDomain),
-                    TextureSampleNode.CoordinateMode.Relative,
-                    TextureSampleNode.InterpolationMode.Linear,
-                    TextureSampleNode.WrapUVWMode.Repeat,
-                    0f);
+                                                    TextureSampleNode.CoordinateMode.Relative,
+                                                    TextureSampleNode.InterpolationMode.Linear,
+                                                    TextureSampleNode.WrapUVWMode.Repeat,
+                                                    0f);
 
                 string heightmapRocks = "Heightmap = -225 * (texture(x/5000, z/5000).x - 0.5);";
                 string heightmapDirt = "Heightmap = -225 * (texture(x/5000, z/5000).y - 0.5);";
@@ -259,7 +259,7 @@ namespace UpvoidMiner
             //concat.AddNode(new CsgCollapseNode());
 
 
-                        return concat;
+            return concat;
         }
 
         public static void SaveEntities()
@@ -267,6 +267,7 @@ namespace UpvoidMiner
             Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathEntities).Directory.FullName);
             File.WriteAllText(UpvoidMiner.SavePathEntities, JsonConvert.SerializeObject(entitySave, Formatting.Indented));
         }
+
         public static void LoadEntities()
         {
             if (File.Exists(UpvoidMiner.SavePathEntities))
@@ -295,7 +296,6 @@ namespace UpvoidMiner
 
         public static void TreeCreate(vec3 pos, int seed, Tree.TreeType type)
         {
-        return;
             // at least 2m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
             foreach (var tree in entitySave.trees)
