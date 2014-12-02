@@ -47,8 +47,6 @@ void main()
 
     size *= 1 + 1 * smoothstep(0.7, 1.0, aParticleLife);
 
-    vParticleColor.rgb *= shadowFactor(worldPos.xyz);
-
     eyePos.xy += tangent * (aPosition.x * size)
                 + normal * (aPosition.y * size);
 
