@@ -4,6 +4,7 @@
 
 uniform mat4 uModelMatrix;
 uniform float uFadeDistance = 10000;
+uniform float uDiscardBias = 0.5;
 
 in vec3 aPosition;
 in vec3 aNormal;
@@ -15,14 +16,11 @@ in vec3 aInstNormal;
 in vec3 aInstTangent;
 in vec3 aInstColor;
 
-out vec3 vInstNormal;
-out vec3 vInstPosition;
-out vec3 vNormal;
-out vec3 vColor;
-out vec3 vTangent;
 out vec3 vWorldPos;
+out vec3 vNormal;
 out vec2 vTexCoord;
-out vec3 vObjPos;
+out float vTexUnit;
+out float vDisc;
 
 vec3 windOffset(float height, vec3 pos)
 {
@@ -32,17 +30,10 @@ vec3 windOffset(float height, vec3 pos)
 
 void main()
 {
-    vColor = aInstColor;
-
     float tanLength = length(aInstTangent);
     vec3 instBitangent = normalize(cross(aInstNormal, aInstTangent));
     vec3 instTangent = normalize(cross(instBitangent, aInstNormal));
-    mat3 instRot = mat3(
-                instBitangent,
-                normalize(aInstNormal),
-                instTangent
-                );
-   mat4 instModel = mat4(
+    mat4 instModel = mat4(
             vec4(instBitangent * tanLength, 0.0),
             vec4(aInstNormal, 0.0),
             vec4(instTangent * tanLength, 0.0),
@@ -50,21 +41,32 @@ void main()
             );
 
     // world space normal:
-    vNormal = mat3(uModelMatrix) * instRot * aNormal;
-    vTangent = mat3(uModelMatrix) * instRot * aTangent;
     vTexCoord = aTexCoord;
 
-    vInstNormal = aInstNormal;
-    vInstPosition = aInstPosition;
+    vNormal = aInstNormal;
 
     float posFactor = 1 - smoothstep(uFadeDistance * .8, uFadeDistance, distance(aInstPosition, uCameraPosition));
 
-    vObjPos = (uModelMatrix * vec4(aInstPosition, 1.0)).xyz;
+    vec3 vObjPos = (uModelMatrix * vec4(aInstPosition, 1.0)).xyz;
+
+    // tex unit
+   const int numberOfFlowerTypes = 5;
+   
+   float positionAddition = 0.5 + 0.5 * sin(0.018*vObjPos.x + 0.003*vObjPos.z + cos(0.1*vObjPos.z + 0.01 * vObjPos.x));
+   positionAddition *= numberOfFlowerTypes;
+
+    vTexUnit = int(positionAddition + 0.5) % 15;
 
     // world space position:
-    vec4 worldPos = uModelMatrix * instModel * vec4(aPosition * posFactor, 1.0);
+    vec4 worldPos = uModelMatrix * (instModel * vec4(aPosition * posFactor, 1.0));
     worldPos.xyz += windOffset(aPosition.y, aInstPosition);
     vWorldPos = worldPos.xyz;
+
+    // disc
+    float disc = uDiscardBias;
+    disc = distance(vWorldPos, uCameraPosition);
+    disc = (1-uDiscardBias) + 0.05-clamp(disc/50,0,1-uDiscardBias);
+    vDisc = disc;
 
     // projected vertex position used for the interpolation
     gl_Position  = uViewProjectionMatrix * worldPos;
