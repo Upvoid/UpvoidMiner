@@ -79,6 +79,8 @@ namespace UpvoidMiner
         /// </summary>
         public static bool NoclipEnabled { get; private set; }
 
+        private static bool FirstSettingReset = false;
+
         /// <summary>
         /// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
         /// </summary>
@@ -138,14 +140,22 @@ namespace UpvoidMiner
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
             Settings.settings.ResetSettings(); // aka load from settings
+            Scripting.RegisterUpdateFunction(f => {
+                if (!FirstSettingReset && Rendering.ActiveMainPipeline != null)
+                {
+                    FirstSettingReset = true;
+                    Settings.settings.ResetSettings(); // for internalsize
+                }
+            }, module);
+
             UIProxyManager.AddProxy(Settings.settings);
             UIProxyManager.AddProxy(stats);
             UIProxyManager.AddProxy(memFailsafe);
 
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGame",
-                (WebRequest request, WebResponse response) => Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html"));
+                                                              (WebRequest request, WebResponse response) => Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html"));
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "QuitGameReally",
-                (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
+                                                              (WebRequest request, WebResponse response) => Scripting.ShutdownEngine());
 
             // Register for input press events.
             Input.OnPressInput += HandlePressInput;

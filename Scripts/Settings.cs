@@ -81,11 +81,8 @@ namespace UpvoidMiner
         private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
         private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
         private bool settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
-
         private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
-
         private bool settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", Rendering.AreGraphicsMinimal());
-
         private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
         private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
         private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
@@ -94,11 +91,45 @@ namespace UpvoidMiner
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
         private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
         private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
-
         private bool pipelineChanges = false;
 
         [UITextBox]
         public string InternalSize { get; set; }
+
+        [UIButton]
+        public void ApplyInternalSize()
+        {
+            int w = -1, h = -1;
+            if (InternalSize.Contains("x"))
+            {
+                var split = InternalSize.Split('x');
+                if (split.Length == 2)
+                {
+                    int tw, th;
+                    if (int.TryParse(split[0], out tw) &&
+                        int.TryParse(split[1], out th) &&
+                        tw >= 2 &&
+                        th >= 2)
+                    {
+                        w = tw;
+                        h = th;
+                    }
+                }
+            }
+
+            if (w == -1)
+            {
+                w = Engine.Windows.Windows.GetWindow(0).GetWidth();
+                h = Engine.Windows.Windows.GetWindow(0).GetHeight();
+                if (Rendering.ActiveMainPipeline != null)
+                    Rendering.ActiveMainPipeline.SetInternalRenderSize(w, h);
+                w = -1;
+                h = -1;
+            }
+
+            if (Rendering.ActiveMainPipeline != null)
+                Rendering.ActiveMainPipeline.SetInternalRenderSize(w, h);
+        }
 
         [UICheckBox]
         public bool DigParticles
@@ -121,7 +152,7 @@ namespace UpvoidMiner
             {
                 var mode = StringToVideoMode(vidMode);
                 if (mode.Width > 0 && mode.Height > 0 &&
-                    (mode.Width < 1100 || mode.Height < 700) )
+                    (mode.Width < 1100 || mode.Height < 700))
                     continue;
                 supportedVideoModes.Add(mode);
             }
@@ -208,7 +239,8 @@ namespace UpvoidMiner
             get { return settingMinimalGraphics; }
             set
             {
-                if (settingMinimalGraphics != value) pipelineChanges = true;
+                if (settingMinimalGraphics != value)
+                    pipelineChanges = true;
                 settingMinimalGraphics = value;
             }
         }
@@ -219,7 +251,8 @@ namespace UpvoidMiner
             get { return settingShadows; }
             set
             {
-                if (settingShadows != value) pipelineChanges = true;
+                if (settingShadows != value)
+                    pipelineChanges = true;
                 settingShadows = value;
             }
         }
@@ -230,7 +263,8 @@ namespace UpvoidMiner
             get { return settingLensflares; }
             set
             {
-                if (settingLensflares != value) pipelineChanges = true;
+                if (settingLensflares != value)
+                    pipelineChanges = true;
                 settingLensflares = value;
             }
         }
@@ -241,7 +275,8 @@ namespace UpvoidMiner
             get { return settingVolumetricScattering; }
             set
             {
-                if (settingVolumetricScattering != value) pipelineChanges = true;
+                if (settingVolumetricScattering != value)
+                    pipelineChanges = true;
                 settingVolumetricScattering = value;
             }
         }
@@ -252,7 +287,8 @@ namespace UpvoidMiner
             get { return settingTonemapping; }
             set
             {
-                if (settingTonemapping != value) pipelineChanges = true;
+                if (settingTonemapping != value)
+                    pipelineChanges = true;
                 settingTonemapping = value;
             }
         }
@@ -263,7 +299,8 @@ namespace UpvoidMiner
             get { return settingFXAA; }
             set
             {
-                if (settingFXAA != value) pipelineChanges = true;
+                if (settingFXAA != value)
+                    pipelineChanges = true;
                 settingFXAA = value;
             }
         }
@@ -363,6 +400,8 @@ namespace UpvoidMiner
             else
                 Scripting.SetUserSettingString("WindowManager/Fullscreen", "-1");
 
+            Scripting.SetUserSettingString("WindowManager/InternalSize", InternalSize);
+
             string vidModeString = settingResolution.Width + "x" + settingResolution.Height;
             Scripting.SetUserSettingString("WindowManager/Resolution", vidModeString);
 
@@ -410,6 +449,9 @@ namespace UpvoidMiner
 
             settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
             settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
+            
+            InternalSize = Scripting.GetUserSettingString("WindowManager/InternalSize", "");
+            ApplyInternalSize();
 
             MinLodDistance = (int)Scripting.GetUserSettingNumber("Graphics/Min Lod Distance", 20);
             LodFalloff = (int)Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 30);

@@ -42,7 +42,7 @@ namespace UpvoidMiner
         /// </summary>
         private static Random random = new Random();
         /// <summary>
-        /// Backref to the world 
+        /// Backref to the world
         /// </summary>
         private World world;
 
@@ -50,8 +50,8 @@ namespace UpvoidMiner
         /// Dirt terrain resource.
         /// </summary>
         private TerrainResource terrainDirt;
-		private TerrainResource terrainRock;
-		private TerrainResource terrainDesert;
+                private TerrainResource terrainRock;
+                private TerrainResource terrainDesert;
         private TerrainResource terrainOreGold;
 
 
@@ -83,7 +83,7 @@ namespace UpvoidMiner
 
             float minDist = float.MaxValue;
             vec3 closestTree = new vec3(float.MaxValue);
-            
+
             int visCountTrunk = 0;
             int visCountLeaves = 0;
             List<Tree> trunks = new List<Tree>();
@@ -107,16 +107,16 @@ namespace UpvoidMiner
                     ++visCountTrunk;
                     trunks.Add(t);
                 }
-                else 
+                else
                     foreach (var r in t.RjTrunk)
                         r.Visible = false;
 
                 if (vLeaves0)
                 {
-                    ++visCountLeaves;                    
+                    ++visCountLeaves;
                     leaves.Add(t);
                 }
-                else 
+                else
                     foreach (var r in t.RjLeaves0)
                         r.Visible = false;
             }
@@ -177,8 +177,8 @@ namespace UpvoidMiner
             world.SetTerrainGenerator(new TerrainGenerator());
             world.TerrainGenerator.SetCsgNode(Instance.createTerrain());
         }
-        
-        
+
+
         /// <summary>
         /// Creates the CSG node network for the terrain generation.
         /// </returns>
@@ -188,12 +188,12 @@ namespace UpvoidMiner
 
             {
                 CsgOpUnion union = new CsgOpUnion();
-                
+
                 StringBuilder hillsDefines = new StringBuilder();
                 // Introduce variables.
                 hillsDefines.Append("pos = vec3(x, y, z);");
                 // Import perlin noise.
-				hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
+                                hillsDefines.Append("perlins(x,y,z) $= ::Perlin;");
                 hillsDefines.Append("perlin(v) = perlins(v.x, v.y, v.z);");
                 // Hill structue.
                 //hillsDefines.Append("Hills = perlins(x / 300, 0.00001 * y, z / 300) + perlins(x / 100, 0.00001 * y, z / 100) * .5 + perlins(x / 30, 0.00001 * y, z / 30) * .25 + perlins(x / 10, 0.00001 * y, z / 10) * .05;");
@@ -223,16 +223,16 @@ namespace UpvoidMiner
 
                 //var goldNodeNetwork = NodeNetworkHelper.CreateExprWithTextureSampling(hillsDef + oreDef + "Ore + clamp(y+20, -10, 0)*0.1", UpvoidMiner.ModDomain, "texture", texture);
                 //union.AddNode(new CsgExpression(terrainOreGold.Index, goldNodeNetwork));
-                
+
                 //union.AddNode(groundTerrain);
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
                 concat.AddNode(union);
             }
             /*
             {
-                
+
                 CsgOpDiff diff = new CsgOpDiff();
-                
+
                 StringBuilder caveDefines = new StringBuilder();
                 // Introduce variables.
                 caveDefines.Append("pos = vec3(x, y, z);");
@@ -245,7 +245,7 @@ namespace UpvoidMiner
                 caveDefines.Append("CaveDensity = 0.3 + abs(perlins((x+perlinOffsetX) / 30, y / 30, (z+perlinOffsetZ) / 30));");
                 caveDefines.Append("Caves = CaveDensity;");
                 string caveDef = "y";// caveDefines.ToString();
-                
+
                 diff.AddNode(new CsgExpression(1, "y", UpvoidMiner.ModDomain));
                 concat.AddNode(diff);
             }
@@ -253,15 +253,15 @@ namespace UpvoidMiner
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("DesertVegetation", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
-            
-            
+
+
             // No collapsing terrain for now
             //concat.AddNode(new CsgCollapseNode());
 
 
-			return concat;
+                        return concat;
         }
-        
+
         public static void SaveEntities()
         {
             Directory.CreateDirectory(new FileInfo(UpvoidMiner.SavePathEntities).Directory.FullName);
@@ -295,6 +295,7 @@ namespace UpvoidMiner
 
         public static void TreeCreate(vec3 pos, int seed, Tree.TreeType type)
         {
+        return;
             // at least 2m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
             foreach (var tree in entitySave.trees)
@@ -319,7 +320,7 @@ namespace UpvoidMiner
             left.x *= 0.8f + 0.4f * (float)random.NextDouble();
             up.y *= 0.7f + 0.6f * (float)random.NextDouble();
             front.z *= 0.8f + 0.4f * (float)random.NextDouble();
-            
+
             mat4 transform1 = mat4.Translate(pos);
             mat4 transform2 = new mat4(left, up, front, vec3.Zero);
 
