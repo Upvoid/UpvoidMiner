@@ -37,6 +37,7 @@ OUTPUT_CHANNEL_Color(vec3)
 OUTPUT_CHANNEL_Normal(vec3)
 OUTPUT_CHANNEL_Position(vec3)
 
+// see https://www.opengl.org/discussion_boards/showthread.php/177520-Mipmap-level-calculation-using-dFdx-dFdy
 void terrainFunction(float scale, out vec3 color, out vec3 normal)
 {
     // texturing
