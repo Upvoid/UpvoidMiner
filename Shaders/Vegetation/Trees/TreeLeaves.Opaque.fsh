@@ -7,6 +7,7 @@
 uniform sampler2D uColor;
 
 uniform vec4 uColorModulation = vec4(1.0);
+uniform float uVisibility = 1.0;
 
 in vec2 vTexCoord;
 in vec3 vNormal;
@@ -24,6 +25,10 @@ void main()
     if(texColor.a < vDisc)
         discard;
 
+   float posFactor = uVisibility;
+   if(int(13.479*gl_FragCoord.x + gl_FragCoord.y * 273.524 * gl_FragCoord.x) % 200 >= posFactor * 250)
+      discard;
+        
     texColor.rgb /= texColor.a + 0.001; // premultiplied alpha
     texColor.rgb *= uColorModulation.rgb;
 

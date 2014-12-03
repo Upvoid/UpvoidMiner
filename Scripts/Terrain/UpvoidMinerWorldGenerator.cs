@@ -70,24 +70,36 @@ namespace UpvoidMiner
 
         public static EntitySave entitySave = new EntitySave();
         public static List<Tree> trees = new List<Tree>();
+
+
+        public static void setTreeLodSettings(float minFadeDistance, float maxFadeDistance, float fadeTime)
+        {
+            foreach (Tree t in trees)
+            {
+                // Configure LoD for all Leaves-Renderjobs
+                foreach (RenderComponent r in t.RjLeaves0)
+                {
+                    r.ConfigureLod(minFadeDistance, maxFadeDistance, fadeTime);
+                }
+
+                // Configure LoD for all Trunk-Renderjobs
+                foreach (RenderComponent r in t.RjTrunk)
+                {
+                    r.ConfigureLod(minFadeDistance, maxFadeDistance, fadeTime);
+                }
+            }
+        }
+
+
         // Updates all trees and returns position of closest one
         public static vec3 UpdateTrees(vec3 refPos)
         {
             using (new ProfileAction("UpdateTrees", UpvoidMiner.Mod))
             {
-                // Settings
-                int maxTrunks = (int)(Settings.settings.MaxTrees);
-                int maxLeaves = (int)(Settings.settings.MaxTrees);
-                int maxDisTrunks = (int)(Settings.settings.MaxTreeDistance);
-                int maxDisLeaves = (int)(Settings.settings.MaxTreeDistance);
 
                 float minDist = float.MaxValue;
                 vec3 closestTree = new vec3(float.MaxValue);
 
-                int visCountTrunk = 0;
-                int visCountLeaves = 0;
-                List<Tree> trunks = new List<Tree>();
-                List<Tree> leaves = new List<Tree>();
                 foreach (Tree t in trees)
                 {
                     float dis = vec3.distance(refPos, t.Position);
@@ -99,52 +111,7 @@ namespace UpvoidMiner
                         closestTree = t.Position;
                     }
 
-                    bool vTrunk = dis < maxDisTrunks;
-                    bool vLeaves0 = dis < maxDisLeaves;
-
-                    if (vTrunk)
-                    {
-                        ++visCountTrunk;
-                        trunks.Add(t);
-                    }
-                    else
-                        foreach (var r in t.RjTrunk)
-                            r.Visible = false;
-
-                    if (vLeaves0)
-                    {
-                        ++visCountLeaves;
-                        leaves.Add(t);
-                    }
-                    else
-                        foreach (var r in t.RjLeaves0)
-                            r.Visible = false;
                 }
-
-                // Max trees
-                if (visCountTrunk > maxTrunks)
-                {
-                    trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
-                    for (int i = 0; i < trunks.Count; ++i)
-                        foreach (var r in trunks[i].RjTrunk)
-                            r.Visible = i < maxTrunks;
-                }
-                else
-                    foreach (var t in trunks)
-                        foreach (var r in t.RjTrunk)
-                            r.Visible = true;
-
-                if (visCountLeaves > maxLeaves)
-                {
-                    trunks.Sort((t1, t2) => vec3.distance(refPos, t1.Position).CompareTo(vec3.distance(refPos, t2.Position)));
-                    for (int i = 0; i < trunks.Count; ++i)
-                        foreach (var r in trunks[i].RjLeaves0)
-                            r.Visible = i < maxLeaves;
-                }
-                else
-                    foreach (var t in leaves)
-                        foreach (var r in t.RjLeaves0)
-                            r.Visible = true;
 
                 // Return distance to closest tree
                 return closestTree;

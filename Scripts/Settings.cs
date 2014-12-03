@@ -91,6 +91,7 @@ namespace UpvoidMiner
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
         private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
         private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
+        private int settingMaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 150);
         private bool pipelineChanges = false;
 
         [UITextBox]
@@ -356,11 +357,22 @@ namespace UpvoidMiner
 
         public float MouseSensitivityF { get { return MouseSensitivity / 100f; } }
 
-        [UISlider(10, 500)]
-        public int MaxTrees { get; set; }
-
-        [UISlider(10, 500)]
-        public int MaxTreeDistance { get; set; }
+        [UISlider(20, 500)]
+        public int MaxTreeDistance 
+        { 
+            get
+            {
+                return settingMaxTreeDistance;
+            }
+            set
+            {
+                float fadeOutMin = Math.Max(5, value - 5);     // >= 5
+                float fadeOutMax = Math.Max(10, value + 5);    // >= 10
+                float fadeTime = 1.0f; // 1 second
+                UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
+                settingMaxTreeDistance = value;
+            }
+        }
 
         [UIButton]
         public void ApplySettings()
@@ -392,7 +404,6 @@ namespace UpvoidMiner
 
             Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
             Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
-            Scripting.SetUserSettingNumber("Graphics/Max Trees", MaxTrees);
             Scripting.SetUserSettingNumber("Graphics/Max Tree Distance", MaxTreeDistance);
 
             if (settingFullscreen)
@@ -455,8 +466,7 @@ namespace UpvoidMiner
 
             MinLodDistance = (int)Scripting.GetUserSettingNumber("Graphics/Min Lod Distance", 20);
             LodFalloff = (int)Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 30);
-            MaxTrees = (int)Scripting.GetUserSettingNumber("Graphics/Max Trees", 200);
-            MaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 300);
+            MaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 150);
 
             // Re-apply the former settings
             Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
