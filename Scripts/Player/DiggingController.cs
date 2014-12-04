@@ -24,6 +24,7 @@ using Engine.Rendering;
 using Engine.Physics;
 using System.Collections.Generic;
 using UpvoidMiner.UI;
+using Engine.Statistics;
 
 namespace UpvoidMiner
 {
@@ -633,12 +634,12 @@ namespace UpvoidMiner
                     axisToRotateAbout *= rotSpeed;
 
                     particles.particlesStones.AddParticle(
-                        partPos.x.ToString() + ";" + partPos.y.ToString() + ";" + partPos.z.ToString() + ";" + // pos xyz
-                        partVel.x.ToString() + ";" + partVel.y.ToString() + ";" + partVel.z.ToString() + ";" + // vel xyz
-                        partSize.ToString() + ";" + curLife.ToString() + ";" + maxLife.ToString() + ";" + // size, life, lifeMax
-                        tangent.x.ToString() + ";" + tangent.y.ToString() + ";" + tangent.z.ToString() + ";" + // tangent xyz
-                        biTangent.x.ToString() + ";" + biTangent.y.ToString() + ";" + biTangent.z.ToString() + ";" + // bitangent xyz
-                        axisToRotateAbout.x.ToString() + ";" + axisToRotateAbout.y.ToString() + ";" + axisToRotateAbout.z.ToString());  // axisToRotateAbout xyz
+                        partPos.x, partPos.y, partPos.z,
+                        partVel.x, partVel.y, partVel.z,
+                        partSize, curLife, maxLife,
+                        tangent.x, tangent.y, tangent.z,
+                        biTangent.x, biTangent.y, biTangent.z,
+                        axisToRotateAbout.x, axisToRotateAbout.y, axisToRotateAbout.z);
                 }
             }
         }
