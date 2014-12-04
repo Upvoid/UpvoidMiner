@@ -559,6 +559,7 @@ namespace UpvoidMiner
             {
                 public long Id;
                 public ToolType Type;
+                public ToolMaterial Material;
                 public int StackSize;
             }
 
@@ -574,10 +575,29 @@ namespace UpvoidMiner
                 public int StackSize;
             }
 
+            [Serializable]
+            public class RecipeItemSave
+            {
+                public long Id;
+                public ItemSave ResultSave;
+                public List<ItemSave> IngredientItemSaves;
+            }
+
+            [Serializable]
+            public class CraftingItemSave
+            {
+                public long Id;
+                public CraftingItem.ItemType Type;
+                public CraftingItem.MaterialType MaterialType;
+                public int StackSize;
+            }
+
             public ResourceItemSave ResourceItem;
             public ToolItemSave ToolItem;
             public MaterialItemSave MaterialItem;
             public PipetteItemSave PipetteItem;
+            public RecipeItemSave RecipeItem;
+            public CraftingItemSave CraftingItem;
 
             public long Id()
             {
@@ -587,6 +607,10 @@ namespace UpvoidMiner
                     return ToolItem.Id;
                 if (MaterialItem != null)
                     return MaterialItem.Id;
+                if (CraftingItem != null)
+                    return CraftingItem.Id;
+                if (RecipeItem != null)
+                    return RecipeItem.Id;
                 return -1;
             }
 
@@ -595,11 +619,16 @@ namespace UpvoidMiner
                 if (ResourceItem != null)
                     return new ResourceItem(TerrainResource.FromName(ResourceItem.Resource), ResourceItem.Volume);
                 if (ToolItem != null)
-                    return new ToolItem(ToolItem.Type, ToolItem.StackSize);
+                    return new ToolItem(ToolItem.Type, ToolItem.Material, ToolItem.StackSize);
                 if (MaterialItem != null)
                     return new MaterialItem(TerrainResource.FromName(MaterialItem.Resource), MaterialItem.Shape, new vec3(MaterialItem.SizeX, MaterialItem.SizeY, MaterialItem.SizeZ), MaterialItem.StackSize);
                 if (PipetteItem != null)
                     return new PipetteItem(PipetteItem.StackSize);
+                if (RecipeItem != null)
+                    return new RecipeItem(RecipeItem.ResultSave.DeserializeItem(), RecipeItem.IngredientItemSaves.Select(ingredient => ingredient.DeserializeItem()).ToList());
+                if (CraftingItem != null)
+                    return new CraftingItem(CraftingItem.Type,CraftingItem.MaterialType,CraftingItem.StackSize);
+
                 return null;
             }
         }
@@ -641,6 +670,7 @@ namespace UpvoidMiner
                             {
                                 Id = item.Id,
                                 StackSize = (item as ToolItem).StackSize,
+                                Material = (item as ToolItem).ToolMaterial,
                                 Type = (item as ToolItem).ToolType
                             }
                     };
@@ -681,6 +711,31 @@ namespace UpvoidMiner
                         {
                             Id = item.Id,
                             StackSize = (item as PipetteItem).StackSize
+                        }
+                    };
+                }
+                else if (item is RecipeItem)
+                {
+                    return new ItemSave
+                    {
+                        RecipeItem = new ItemSave.RecipeItemSave
+                        {
+                            Id = item.Id,
+                            ResultSave = saveObj((item as RecipeItem).Result),
+                            IngredientItemSaves = (item as RecipeItem).IngredientItems.Select(saveObj).ToList(),
+                        }
+                    };
+                }
+                else if (item is CraftingItem)
+                {
+                    return new ItemSave
+                    {
+                        CraftingItem = new ItemSave.CraftingItemSave
+                        {
+                            Id = item.Id,
+                            Type = (item as CraftingItem).Type,
+                            MaterialType = (item as CraftingItem).Material,
+                            StackSize = (item as CraftingItem).StackSize
                         }
                     };
                 }
@@ -742,7 +797,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.GodsShovel));
                 Inventory.AddItem(new ToolItem(ToolType.Shovel));
                 Inventory.AddItem(new ToolItem(ToolType.Axe));
-                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, ToolMaterial.Other,5));
                 Inventory.AddItem(new PipetteItem());
                 foreach (var resource in TerrainResource.ListResources())
                     Inventory.AddResource(resource, 1e9f);
@@ -784,7 +839,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
                 Inventory.AddItem(new ToolItem(ToolType.Axe));
                 //Inventory.AddItem(new ToolItem(ToolType.Hammer));
-                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, ToolMaterial.Other, 5));
 
                 // Testing resource/material items.
                 /*TerrainResource dirt = ContainingWorld.Terrain.QueryMaterialFromName("Dirt");
@@ -806,7 +861,54 @@ namespace UpvoidMiner
             // Resupply drones
             var drones = Inventory.Items.Sum(i => i is ToolItem && (i as ToolItem).ToolType == ToolType.DroneChain ? (i as ToolItem).StackSize : 0);
             if (drones < 5)
-                Inventory.AddItem(new ToolItem(ToolType.DroneChain, 5 - drones));
+                Inventory.AddItem(new ToolItem(ToolType.DroneChain, ToolMaterial.Other, 5 - drones));
+
+            // Resupply Recipes
+            foreach (var item in Inventory.Items.Reverse().OfType<RecipeItem>())
+            {
+                Inventory.Items.RemoveItem(item, true);
+            }
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.Handle,CraftingItem.MaterialType.Other,10), 
+                new List<Item>
+                    {
+                        new MaterialItem(TerrainResource.FromName("BirchWood"),MaterialShape.Cylinder, new vec3(0.3f,0.5f,0.3f))
+                    }));
+
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Wood),
+                new List<Item>
+                    {
+                        new ResourceItem(TerrainResource.FromName("BirchWood"), 0.1f)
+                    }));
+            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel,ToolMaterial.Wood),
+                new List<Item>
+                    {
+                        new CraftingItem(CraftingItem.ItemType.Handle),
+                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Wood)
+                    }));
+
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Stone),
+                new List<Item>
+                    {
+                        new ResourceItem(TerrainResource.FromName("Stone.09"), 0.1f)
+                    }));
+            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel, ToolMaterial.Stone),
+                new List<Item>
+                    {
+                        new CraftingItem(CraftingItem.ItemType.Handle),
+                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Stone)
+                    }));
+
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Copper),
+                new List<Item>
+                    {
+                        new ResourceItem(TerrainResource.FromName("Copper"), 0.1f)
+                    }));
+            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel, ToolMaterial.Copper),
+                new List<Item>
+                    {
+                        new CraftingItem(CraftingItem.ItemType.Handle),
+                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Copper)
+                    }));
 
             Gui.OnUpdate();
         }

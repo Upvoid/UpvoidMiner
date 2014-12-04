@@ -278,6 +278,13 @@
             <!-- Inventory -->
             <ui name="Inventory" id="inv-ui" onAdd="function(ui) { $(ui).find('.delete-menu').popover(); }">
                 <div class="panel panel-default">
+                    <div class="panel-heading">Recipes</div>
+                    <div class="panel-body inv-bag">
+                        <uicollection name="RecipeItems" class="inv-items"></uicollection>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
                     <div class="panel-heading">Tools</div>
                     <div class="panel-body inv-bag">
                         <uicollection name="ToolItems" class="inv-items"></uicollection>
@@ -321,6 +328,10 @@
                     $('.delete-menu').attr('data-content', $('.delete-menu-div').html());
                 });
             </script>
+            <uitemplate name="RecipeItem" class="inv-item">
+                <uicollection name="IconStack" class="itemstack"></uicollection>
+                <a class="item-btn" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+            </uitemplate>
             <uitemplate name="ToolItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
@@ -572,6 +583,47 @@
                 </div>
                 <uiobject name="HasUsageSettings" onvalue="function(el, val) { $('.usage-settings').css('display', val ? 'block' : 'none'); }"></uiobject>
             </ui>
+            </div>
+            <!-- Recipes -->
+            <style type="text/css">
+            .ingredientitem .itemstack{
+                position: absolute;
+                right: 12px;
+                top: 12px;
+            }
+            .ingredientitem {
+                position: relative;
+            }
+            .ingredientitem h4{
+                margin: 0;
+            }
+            </style>
+            <div class="recipe">
+            <ui name="Recipe" class="panel panel-default">
+                <div class="panel-heading">Craft Items from other items</div>
+                <div class="panel-body">
+                    <p style="position:relative;">
+                        Recipe: <uistring name="ResultName" tag="b" class="text-info"></uistring><br>
+                        <uicollection name="ResultIconStack" class="itemstack"></uicollection>
+                    </p>
+                    Ingredients:
+                    <uicollection name="IngredientItems" class="list-group"></uicollection>
+
+                    <div style="text-align:center">
+                        <uibutton name="BtnCraft" class="btn btn-primary disabled btn-craft-recipe" tag="a">Craft a XYZ</uibutton>
+                    </div>
+                </div>
+                <uiobject name="HasRecipeSettings" onvalue="function(el, val) { $('.recipe').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="CanCraft" onvalue="function(el,val) { var e = $(el).parent().find('.btn-craft-recipe'); if(!val) e.addClass('disabled'); else e.removeClass('disabled');}"></uiobject>
+            </ui>
+            <uitemplate name="IngredientItem" class="list-group-item ingredientitem" tag="a">
+                    <h4 class="list-group-item-heading">
+                        <uistring name="Amount" class="text-info" tag="span"></uistring>
+                        <uistring name="Name" tag="b"></uistring>
+                        <uicollection name="Icon" class="itemstack"></uicollection>
+                    </h4>
+                    <uiobject name="IsAvailable" onvalue="function(el,val) { var e = $(el).parent(); if(!val) e.addClass('list-group-item-danger'); else e.removeClass('list-group-item-danger');}"></uiobject>
+            </uitemplate>
             </div>
             <!-- Crafting -->
             <div class="crafting">

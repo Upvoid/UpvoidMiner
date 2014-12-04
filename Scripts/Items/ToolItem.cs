@@ -22,6 +22,13 @@ namespace UpvoidMiner
         GodsShovel,
         DroneChain
     }
+    public enum ToolMaterial
+    {
+        Wood,
+        Stone,
+        Copper,
+        Other,
+    }
 
     /// <summary>
     /// An item that is a tool
@@ -33,31 +40,47 @@ namespace UpvoidMiner
         /// </summary>
         public readonly ToolType ToolType;
 
+        public readonly ToolMaterial ToolMaterial;
+
         public override string Identifier
         {
             get
             {
-                return "00-Tools." + ((int)ToolType).ToString("00") + "-" + Name;
+                return "00-Tools." + ((int)ToolType).ToString("00") + "-" + ((int)ToolMaterial).ToString("00") + "-" +  Name;
             }
         }
 
-        public ToolItem(ToolType type, int stackSize = 1) :
+        public ToolItem(ToolType type, ToolMaterial material = ToolMaterial.Other, int stackSize = 1) :
             base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {
             ToolType = type;
-            Icon = ToolType.ToString();
+            ToolMaterial = material;
+            Icon = ToolType + (ToolMaterial == ToolMaterial.Other ? "" :  "," + ToolMaterial + "Mat");
+            string materialString = "";
+            switch (material)
+            {
+                case ToolMaterial.Wood:
+                    materialString = "Wooden";
+                    break;
+                case ToolMaterial.Stone:
+                    materialString = "Stone";
+                    break;
+                case ToolMaterial.Copper:
+                    materialString = "Stone";
+                    break;
+            }
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
-                    Name = "Pickaxe";
+                    Name = materialString + " Pickaxe";
                     Description = "Tool used for mining stone.";
                     break;
                 case ToolType.Shovel:
-                    Name = "Shovel";
+                    Name = materialString + " Shovel";
                     Description = "Tool used for excavating earth.";
                     break;
                 case ToolType.Axe:
-                    Name = "Axe";
+                    Name = materialString + " Axe";
                     Description = "Tool used for chopping trees.";
                     break;
                 case ToolType.GodsShovel:
@@ -65,7 +88,7 @@ namespace UpvoidMiner
                     Description = "The epic shovel of god.";
                     break;
                 case ToolType.Hammer:
-                    Name = "Hammer";
+                    Name = materialString + " Hammer";
                     Description = "Tool used for crafting mechanics.";
                     break;
 
@@ -90,6 +113,8 @@ namespace UpvoidMiner
                 return false;
             if (item.ToolType != ToolType)
                 return false;
+            if (item.ToolMaterial != ToolMaterial)
+                return false;
             
             return Merge(item, subtract, force, dryrun);
         }
@@ -99,7 +124,7 @@ namespace UpvoidMiner
         /// </summary>
         public override Item Clone()
         {
-            return new ToolItem(ToolType, StackSize);
+            return new ToolItem(ToolType, ToolMaterial, StackSize);
         }
 
         /// <summary>

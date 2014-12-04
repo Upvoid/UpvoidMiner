@@ -57,13 +57,16 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Audio\MusicQueue.cs" />
+    <Compile Include="Items\CraftingItem.cs" />
     <Compile Include="Items\ItemManager.cs" />
     <Compile Include="Items\PipetteItem.cs" />
+    <Compile Include="Items\RecipeItem.cs" />
     <Compile Include="LocalScript.cs" />
     <Compile Include="HostScript.cs" />
     <Compile Include="Player\CharacterController.cs" />
     <Compile Include="Player\CraftingUI.cs" />
     <Compile Include="Player\DiggingController.cs" />
+    <Compile Include="Player\RecipeUI.cs" />
     <Compile Include="Player\UsageUI.cs" />
     <Compile Include="Player\InventoryUI.cs" />
     <Compile Include="Player\Player.cs" />

@@ -25,8 +25,10 @@ namespace UpvoidMiner
         // Normal categories:
         Resources,
         Material,
-        Mechancis,
+        Mechanics,
         Tools,
+        Recipes,
+        Crafting,
 
         // Special/compound categories:
         All,

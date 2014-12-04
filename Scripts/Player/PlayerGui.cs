@@ -56,6 +56,10 @@ namespace UpvoidMiner
         /// </summary>
         private CraftingUI craftingUI = new CraftingUI();
         /// <summary>
+        /// Recipe UI
+        /// </summary>
+        private RecipeUI recipeUI = new RecipeUI();
+        /// <summary>
         /// Inventory UI
         /// </summary>
         private InventoryUI inventoryUI = new InventoryUI();
