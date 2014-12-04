@@ -90,6 +90,7 @@ namespace UpvoidMiner
         private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
         private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
         private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
+        private bool settingHideTutorial = Scripting.GetUserSetting("Misc/Hide Tutorial", false);
         private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
         private int settingMaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 150);
         private bool pipelineChanges = false;
@@ -235,6 +236,13 @@ namespace UpvoidMiner
         }
 
         [UICheckBox]
+        public bool HideTutorial
+        {
+            get { return settingHideTutorial; }
+            set { settingHideTutorial = value; }
+        }
+
+        [UICheckBox]
         public bool MinimalGraphics
         {
             get { return settingMinimalGraphics; }
@@ -358,7 +366,7 @@ namespace UpvoidMiner
         public float MouseSensitivityF { get { return MouseSensitivity / 100f; } }
 
         [UISlider(20, 500)]
-        public int MaxTreeDistance 
+        public int MaxTreeDistance
         { 
             get
             {
@@ -401,6 +409,7 @@ namespace UpvoidMiner
             Scripting.SetUserSetting("Graphics/Enable Dig Particles", settingDigParticles);
 
             Scripting.SetUserSettingNumber("Input/Mouse Sensitivity", settingMouseSensitivity);
+            Scripting.SetUserSetting("Misc/Hide Tutorial", settingHideTutorial);
 
             Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
             Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
@@ -454,6 +463,7 @@ namespace UpvoidMiner
             settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
 
             settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
+            settingHideTutorial = Scripting.GetUserSetting("Misc/Hide Tutorial", false);
 
             // property in order to trigger rebuilt
             Grass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
