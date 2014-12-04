@@ -866,7 +866,7 @@ namespace UpvoidMiner
             {
                 Inventory.Items.RemoveItem(item, true);
             }
-            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.Handle,CraftingItem.MaterialType.Other,10), 
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.Handle,CraftingItem.MaterialType.Other,4), 
                 new List<Item>
                     {
                         new MaterialItem(TerrainResource.FromName("BirchWood"),MaterialShape.Cylinder, new vec3(0.3f,0.5f,0.3f))
@@ -903,6 +903,13 @@ namespace UpvoidMiner
                         }));
                 }
             }
+
+            Inventory.AddItem(
+                new RecipeItem(new ResourceItem(TerrainResource.FromName("Copper"),0.1f),
+                    new List<Item>
+                            {
+                                new ResourceItem(TerrainResource.FromName("CopperOre"), 40.0f)
+                            }));
 
             Gui.OnUpdate();
         }

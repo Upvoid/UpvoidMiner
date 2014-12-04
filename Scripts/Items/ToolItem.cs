@@ -61,12 +61,18 @@ namespace UpvoidMiner
             {
                 case ToolMaterial.Wood:
                     materialString = "Wooden";
+                    digRadiusMaxFactor = digRadiusMaxFactorWood;
                     break;
                 case ToolMaterial.Stone:
                     materialString = "Stone";
+                    digRadiusMaxFactor = digRadiusMaxFactorStone;
                     break;
                 case ToolMaterial.Copper:
                     materialString = "Copper";
+                    digRadiusMaxFactor = digRadiusMaxFactorCopper;
+                    break;
+                default:
+                    digRadiusMaxFactor = 1.0f;
                     break;
             }
             switch (ToolType)
@@ -141,9 +147,13 @@ namespace UpvoidMiner
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
-        private const float digRadiusMinFactor = 0.4f;
+        private const float digRadiusMaxFactorWood = 0.5f;
+        private const float digRadiusMaxFactorStone = 1f;
+        private const float digRadiusMaxFactorCopper = 2f;
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
+        private const float digRadiusMinFactor = 0.4f;
+        private readonly float digRadiusMaxFactor = 0.4f;
 
         public float DigRadiusShovel { get { return digRadiusShovel; } }
 
@@ -272,9 +282,9 @@ namespace UpvoidMiner
             // Limit shape if non-noclip
             if (!LocalScript.NoclipEnabled && ToolType != ToolType.GodsShovel)
             {
-                if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
+                if (digRadiusShovel > digRadiusShovelInitial * digRadiusMaxFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMaxFactor;
                 if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
-                if (digRadiusPickaxe > digRadiusPickaxeInitial) digRadiusPickaxe = digRadiusPickaxeInitial;
+                if (digRadiusPickaxe > digRadiusPickaxeInitial * digRadiusMaxFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMaxFactor;
                 if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
             }
 
@@ -320,8 +330,24 @@ namespace UpvoidMiner
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
-                    // Pickaxe has small radius but can dig everywhere
-                    player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, null);
+                    // Pickaxe has small radius but can dig materials based up to its material + 1
+                    var mats = new List<int>
+                    {
+                        TerrainResource.FromName("Dirt").Index,
+                        TerrainResource.FromName("Desert").Index
+                    };
+                    switch (ToolMaterial)
+                    {
+                        case ToolMaterial.Wood:
+                            mats.Add(TerrainResource.FromName("Stone.09").Index);
+                            break;
+                        case ToolMaterial.Stone:
+                            mats.Add(TerrainResource.FromName("CopperOre").Index);
+                            goto case ToolMaterial.Wood;
+                        case ToolMaterial.Copper:
+                            goto case ToolMaterial.Stone;
+                    }
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, mats);
                     return;
 
                 case ToolType.Shovel:

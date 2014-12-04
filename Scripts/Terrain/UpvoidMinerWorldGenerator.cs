@@ -199,11 +199,12 @@ namespace UpvoidMiner
             }
             {
                 StringBuilder copperDefines = new StringBuilder();
-                copperDefines.Append("pos = vec3(x, y, z);");
+                copperDefines.Append("pos = vec3(x, y, z); start = 20; end = -180; plateau = 40;");
+                copperDefines.Append("center = (start+end)/2; width = (start-end)/2; f = width/(width-plateau);");
                 copperDefines.Append("perlins(x,y,z) $= ::Perlin;");
-                copperDefines.Append("Weight = clamp(1.5*(distance(y,-80)/60-1),-1,0);");
-                copperDefines.Append("Density = (perlins(x/10,y/10,z/10)+1)/2;");
-                copperDefines.Append("Weight + Density + 0.7");
+                copperDefines.Append("Weight = clamp(f*(distance(y,center)/width-1),-1,0);");
+                copperDefines.Append("Density = (perlins(x/40,y/40,z/40)+1)/2;");
+                copperDefines.Append("Weight + Density + 0.8");
                 string copperDef = copperDefines.ToString();
                 CsgExpression copperExpression = new CsgExpression(terrainCopperOre.Index,copperDef,UpvoidMiner.ModDomain);
                 CsgOpUnion union = new CsgOpUnion();
