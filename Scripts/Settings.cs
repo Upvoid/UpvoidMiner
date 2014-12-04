@@ -427,8 +427,8 @@ namespace UpvoidMiner
 
             // rebuild pipeline on changes
             // TODO: fixme
-            if (pipelineChanges)
-                Rendering.SetupDefaultPipeline(LocalScript.camera);
+            //if (pipelineChanges)
+            //    Rendering.SetupDefaultPipeline(LocalScript.camera);
             pipelineChanges = false;
         }
 
