@@ -43,9 +43,28 @@ namespace UpvoidMiner
 
     public class Settings : UIProxy
     {
+        private readonly static List<Setting> allSettings = new List<Setting>();
+        public static Settings settings;
 
-        public static Settings settings = new Settings();
+        private List<VideoMode> supportedVideoModes;
 
+        // Transforms a string of the form "widthxHeight" to VideoMode(width, height);
+        private static VideoMode StringToVideoMode(string vidModString)
+        {
+            string[] curMode = vidModString.Split('x');
+
+            Debug.Assert(curMode.Count() == 2);
+
+            if (curMode.Count() == 2)
+            {
+                return new VideoMode(int.Parse(curMode[0]), int.Parse(curMode[1]));
+            }
+
+            // Error
+            return new VideoMode(-2, -2);
+        }
+
+        // A VideoMode wraps a width/height pair
         public struct VideoMode
         {
             public int Width;
@@ -58,67 +77,145 @@ namespace UpvoidMiner
             }
         }
 
-        private List<VideoMode> supportedVideoModes;
 
-        private static VideoMode StringToVideoMode(string vidModString)
+        // Encapsulates one single setting
+        public abstract class Setting
         {
-            String[] curMode = vidModString.Split('x');
-
-            Debug.Assert(curMode.Count() == 2);
-
-            if (curMode.Count() == 2)
+            public string id;   // JSON key, e.g. "Graphics/Shadow Quality"
+            public string desc;  // a longer description, e.g. for tooltips, optional
+            public Setting(string identifier, string description)
             {
-                return new VideoMode(int.Parse(curMode[0]), int.Parse(curMode[1]));
+                id = identifier;
+                desc = description;
             }
 
-            // Error
-            return new VideoMode(-2, -2);
+            // Reload the setting from user.settings file
+            public abstract void reloadSettingFromFile();
+
+            // Save the current setting to user.settings file
+            public abstract void SaveSetting();
         }
-        // Local variables for the current settings values
-        private VideoMode settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
-        private bool settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-        private int settingMasterVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Master) * 100f);
-        private int settingSfxVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.SFX) * 100f);
-        private int settingMusicVolume = (int)(Audio.GetVolumeForSpecificAudioType((int)AudioType.Music) * 100f);
-        private bool settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
-        private int settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75.0);
-        private bool settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", Rendering.AreGraphicsMinimal());
-        private bool settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", true);
-        private bool settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
-        private bool settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
-        private bool settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-        private bool settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
-        private bool settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
-        private bool settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
-        private bool settingHideTutorial = Scripting.GetUserSetting("Misc/Hide Tutorial", false);
-        private double settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
-        private int settingMaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 150);
+
+        public class SettingDouble : Setting
+        {
+            public double value;
+            public double defValue;
+            public SettingDouble(string identifier, double defaultValue, string description = "") :
+                base(identifier, description)
+            {
+                defValue = defaultValue;
+
+                allSettings.Add(this);
+            }
+
+            public override void reloadSettingFromFile()
+            {
+                value = Scripting.GetUserSettingNumber(id, defValue);
+            }
+
+            public override void SaveSetting()
+            {
+                Scripting.SetUserSettingNumber(id, value);
+            }
+        }
+
+
+        public class SettingBool : Setting
+        {
+            public bool value;
+            public bool defValue;
+            public SettingBool(String identifier, bool defaultValue, String description = "") :
+                base(identifier, description)
+            {
+                defValue = defaultValue;
+
+                allSettings.Add(this);
+            }
+
+            public override void reloadSettingFromFile()
+            {
+                value = Scripting.GetUserSetting(id, defValue);
+            }
+
+            public override void SaveSetting()
+            {
+                Scripting.SetUserSetting(id, value);
+            }
+        }
+
+        // Window Manager
+        SettingDouble settingResolutionWidth          = new SettingDouble("WindowManager/Resolution/Width", -1);
+        SettingDouble settingResolutionHeight         = new SettingDouble("WindowManager/Resolution/Height", -1);
+        SettingDouble settingFullscreen               = new SettingDouble("WindowManager/Fullscreen", -1);
+        SettingDouble settingInternalResolutionWidth  = new SettingDouble("WindowManager/InternalResolution/Width", -1);
+        SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalResolution/Height", -1);
+
+        // Audio
+        SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
+        SettingDouble settingSfxVolume    = new SettingDouble("Audio/SFX Volume", 50);
+        SettingDouble settingMusicVolume  = new SettingDouble("Audio/Music Volume", 50);
+        SettingBool   settingMuteMusic    = new SettingBool("Audio/Mute Music", false);
+        
+        // Graphics
+        SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
+        SettingDouble settingShadowQuality        = new SettingDouble("Graphics/Shadow Quality", 512);
+        SettingBool   settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
+        SettingBool   settingTonemapping          = new SettingBool("Graphics/Enable Tonemapping", true);
+        SettingBool   settingFXAA                 = new SettingBool("Graphics/Enable FXAA", true);
+        SettingBool   settingLensflares           = new SettingBool("Graphics/Enable Lensflares", false);
+        SettingDouble settingFieldOfView          = new SettingDouble("Graphics/Field of View", 75.0);
+        
+        // LoD
+        SettingBool   settingGrass           = new SettingBool("Graphics/Enable Grass", true);
+        SettingBool   settingDigParticles    = new SettingBool("Graphics/Enable Dig Particles", true);
+        SettingDouble settingMaxTreeDistance = new SettingDouble("Graphics/Max Tree Distance", 150);
+        SettingDouble settingMinLodDistance  = new SettingDouble("Graphics/Min Lod Distance", 20);
+        SettingDouble settingLodFalloff      = new SettingDouble("Graphics/Lod Falloff", 30);
+        
+        // Other
+        SettingDouble settingMouseSensitivity = new SettingDouble("Input/Mouse Sensitivity", 0.5);
+        SettingBool   settingHideTutorial     = new SettingBool("Misc/Hide Tutorial", false);
+        SettingBool   settingShowStats        = new SettingBool("Debug/Show Stats", false);
+
+
         private bool pipelineChanges = false;
 
         [UITextBox]
-        public string InternalSize { get; set; }
+        public string InternalSize { 
+            get
+            {
+                return settingInternalResolutionWidth.value.ToString() + "x" + 
+                       settingInternalResolutionHeight.value.ToString();
+            }
+            set
+            {
+                int w = -1, h = -1;
+                if (value.Contains("x"))
+                {
+                    var split = value.Split('x');
+                    if (split.Length == 2)
+                    {
+                        int tw, th;
+                        if (int.TryParse(split[0], out tw) &&
+                            int.TryParse(split[1], out th) &&
+                            tw >= 2 &&
+                            th >= 2)
+                        {
+                            w = tw;
+                            h = th;
+                        }
+                    }
+                }
+            settingInternalResolutionWidth.value = w;
+            settingInternalResolutionHeight.value = h;
+            }
+        }
 
         [UIButton]
         public void ApplyInternalSize()
         {
-            int w = -1, h = -1;
-            if (InternalSize.Contains("x"))
-            {
-                var split = InternalSize.Split('x');
-                if (split.Length == 2)
-                {
-                    int tw, th;
-                    if (int.TryParse(split[0], out tw) &&
-                        int.TryParse(split[1], out th) &&
-                        tw >= 2 &&
-                        th >= 2)
-                    {
-                        w = tw;
-                        h = th;
-                    }
-                }
-            }
-
+            int w = (int)settingInternalResolutionWidth.value;
+            int h = (int)settingInternalResolutionHeight.value;
             if (w == -1)
             {
                 w = Engine.Windows.Windows.GetWindow(0).GetWidth();
@@ -136,8 +233,8 @@ namespace UpvoidMiner
         [UICheckBox]
         public bool DigParticles
         {
-            get { return settingDigParticles; }
-            set { settingDigParticles = value; }
+            get { return settingDigParticles.value; }
+            set { settingDigParticles.value = value; }
         }
 
         private Settings()
@@ -145,8 +242,6 @@ namespace UpvoidMiner
         {
             // Read the supported video modes
             var modes = Rendering.GetSupportedVideoModes().Distinct().ToList();
-
-            settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
 
             // Add native resolution
             supportedVideoModes = new List<VideoMode> { new VideoMode(-1, -1) };
@@ -170,60 +265,62 @@ namespace UpvoidMiner
         public void VideoModeCallback(int index)
         {
             Debug.Assert(index < supportedVideoModes.Count());
-            settingResolution = supportedVideoModes[index];
+
+            settingResolutionWidth.value = supportedVideoModes[index].Width;
+            settingResolutionHeight.value = supportedVideoModes[index].Height;
         }
 
         [UISlider(0, 100)]
         public int MasterVolume
         {
-            get { return settingMasterVolume; }
+            get { return (int)settingMasterVolume.value; }
             set
             {
-                settingMasterVolume = value;
-                Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
+                settingMasterVolume.value = value;
+                Audio.SetVolumeForSpecificAudioType((float)settingMasterVolume.value / 100f, (int)AudioType.Master);
             }
         }
 
         [UISlider(0, 100)]
         public int SfxVolume
         {
-            get { return settingSfxVolume; }
+            get { return (int)settingSfxVolume.value; }
             set
             {
-                settingSfxVolume = value;
-                Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
+                settingSfxVolume.value = value;
+                Audio.SetVolumeForSpecificAudioType((float)settingSfxVolume.value / 100f, (int)AudioType.SFX);
             }
         }
 
         [UISlider(0, 100)]
         public int MusicVolume
         {
-            get { return settingMusicVolume; }
+            get { return (int)settingMusicVolume.value; }
             set
             {
-                settingMusicVolume = value;
-                Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
+                settingMusicVolume.value = value;
+                Audio.SetVolumeForSpecificAudioType(settingMuteMusic.value ? 0.0f : (float)settingMusicVolume.value / 100f, (int)AudioType.Music);
             }
         }
 
         [UICheckBox]
         public bool MuteMusic
         {
-            get { return settingMuteMusic; }
+            get { return settingMuteMusic.value; }
             set
             {
-                settingMuteMusic = value;
-                Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
+                settingMuteMusic.value = value;
+                Audio.SetVolumeForSpecificAudioType(value ? 0.0f : (float)settingMusicVolume.value / 100f, (int)AudioType.Music);
             }
         }
 
         [UISlider(45, 135)]
         public int FieldOfView
         {
-            get { return settingFieldOfView; }
+            get { return (int)settingFieldOfView.value; }
             set
             {
-                settingFieldOfView = value;
+                settingFieldOfView.value = value;
                 LocalScript.camera.HorizontalFieldOfView = value;
             }
         }
@@ -231,96 +328,99 @@ namespace UpvoidMiner
         [UICheckBox]
         public bool Fullscreen
         {
-            get { return settingFullscreen; }
-            set { settingFullscreen = value; }
+            get { return (settingFullscreen.value > -1); }
+            set { settingFullscreen.value = value ? 0 : -1; }
         }
 
         [UICheckBox]
         public bool HideTutorial
         {
-            get { return settingHideTutorial; }
-            set { settingHideTutorial = value; }
+            get { return settingHideTutorial.value; }
+            set { settingHideTutorial.value = value; }
         }
 
-        [UICheckBox]
-        public bool MinimalGraphics
+        [UISlider(0,4)]
+        public int ShadowQuality
         {
-            get { return settingMinimalGraphics; }
+            get { return (int)settingShadowQuality.value; }
             set
             {
-                if (settingMinimalGraphics != value)
+                if (settingShadowQuality.value != value)
+                {
+                    settingShadowQuality.value = value;
                     pipelineChanges = true;
-                settingMinimalGraphics = value;
-            }
-        }
-
-        [UICheckBox]
-        public bool Shadows
-        {
-            get { return settingShadows; }
-            set
-            {
-                if (settingShadows != value)
-                    pipelineChanges = true;
-                settingShadows = value;
+                }
             }
         }
 
         [UICheckBox]
         public bool Lensflares
         {
-            get { return settingLensflares; }
+            get { return settingLensflares.value; }
             set
             {
-                if (settingLensflares != value)
+                if (settingLensflares.value != value)
+                {
+                    settingLensflares.value = value;
                     pipelineChanges = true;
-                settingLensflares = value;
+                }
+                
             }
         }
 
         [UICheckBox]
         public bool VolumetricScattering
         {
-            get { return settingVolumetricScattering; }
+            get { return settingVolumetricScattering.value; }
             set
             {
-                if (settingVolumetricScattering != value)
+                if (settingVolumetricScattering.value != value)
+                {
+                    settingVolumetricScattering.value = value;
                     pipelineChanges = true;
-                settingVolumetricScattering = value;
+                }
+                
+                
             }
         }
 
         [UICheckBox]
         public bool Tonemapping
         {
-            get { return settingTonemapping; }
+            get { return settingTonemapping.value; }
             set
             {
-                if (settingTonemapping != value)
+                if (settingTonemapping.value != value)
+                {
+                    settingTonemapping.value = value;
                     pipelineChanges = true;
-                settingTonemapping = value;
+                }
+                    
+                
             }
         }
 
         [UICheckBox]
         public bool FXAA
         {
-            get { return settingFXAA; }
+            get { return settingFXAA.value; }
             set
             {
-                if (settingFXAA != value)
+                if (settingFXAA.value != value)
+                {
+                    settingFXAA.value = value;
                     pipelineChanges = true;
-                settingFXAA = value;
+                }
             }
         }
 
         [UICheckBox]
         public bool Grass
         {
-            get { return settingGrass; }
+            get { return settingGrass.value; }
             set
             {
-                if (value == settingGrass)
+                if (value == settingGrass.value)
                     return;
 
                 if (LocalScript.world != null)
@@ -335,32 +435,56 @@ namespace UpvoidMiner
                     // grass change requires terrain rebuilt
                     LocalScript.world.Terrain.RebuildTerrainGeometry();
                 }
-                settingGrass = value;
+                settingGrass.value = value;
             }
         }
 
         [UICheckBox]
-        public bool ShowStats { get; set; }
+        public bool ShowStats 
+        {
+            get 
+            {
+                return settingShowStats.value;
+            }
+            set
+            {
+                settingShowStats.value = value;
+            }
+        }
 
         [UISlider(10, 50)]
         public int LodFalloff
         {
-            get { return (int)LocalScript.world.LodSettings.LodFalloff; }
-            set { LocalScript.world.LodSettings.LodFalloff = value; }
+            get { return (int)settingLodFalloff.value; }
+            set 
+            {
+                settingLodFalloff.value = value;
+                LocalScript.world.LodSettings.LodFalloff = value; 
+            }
         }
 
         [UISlider(0, 100)]
         public int MinLodDistance
         {
-            get { return (int)LocalScript.world.LodSettings.MinLodDistance; }
-            set { LocalScript.world.LodSettings.MinLodDistance = value; }
+            get { return (int)settingMinLodDistance.value; }
+            set 
+            {
+                settingMinLodDistance.value = value;
+                LocalScript.world.LodSettings.MinLodDistance = value; 
+            }
         }
 
         [UISlider(0, 100)]
         public int MouseSensitivity
         {
-            get { return (int)(settingMouseSensitivity * 100); }
-            set { settingMouseSensitivity = value / 100.0; }
+            get 
+            {
+                return (int)(settingMouseSensitivity.value * 100); 
+            }
+            set 
+            { 
+                settingMouseSensitivity.value = value / 100.0; 
+            }
         }
 
         public float MouseSensitivityF { get { return MouseSensitivity / 100f; } }
@@ -370,15 +494,16 @@ namespace UpvoidMiner
         { 
             get
             {
-                return settingMaxTreeDistance;
+                return (int)settingMaxTreeDistance.value;
             }
             set
             {
                 float fadeOutMin = Math.Max(5, value - 5);     // >= 5
                 float fadeOutMax = Math.Max(10, value + 5);    // >= 10
                 float fadeTime = 1.0f; // 1 second
+                
+                settingMaxTreeDistance.value = value;
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
-                settingMaxTreeDistance = value;
             }
         }
 
@@ -387,43 +512,11 @@ namespace UpvoidMiner
         {
             // Write all settings to settings file
 
-            // Audio settings
-            Scripting.SetUserSettingNumber("Audio/Master Volume", settingMasterVolume);
-            Scripting.SetUserSettingNumber("Audio/SFX Volume", settingSfxVolume);
-            Scripting.SetUserSettingNumber("Audio/Music Volume", settingMusicVolume);
-            Scripting.SetUserSetting("Audio/Mute Music", settingMuteMusic);
-
-            // Graphics settings
-            Scripting.SetUserSettingNumber("Graphics/Field of View", settingFieldOfView);
-
-            Scripting.SetUserSetting("Debug/Minimal Graphics", settingMinimalGraphics);
-            Scripting.SetUserSetting("Debug/Show Stats", ShowStats);
-
-            Scripting.SetUserSetting("Graphics/Enable Shadows", settingShadows);
-            Scripting.SetUserSetting("Graphics/Enable Lensflares", settingLensflares);
-            Scripting.SetUserSetting("Graphics/Enable Volumetric Scattering", settingVolumetricScattering);
-            Scripting.SetUserSetting("Graphics/Enable Tonemapping", settingTonemapping);
-            Scripting.SetUserSetting("Graphics/Enable FXAA", settingFXAA);
-
-            Scripting.SetUserSetting("Graphics/Enable Grass", settingGrass);
-            Scripting.SetUserSetting("Graphics/Enable Dig Particles", settingDigParticles);
-
-            Scripting.SetUserSettingNumber("Input/Mouse Sensitivity", settingMouseSensitivity);
-            Scripting.SetUserSetting("Misc/Hide Tutorial", settingHideTutorial);
-
-            Scripting.SetUserSettingNumber("Graphics/Lod Falloff", LodFalloff);
-            Scripting.SetUserSettingNumber("Graphics/Min Lod Distance", MinLodDistance);
-            Scripting.SetUserSettingNumber("Graphics/Max Tree Distance", MaxTreeDistance);
-
-            if (settingFullscreen)
-                Scripting.SetUserSettingString("WindowManager/Fullscreen", "0");
-            else
-                Scripting.SetUserSettingString("WindowManager/Fullscreen", "-1");
-
-            Scripting.SetUserSettingString("WindowManager/InternalSize", InternalSize);
-
-            string vidModeString = settingResolution.Width + "x" + settingResolution.Height;
-            Scripting.SetUserSettingString("WindowManager/Resolution", vidModeString);
+            Debug.Assert(allSettings.Count > 0);
+            foreach(Setting set in allSettings)
+            {
+                set.SaveSetting();
+            }
 
             // rebuild pipeline on changes
             // TODO: fixme
@@ -441,50 +534,30 @@ namespace UpvoidMiner
         [UIButton]
         public void ResetSettings()
         {
-            WorldLod lod = LocalScript.world.LodSettings;
-
             // Reset local setting values to those from user settings
-            settingMasterVolume = (int)Scripting.GetUserSettingNumber("Audio/Master Volume", 100);
-            settingSfxVolume = (int)Scripting.GetUserSettingNumber("Audio/SFX Volume", 50);
-            settingMusicVolume = (int)Scripting.GetUserSettingNumber("Audio/Music Volume", 50);
-            settingMuteMusic = Scripting.GetUserSetting("Audio/Mute Music", false);
+            Debug.Assert(allSettings.Count > 0);
+            foreach (Setting set in allSettings)
+            {
+                set.reloadSettingFromFile();
+            }
 
-            settingFieldOfView = (int)Scripting.GetUserSettingNumber("Graphics/Field of View", 75);
-
-            settingMinimalGraphics = Scripting.GetUserSetting("Debug/Minimal Graphics", Rendering.AreGraphicsMinimal());
-            ShowStats = Scripting.GetUserSetting("Debug/Show Stats", false);
-
-            settingShadows = Scripting.GetUserSetting("Graphics/Enable Shadows", false);
-            settingLensflares = Scripting.GetUserSetting("Graphics/Enable Lensflares", false);
-            settingVolumetricScattering = Scripting.GetUserSetting("Graphics/Enable Volumetric Scattering", true);
-            settingTonemapping = Scripting.GetUserSetting("Graphics/Enable Tonemapping", true);
-            settingFXAA = Scripting.GetUserSetting("Graphics/Enable FXAA", true);
-            settingGrass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
-            settingDigParticles = Scripting.GetUserSetting("Graphics/Enable Dig Particles", true);
-
-            settingMouseSensitivity = Scripting.GetUserSettingNumber("Input/Mouse Sensitivity", 0.5);
-            settingHideTutorial = Scripting.GetUserSetting("Misc/Hide Tutorial", false);
-
-            // property in order to trigger rebuilt
-            Grass = Scripting.GetUserSetting("Graphics/Enable Grass", true);
-
-            settingFullscreen = Scripting.GetUserSettingString("WindowManager/Fullscreen", "-1") != "-1";
-            settingResolution = StringToVideoMode(Scripting.GetUserSettingString("WindowManager/Resolution", "-1x-1"));
             
-            InternalSize = Scripting.GetUserSettingString("WindowManager/InternalSize", "");
             ApplyInternalSize();
 
-            MinLodDistance = (int)Scripting.GetUserSettingNumber("Graphics/Min Lod Distance", 20);
-            LodFalloff = (int)Scripting.GetUserSettingNumber("Graphics/Lod Falloff", 30);
-            MaxTreeDistance = (int)Scripting.GetUserSettingNumber("Graphics/Max Tree Distance", 150);
-
             // Re-apply the former settings
-            Audio.SetVolumeForSpecificAudioType(settingMasterVolume / 100f, (int)AudioType.Master);
-            Audio.SetVolumeForSpecificAudioType(settingSfxVolume / 100f, (int)AudioType.SFX);
-            Audio.SetVolumeForSpecificAudioType(settingMuteMusic ? 0.0f : settingMusicVolume / 100f, (int)AudioType.Music);
-            LocalScript.camera.HorizontalFieldOfView = settingFieldOfView;
+            Audio.SetVolumeForSpecificAudioType((float)settingMasterVolume.value / 100f, (int)AudioType.Master);
+            Audio.SetVolumeForSpecificAudioType((float)settingSfxVolume.value / 100f, (int)AudioType.SFX);
+            Audio.SetVolumeForSpecificAudioType(settingMuteMusic.value ? 0.0f : (float)settingMusicVolume.value / 100f, (int)AudioType.Music);
+
+            LocalScript.camera.HorizontalFieldOfView = settingFieldOfView.value;
 
             pipelineChanges = false;
+        }
+
+        internal static void InitSettings()
+        {
+            if (settings == null)
+                settings = new Settings();
         }
     }
 }
