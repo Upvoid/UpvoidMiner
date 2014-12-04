@@ -139,6 +139,18 @@ namespace UpvoidMiner
         }
 
         [UIObject]
+        public string CraftingString
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ResultName))
+                    return "";
+                var n = ResultName.First() == 'a' || ResultName.First() == 'e' || ResultName.First() == 'i' || ResultName.First() == 'o' || ResultName.First() == 'u';
+                return "Craft a" + (n ? "n " : " ") + ResultName;
+            }
+        }
+
+        [UIObject]
         public bool CanCraft
         {
             get

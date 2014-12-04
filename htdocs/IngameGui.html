@@ -283,6 +283,12 @@
                         <uicollection name="RecipeItems" class="inv-items"></uicollection>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Ingredients</div>
+                    <div class="panel-body inv-bag">
+                        <uicollection name="CraftingItems" class="inv-items"></uicollection>
+                    </div>
+                </div>
 
                 <div class="panel panel-default">
                     <div class="panel-heading">Tools</div>
@@ -329,6 +335,10 @@
                 });
             </script>
             <uitemplate name="RecipeItem" class="inv-item">
+                <uicollection name="IconStack" class="itemstack"></uicollection>
+                <a class="item-btn" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+            </uitemplate>
+            <uitemplate name="CraftingItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
                 <a class="item-btn" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
             </uitemplate>
@@ -614,6 +624,7 @@
                     </div>
                 </div>
                 <uiobject name="HasRecipeSettings" onvalue="function(el, val) { $('.recipe').css('display', val ? 'block' : 'none'); }"></uiobject>
+                <uiobject name="CraftingString" onvalue="function(el, val) { $('.btn-craft-recipe').html(val); }"></uiobject>
                 <uiobject name="CanCraft" onvalue="function(el,val) { var e = $(el).parent().find('.btn-craft-recipe'); if(!val) e.addClass('disabled'); else e.removeClass('disabled');}"></uiobject>
             </ui>
             <uitemplate name="IngredientItem" class="list-group-item ingredientitem" tag="a">

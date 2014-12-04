@@ -66,7 +66,7 @@ namespace UpvoidMiner
                     materialString = "Stone";
                     break;
                 case ToolMaterial.Copper:
-                    materialString = "Stone";
+                    materialString = "Copper";
                     break;
             }
             switch (ToolType)

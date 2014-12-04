@@ -134,6 +134,35 @@ namespace UpvoidMiner
             }
         }
 
+        public class CraftingItemUI : ItemUI
+        {
+            private readonly Item item;
+
+            [UICollection("CraftingItem")]
+            public ItemUI ThisItem { get { return this; } }
+
+            [UIString]
+            public string StackSize
+            {
+                get
+                {
+                    if (LocalScript.player == null)
+                        return null;
+
+                    if (item is DiscreteItem && !LocalScript.player.GodMode)
+                        return ((item as DiscreteItem).StackSize + "x");
+
+                    return "";
+                }
+            }
+
+            public CraftingItemUI(Item item)
+                : base(item)
+            {
+                this.item = item;
+            }
+        }
+
         public class ResourceItemUI : ItemUI
         {
             private readonly ResourceItem item;
@@ -189,6 +218,8 @@ namespace UpvoidMiner
 
         [UICollection("RecipeItem")]
         public List<RecipeItemUI> RecipeItems { get; private set; }
+        [UICollection("CraftingItem")]
+        public List<CraftingItemUI> CraftingItems { get; private set; }
         [UICollection("ToolItem")]
         public List<ToolItemUI> ToolItems { get; private set; }
         [UICollection("MaterialItem")]
@@ -243,8 +274,12 @@ namespace UpvoidMiner
                     Bar[idx] = new MaterialItemUI(item as MaterialItem);
                 else if (item is ResourceItem)
                     Bar[idx] = new ResourceItemUI(item as ResourceItem);
-                else if (item != null)
+                else if (item is RecipeItem)
+                    Bar[idx] = new RecipeItemUI(item as RecipeItem);
+                else if (item is ToolItem || item is PipetteItem)
                     Bar[idx] = new ToolItemUI(item);
+                else if (item != null)
+                    Bar[idx] = new CraftingItemUI(item);
                 else 
                     Bar[idx] = null;
             }
@@ -259,6 +294,7 @@ namespace UpvoidMiner
             MaterialItems = new List<MaterialItemUI>();
             ResourceItems = new List<ResourceItemUI>();
             RecipeItems = new List<RecipeItemUI>();
+            CraftingItems = new List<CraftingItemUI>();
 
             UIProxyManager.AddProxy(this);
 
@@ -272,6 +308,7 @@ namespace UpvoidMiner
             MaterialItems.RemoveAll(i => i.Item == item);
             ResourceItems.RemoveAll(i => i.Item == item);
             RecipeItems.RemoveAll(i => i.Item == item);
+            CraftingItems.RemoveAll(i => i.Item == item);
         }
 
         private void ItemsOnOnAdd(Item item)
@@ -282,7 +319,10 @@ namespace UpvoidMiner
                 ResourceItems.Add(new ResourceItemUI(item as ResourceItem));
             else if (item is RecipeItem)
                 RecipeItems.Add(new RecipeItemUI(item as RecipeItem));
-            else ToolItems.Add(new ToolItemUI(item));
+            else if (item is ToolItem || item is PipetteItem)
+                ToolItems.Add(new ToolItemUI(item));
+            else 
+                CraftingItems.Add(new CraftingItemUI(item));
         }
 
         [UIObject]
