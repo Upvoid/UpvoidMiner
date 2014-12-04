@@ -124,11 +124,6 @@
                                         <uislider onvalue="function(el, value) { $('#minLodDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MinLodDistance"></uislider></td>
                                         <td><span id="minLodDistance"></span></td></tr>
 
-                                    <tr><td>Max&nbsp;Trees:</td>
-                                    <td class="slider-cell">
-                                        <uislider onvalue="function(el, value) { $('#maxTrees').html(value+''); }" options="{range:'min'}" class="lod-slider" name="MaxTrees"></uislider></td>
-                                        <td><span id="maxTrees"></span></td></tr>
-
                                     <tr><td>Max&nbsp;Tree&nbsp;Distance:</td>
                                     <td class="slider-cell">
                                         <uislider onvalue="function(el, value) { $('#maxTreeDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MaxTreeDistance"></uislider></td>
@@ -190,6 +185,7 @@
                         <div class="panel-collapse collapse" id="group-debug">
                             <div class="panel-body">
                                 <uicheckbox name="ShowStats">Show Engine Stats</uicheckbox>
+                                <uicheckbox name="HideTutorial">Hide Tutorial</uicheckbox>
                                 <uibutton name="ResetTutorial" class="btn btn-default" tag="a">Reset Tutorial</uibutton>
                             </div>
                         </div>

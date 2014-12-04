@@ -117,6 +117,7 @@
     </script>
     <hud name="Tutorial" id="tutorials">
         <uicollection name="TutorialMsgs"></uicollection>
+        <uiobject name="Visible" onvalue="function(el, val) { $(el).parent().css('visibility', val ? 'visible' : 'hidden'); }"></uiobject>
     </hud>
 
     <!-- Inventory -->

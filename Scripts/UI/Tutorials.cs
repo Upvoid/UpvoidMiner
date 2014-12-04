@@ -16,6 +16,9 @@ namespace UpvoidMiner.UI
             UIProxyManager.AddProxy(this);
         }
 
+        [UIObject]
+        public bool Visible { get { return !Settings.settings.HideTutorial; } }
+
         public class TutorialMsg
         {
             public string Type;
@@ -67,15 +70,11 @@ namespace UpvoidMiner.UI
             public bool Visible = false;
             public bool Cleared = false;
             public bool Skipped = false;
-
             public string Name;
-
             public List<string> EnableMsgs = new List<string>();
-
             public float Target;
             public readonly Modes Mode;
             public float Current;
-
 
             public void Report(float amount)
             {
@@ -107,7 +106,8 @@ namespace UpvoidMiner.UI
             /// </summary>
             public void Clear()
             {
-                if (!Visible) return;
+                if (!Visible)
+                    return;
 
                 Cleared = true;
                 Visible = false;
@@ -117,9 +117,11 @@ namespace UpvoidMiner.UI
 
                 ShowNextNonClearedOnDemand();
             }
+
             public void TriggerShow()
             {
-                if (Cleared || Visible) return;
+                if (Cleared || Visible)
+                    return;
 
                 if ((Mode == Modes.Adventure && godMode)
                     || (Mode == Modes.God && !godMode))
@@ -147,38 +149,29 @@ namespace UpvoidMiner.UI
         /// Tutorial UI
         /// </summary>
         public static readonly TutorialUI TutorialUI = new TutorialUI();
-
         private static bool godMode = false;
-
         #region Tutorials
         public readonly static TutorialMessage MsgIntro = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 1, "MsgMovementMove");
-
         public readonly static TutorialMessage MsgMovementMove = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementSprint");
         public readonly static TutorialMessage MsgMovementSprint = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 20, "MsgMovementJump");
         public readonly static TutorialMessage MsgMovementJump = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicDiggingDirt", Modes.Adventure);
-
         public readonly static TutorialMessage MsgBasicDiggingDirt = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgBasicDiggingStone", Modes.Adventure);
         public readonly static TutorialMessage MsgBasicDiggingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgBasicDiggingGod", Modes.Adventure);
         public readonly static TutorialMessage MsgBasicDiggingGod = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgBasicBuildingDirt", Modes.God);
-
         public readonly static TutorialMessage MsgBasicBuildingDirt = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgBasicBuildingStone");
         public readonly static TutorialMessage MsgBasicBuildingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgBasicCraftingDirtCube");
-
         public readonly static TutorialMessage MsgBasicCraftingDirtCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingDirtCubePlace");
         public readonly static TutorialMessage MsgBasicCraftingDirtCubePlace = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingStoneNonCube");
         public readonly static TutorialMessage MsgBasicCraftingStoneNonCube = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicCraftingCollect");
         public readonly static TutorialMessage MsgBasicCraftingCollect = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicChoppingTree");
-
         public readonly static TutorialMessage MsgBasicChoppingTree = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgBasicChoppingCollect");
         public readonly static TutorialMessage MsgBasicChoppingCollect = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 5, "MsgAdvancedDiggingSmall");
-
         public readonly static TutorialMessage MsgAdvancedDiggingSmall = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 5, "MsgAdvancedDiggingNonSphere");
         public readonly static TutorialMessage MsgAdvancedDiggingNonSphere = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingBottom");
         public readonly static TutorialMessage MsgAdvancedDiggingBottom = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgAdvancedDiggingView");
         public readonly static TutorialMessage MsgAdvancedDiggingView = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingAngle");
         public readonly static TutorialMessage MsgAdvancedDiggingAngle = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedDiggingGridSize");
         public readonly static TutorialMessage MsgAdvancedDiggingGridSize = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedBuildingTerrainAligned");
-
         public readonly static TutorialMessage MsgAdvancedBuildingTerrainAligned = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceMaterial");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceMaterial = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingReplaceAll");
         public readonly static TutorialMessage MsgAdvancedBuildingReplaceAll = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 10, "MsgAdvancedBuildingPipette");
@@ -186,17 +179,13 @@ namespace UpvoidMiner.UI
         public readonly static TutorialMessage MsgAdvancedBuildingPlaceDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedBuildingPlaceConstrained");
         public readonly static TutorialMessage MsgAdvancedBuildingPlaceConstrained = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 50, "MsgAdvancedBuildingCollectDrone");
         public readonly static TutorialMessage MsgAdvancedBuildingCollectDrone = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingThrowQ");
-
         public readonly static TutorialMessage MsgAdvancedCraftingThrowQ = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingThrowUse");
         public readonly static TutorialMessage MsgAdvancedCraftingThrowUse = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingStaticUse");
         public readonly static TutorialMessage MsgAdvancedCraftingStaticUse = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 3, "MsgAdvancedCraftingCollectAllDynamic");
         public readonly static TutorialMessage MsgAdvancedCraftingCollectAllDynamic = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgAdvancedCraftingCollectAllStatic");
         public readonly static TutorialMessage MsgAdvancedCraftingCollectAllStatic = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgFinal");
-
         public readonly static TutorialMessage MsgFinal = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, null);
-
         #endregion
-
         public readonly static Dictionary<string, TutorialMessage> AllMessages = new Dictionary<string, TutorialMessage>();
 
         /// <summary>
@@ -290,7 +279,10 @@ namespace UpvoidMiner.UI
             public bool Visible;
             public float Current;
 
-            public TutorialSave() { }
+            public TutorialSave()
+            {
+            }
+
             public TutorialSave(TutorialMessage msg)
             {
                 Name = msg.Name;

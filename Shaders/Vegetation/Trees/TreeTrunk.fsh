@@ -7,6 +7,7 @@
 uniform sampler2D uColor;
 uniform sampler2D uNormal;
 uniform vec4 uSpecularColor;
+uniform float uVisibility = 1.0;
 
 in vec3 vNormal;
 in vec3 vTangent;
@@ -20,6 +21,10 @@ OUTPUT_CHANNEL_Position(vec3)
 void main()
 {
     INIT_CHANNELS;
+    
+   float posFactor = uVisibility;
+   if(int(13.479*gl_FragCoord.x + gl_FragCoord.y * 273.524 * gl_FragCoord.x) % 200 >= posFactor * 250)
+      discard;
 
     // normalmap
     vec3 normal = applyNormalmap(vNormal, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));

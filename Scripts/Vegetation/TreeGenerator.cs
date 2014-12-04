@@ -120,11 +120,26 @@ namespace UpvoidMiner
             world.Physics.AddRigidBody(b);
             l.PhysicsComps.Add(new PhysicsComponent(b, mat4.Translate(new vec3(0,-5,0))));
 
-            t.RjLeaves0.Add(new RenderComponent(leavesOpaque, transform2));
+            RenderComponent rc1 = new RenderComponent(leavesOpaque, transform2);
+            RenderComponent rc2 = new RenderComponent(leavesShadow, transform2);
+            RenderComponent rc3 = new RenderComponent(trunkOpaque, transform2);
+            RenderComponent rc4 = new RenderComponent(trunkShadow, transform2);
+
+            int maxTreeDistanceSetting = Settings.settings.MaxTreeDistance;
+            float fadeOutMin = Math.Max(5, maxTreeDistanceSetting - 5);     // >= 5
+            float fadeOutMax = Math.Max(10, maxTreeDistanceSetting + 5);    // >= 10
+            float fadeTime = 1.0f; // 1 second
+
+            rc1.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rc2.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rc3.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rc4.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+
+            t.RjLeaves0.Add(rc1);
             //t.RjLeaves0.Add(new RenderComponent(leavesZPre, transform2));
-            t.RjLeaves0.Add(new RenderComponent(leavesShadow, transform2));
-            t.RjTrunk.Add(new RenderComponent(trunkOpaque, transform2));
-            t.RjTrunk.Add(new RenderComponent(trunkShadow, transform2));
+            t.RjLeaves0.Add(rc2);
+            t.RjTrunk.Add(rc3);
+            t.RjTrunk.Add(rc4);
 
             t.Logs.Add(l);
 
