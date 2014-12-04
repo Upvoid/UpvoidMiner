@@ -342,6 +342,10 @@
             <uitemplate name="CraftingItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
                 <a class="item-btn" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
+                <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
+                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ToolItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
@@ -616,6 +620,7 @@
                     <p style="position:relative;">
                         Recipe: <uistring name="ResultName" tag="b" class="text-info"></uistring><br>
                         <uicollection name="ResultIconStack" class="itemstack"></uicollection>
+                        <uistring name="ResultAmount" class="text-info"></uistring>
                     </p>
                     Ingredients:
                     <uicollection name="IngredientItems" class="list-group"></uicollection>
@@ -634,7 +639,11 @@
                         <uistring name="Name" tag="b"></uistring>
                         <uicollection name="Icon" class="itemstack"></uicollection>
                     </h4>
+                    <p class="list-group-item-text">
+                        <uistring name="Dimensions" class="text-info" tag="span"></uistring>
+                    </p>
                     <uiobject name="IsAvailable" onvalue="function(el,val) { var e = $(el).parent(); if(!val) e.addClass('list-group-item-danger'); else e.removeClass('list-group-item-danger');}"></uiobject>
+                    <uiobject name="HasDimensions" onvlaue="function(el, val) { $('.list-group-item-text').css('display', val ? 'block' : 'none'); }"></uiobject>
             </uitemplate>
             </div>
             <!-- Crafting -->

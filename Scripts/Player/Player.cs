@@ -835,9 +835,7 @@ namespace UpvoidMiner
             if (genDefault)
             {
                 // Tools
-                Inventory.AddItem(new ToolItem(ToolType.Shovel));
-                Inventory.AddItem(new ToolItem(ToolType.Pickaxe));
-                Inventory.AddItem(new ToolItem(ToolType.Axe));
+                Inventory.AddItem(new ToolItem(ToolType.Axe,ToolMaterial.Wood));
                 //Inventory.AddItem(new ToolItem(ToolType.Hammer));
                 Inventory.AddItem(new ToolItem(ToolType.DroneChain, ToolMaterial.Other, 5));
 
@@ -874,41 +872,37 @@ namespace UpvoidMiner
                         new MaterialItem(TerrainResource.FromName("BirchWood"),MaterialShape.Cylinder, new vec3(0.3f,0.5f,0.3f))
                     }));
 
-            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Wood),
-                new List<Item>
-                    {
-                        new ResourceItem(TerrainResource.FromName("BirchWood"), 0.1f)
-                    }));
-            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel,ToolMaterial.Wood),
-                new List<Item>
-                    {
-                        new CraftingItem(CraftingItem.ItemType.Handle),
-                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Wood)
-                    }));
+            var matTypes = new List<Tuple<CraftingItem.MaterialType, ToolMaterial, String>>
+            {
+                Tuple.Create(CraftingItem.MaterialType.Wood, ToolMaterial.Wood, "BirchWood"),
+                Tuple.Create(CraftingItem.MaterialType.Stone, ToolMaterial.Stone, "Stone.09"),
+                Tuple.Create(CraftingItem.MaterialType.Copper, ToolMaterial.Copper, "Copper")
+            };
+            var toolTypes = new List<Tuple<ToolType, CraftingItem.ItemType>>
+            {
+                Tuple.Create(ToolType.Shovel,CraftingItem.ItemType.ShovelBlade),
+                Tuple.Create(ToolType.Pickaxe,CraftingItem.ItemType.PickaxeHead),
+                Tuple.Create(ToolType.Axe,CraftingItem.ItemType.AxeHead)
+            };
 
-            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Stone),
-                new List<Item>
-                    {
-                        new ResourceItem(TerrainResource.FromName("Stone.09"), 0.1f)
-                    }));
-            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel, ToolMaterial.Stone),
-                new List<Item>
-                    {
-                        new CraftingItem(CraftingItem.ItemType.Handle),
-                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Stone)
-                    }));
-
-            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Copper),
-                new List<Item>
-                    {
-                        new ResourceItem(TerrainResource.FromName("Copper"), 0.1f)
-                    }));
-            Inventory.AddItem(new RecipeItem(new ToolItem(ToolType.Shovel, ToolMaterial.Copper),
-                new List<Item>
-                    {
-                        new CraftingItem(CraftingItem.ItemType.Handle),
-                        new CraftingItem(CraftingItem.ItemType.ShovelBlade, CraftingItem.MaterialType.Copper)
-                    }));
+            foreach (var tool in toolTypes)
+            {
+                foreach (var mat in matTypes)
+                {
+                    Inventory.AddItem(
+                        new RecipeItem(new CraftingItem(tool.Item2, mat.Item1),
+                            new List<Item>
+                            {
+                                new ResourceItem(TerrainResource.FromName(mat.Item3), 0.1f)
+                            }));
+                    Inventory.AddItem(new RecipeItem(new ToolItem(tool.Item1, mat.Item2),
+                        new List<Item>
+                        {
+                            new CraftingItem(CraftingItem.ItemType.Handle),
+                            new CraftingItem(tool.Item2, mat.Item1)
+                        }));
+                }
+            }
 
             Gui.OnUpdate();
         }

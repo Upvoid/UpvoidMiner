@@ -10,7 +10,9 @@ namespace UpvoidMiner
         public enum ItemType
         {
             Handle,
-            ShovelBlade
+            ShovelBlade,
+            PickaxeHead,
+            AxeHead,
         }
 
         public enum MaterialType
@@ -48,6 +50,10 @@ namespace UpvoidMiner
                     return "Handle";
                 case ItemType.ShovelBlade:
                     return adjective + " Shovel Blade";
+                case ItemType.PickaxeHead:
+                    return adjective + " Pickaxe Head";
+                case ItemType.AxeHead:
+                    return adjective + " Axe Head";
             }
             return "";
         }
@@ -60,8 +66,12 @@ namespace UpvoidMiner
                     return "A wooden handle.";
                 case ItemType.ShovelBlade:
                     return "A " + Adjective(mat) + " shovel blade.";
+                case ItemType.PickaxeHead:
+                    return "A " + Adjective(mat) + " pickaxe head.";
+                case ItemType.AxeHead:
+                    return "A " + Adjective(mat) + " axe head.";
             }
-                
+
             return "A nondescript object.";
         }
         private static float Weight(ItemType type, MaterialType mat)
@@ -71,6 +81,10 @@ namespace UpvoidMiner
                 case ItemType.Handle:
                     return 0.3f;
                 case ItemType.ShovelBlade:
+                    return 1.0f;
+                case ItemType.PickaxeHead:
+                    return 1.0f;
+                case ItemType.AxeHead:
                     return 1.0f;
             }
 
@@ -85,6 +99,10 @@ namespace UpvoidMiner
                     return "Handle" + suffix;
                 case ItemType.ShovelBlade:
                     return "ShovelBlade" + suffix;
+                case ItemType.PickaxeHead:
+                    return "PickaxeHead" + suffix;
+                case ItemType.AxeHead:
+                    return "AxeHead" + suffix;
             }
 
             return "";
@@ -107,7 +125,7 @@ namespace UpvoidMiner
 
         public override string Icon
         {
-            get { return IconName(Type,Material); }
+            get { return IconName(Type, Material); }
         }
 
         public override bool TryMerge(Item rhs, bool substract, bool force, bool dryrun = false)
@@ -122,7 +140,9 @@ namespace UpvoidMiner
 
         public override Item Clone()
         {
-            return new CraftingItem(Type,Material,StackSize);
+            return new CraftingItem(Type, Material, StackSize);
         }
+
+
     }
 }

@@ -49,7 +49,7 @@ namespace UpvoidMiner
             public bool IsDroppable { get { return item.IsDroppable; } }
 
             [UIObject]
-            public bool IsDestructible { get { return item is MaterialItem; } }
+            public bool IsDestructible { get { return item is MaterialItem || item is CraftingItem; } }
 
             [UIObject]
             public bool IsConvertible { get { return item is MaterialItem; } }

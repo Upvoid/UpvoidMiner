@@ -488,6 +488,16 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
+        "Name" : "Terrain/CopperOre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/CopperOre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
         "Name" : "Terrain/Wood",
         "Type" : "FromCollection"
     },
@@ -745,6 +755,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Particles/Terrain/AlienRock",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/CopperOre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/CopperOre",
     "Path" : "~.mat",
     "Type" : "Material"
  },

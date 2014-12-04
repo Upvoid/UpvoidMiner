@@ -390,6 +390,26 @@
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Color: uSpecularColor, .1, .1, .1, 8
 
+[Terrain/CopperOre] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScaleXY, 5
+    Parameter: uTexScaleXZ, 5
+    Parameter: uTexScaleZY, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Particles/Terrain/CopperOre] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uNormal, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Color: uSpecularColor, .1, .1, .1, 8
+
 [Terrain/Wood] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Wood/Wood21.Diffuse

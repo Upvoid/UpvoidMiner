@@ -71,6 +71,8 @@ namespace UpvoidMiner
             addResource(new SolidTerrainResource("Iron", "Terrain/Iron", "Particles/Terrain/Iron", 7700f));
             addResource(new SolidTerrainResource("Gold", "Terrain/Gold", "Particles/Terrain/Gold", 19302f));
 
+            addResource(new SolidTerrainResource("CopperOre","Terrain/CopperOre","Particles/Terrain/CopperOre",4900f));
+
             // Rares
             addResource(new SolidTerrainResource("BlueCrystal", "Terrain/BlueCrystal", "Particles/Terrain/BlueCrystal", 3500f));
             addResource(new SolidTerrainResource("FireRock", "Terrain/FireRock", "Particles/Terrain/FireRock", 2900f));

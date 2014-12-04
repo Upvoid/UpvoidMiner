@@ -39,8 +39,29 @@ namespace UpvoidMiner
             [UIString]
             public string Amount
             {
-                get { return Ingredient.StackDescription.Replace("³","&sup3;"); }
+                get
+                {
+                    return Ingredient.StackDescription.Replace("³", "&sup3;");
+                }
             }
+
+            [UIString]
+            public string Dimensions
+            {
+                get
+                {
+                    if (Ingredient is MaterialItem)
+                        return (Ingredient as MaterialItem).DimensionString;
+                    return "";
+                }
+            }
+
+            [UIObject]
+            public bool HasDimensions
+            {
+                get { return (Ingredient is MaterialItem); }
+            }
+
 
             public readonly Item Ingredient;
 
@@ -109,6 +130,15 @@ namespace UpvoidMiner
             get
             {
                 return LocalScript.player == null ? null : LocalScript.player.Inventory.Selection;
+            }
+        }
+
+        [UIString]
+        public string ResultAmount
+        {
+            get
+            {
+                return SelectedItem is RecipeItem ? (SelectedItem as RecipeItem).Result.StackDescription.Replace("³","&sup3;") : "";
             }
         }
 
