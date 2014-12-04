@@ -263,10 +263,10 @@ namespace UpvoidMiner
 
         public static void TreeCreate(vec3 pos, int seed, Tree.TreeType type)
         {
-            // at least 2m distance
+            // at least 6m distance
             vec2 pos2D = new vec2(pos.x, pos.z);
             foreach (var tree in entitySave.trees)
-                if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 4f)
+                if (vec2.distance(pos2D, new vec2(tree.x, tree.z)) < 6f)
                     return;
 
             Random random = new Random(seed);
