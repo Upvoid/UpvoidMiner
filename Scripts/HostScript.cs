@@ -42,11 +42,16 @@ namespace UpvoidMiner
             UpvoidMiner.Mod = module;
             UpvoidMiner.ModDomain = UpvoidMiner.Mod.ResourceDomain;
 
+            // init settings
+            Settings.InitSettings();
+
             // Create the world. Multiple worlds could be created here, but we only want one.
             // Use the UpvoidMinerWorldGenerator, which will create a simple terrain with some vegetation.
             World world = Universe.CreateWorld("UpvoidMinerWorld");
             UpvoidMinerWorldGenerator.init(world);
             world.Start();
+
+            Settings.settings.ResetSettings();
         }
     }
 }
