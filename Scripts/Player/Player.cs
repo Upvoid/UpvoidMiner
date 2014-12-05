@@ -840,6 +840,7 @@ namespace UpvoidMiner
             if (genDefault)
             {
                 // Tools
+                Inventory.AddItem(new ToolItem(ToolType.Shovel,ToolMaterial.Wood));
                 Inventory.AddItem(new ToolItem(ToolType.Axe,ToolMaterial.Wood));
                 //Inventory.AddItem(new ToolItem(ToolType.Hammer));
                 Inventory.AddItem(new ToolItem(ToolType.DroneChain, ToolMaterial.Other, 5));
