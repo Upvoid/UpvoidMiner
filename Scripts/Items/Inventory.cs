@@ -133,6 +133,9 @@ namespace UpvoidMiner
         {
             // If appended and enough space, also add it to quickAccess.
             // Caution: highest quick access idx is only temporary.
+            if (item is RecipeItem || item is CraftingItem)
+                return;
+
             for (int i = 0; i < QuickAccessSlotCount; ++i)
             {
                 if (quickAccessItems[i] == null)
