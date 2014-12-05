@@ -192,7 +192,7 @@ namespace UpvoidMiner
                 return;
 
             float cylinderHeight = 0.7f;
-            int numberOfWoodCylinders = 3 * (int)(amountOfWood + 1.0f);
+            int numberOfWoodCylinders = (int)(3 * amountOfWood + 1.0f);
             for (int i = 0; i < numberOfWoodCylinders; ++i)
             {
                 var item = new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder, new vec3(0.2f, cylinderHeight, 0.2f));

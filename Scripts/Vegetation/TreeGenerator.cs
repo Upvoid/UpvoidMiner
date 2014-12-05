@@ -74,38 +74,54 @@ namespace UpvoidMiner
 
         public static Tree OldTree(Random random, mat4 transform1, mat4 transform2, World world)
         {
-            bool type0 = random.NextDouble() > 0.5;
+            double randy = random.NextDouble();
+            string trunkMesh, leavesMesh;
+            if(randy < 0.34)
+            {
+                trunkMesh = "Vegetation/Tree01/Trunk";
+                leavesMesh = "Vegetation/Tree01/Leaves_medium";
+            }
+            else if(randy < 0.67)
+            {
+                trunkMesh = "Vegetation/Tree02/Trunk";
+                leavesMesh = "Vegetation/Tree02/Leaves_low";
+            }
+            else
+            {
+                trunkMesh = "Vegetation/Tree03/Trunk";
+                leavesMesh = "Vegetation/Tree03/Leaves_medium";
+            }
 
             MeshRenderJob leavesOpaque = new MeshRenderJob(
                 Renderer.Opaque.Mesh,
                 Resources.UseMaterial("TreeLeaves01", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_medium" : "Vegetation/Tree03/Leaves_medium", UpvoidMiner.ModDomain),
+                Resources.UseMesh(leavesMesh, UpvoidMiner.ModDomain),
                 transform2);
 
             /*
             MeshRenderJob leavesZPre = new MeshRenderJob(
                 Renderer.zPre.Mesh,
                 Resources.UseMaterial("TreeLeaves01.zPre", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_high" : "Vegetation/Tree03/Leaves_high", UpvoidMiner.ModDomain),
+                Resources.UseMesh(leavesMesh, UpvoidMiner.ModDomain),
                 transform2);
              */
 
             MeshRenderJob leavesShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh,
                 Resources.UseMaterial("TreeLeaves01.Shadow", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Leaves_medium" : "Vegetation/Tree03/Leaves_medium", UpvoidMiner.ModDomain),
+                Resources.UseMesh(leavesMesh, UpvoidMiner.ModDomain),
                 transform2);
 
             MeshRenderJob trunkOpaque = new MeshRenderJob(
                 Renderer.Opaque.Mesh,
                 Resources.UseMaterial("TreeTrunk", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
+                Resources.UseMesh(trunkMesh, UpvoidMiner.ModDomain),
                 transform2);
 
             MeshRenderJob trunkShadow = new MeshRenderJob(
                 Renderer.Shadow.Mesh,
                 Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
-                Resources.UseMesh(type0 ? "Vegetation/Tree01/Trunk" : "Vegetation/Tree03/Trunk", UpvoidMiner.ModDomain),
+                Resources.UseMesh(trunkMesh, UpvoidMiner.ModDomain),
                 transform2);
 
 
@@ -113,8 +129,9 @@ namespace UpvoidMiner
             vec4 colorModulation = new vec4(0.7f + (float)random.NextDouble() * 0.5f, 0.7f + (float)random.NextDouble() * 0.5f, 1, 1);
             leavesOpaque.SetColor("uColorModulation", colorModulation);
 
+            float amountOfWood = ((float)randy * 0.7f + 0.5f) * transform2.col1.Length;
             // Amount of wood depends on tree type (thicker/thinner trunk) and tree height scale factor.
-            Tree t = new Tree((type0 ? 0.5f : 1.0f) * transform2.col1.y, Tree.TreeType.Birch);
+            Tree t = new Tree(amountOfWood, Tree.TreeType.Birch);
             Tree.Log l = new Tree.Log();
             RigidBody b = new RigidBody(0f, transform1 * mat4.Translate(new vec3(0,5,0)), new CylinderShape(.5f, 10));
             world.Physics.AddRigidBody(b);
