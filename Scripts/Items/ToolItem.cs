@@ -334,7 +334,8 @@ namespace UpvoidMiner
                     var mats = new List<int>
                     {
                         TerrainResource.FromName("Dirt").Index,
-                        TerrainResource.FromName("Desert").Index
+                        TerrainResource.FromName("Desert").Index,
+                        TerrainResource.FromName("Wood").Index
                     };
                     switch (ToolMaterial)
                     {
@@ -343,6 +344,7 @@ namespace UpvoidMiner
                             break;
                         case ToolMaterial.Stone:
                             mats.Add(TerrainResource.FromName("CopperOre").Index);
+                            mats.Add(TerrainResource.FromName("Copper").Index);
                             goto case ToolMaterial.Wood;
                         case ToolMaterial.Copper:
                             goto case ToolMaterial.Stone;
