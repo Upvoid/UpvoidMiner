@@ -164,8 +164,6 @@ namespace UpvoidMiner
             //Tutorial
             if (recipeItem.Result.Name == "Handle")
                 Tutorials.MsgBasicRecipeCraftingHandle.Report(4);
-            if (recipeItem.Result.Name == "Wooden Shovel")
-                Tutorials.MsgBasicRecipeWoodShovel.Report(1);
             if (recipeItem.Result.Name == "Wooden Pickaxe")
                 Tutorials.MsgBasicRecipeWoodPickaxe.Report(1);
         }
