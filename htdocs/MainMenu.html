@@ -5,6 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="paper.bootstrap.min.css">
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
+    <script src="/Mods/Upvoid/EfficientUI/1.0.0/js/efficientUI.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
     <title>UpvoidMiner</title>
     <style type="text/css">
       .upvoid-debug
@@ -36,9 +41,6 @@
         </div>
     </div>
 
-    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js"></script>
-    <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/bootstrap.min.js"></script>
-    <script src="/Mods/Upvoid/Web.Tools.Plots/1.0.0/plots/plots.js"></script>
     <script>
 
         $.get("/Mods/Upvoid/UpvoidMiner/0.0.1/IsPlayerActivated", "", function (data) {
@@ -94,5 +96,11 @@
 
     </script>
 
+
+    <script type="text/javascript">EfficientUI.addTemplateUrl("StatsAndMemFailsafe.html");</script>
+    <hud name="Global">
+        <uicollection name="Stats"></uicollection>
+        <uicollection name="MemoryFailsafe"></uicollection>
+    </hud>
 </body>
 </html>

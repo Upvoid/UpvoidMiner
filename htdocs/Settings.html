@@ -52,7 +52,7 @@
     <div id="menu" class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto; overflow-y:auto;">
         <div class="panel-body text-center InputConsumer">
         
-            <ui name="Settings">
+            <ui name="Settings" onadd="function(ui){$(ui).find('.panel-collapse').collapse({toggle:false});}">
                 <h1>Settings</h1>
                 <form role="form" style="text-align: left;">
                 
@@ -268,9 +268,9 @@
          EfficientUI.SendCallback(el, 'VideoModeCallback', {index: el.selectedIndex});
     }
 
-    $(document).ready(function() {
+    /*$(document).ready(function() {
      $('.panel-collapse').collapse({toggle:false});
-    });
+    });*/
 
       function menuResize() {
         var menu = $('#menu');
@@ -283,5 +283,10 @@
     
     </script>
 
+    <script type="text/javascript">EfficientUI.addTemplateUrl("StatsAndMemFailsafe.html");</script>
+    <hud name="Global">
+        <uicollection name="Stats"></uicollection>
+        <uicollection name="MemoryFailsafe"></uicollection>
+    </hud>
 </body>
 </html>
