@@ -344,19 +344,32 @@ namespace UpvoidMiner
         {
             switch (shadowSet)
             {
-                case 0: return 0;
+                case 0: return 2;
                 case 1: return 256;
                 case 2: return 512;
                 case 3: return 1024;
                 case 4: return 2048;
-                default: return 0;
+                default: return 2;
+            }
+        }
+
+        public int ShadowResolutionToSetting(int shadowRes)
+        {
+            switch (shadowRes)
+            {
+                case 2:    return 0;
+                case 256:  return 1;
+                case 512:  return 2;
+                case 1024: return 3;
+                case 2048: return 4;
+                default:   return 0;
             }
         }
 
         [UISlider(0,4)]
         public int ShadowResolution
         {
-            get { return (int)settingShadowResolution.value; }
+            get { return ShadowResolutionToSetting((int)settingShadowResolution.value); }
             set
             {
                 int shadowRes = ShadowSettingToResolution(value);
@@ -540,7 +553,7 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetLow()
         {
-            ShadowResolution = 256;
+            ShadowResolution = 1;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = false;
             FXAA = true;
@@ -555,7 +568,7 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetMedium()
         {
-            ShadowResolution = 512;
+            ShadowResolution = 2;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = true;
             FXAA = true;
@@ -570,7 +583,7 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetHigh()
         {
-            ShadowResolution = 1024;
+            ShadowResolution = 3;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
@@ -585,15 +598,15 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetMax()
         {
-            ShadowResolution = 2048;
+            ShadowResolution = 4;   // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
             InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
-            MinLodDistance = 30;
-            LodFalloff = 40;
+            MinLodDistance = 50;
+            LodFalloff = 50;
             MaxTreeDistance = 300;
         }
 

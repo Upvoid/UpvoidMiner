@@ -145,11 +145,13 @@
                                        <uicheckbox name="MinimalGraphics" onvalue="function(el, val) { $('.graphicsSettings').css('display', val ? 'none' : 'block'); }">Minimal Graphics mode</uicheckbox>
                                     </p>-->
                                     <div class="graphicsSettings">
-                                       <uibutton name="SettingsPresetMin">Min</uibutton>
-                                       <uibutton name="SettingsPresetLow">Low</uibutton>
-                                       <uibutton name="SettingsPresetMedium">Med</uibutton>
-                                       <uibutton name="SettingsPresetHigh">High</uibutton>
-                                       <uibutton name="SettingsPresetMax">Max</uibutton>
+                                       <div class="btn-group">
+                                          <uibutton name="SettingsPresetMin" tag="a">Min</uibutton>
+                                          <uibutton name="SettingsPresetLow" tag="a">Low</uibutton>
+                                          <uibutton name="SettingsPresetMedium" tag="a">Med</uibutton>
+                                          <uibutton name="SettingsPresetHigh" tag="a">High</uibutton>
+                                          <uibutton name="SettingsPresetMax" tag="a">Max</uibutton>
+                                       </div>
                                        
                                        <uislider name="ShadowResolution">Shadowmap Resolution</uislider>
                                        <!--<uicheckbox name="Shadows">Enable Shadows</uicheckbox>-->
