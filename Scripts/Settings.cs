@@ -158,7 +158,7 @@ namespace UpvoidMiner
         
         // Graphics
         SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
-        SettingDouble settingShadowQuality        = new SettingDouble("Graphics/Shadow Resolution", 512);
+        SettingDouble settingShadowResolution     = new SettingDouble("Graphics/Shadow Resolution", 512);
         SettingBool   settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
         SettingBool   settingTonemapping          = new SettingBool("Graphics/Enable Tonemapping", true);
         SettingBool   settingFXAA                 = new SettingBool("Graphics/Enable FXAA", true);
@@ -339,15 +339,30 @@ namespace UpvoidMiner
             set { settingHideTutorial.value = value; }
         }
 
-        [UISlider(0,4)]
-        public int ShadowQuality
+
+        public int ShadowSettingToResolution(int shadowSet)
         {
-            get { return (int)settingShadowQuality.value; }
+            switch (shadowSet)
+            {
+                case 0: return 0;
+                case 1: return 256;
+                case 2: return 512;
+                case 3: return 1024;
+                case 4: return 2048;
+                default: return 0;
+            }
+        }
+
+        [UISlider(0,4)]
+        public int ShadowResolution
+        {
+            get { return (int)settingShadowResolution.value; }
             set
             {
-                if (settingShadowQuality.value != value)
+                int shadowRes = ShadowSettingToResolution(value);
+                if (settingShadowResolution.value != shadowRes)
                 {
-                    settingShadowQuality.value = value;
+                    settingShadowResolution.value = shadowRes;
                     pipelineChanges = true;
                 }
             }
@@ -508,6 +523,81 @@ namespace UpvoidMiner
         }
 
         [UIButton]
+        public void SettingsPresetMin()
+        {
+            ShadowResolution = 0;       // No shadows
+            VolumetricScattering = false;
+            Tonemapping = false;
+            FXAA = false;
+            InternalSize = "1280x720";  // Restrict to 720p
+            Grass = false;
+            DigParticles = false;
+            MinLodDistance = 0;
+            LodFalloff = 10;
+            MaxTreeDistance = 20;
+        }
+
+        [UIButton]
+        public void SettingsPresetLow()
+        {
+            ShadowResolution = 256;
+            VolumetricScattering = false;
+            Tonemapping = false;
+            FXAA = true;
+            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            Grass = true;
+            DigParticles = true;
+            MinLodDistance = 10;
+            LodFalloff = 20;
+            MaxTreeDistance = 50;
+        }
+
+        [UIButton]
+        public void SettingsPresetMedium()
+        {
+            ShadowResolution = 512;
+            VolumetricScattering = false;
+            Tonemapping = true;
+            FXAA = true;
+            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            Grass = true;
+            DigParticles = true;
+            MinLodDistance = 20;
+            LodFalloff = 30;
+            MaxTreeDistance = 100;
+        }
+
+        [UIButton]
+        public void SettingsPresetHigh()
+        {
+            ShadowResolution = 1024;
+            VolumetricScattering = true;
+            Tonemapping = true;
+            FXAA = true;
+            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            Grass = true;
+            DigParticles = true;
+            MinLodDistance = 30;
+            LodFalloff = 40;
+            MaxTreeDistance = 200;
+        }
+
+        [UIButton]
+        public void SettingsPresetMax()
+        {
+            ShadowResolution = 2048;
+            VolumetricScattering = true;
+            Tonemapping = true;
+            FXAA = true;
+            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            Grass = true;
+            DigParticles = true;
+            MinLodDistance = 30;
+            LodFalloff = 40;
+            MaxTreeDistance = 300;
+        }
+
+        [UIButton]
         public void ApplySettings()
         {
             // Write all settings to settings file
@@ -551,7 +641,6 @@ namespace UpvoidMiner
 
             if(LocalScript.world != null)
             {
-                
                 LocalScript.world.LodSettings.LodFalloff = (float)settingLodFalloff.value;
                 LocalScript.world.LodSettings.MinLodDistance = (float)settingMinLodDistance.value;
             }

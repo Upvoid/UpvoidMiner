@@ -145,7 +145,13 @@
                                        <uicheckbox name="MinimalGraphics" onvalue="function(el, val) { $('.graphicsSettings').css('display', val ? 'none' : 'block'); }">Minimal Graphics mode</uicheckbox>
                                     </p>-->
                                     <div class="graphicsSettings">
-                                       <uislider name="ShadowQuality">Shadowmap Resolution</uislider>
+                                       <uibutton name="SettingsPresetMin">Min</uibutton>
+                                       <uibutton name="SettingsPresetLow">Low</uibutton>
+                                       <uibutton name="SettingsPresetMedium">Med</uibutton>
+                                       <uibutton name="SettingsPresetHigh">High</uibutton>
+                                       <uibutton name="SettingsPresetMax">Max</uibutton>
+                                       
+                                       <uislider name="ShadowResolution">Shadowmap Resolution</uislider>
                                        <!--<uicheckbox name="Shadows">Enable Shadows</uicheckbox>-->
                                        <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
                                        <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
