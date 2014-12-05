@@ -40,7 +40,7 @@
 
       .slider-cell { padding-left: 1em; padding-right: 1em; width: 100%; }
 
-      #menu .panel:hover .panel-heading {
+      #menu form > .panel:hover > .panel-heading {
         background: #2196f3;
         border-color: #2196f3;
       }
@@ -55,7 +55,7 @@
             <ui name="Settings">
                 <h1>Settings</h1>
                 <form role="form" style="text-align: left;">
-                    
+                
                     <div class="panel panel-default">
                         <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-resolution">
@@ -110,67 +110,96 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-lod').collapse('toggle')">Level of Detail <span class="caret"></span></div>
-                        <div class="panel-collapse collapse" id="group-lod">
-                            <div class="panel-body">
-                                <table>
-                                    <tr><td>Lod&nbsp;Falloff:</td>
-                                    <td class="slider-cell">
-                                        <uislider onvalue="function(el, value) { $('#lodFalloff').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="LodFalloff"></uislider></td>
-                                        <td><span id="lodFalloff"></span></td></tr>
-
-                                    <tr><td>Min&nbsp;Lod&nbsp;Distance:</td>
-                                    <td class="slider-cell">
-                                        <uislider onvalue="function(el, value) { $('#minLodDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MinLodDistance"></uislider></td>
-                                        <td><span id="minLodDistance"></span></td></tr>
-
-                                    <tr><td>Max&nbsp;Tree&nbsp;Distance:</td>
-                                    <td class="slider-cell">
-                                        <uislider onvalue="function(el, value) { $('#maxTreeDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MaxTreeDistance"></uislider></td>
-                                        <td><span id="maxTreeDistance"></span></td></tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-default">
                         <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-graphics').collapse('toggle')">Graphics <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-graphics">
                             <div class="panel-body">
-                                <div class="well well-sm">
-                                    <!--<div style="text-align:center;"><p style="color: #f90;"><i class="fa fa-warning"></i> Changes are effective after pressing 'Apply'.</p></div>-->
-                                    <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
-                                    
-                                    <!--<p style="margin-bottom:20px; font-size:125%;">
-                                       <uicheckbox name="MinimalGraphics" onvalue="function(el, val) { $('.graphicsSettings').css('display', val ? 'none' : 'block'); }">Minimal Graphics mode</uicheckbox>
-                                    </p>-->
-                                    <div class="graphicsSettings">
-                                       <div class="btn-group">
-                                          <uibutton name="SettingsPresetMin" tag="a">Min</uibutton>
-                                          <uibutton name="SettingsPresetLow" tag="a">Low</uibutton>
-                                          <uibutton name="SettingsPresetMedium" tag="a">Med</uibutton>
-                                          <uibutton name="SettingsPresetHigh" tag="a">High</uibutton>
-                                          <uibutton name="SettingsPresetMax" tag="a">Max</uibutton>
-                                       </div>
-                                       <br/>
-                                       <uislider name="ShadowResolution">Shadow Quality</uislider>
-                                       <uislider name="AnisotropicFiltering">Anisotropic Filtering</uislider>
-                                       <uislider name="TextureResolution">Texture Quality</uislider>
-                                       <!--<uicheckbox name="Shadows">Enable Shadows</uicheckbox>-->
-                                       <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
-                                       <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
-                                       <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
-                                       <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+
+                                <div style="text-align:center;" class="info-on-apply"><p class="text-warning"><i class="fa fa-warning"></i> Click on "Ok" or "Apply" to apply changes.</p></div>
+                                <uiobject name="ChangesOnApply" onvalue="function(el, val) { $(el).parent().find('.info-on-apply').css('visibility', val ? 'visible' : 'hidden'); }"></uiobject>
+
+                                <div style="text-align:center;">
+                                   <div class="btn-group btn-group-sm">
+                                      <uibutton name="SettingsPresetMin" tag="a">Min</uibutton>
+                                      <uibutton name="SettingsPresetLow" tag="a">Low</uibutton>
+                                      <uibutton name="SettingsPresetMedium" tag="a">Med</uibutton>
+                                      <uibutton name="SettingsPresetHigh" tag="a">High</uibutton>
+                                      <uibutton name="SettingsPresetMax" tag="a">Max</uibutton>
+                                   </div>
+                               </div>
+
+                               <br>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <table>
+                                            <tr>
+                                                <td>Shadows</td>
+                                                <td class="slider-cell">
+                                                    <uislider options="{range:'min'}" class="input-slider" name="ShadowResolution"></uislider></td>
+                                                <td><uistring name="ShadowResolutionString" tag="span"></uistring></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Anisotropic&nbsp;Filtering</td>
+                                                <td class="slider-cell">
+                                                    <uislider options="{range:'min'}" class="input-slider" name="AnisotropicFiltering"></uislider></td>
+                                                <td><uistring name="AnisotropicFilteringString" tag="span"></uistring></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Texture&nbsp;Quality</td>
+                                                <td class="slider-cell">
+                                                    <uislider options="{range:'min'}" class="input-slider" name="TextureResolution"></uislider></td>
+                                                <td><uistring name="TextureResolutionString" tag="span"></uistring></td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
-                                <uicheckbox name="Grass">Enable Grass</uicheckbox>
-                                <uicheckbox name="DigParticles">Enable Digging Particles</uicheckbox>
-                                <table>
-                                    <tr><td>Horizontal&nbsp;FOV:</td>
-                                    <td class="slider-cell">
-                                        <uislider onvalue="function(el, value) { $('#fovValue').html(value+'°'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider></td>
-                                        <td><span id="fovValue"></span></td></tr>
-                                </table>
+
+                               <!--<uicheckbox name="Shadows">Enable Shadows</uicheckbox>-->
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
+                                        <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
+                                        <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
+                                        <uicheckbox name="FXAA">Enable FXAA</uicheckbox>
+                                        <uicheckbox name="RestrictTo720p">Restrict to 720p</uicheckbox>                                        
+
+                                        <uicheckbox name="Grass">Enable Grass</uicheckbox>
+                                        <uicheckbox name="DigParticles">Enable Digging Particles</uicheckbox>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Level of Detail</div>
+                                    <div class="panel-body">
+                                        <table>
+                                            <tr><td>Lod&nbsp;Falloff:</td>
+                                            <td class="slider-cell">
+                                                <uislider onvalue="function(el, value) { $('#lodFalloff').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="LodFalloff"></uislider></td>
+                                                <td><span id="lodFalloff"></span></td></tr>
+
+                                            <tr><td>Min&nbsp;Lod&nbsp;Distance:</td>
+                                            <td class="slider-cell">
+                                                <uislider onvalue="function(el, value) { $('#minLodDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MinLodDistance"></uislider></td>
+                                                <td><span id="minLodDistance"></span></td></tr>
+
+                                            <tr><td>Max&nbsp;Tree&nbsp;Distance:</td>
+                                            <td class="slider-cell">
+                                                <uislider onvalue="function(el, value) { $('#maxTreeDistance').html(value+'m'); }" options="{range:'min'}" class="lod-slider" name="MaxTreeDistance"></uislider></td>
+                                                <td><span id="maxTreeDistance"></span></td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <table>
+                                            <tr><td>Horizontal&nbsp;FOV:</td>
+                                            <td class="slider-cell">
+                                                <uislider onvalue="function(el, value) { $('#fovValue').html(value+'°'); }" options="{range:'min'}" class="fov-slider" name="FieldOfView"></uislider></td>
+                                                <td><span id="fovValue"></span></td></tr>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,9 +231,12 @@
                         </div>
                     </div>
                 </form>
-                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ApplySettings">Ok</uibutton>
-                <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ResetSettings" class="btn btn-danger">Cancel</uibutton>
-                <uibutton name="ResetSettings">Undo changes</uibutton>
+                <div class="btn-group">
+                    <uibutton name="ApplySettings">Apply</uibutton>
+                    <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ApplySettings">Ok</uibutton>
+                    <uibutton onclick="javascript:window.location.href='MainMenu.html'" name="ResetSettings" class="btn btn-primary">Cancel</uibutton>
+                    <uibutton name="ResetSettings">Undo changes</uibutton>
+                </div>
             </ui>
         </div>
     </div>

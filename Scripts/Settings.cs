@@ -171,49 +171,66 @@ namespace UpvoidMiner
         }
 
         // Window Manager
-        private SettingDouble settingResolutionWidth            = new SettingDouble("WindowManager/Width", -1);
-        private SettingDouble settingResolutionHeight           = new SettingDouble("WindowManager/Height", -1);
-        private SettingDouble settingFullscreen                 = new SettingDouble("WindowManager/Fullscreen", -1);
-        private SettingDouble settingInternalResolutionWidth    = new SettingDouble("WindowManager/InternalWidth", -1);
-        private SettingDouble settingInternalResolutionHeight   = new SettingDouble("WindowManager/InternalHeight", -1);
+        private SettingDouble settingResolutionWidth = new SettingDouble("WindowManager/Width", -1);
+        private SettingDouble settingResolutionHeight = new SettingDouble("WindowManager/Height", -1);
+        private SettingDouble settingFullscreen = new SettingDouble("WindowManager/Fullscreen", -1);
+        private SettingDouble settingInternalResolutionWidth = new SettingDouble("WindowManager/InternalWidth", -1);
+        private SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalHeight", -1);
+        private SettingBool settingRestrictTo720p = new SettingBool("WindowManager/Restrict To 720p", false);
 
         // Audio
-        private SettingDouble settingMasterVolume               = new SettingDouble("Audio/Master Volume", 100);
-        private SettingDouble settingSfxVolume                  = new SettingDouble("Audio/SFX Volume", 50);
-        private SettingDouble settingMusicVolume                = new SettingDouble("Audio/Music Volume", 50);
-        private SettingBool   settingMuteMusic                  = new SettingBool("Audio/Mute Music", false);
-        
+        private SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
+        private SettingDouble settingSfxVolume = new SettingDouble("Audio/SFX Volume", 50);
+        private SettingDouble settingMusicVolume = new SettingDouble("Audio/Music Volume", 50);
+        private SettingBool settingMuteMusic = new SettingBool("Audio/Mute Music", false);
+
         // Graphics
-        private SettingDouble settingAnisotropicFiltering       = new SettingDouble("Graphics/Anisotropic Filtering", 4);
-        private SettingDouble settingTextureResolution          = new SettingDouble("Graphics/Texture Resolution", 512);
-        private SettingDouble settingShadowResolution           = new SettingDouble("Graphics/Shadow Resolution", 512);
-        private SettingBool   settingVolumetricScattering       = new SettingBool("Graphics/Enable Volumetric Scattering", false);
-        private SettingBool   settingTonemapping                = new SettingBool("Graphics/Enable Tonemapping", true);
-        private SettingBool   settingFXAA                       = new SettingBool("Graphics/Enable FXAA", true);
-        private SettingBool   settingLensflares                 = new SettingBool("Graphics/Enable Lensflares", false);
-        private SettingDouble settingFieldOfView                = new SettingDouble("Graphics/Field of View", 75.0);
-        
+        private SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
+        private SettingDouble settingTextureResolution = new SettingDouble("Graphics/Texture Resolution", 512);
+        private SettingDouble settingShadowResolution = new SettingDouble("Graphics/Shadow Resolution", 512);
+        private SettingBool settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
+        private SettingBool settingTonemapping = new SettingBool("Graphics/Enable Tonemapping", true);
+        private SettingBool settingFXAA = new SettingBool("Graphics/Enable FXAA", true);
+        private SettingBool settingLensflares = new SettingBool("Graphics/Enable Lensflares", false);
+        private SettingDouble settingFieldOfView = new SettingDouble("Graphics/Field of View", 75.0);
+
         // LoD
-        private SettingBool   settingGrass                      = new SettingBool("Graphics/Enable Grass", true);
-        private SettingBool   settingDigParticles               = new SettingBool("Graphics/Enable Dig Particles", true);
-        private SettingDouble settingMaxTreeDistance            = new SettingDouble("Graphics/Max Tree Distance", 150);
-        private SettingDouble settingMinLodDistance             = new SettingDouble("Graphics/Min Lod Distance", 20);
-        private SettingDouble settingLodFalloff                 = new SettingDouble("Graphics/Lod Falloff", 30);
-        
+        private SettingBool settingGrass = new SettingBool("Graphics/Enable Grass", true);
+        private SettingBool settingDigParticles = new SettingBool("Graphics/Enable Dig Particles", true);
+        private SettingDouble settingMaxTreeDistance = new SettingDouble("Graphics/Max Tree Distance", 150);
+        private SettingDouble settingMinLodDistance = new SettingDouble("Graphics/Min Lod Distance", 20);
+        private SettingDouble settingLodFalloff = new SettingDouble("Graphics/Lod Falloff", 30);
+
         // Other
-        private SettingDouble settingMouseSensitivity           = new SettingDouble("Input/Mouse Sensitivity", 0.5);
-        private SettingBool   settingHideTutorial               = new SettingBool("Misc/Hide Tutorial", false);
-        private SettingBool   settingShowStats                  = new SettingBool("Debug/Show Stats", false);
+        private SettingDouble settingMouseSensitivity = new SettingDouble("Input/Mouse Sensitivity", 0.5);
+        private SettingBool settingHideTutorial = new SettingBool("Misc/Hide Tutorial", false);
+        private SettingBool settingShowStats = new SettingBool("Debug/Show Stats", false);
 
 
         private bool pipelineChanges = false;
         private bool textureChanges = false;
 
+        [UIObject]
+        public bool ChangesOnApply { get { return pipelineChanges || textureChanges; } }
+
+        [UICheckBox]
+        public bool RestrictTo720p
+        {
+            get { return settingRestrictTo720p.value; }
+            set
+            {
+                if (settingRestrictTo720p.value == value) return;
+                settingRestrictTo720p.value = value;
+                pipelineChanges = true;
+            }
+        }
+
         [UITextBox]
-        public string InternalSize { 
+        public string InternalSize
+        {
             get
             {
-                return settingInternalResolutionWidth.value.ToString() + "x" + 
+                return settingInternalResolutionWidth.value.ToString() + "x" +
                        settingInternalResolutionHeight.value.ToString();
             }
             set
@@ -346,14 +363,14 @@ namespace UpvoidMiner
         [UISlider(0, 4)]
         public int AnisotropicFiltering
         {
-            get 
+            get
             {
                 switch ((int)settingAnisotropicFiltering.value)
                 {
-                    case 1:  return 0;
-                    case 2:  return 1;
-                    case 4:  return 2;
-                    case 8:  return 3;
+                    case 1: return 0;
+                    case 2: return 1;
+                    case 4: return 2;
+                    case 8: return 3;
                     case 16: return 4;
                     default: return 0;
                 }
@@ -363,14 +380,14 @@ namespace UpvoidMiner
                 int anisFilt;
                 switch (value)
                 {
-                    case 0: anisFilt = 1;  break;
-                    case 1: anisFilt = 2;  break;
-                    case 2: anisFilt = 4;  break;
-                    case 3: anisFilt = 8;  break;
+                    case 0: anisFilt = 1; break;
+                    case 1: anisFilt = 2; break;
+                    case 2: anisFilt = 4; break;
+                    case 3: anisFilt = 8; break;
                     case 4: anisFilt = 16; break;
                     default: anisFilt = 1; break;
                 }
-                if(settingAnisotropicFiltering.value != anisFilt)
+                if (settingAnisotropicFiltering.value != anisFilt)
                 {
                     settingAnisotropicFiltering.value = anisFilt;
                     textureChanges = true;
@@ -378,19 +395,25 @@ namespace UpvoidMiner
             }
         }
 
+        [UIString]
+        public string AnisotropicFilteringString
+        {
+            get { return (int)settingAnisotropicFiltering.value + "x"; }
+        }
+
         [UISlider(0, 4)]
         public int TextureResolution
         {
-            get 
+            get
             {
                 switch ((int)settingTextureResolution.value)
                 {
-                    case 128:  return 0;
-                    case 256:  return 1;
-                    case 512:  return 2;
+                    case 128: return 0;
+                    case 256: return 1;
+                    case 512: return 2;
                     case 1024: return 3;
                     case 2048: return 4;
-                    default:   return 128;
+                    default: return 128;
                 }
             }
             set
@@ -405,12 +428,18 @@ namespace UpvoidMiner
                     case 4: texRes = 2048; break;
                     default: texRes = 128; break;
                 }
-                if(settingTextureResolution.value != texRes)
+                if (settingTextureResolution.value != texRes)
                 {
                     settingTextureResolution.value = texRes;
                     textureChanges = true;
                 }
             }
+        }
+
+        [UIString]
+        public string TextureResolutionString
+        {
+            get { return (int)settingTextureResolution.value + "&sup2;"; }
         }
 
         [UISlider(45, 135)]
@@ -439,10 +468,11 @@ namespace UpvoidMiner
         }
 
 
-        [UISlider(0,4)]
+        [UISlider(0, 4)]
         public int ShadowResolution
         {
-            get {
+            get
+            {
                 switch ((int)settingShadowResolution.value)
                 {
                     case 2: return 0;
@@ -458,12 +488,12 @@ namespace UpvoidMiner
                 int shadowRes;
                 switch (value)
                 {
-                    case 0: shadowRes = 2;    break;
-                    case 1: shadowRes = 256;  break;
-                    case 2: shadowRes = 512;  break;
+                    case 0: shadowRes = 2; break;
+                    case 1: shadowRes = 256; break;
+                    case 2: shadowRes = 512; break;
                     case 3: shadowRes = 1024; break;
                     case 4: shadowRes = 2048; break;
-                    default: shadowRes = 2;   break;
+                    default: shadowRes = 2; break;
                 }
 
                 if (settingShadowResolution.value != shadowRes)
@@ -471,6 +501,17 @@ namespace UpvoidMiner
                     settingShadowResolution.value = shadowRes;
                     pipelineChanges = true;
                 }
+            }
+        }
+
+        [UIString]
+        public string ShadowResolutionString
+        {
+            get
+            {
+                if (settingShadowResolution.value <= 2)
+                    return "none";
+                else return (int)settingShadowResolution.value + "&sup2;";
             }
         }
 
@@ -485,7 +526,7 @@ namespace UpvoidMiner
                     settingLensflares.value = value;
                     pipelineChanges = true;
                 }
-                
+
             }
         }
 
@@ -500,8 +541,8 @@ namespace UpvoidMiner
                     settingVolumetricScattering.value = value;
                     pipelineChanges = true;
                 }
-                
-                
+
+
             }
         }
 
@@ -516,8 +557,8 @@ namespace UpvoidMiner
                     settingTonemapping.value = value;
                     pipelineChanges = true;
                 }
-                    
-                
+
+
             }
         }
 
@@ -561,9 +602,9 @@ namespace UpvoidMiner
         }
 
         [UICheckBox]
-        public bool ShowStats 
+        public bool ShowStats
         {
-            get 
+            get
             {
                 return settingShowStats.value;
             }
@@ -577,10 +618,10 @@ namespace UpvoidMiner
         public int LodFalloff
         {
             get { return (int)settingLodFalloff.value; }
-            set 
+            set
             {
                 settingLodFalloff.value = value;
-                LocalScript.world.LodSettings.LodFalloff = value; 
+                LocalScript.world.LodSettings.LodFalloff = value;
             }
         }
 
@@ -588,23 +629,23 @@ namespace UpvoidMiner
         public int MinLodDistance
         {
             get { return (int)settingMinLodDistance.value; }
-            set 
+            set
             {
                 settingMinLodDistance.value = value;
-                LocalScript.world.LodSettings.MinLodDistance = value; 
+                LocalScript.world.LodSettings.MinLodDistance = value;
             }
         }
 
         [UISlider(0, 100)]
         public int MouseSensitivity
         {
-            get 
+            get
             {
-                return (int)(settingMouseSensitivity.value * 100); 
+                return (int)(settingMouseSensitivity.value * 100);
             }
-            set 
-            { 
-                settingMouseSensitivity.value = value / 100.0; 
+            set
+            {
+                settingMouseSensitivity.value = value / 100.0;
             }
         }
 
@@ -612,7 +653,7 @@ namespace UpvoidMiner
 
         [UISlider(20, 500)]
         public int MaxTreeDistance
-        { 
+        {
             get
             {
                 return (int)settingMaxTreeDistance.value;
@@ -622,7 +663,7 @@ namespace UpvoidMiner
                 float fadeOutMin = Math.Max(5, value - 5);     // >= 5
                 float fadeOutMax = Math.Max(10, value + 5);    // >= 10
                 float fadeTime = 1.0f; // 1 second
-                
+
                 settingMaxTreeDistance.value = value;
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
             }
@@ -637,12 +678,12 @@ namespace UpvoidMiner
             VolumetricScattering = false;
             Tonemapping = false;
             FXAA = false;
-            InternalSize = "1280x720";  // Restrict to 720p
             Grass = false;
             DigParticles = false;
             MinLodDistance = 0;
             LodFalloff = 10;
             MaxTreeDistance = 30;
+            RestrictTo720p = true;
         }
 
         [UIButton]
@@ -654,12 +695,12 @@ namespace UpvoidMiner
             VolumetricScattering = false;
             Tonemapping = false;
             FXAA = true;
-            //InternalSize = "-1x-1";  // Do not set internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 10;
             LodFalloff = 20;
             MaxTreeDistance = 50;
+            RestrictTo720p = false;
         }
 
         [UIButton]
@@ -671,12 +712,12 @@ namespace UpvoidMiner
             VolumetricScattering = false;
             Tonemapping = true;
             FXAA = true;
-            //InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 20;
             LodFalloff = 30;
             MaxTreeDistance = 100;
+            RestrictTo720p = false;
         }
 
         [UIButton]
@@ -688,12 +729,12 @@ namespace UpvoidMiner
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
-            //InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 30;
             LodFalloff = 40;
             MaxTreeDistance = 200;
+            RestrictTo720p = false;
         }
 
         [UIButton]
@@ -705,12 +746,12 @@ namespace UpvoidMiner
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
-            InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 50;
             LodFalloff = 50;
             MaxTreeDistance = 300;
+            RestrictTo720p = false;
         }
 
         private void SaveAllSettings()
@@ -743,7 +784,7 @@ namespace UpvoidMiner
         [UIButton]
         public void ApplySettings()
         {
-            if(settingInternalResolutionWidth.value != settingInternalResolutionWidth.preSaveValue ||
+            if (settingInternalResolutionWidth.value != settingInternalResolutionWidth.preSaveValue ||
                settingInternalResolutionHeight.value != settingInternalResolutionHeight.preSaveValue)
             {
                 ApplyInternalSize();
@@ -770,7 +811,7 @@ namespace UpvoidMiner
                 set.ResetSetting();
             }
 
-            
+
             ApplyInternalSize();
 
             // Re-apply the former settings
@@ -778,13 +819,13 @@ namespace UpvoidMiner
             Audio.SetVolumeForSpecificAudioType((float)settingSfxVolume.value / 100f, (int)AudioType.SFX);
             Audio.SetVolumeForSpecificAudioType(settingMuteMusic.value ? 0.0f : (float)settingMusicVolume.value / 100f, (int)AudioType.Music);
 
-            if(LocalScript.world != null)
+            if (LocalScript.world != null)
             {
                 LocalScript.world.LodSettings.LodFalloff = (float)settingLodFalloff.value;
                 LocalScript.world.LodSettings.MinLodDistance = (float)settingMinLodDistance.value;
             }
 
-            if(LocalScript.camera != null)
+            if (LocalScript.camera != null)
             {
                 LocalScript.camera.HorizontalFieldOfView = settingFieldOfView.value;
             }
@@ -797,7 +838,7 @@ namespace UpvoidMiner
                 float fadeTime = 1.0f; // 1 second
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
             }
-            
+
 
             pipelineChanges = false;
         }
