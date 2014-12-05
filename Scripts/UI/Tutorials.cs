@@ -17,7 +17,7 @@ namespace UpvoidMiner.UI
         }
 
         [UIObject]
-        public bool Visible { get { return !Settings.settings.HideTutorial; } }
+        public bool Visible { get { return Settings.settings != null && !Settings.settings.HideTutorial; } }
 
         public class TutorialMsg
         {

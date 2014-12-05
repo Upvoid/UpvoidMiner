@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using EfficientUI;
+using EfficientUI.Scripts.Elements;
 using Engine.Resources;
 using Engine.Universe;
 using UpvoidMiner.Items;
@@ -15,6 +16,7 @@ namespace UpvoidMiner
     {
         public class IconUI : UIProxy
         {
+            [UIConst]
             [UIImage]
             public TextureDataResource Icon { get; set; }
 
@@ -30,27 +32,34 @@ namespace UpvoidMiner
 
             public Item Item { get { return item; } }
 
+            [UIConst]
             [UIString]
             public string Name { get { return item.Name; } }
 
+            [UIConst]
             [UIString]
             public string Description { get { return item.Description; } }
 
             [UIString]
             public string Hotkey { get { return item.QuickAccessIndex < 0 ? "" : ((item.QuickAccessIndex + 1) % 10).ToString(CultureInfo.InvariantCulture); } }
 
+            [UIConst]
             [UICollection("ItemIcon")]
             public List<IconUI> IconStack { get; private set; }
 
+            [UIConst]
             [UICollection("ItemInfo")]
             public ItemUI ItemInfo { get { return this; } }
 
+            [UIConst]
             [UIObject]
             public bool IsDroppable { get { return item.IsDroppable; } }
 
+            [UIConst]
             [UIObject]
             public bool IsDestructible { get { return item is MaterialItem || item is CraftingItem; } }
 
+            [UIConst]
             [UIObject]
             public bool IsConvertible { get { return item is MaterialItem; } }
 
@@ -167,6 +176,7 @@ namespace UpvoidMiner
         {
             private readonly ResourceItem item;
 
+            [UIConst]
             [UICollection("ResourceItem")]
             public ItemUI ThisItem { get { return this; } }
 
@@ -184,7 +194,8 @@ namespace UpvoidMiner
         public class ToolItemUI : ItemUI
         {
             private readonly Item item;
-            
+           
+            [UIConst]
             [UICollection("ToolItem")]
             public ItemUI ThisItem { get { return this; } }
 
@@ -201,7 +212,8 @@ namespace UpvoidMiner
         public class MaterialItemUI : ItemUI
         {
             private readonly MaterialItem item;
-            
+
+            [UIConst]
             [UICollection("MaterialItem")]
             public ItemUI ThisItem { get { return this; } }
 

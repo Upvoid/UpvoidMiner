@@ -141,11 +141,22 @@
                                     <!--<div style="text-align:center;"><p style="color: #f90;"><i class="fa fa-warning"></i> Changes are effective after pressing 'Apply'.</p></div>-->
                                     <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
                                     
-                                    <p style="margin-bottom:20px; font-size:125%;">
+                                    <!--<p style="margin-bottom:20px; font-size:125%;">
                                        <uicheckbox name="MinimalGraphics" onvalue="function(el, val) { $('.graphicsSettings').css('display', val ? 'none' : 'block'); }">Minimal Graphics mode</uicheckbox>
-                                    </p>
+                                    </p>-->
                                     <div class="graphicsSettings">
-                                       <uicheckbox name="Shadows">Enable Shadows</uicheckbox>
+                                       <div class="btn-group">
+                                          <uibutton name="SettingsPresetMin" tag="a">Min</uibutton>
+                                          <uibutton name="SettingsPresetLow" tag="a">Low</uibutton>
+                                          <uibutton name="SettingsPresetMedium" tag="a">Med</uibutton>
+                                          <uibutton name="SettingsPresetHigh" tag="a">High</uibutton>
+                                          <uibutton name="SettingsPresetMax" tag="a">Max</uibutton>
+                                       </div>
+                                       <br/>
+                                       <uislider name="ShadowResolution">Shadow Quality</uislider>
+                                       <uislider name="AnisotropicFiltering">Anisotropic Filtering</uislider>
+                                       <uislider name="TextureResolution">Texture Quality</uislider>
+                                       <!--<uicheckbox name="Shadows">Enable Shadows</uicheckbox>-->
                                        <uicheckbox name="Lensflares">Enable Lens Flares</uicheckbox>
                                        <uicheckbox name="VolumetricScattering">Enable Volumetric Light Scattering</uicheckbox>
                                        <uicheckbox name="Tonemapping">Enable Tone Mapping</uicheckbox>
