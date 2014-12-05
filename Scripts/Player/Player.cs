@@ -31,6 +31,7 @@ using Engine.Input;
 using System.IO;
 using Newtonsoft.Json;
 using UpvoidMiner.Items;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -504,12 +505,14 @@ namespace UpvoidMiner
         /// </summary>
         public void Convert(Item item, bool convertAll)
         {
-            if (item.IsDroppable && item is MaterialItem && item is DiscreteItem)
+            if (item.IsDroppable && item is MaterialItem)
             {
                 var matItem = item as MaterialItem;
                 if (convertAll)
                 {
                     Inventory.AddResource(matItem.Material, matItem.Volume * (item as DiscreteItem).StackSize);
+                    if (matItem.Material.Name == "BirchWood")
+                        Tutorials.MsgBasicRecipeConvertWood.Report(matItem.Volume * (item as DiscreteItem).StackSize);
                     if (!GodMode)
                         Inventory.RemoveItem(item);
                     return;
@@ -520,6 +523,8 @@ namespace UpvoidMiner
                 dItem.StackSize = 1;
 
                 Inventory.AddResource(matItem.Material, matItem.Volume);
+                if (matItem.Material.Name == "BirchWood")
+                    Tutorials.MsgBasicRecipeConvertWood.Report(matItem.Volume);
 
                 // Keep all items in god mode
                 if (!GodMode)

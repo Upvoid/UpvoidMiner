@@ -230,6 +230,9 @@ namespace UpvoidMiner
                 Tutorials.MsgBasicCraftingDirtCube.Report(1);
             if (newItem && TypeSelection != 0 && mat.Name.StartsWith("Stone"))
                 Tutorials.MsgBasicCraftingStoneNonCube.Report(1);
+            if (TypeSelection == 2 && mat.Name.StartsWith("BirchWood") && Math.Abs(cylinderSettings.Size.x - 0.3f) < 0.05f && Math.Abs(cylinderSettings.Size.y - 0.5f) < 0.05f)
+                Tutorials.MsgBasicRecipeCraftingWoodCylinder.Report(1);
+            
         }
     }
 }

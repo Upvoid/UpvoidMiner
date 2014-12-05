@@ -6,6 +6,7 @@ using System.Text;
 using EfficientUI;
 using Engine.Resources;
 using Engine.Scripting;
+using UpvoidMiner.UI;
 
 namespace UpvoidMiner
 {
@@ -155,8 +156,18 @@ namespace UpvoidMiner
                 LocalScript.player.Inventory.Items.RemoveItem(ingredient.Ingredient,true);
 
             var recipeItem = SelectedItem as RecipeItem;
-            if (recipeItem != null)
-                LocalScript.player.Inventory.Items.AddItem(recipeItem.Result.Clone());
+            if (recipeItem == null)
+                return;
+
+            LocalScript.player.Inventory.Items.AddItem(recipeItem.Result.Clone());
+
+            //Tutorial
+            if (recipeItem.Result.Name == "Handle")
+                Tutorials.MsgBasicRecipeCraftingHandle.Report(4);
+            if (recipeItem.Result.Name == "Wooden Shovel")
+                Tutorials.MsgBasicRecipeWoodShovel.Report(1);
+            if (recipeItem.Result.Name == "Wooden Pickaxe")
+                Tutorials.MsgBasicRecipeWoodPickaxe.Report(1);
         }
 
         [UIObject]
