@@ -92,6 +92,9 @@ namespace UpvoidMiner
             // Reload the setting from user.settings file
             public abstract void reloadSettingFromFile();
 
+            // Reset the setting to the state before it was saved to file
+            public abstract void ResetSetting();
+
             // Save the current setting to user.settings file
             public abstract void SaveSetting();
         }
@@ -100,10 +103,15 @@ namespace UpvoidMiner
         {
             public double value;
             public double defValue;
+            public double preSaveValue;
             public SettingDouble(string identifier, double defaultValue, string description = "") :
                 base(identifier, description)
             {
                 defValue = defaultValue;
+                preSaveValue = defaultValue;
+
+                // Get initial value from file (or default value)
+                reloadSettingFromFile();
 
                 allSettings.Add(this);
             }
@@ -111,10 +119,17 @@ namespace UpvoidMiner
             public override void reloadSettingFromFile()
             {
                 value = Scripting.GetUserSettingNumber(id, defValue);
+                preSaveValue = value;
+            }
+
+            public override void ResetSetting()
+            {
+                value = preSaveValue;
             }
 
             public override void SaveSetting()
             {
+                preSaveValue = value;
                 Scripting.SetUserSettingNumber(id, value);
             }
         }
@@ -124,10 +139,15 @@ namespace UpvoidMiner
         {
             public bool value;
             public bool defValue;
+            public bool preSaveValue;
             public SettingBool(String identifier, bool defaultValue, String description = "") :
                 base(identifier, description)
             {
                 defValue = defaultValue;
+                preSaveValue = defaultValue;
+
+                // Get initial value from file (or default value)
+                reloadSettingFromFile();
 
                 allSettings.Add(this);
             }
@@ -135,50 +155,59 @@ namespace UpvoidMiner
             public override void reloadSettingFromFile()
             {
                 value = Scripting.GetUserSetting(id, defValue);
+                preSaveValue = value;
+            }
+
+            public override void ResetSetting()
+            {
+                value = preSaveValue;
             }
 
             public override void SaveSetting()
             {
+                preSaveValue = value;
                 Scripting.SetUserSetting(id, value);
             }
         }
 
         // Window Manager
-        SettingDouble settingResolutionWidth          = new SettingDouble("WindowManager/Width", -1);
-        SettingDouble settingResolutionHeight         = new SettingDouble("WindowManager/Height", -1);
-        SettingDouble settingFullscreen               = new SettingDouble("WindowManager/Fullscreen", -1);
-        SettingDouble settingInternalResolutionWidth  = new SettingDouble("WindowManager/InternalWidth", -1);
-        SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalHeight", -1);
+        private SettingDouble settingResolutionWidth            = new SettingDouble("WindowManager/Width", -1);
+        private SettingDouble settingResolutionHeight           = new SettingDouble("WindowManager/Height", -1);
+        private SettingDouble settingFullscreen                 = new SettingDouble("WindowManager/Fullscreen", -1);
+        private SettingDouble settingInternalResolutionWidth    = new SettingDouble("WindowManager/InternalWidth", -1);
+        private SettingDouble settingInternalResolutionHeight   = new SettingDouble("WindowManager/InternalHeight", -1);
 
         // Audio
-        SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
-        SettingDouble settingSfxVolume    = new SettingDouble("Audio/SFX Volume", 50);
-        SettingDouble settingMusicVolume  = new SettingDouble("Audio/Music Volume", 50);
-        SettingBool   settingMuteMusic    = new SettingBool("Audio/Mute Music", false);
+        private SettingDouble settingMasterVolume               = new SettingDouble("Audio/Master Volume", 100);
+        private SettingDouble settingSfxVolume                  = new SettingDouble("Audio/SFX Volume", 50);
+        private SettingDouble settingMusicVolume                = new SettingDouble("Audio/Music Volume", 50);
+        private SettingBool   settingMuteMusic                  = new SettingBool("Audio/Mute Music", false);
         
         // Graphics
-        SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
-        SettingDouble settingShadowResolution     = new SettingDouble("Graphics/Shadow Resolution", 512);
-        SettingBool   settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
-        SettingBool   settingTonemapping          = new SettingBool("Graphics/Enable Tonemapping", true);
-        SettingBool   settingFXAA                 = new SettingBool("Graphics/Enable FXAA", true);
-        SettingBool   settingLensflares           = new SettingBool("Graphics/Enable Lensflares", false);
-        SettingDouble settingFieldOfView          = new SettingDouble("Graphics/Field of View", 75.0);
+        private SettingDouble settingAnisotropicFiltering       = new SettingDouble("Graphics/Anisotropic Filtering", 4);
+        private SettingDouble settingTextureResolution          = new SettingDouble("Graphics/Texture Resolution", 512);
+        private SettingDouble settingShadowResolution           = new SettingDouble("Graphics/Shadow Resolution", 512);
+        private SettingBool   settingVolumetricScattering       = new SettingBool("Graphics/Enable Volumetric Scattering", false);
+        private SettingBool   settingTonemapping                = new SettingBool("Graphics/Enable Tonemapping", true);
+        private SettingBool   settingFXAA                       = new SettingBool("Graphics/Enable FXAA", true);
+        private SettingBool   settingLensflares                 = new SettingBool("Graphics/Enable Lensflares", false);
+        private SettingDouble settingFieldOfView                = new SettingDouble("Graphics/Field of View", 75.0);
         
         // LoD
-        SettingBool   settingGrass           = new SettingBool("Graphics/Enable Grass", true);
-        SettingBool   settingDigParticles    = new SettingBool("Graphics/Enable Dig Particles", true);
-        SettingDouble settingMaxTreeDistance = new SettingDouble("Graphics/Max Tree Distance", 150);
-        SettingDouble settingMinLodDistance  = new SettingDouble("Graphics/Min Lod Distance", 20);
-        SettingDouble settingLodFalloff      = new SettingDouble("Graphics/Lod Falloff", 30);
+        private SettingBool   settingGrass                      = new SettingBool("Graphics/Enable Grass", true);
+        private SettingBool   settingDigParticles               = new SettingBool("Graphics/Enable Dig Particles", true);
+        private SettingDouble settingMaxTreeDistance            = new SettingDouble("Graphics/Max Tree Distance", 150);
+        private SettingDouble settingMinLodDistance             = new SettingDouble("Graphics/Min Lod Distance", 20);
+        private SettingDouble settingLodFalloff                 = new SettingDouble("Graphics/Lod Falloff", 30);
         
         // Other
-        SettingDouble settingMouseSensitivity = new SettingDouble("Input/Mouse Sensitivity", 0.5);
-        SettingBool   settingHideTutorial     = new SettingBool("Misc/Hide Tutorial", false);
-        SettingBool   settingShowStats        = new SettingBool("Debug/Show Stats", false);
+        private SettingDouble settingMouseSensitivity           = new SettingDouble("Input/Mouse Sensitivity", 0.5);
+        private SettingBool   settingHideTutorial               = new SettingBool("Misc/Hide Tutorial", false);
+        private SettingBool   settingShowStats                  = new SettingBool("Debug/Show Stats", false);
 
 
         private bool pipelineChanges = false;
+        private bool textureChanges = false;
 
         [UITextBox]
         public string InternalSize { 
@@ -206,8 +235,8 @@ namespace UpvoidMiner
                         }
                     }
                 }
-            settingInternalResolutionWidth.value = w;
-            settingInternalResolutionHeight.value = h;
+                settingInternalResolutionWidth.value = w;
+                settingInternalResolutionHeight.value = h;
             }
         }
 
@@ -314,6 +343,76 @@ namespace UpvoidMiner
             }
         }
 
+        [UISlider(0, 4)]
+        public int AnisotropicFiltering
+        {
+            get 
+            {
+                switch ((int)settingAnisotropicFiltering.value)
+                {
+                    case 1:  return 0;
+                    case 2:  return 1;
+                    case 4:  return 2;
+                    case 8:  return 3;
+                    case 16: return 4;
+                    default: return 0;
+                }
+            }
+            set
+            {
+                int anisFilt;
+                switch (value)
+                {
+                    case 0: anisFilt = 1;  break;
+                    case 1: anisFilt = 2;  break;
+                    case 2: anisFilt = 4;  break;
+                    case 3: anisFilt = 8;  break;
+                    case 4: anisFilt = 16; break;
+                    default: anisFilt = 1; break;
+                }
+                if(settingAnisotropicFiltering.value != anisFilt)
+                {
+                    settingAnisotropicFiltering.value = anisFilt;
+                    textureChanges = true;
+                }
+            }
+        }
+
+        [UISlider(0, 4)]
+        public int TextureResolution
+        {
+            get 
+            {
+                switch ((int)settingTextureResolution.value)
+                {
+                    case 128:  return 0;
+                    case 256:  return 1;
+                    case 512:  return 2;
+                    case 1024: return 3;
+                    case 2048: return 4;
+                    default:   return 128;
+                }
+            }
+            set
+            {
+                int texRes;
+                switch (value)
+                {
+                    case 0: texRes = 128; break;
+                    case 1: texRes = 256; break;
+                    case 2: texRes = 512; break;
+                    case 3: texRes = 1024; break;
+                    case 4: texRes = 2048; break;
+                    default: texRes = 128; break;
+                }
+                if(settingTextureResolution.value != texRes)
+                {
+                    settingTextureResolution.value = texRes;
+                    textureChanges = true;
+                }
+            }
+        }
+
         [UISlider(45, 135)]
         public int FieldOfView
         {
@@ -340,39 +439,33 @@ namespace UpvoidMiner
         }
 
 
-        public int ShadowSettingToResolution(int shadowSet)
-        {
-            switch (shadowSet)
-            {
-                case 0: return 2;
-                case 1: return 256;
-                case 2: return 512;
-                case 3: return 1024;
-                case 4: return 2048;
-                default: return 2;
-            }
-        }
-
-        public int ShadowResolutionToSetting(int shadowRes)
-        {
-            switch (shadowRes)
-            {
-                case 2:    return 0;
-                case 256:  return 1;
-                case 512:  return 2;
-                case 1024: return 3;
-                case 2048: return 4;
-                default:   return 0;
-            }
-        }
-
         [UISlider(0,4)]
         public int ShadowResolution
         {
-            get { return ShadowResolutionToSetting((int)settingShadowResolution.value); }
+            get {
+                switch ((int)settingShadowResolution.value)
+                {
+                    case 2: return 0;
+                    case 256: return 1;
+                    case 512: return 2;
+                    case 1024: return 3;
+                    case 2048: return 4;
+                    default: return 0;
+                }
+            }
             set
             {
-                int shadowRes = ShadowSettingToResolution(value);
+                int shadowRes;
+                switch (value)
+                {
+                    case 0: shadowRes = 2;    break;
+                    case 1: shadowRes = 256;  break;
+                    case 2: shadowRes = 512;  break;
+                    case 3: shadowRes = 1024; break;
+                    case 4: shadowRes = 2048; break;
+                    default: shadowRes = 2;   break;
+                }
+
                 if (settingShadowResolution.value != shadowRes)
                 {
                     settingShadowResolution.value = shadowRes;
@@ -538,7 +631,9 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetMin()
         {
-            ShadowResolution = 0;       // No shadows
+            AnisotropicFiltering = 0;   // NOTE: This is the setting in [0..4]
+            TextureResolution = 0;      // NOTE: This is the setting in [0..4]
+            ShadowResolution = 0;       // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = false;
             FXAA = false;
@@ -547,17 +642,19 @@ namespace UpvoidMiner
             DigParticles = false;
             MinLodDistance = 0;
             LodFalloff = 10;
-            MaxTreeDistance = 20;
+            MaxTreeDistance = 30;
         }
 
         [UIButton]
         public void SettingsPresetLow()
         {
+            AnisotropicFiltering = 1;// NOTE: This is the setting in [0..4]
+            TextureResolution = 1;   // NOTE: This is the setting in [0..4]
             ShadowResolution = 1;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = false;
             FXAA = true;
-            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            //InternalSize = "-1x-1";  // Do not set internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 10;
@@ -568,11 +665,13 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetMedium()
         {
+            AnisotropicFiltering = 2;// NOTE: This is the setting in [0..4]
+            TextureResolution = 2;   // NOTE: This is the setting in [0..4]
             ShadowResolution = 2;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = true;
             FXAA = true;
-            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            //InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 20;
@@ -583,11 +682,13 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetHigh()
         {
-            ShadowResolution = 3;    // NOTE: This is the setting in [0..4]
+            AnisotropicFiltering = 3;  // NOTE: This is the setting in [0..4]
+            TextureResolution = 3;     // NOTE: This is the setting in [0..4]
+            ShadowResolution = 3;      // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
-            InternalSize = "-1x-1";  // Do not restrict internal resolution
+            //InternalSize = "-1x-1";  // Do not restrict internal resolution
             Grass = true;
             DigParticles = true;
             MinLodDistance = 30;
@@ -598,7 +699,9 @@ namespace UpvoidMiner
         [UIButton]
         public void SettingsPresetMax()
         {
-            ShadowResolution = 4;   // NOTE: This is the setting in [0..4]
+            AnisotropicFiltering = 4; // NOTE: This is the setting in [0..4]
+            TextureResolution = 4;    // NOTE: This is the setting in [0..4]
+            ShadowResolution = 4;     // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
             Tonemapping = true;
             FXAA = true;
@@ -610,22 +713,45 @@ namespace UpvoidMiner
             MaxTreeDistance = 300;
         }
 
-        [UIButton]
-        public void ApplySettings()
+        private void SaveAllSettings()
         {
             // Write all settings to settings file
-
             Debug.Assert(allSettings.Count > 0);
-            foreach(Setting set in allSettings)
+            foreach (Setting set in allSettings)
             {
                 set.SaveSetting();
             }
+        }
 
-            // rebuild pipeline on changes
-            // TODO: fixme
-            //if (pipelineChanges)
-            //    Rendering.SetupDefaultPipeline(LocalScript.camera);
+        private void RebuildTextures()
+        {
+            // rebuild textures on changes only
+            if (textureChanges)
+                TextureResource.RebuildTextures();
+            textureChanges = false;
+        }
+
+        private void RebuildPipeline()
+        {
+            // rebuild pipeline on changes only
+            if (pipelineChanges)
+                Rendering.SetupDefaultPipeline(LocalScript.camera);
             pipelineChanges = false;
+        }
+
+
+        [UIButton]
+        public void ApplySettings()
+        {
+            if(settingInternalResolutionWidth.value != settingInternalResolutionWidth.preSaveValue ||
+               settingInternalResolutionHeight.value != settingInternalResolutionHeight.preSaveValue)
+            {
+                ApplyInternalSize();
+            }
+
+            SaveAllSettings();
+            RebuildPipeline();
+            RebuildTextures();
         }
 
         [UIButton]
@@ -637,11 +763,11 @@ namespace UpvoidMiner
         [UIButton]
         public void ResetSettings()
         {
-            // Reset local setting values to those from user settings
+            // Reset setting values
             Debug.Assert(allSettings.Count > 0);
             foreach (Setting set in allSettings)
             {
-                set.reloadSettingFromFile();
+                set.ResetSetting();
             }
 
             
