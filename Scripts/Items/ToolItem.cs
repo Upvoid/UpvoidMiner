@@ -121,7 +121,6 @@ namespace UpvoidMiner
                 return false;
             if (item.ToolMaterial != ToolMaterial)
                 return false;
-            
             return Merge(item, subtract, force, dryrun);
         }
 
@@ -161,6 +160,15 @@ namespace UpvoidMiner
 
         public override void OnSelect(Player player)
         {
+            // no preview for hammer/drone/axe
+            switch (ToolType)
+            {
+                case ToolType.Hammer:
+                case ToolType.DroneChain:
+                case ToolType.Axe:
+                    return;
+            }
+
             // Use correct preview mesh
             MeshResource shapeMesh = null;
             MaterialResource shapeMat = null;
@@ -204,10 +212,13 @@ namespace UpvoidMiner
 
         public override void OnDeselect(Player player)
         {
-            // Remove and delete it on deselect.
-            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeRenderComp);
-            LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeIndicatorRenderComp);
-            LocalScript.ShapeIndicatorEntity.RemoveComponent(materialAlignmentGridRenderComp);
+            if (previewShapeRenderComp != null)
+            {
+                // Remove and delete it on deselect.
+                LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeRenderComp);
+                LocalScript.ShapeIndicatorEntity.RemoveComponent(previewShapeIndicatorRenderComp);
+                LocalScript.ShapeIndicatorEntity.RemoveComponent(materialAlignmentGridRenderComp);
+            }
             previewShape = null;
             previewShapeIndicator = null;
             materialAlignmentGrid = null;
@@ -223,31 +234,35 @@ namespace UpvoidMiner
         /// <summary>
         /// Some items have a preview for their impact when used, others do not
         /// </summary>
-        public override bool HasRayPreview{ get {
-        switch (ToolType)
+        public override bool HasRayPreview
         {
-            case ToolType.Pickaxe:
-                return true;
+            get
+            {
+                switch (ToolType)
+                {
+                    case ToolType.Pickaxe:
+                        return true;
 
-            case ToolType.Shovel:
-                return true;
+                    case ToolType.Shovel:
+                        return true;
 
-            case ToolType.Axe:
-                return true;
+                    case ToolType.Axe:
+                        return true;
 
-            case ToolType.GodsShovel:
-                return true;
+                    case ToolType.GodsShovel:
+                        return true;
 
-            case ToolType.DroneChain:
-                return true;
+                    case ToolType.DroneChain:
+                        return true;
 
-            case ToolType.Hammer:
-                return false;
+                    case ToolType.Hammer:
+                        return false;
 
-            default:
-                return false;
+                    default:
+                        return false;
+                }
+            }
         }
-        } }
 
 
         public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)
@@ -260,16 +275,18 @@ namespace UpvoidMiner
 
             crosshair.Disabled = rayHit == null;
 
-            if (ToolType == ToolType.Axe)
+            // no preview for hammer/drone/axe
+            switch (ToolType)
             {
-                if (rayHit != null && rayHit.HasTerrainCollision)
-                    crosshair.Disabled = true;
-                return;
+                case ToolType.Hammer:
+                case ToolType.DroneChain:
+                    return;
+                case ToolType.Axe:
+                    if (rayHit != null && rayHit.HasTerrainCollision)
+                        crosshair.Disabled = true;
+                    return;
             }
-            if (ToolType == ToolType.DroneChain)
-            {
-                return;
-            }
+
 
             //crosshair.IconClass = 
 
@@ -386,7 +403,7 @@ namespace UpvoidMiner
                     // TODO
                     return;
 
-                default: 
+                default:
                     throw new InvalidOperationException("Unknown tool");
             }
         }
