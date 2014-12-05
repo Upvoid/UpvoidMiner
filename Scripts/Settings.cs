@@ -81,7 +81,7 @@ namespace UpvoidMiner
         // Encapsulates one single setting
         public abstract class Setting
         {
-            public string id;   // JSON key, e.g. "Graphics/Shadow Quality"
+            public string id;   // JSON key, e.g. "Graphics/Shadow Resolution"
             public string desc;  // a longer description, e.g. for tooltips, optional
             public Setting(string identifier, string description)
             {
@@ -144,11 +144,11 @@ namespace UpvoidMiner
         }
 
         // Window Manager
-        SettingDouble settingResolutionWidth          = new SettingDouble("WindowManager/Resolution/Width", -1);
-        SettingDouble settingResolutionHeight         = new SettingDouble("WindowManager/Resolution/Height", -1);
+        SettingDouble settingResolutionWidth          = new SettingDouble("WindowManager/Width", -1);
+        SettingDouble settingResolutionHeight         = new SettingDouble("WindowManager/Height", -1);
         SettingDouble settingFullscreen               = new SettingDouble("WindowManager/Fullscreen", -1);
-        SettingDouble settingInternalResolutionWidth  = new SettingDouble("WindowManager/InternalResolution/Width", -1);
-        SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalResolution/Height", -1);
+        SettingDouble settingInternalResolutionWidth  = new SettingDouble("WindowManager/InternalWidth", -1);
+        SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalHeight", -1);
 
         // Audio
         SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
@@ -158,7 +158,7 @@ namespace UpvoidMiner
         
         // Graphics
         SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
-        SettingDouble settingShadowQuality        = new SettingDouble("Graphics/Shadow Quality", 512);
+        SettingDouble settingShadowQuality        = new SettingDouble("Graphics/Shadow Resolution", 512);
         SettingBool   settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
         SettingBool   settingTonemapping          = new SettingBool("Graphics/Enable Tonemapping", true);
         SettingBool   settingFXAA                 = new SettingBool("Graphics/Enable FXAA", true);
@@ -549,7 +549,27 @@ namespace UpvoidMiner
             Audio.SetVolumeForSpecificAudioType((float)settingSfxVolume.value / 100f, (int)AudioType.SFX);
             Audio.SetVolumeForSpecificAudioType(settingMuteMusic.value ? 0.0f : (float)settingMusicVolume.value / 100f, (int)AudioType.Music);
 
-            LocalScript.camera.HorizontalFieldOfView = settingFieldOfView.value;
+            if(LocalScript.world != null)
+            {
+                
+                LocalScript.world.LodSettings.LodFalloff = (float)settingLodFalloff.value;
+                LocalScript.world.LodSettings.MinLodDistance = (float)settingMinLodDistance.value;
+            }
+
+            if(LocalScript.camera != null)
+            {
+                LocalScript.camera.HorizontalFieldOfView = settingFieldOfView.value;
+            }
+
+
+            {
+                int maxTreeDist = (int)settingMaxTreeDistance.value;
+                float fadeOutMin = Math.Max(5, maxTreeDist - 5);     // >= 5
+                float fadeOutMax = Math.Max(10, maxTreeDist + 5);    // >= 10
+                float fadeTime = 1.0f; // 1 second
+                UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
+            }
+            
 
             pipelineChanges = false;
         }

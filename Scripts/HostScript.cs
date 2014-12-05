@@ -50,6 +50,8 @@ namespace UpvoidMiner
             World world = Universe.CreateWorld("UpvoidMinerWorld");
             UpvoidMinerWorldGenerator.init(world);
             world.Start();
+
+            Settings.settings.ResetSettings();
         }
     }
 }
