@@ -17,6 +17,7 @@ in vec3 aInstTangent;
 in vec3 aInstColor;
 
 out vec3 vColor;
+out vec3 vNormal;
 out vec2 vTexCoord;
 out float vDisc;
 
@@ -53,6 +54,8 @@ void main()
    disc = distance(worldPos.xyz, uCameraPosition);
    disc = (1-uDiscardBias) + 0.05-clamp(disc/50,0,1-uDiscardBias);
    vDisc = disc;
+
+   vNormal = aInstNormal;
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * worldPos;

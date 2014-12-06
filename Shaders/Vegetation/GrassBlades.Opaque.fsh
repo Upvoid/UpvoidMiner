@@ -4,17 +4,21 @@
 #pragma ACGLimport <Common/Lighting.fsh>
 #pragma ACGLimport <Common/Camera.csh>
 
+uniform float uFadeDistance = 25.0;
+
+uniform float uRoughness = 0.5;
+uniform float uFresnel = 1.3;
+uniform float uGlossiness = 0.5;
+
 in vec3 vWorldPos;
 in float vX;
 in float vY;
 in float vR;
-uniform float uFadeDistance = 25.0;
 
 uniform sampler2D uColor;
 
-OUTPUT_CHANNEL_Color(vec3)
-OUTPUT_CHANNEL_Normal(vec3)
-OUTPUT_CHANNEL_Position(vec3)
+OUTPUT_CHANNEL_GBuffer1(vec4)
+OUTPUT_CHANNEL_GBuffer2(vec4)
 
 void main()
 {
@@ -47,7 +51,15 @@ void main()
    // Shadowing
    vec3 color = vColor;
 
-   OUTPUT_Color(color);
-   OUTPUT_Normal(normal);
-   OUTPUT_Position(vWorldPos);
+   vec4 gb1, gb2;
+   writeGBuffer(
+      color,
+      vec3(0, 1, 0),
+      uRoughness,
+      uFresnel,
+      uGlossiness,
+      gb1, gb2
+   );
+   OUTPUT_GBuffer1(gb1);
+   OUTPUT_GBuffer2(gb2);
 }

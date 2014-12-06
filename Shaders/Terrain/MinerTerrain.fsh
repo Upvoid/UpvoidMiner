@@ -11,7 +11,9 @@ uniform sampler2D uNormalXY;
 uniform sampler2D uNormalXZ;
 uniform sampler2D uNormalZY;
 
-uniform vec4 uSpecularColor;
+uniform float uRoughness = 0.5;
+uniform float uFresnel = 1.3;
+uniform float uGlossiness = 0.5;
 
 uniform float uTexScaleXY;
 uniform float uTexScaleXZ;
@@ -33,9 +35,8 @@ in vec3 vObjectNormal;
 in vec3 vWorldNormal;
 in vec3 vScaling;
 
-OUTPUT_CHANNEL_Color(vec3)
-OUTPUT_CHANNEL_Normal(vec3)
-OUTPUT_CHANNEL_Position(vec3)
+OUTPUT_CHANNEL_GBuffer1(vec4)
+OUTPUT_CHANNEL_GBuffer2(vec4)
 
 // see https://www.opengl.org/discussion_boards/showthread.php/177520-Mipmap-level-calculation-using-dFdx-dFdy
 void terrainFunction(float scale, out vec3 color, out vec3 normal)
@@ -102,11 +103,17 @@ void main()
 
     // illumination
     normal = normalize(mat3(uModelMatrix) * normal);
-    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
-    OUTPUT_Color(color);
-
-    OUTPUT_Normal(vWorldNormal);
-    OUTPUT_Position(vWorldPos);
+    vec4 gb1, gb2;
+    writeGBuffer(
+       baseColor,
+       normal,
+       uRoughness,
+       uFresnel,
+       uGlossiness,
+       gb1, gb2
+    );
+    OUTPUT_GBuffer1(gb1);
+    OUTPUT_GBuffer2(gb2);
 }
 
