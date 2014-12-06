@@ -46,6 +46,11 @@
                 "Terrain/SolidTerrainResource.cs",
                 "Terrain/VegetatedTerrainResource.cs",
                 "Terrain/TerrainResource.Register.cs",
+                "Terrain/Substance.cs",
+                "Terrain/PlantSubstance.cs",
+                "Terrain/RockSubstance.cs",
+                "Terrain/LooseSubstance.cs",
+                "Terrain/MetalSubstance.cs",
                 "Vegetation/Tree.cs",
                 "Vegetation/TreeGenerator.cs"
             ],

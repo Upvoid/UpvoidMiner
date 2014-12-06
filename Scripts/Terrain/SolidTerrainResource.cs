@@ -35,12 +35,12 @@ namespace UpvoidMiner
         /// </summary>
         public readonly MaterialResource DigParticleMaterial;
 
-        public SolidTerrainResource(string name, string renderMaterial, string particleMaterial, float massDensity, bool defaultPipeline = true) :
-            base(name, massDensity)
+        public SolidTerrainResource(Substance substance, string renderMaterial, string particleMaterial, float massDensity, bool defaultPipeline = true) :
+            base(substance, massDensity)
         {
             RenderMaterial = Resources.UseMaterial(renderMaterial, UpvoidMiner.ModDomain);
             DigParticleMaterial = Resources.UseMaterial(particleMaterial, UpvoidMiner.ModDomain);
-            Icon = Resources.UseTextureData("Items/Icons/" + name, UpvoidMiner.ModDomain);
+            Icon = Resources.UseTextureData("Items/Icons/" + Name, UpvoidMiner.ModDomain);
 
             if (Scripting.IsHost)
             {

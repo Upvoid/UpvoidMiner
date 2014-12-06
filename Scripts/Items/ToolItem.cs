@@ -351,7 +351,7 @@ namespace UpvoidMiner
                     var mats = new List<int>
                     {
                         TerrainResource.FromName("Dirt").Index,
-                        TerrainResource.FromName("Desert").Index,
+                        TerrainResource.FromName("Sand").Index,
                         TerrainResource.FromName("Wood").Index
                     };
                     switch (ToolMaterial)
@@ -371,7 +371,7 @@ namespace UpvoidMiner
 
                 case ToolType.Shovel:
                     // Shovel has big radius but can only dig dirt
-                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index });
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Sand").Index });
                     return;
 
                 case ToolType.GodsShovel:

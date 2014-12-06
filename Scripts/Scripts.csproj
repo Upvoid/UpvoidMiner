@@ -89,6 +89,11 @@
     <Compile Include="Items\Inventory.CraftingRules.cs" />
     <Compile Include="Items\ToolItem.cs" />
     <Compile Include="Player\InputController.cs" />
+    <Compile Include="Terrain\LooseSubstance.cs" />
+    <Compile Include="Terrain\MetalSubstance.cs" />
+    <Compile Include="Terrain\RockSubstance.cs" />
+    <Compile Include="Terrain\PlantSubstance.cs" />
+    <Compile Include="Terrain\Substance.cs" />
     <Compile Include="Terrain\TerrainResource.cs" />
     <Compile Include="Terrain\UpvoidMinerWorldGenerator.cs" />
     <Compile Include="Terrain\TerrainResource.Register.cs" />

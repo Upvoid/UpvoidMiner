@@ -498,6 +498,16 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
+        "Name" : "Terrain/VerdaniumOre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/VerdaniumOre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
         "Name" : "Terrain/Wood",
         "Type" : "FromCollection"
     },
@@ -765,6 +775,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Particles/Terrain/CopperOre",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/VerdaniumOre",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/VerdaniumOre",
     "Path" : "~.mat",
     "Type" : "Material"
  },

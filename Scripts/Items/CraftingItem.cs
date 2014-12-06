@@ -58,7 +58,7 @@ namespace UpvoidMiner
             return "";
         }
 
-        private static string Description(ItemType type, MaterialType mat)
+        private static string MakeDescription(ItemType type, MaterialType mat)
         {
             switch (type)
             {
@@ -74,7 +74,7 @@ namespace UpvoidMiner
 
             return "A nondescript object.";
         }
-        private static float Weight(ItemType type, MaterialType mat)
+        private static float MakeWeight(ItemType type, MaterialType mat)
         {
             switch (type)
             {
@@ -112,7 +112,7 @@ namespace UpvoidMiner
         public readonly MaterialType Material;
 
         public CraftingItem(ItemType type, MaterialType mat = MaterialType.Other, int stacksize = 1) :
-            base(ItemName(type, mat), Description(type, mat), Weight(type, mat), ItemCategory.Crafting, stacksize)
+            base(ItemName(type, mat), MakeDescription(type, mat), MakeWeight(type, mat), ItemCategory.Crafting, stacksize)
         {
             Type = type;
             Material = mat;

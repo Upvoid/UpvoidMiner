@@ -28,8 +28,8 @@ namespace UpvoidMiner
         public int GrassPipelineIndex;
         public int GrassMaterialIndex;
 
-        public VegetatedTerrainResource(string name, string renderMaterial, string particleMaterial, float massDensity) :
-            base(name, renderMaterial, particleMaterial, massDensity, false)
+        public VegetatedTerrainResource(Substance substance, string renderMaterial, string particleMaterial, float massDensity) :
+            base(substance, renderMaterial, particleMaterial, massDensity, false)
         {
             // For now: just use the setup from our default dirt:
 
