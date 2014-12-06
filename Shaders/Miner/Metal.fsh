@@ -11,7 +11,9 @@ uniform sampler2D uNormalXY;
 uniform sampler2D uNormalXZ;
 uniform sampler2D uNormalZY;
 
-uniform vec4 uSpecularColor;
+uniform float uRoughness = 0.8;
+uniform float uFresnel = 8.3;
+uniform float uGlossiness = 1.0;
 
 uniform float uTexScale;
 uniform float uBlendingCoefficient;
@@ -25,9 +27,8 @@ in vec3 vObjectPos;
 in vec3 vObjectNormal;
 in mat3 vNormalMatrix;
 
-OUTPUT_CHANNEL_Color(vec3)
-OUTPUT_CHANNEL_Normal(vec3)
-OUTPUT_CHANNEL_Position(vec3)
+OUTPUT_CHANNEL_GBuffer1(vec4)
+OUTPUT_CHANNEL_GBuffer2(vec4)
 
 void main()
 {
@@ -61,17 +62,23 @@ void main()
     vec3 normal = normalize(mat3(uModelMatrix) * objNormal);
 
     // illumination
-    vec3 color = lighting(vWorldPos, normal, baseColor, uSpecularColor);
 
     // Skybox reflection
-    vec3 reflDir = reflect(normalize(vWorldPos - uCameraPosition), normal);
+    /*vec3 reflDir = reflect(normalize(vWorldPos - uCameraPosition), normal);
     vec3 skyColor = sampleSkybox(reflDir).rgb;
     float reflFactor = .6;
-    color = mix(color, skyColor, reflFactor);
+    color = mix(color, skyColor, reflFactor);*/
 
-    //color.rgb = reflDir;
 
-    OUTPUT_Color(color);
-    OUTPUT_Normal(normal);
-    OUTPUT_Position(vWorldPos);
+    vec4 gb1, gb2;
+    writeGBuffer(
+       baseColor.rgb,
+       normal,
+       uRoughness,
+       uFresnel,
+       uGlossiness,
+       gb1, gb2
+    );
+    OUTPUT_GBuffer1(gb1);
+    OUTPUT_GBuffer2(gb2);
 }
