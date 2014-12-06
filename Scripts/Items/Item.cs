@@ -34,8 +34,6 @@ namespace UpvoidMiner
         /// The item's name. Does not have to be unique.
         /// </summary>
         public virtual string Name { get; protected set; }
-
-        public abstract string Identifier { get; }
         
         /// <summary>
         /// A short description of the item.

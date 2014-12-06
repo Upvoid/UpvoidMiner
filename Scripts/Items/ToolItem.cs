@@ -41,15 +41,7 @@ namespace UpvoidMiner
         public readonly ToolType ToolType;
 
         public readonly ToolMaterial ToolMaterial;
-
-        public override string Identifier
-        {
-            get
-            {
-                return "00-Tools." + ((int)ToolType).ToString("00") + "-" + ((int)ToolMaterial).ToString("00") + "-" +  Name;
-            }
-        }
-
+        
         public ToolItem(ToolType type, ToolMaterial material = ToolMaterial.Other, int stackSize = 1) :
             base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {

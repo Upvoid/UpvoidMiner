@@ -195,7 +195,7 @@ namespace UpvoidMiner
             int numberOfWoodCylinders = (int)(3 * amountOfWood + 1.0f);
             for (int i = 0; i < numberOfWoodCylinders; ++i)
             {
-                var item = new MaterialItem(TerrainResource.FromName("BirchWood"), MaterialShape.Cylinder, new vec3(0.2f, cylinderHeight, 0.2f));
+                var item = new MaterialItem(new BirchWoodSubstance(), MaterialShape.Cylinder, new vec3(0.2f, cylinderHeight, 0.2f));
                 var trans = mat4.Translate(Position + new vec3(0, (i + 1.0f) * (cylinderHeight + 0.05f), 0));
                 ItemManager.InstantiateItem(item, trans, false);
             }

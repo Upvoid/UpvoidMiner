@@ -18,11 +18,6 @@ namespace UpvoidMiner
             IngredientItems = ingredientItems;
         }
 
-        public override string Identifier
-        {
-            get { return "05-Recipes." + Result.Identifier;  }
-        }
-
         public override bool IsEmpty
         {
             get { return empty; }

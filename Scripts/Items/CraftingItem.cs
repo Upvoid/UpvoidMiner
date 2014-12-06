@@ -118,10 +118,6 @@ namespace UpvoidMiner
             Material = mat;
         }
 
-        public override string Identifier
-        {
-            get { return "04-Crafting." + Name; }
-        }
 
         public override string Icon
         {

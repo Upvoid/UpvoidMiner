@@ -57,17 +57,6 @@ namespace UpvoidMiner
             return null;
         }
 
-        public Item ItemFromIdentifier(string identifier)
-        {
-            foreach (Item item in Items)
-            {
-                if (item.Identifier == identifier)
-                    return item;
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Creates a new item collection.
         /// </summary>

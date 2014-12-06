@@ -109,7 +109,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.Name : "";
+                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.Name : "";
             }
         }
 
@@ -118,7 +118,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.Icon : null;
+                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.Icon : null;
             }
         }
 
@@ -137,7 +137,7 @@ namespace UpvoidMiner
             get
             {
                 return (RequiredVolume *
-                    (SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.MassDensity : 0f)).ToString("0");
+                    (SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.MassDensity : 0f)).ToString("0");
             }
         }
 
@@ -200,7 +200,7 @@ namespace UpvoidMiner
             var resourceItem = SelectedItem as ResourceItem;
             if (resourceItem == null)
                 return;
-            var mat = resourceItem.Material;
+            var mat = resourceItem.Substance;
 
             MaterialItem item;
             switch (TypeSelection)

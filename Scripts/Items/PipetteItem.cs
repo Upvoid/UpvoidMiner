@@ -16,13 +16,7 @@ namespace UpvoidMiner
         {
             Icon = "Pipette";
         }
-
-        public override string Identifier
-        {
-            get { return "00-Tools.Pipette"; }
-        }
-
-
+        
         public override bool TryMerge(Item rhs, bool substract, bool force, bool dryrun = false)
         {
             PipetteItem otherItem = rhs as PipetteItem;
@@ -59,7 +53,7 @@ namespace UpvoidMiner
                     ResourceItem resItem = item as ResourceItem;
                     if (resItem == null)
                         continue;
-                    if (resItem.Material.Material == mat)
+                    if (resItem.Substance.QueryResource().Material == mat)
                         player.Inventory.SelectItem(item);
                 }
 
