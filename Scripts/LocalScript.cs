@@ -82,6 +82,21 @@ namespace UpvoidMiner
 
         private static bool FirstSettingReset = false;
 
+        public class GlobalHud : UIProxy
+        {
+            [UICollection("Stats")]
+            public StatUI Stats { get { return stats; } }
+            [UICollection("MemoryFailsafe")]
+            public MemoryFailsafe MemoryFailsafe { get { return memFailsafe; } }
+
+            public GlobalHud()
+                : base("Global")
+            {
+                UIProxyManager.AddProxy(this);
+            }
+        }
+        private static GlobalHud globalHud = new GlobalHud();
+
         /// <summary>
         /// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
         /// </summary>
@@ -141,7 +156,8 @@ namespace UpvoidMiner
             //world.AddActiveRegion(new ivec3(), 100f, 400f, 40f, 40f);
 
             Settings.settings.ResetSettings(); // aka load from settings
-            Scripting.RegisterUpdateFunction(f => {
+            Scripting.RegisterUpdateFunction(f =>
+            {
                 if (!FirstSettingReset && Rendering.ActiveMainPipeline != null)
                 {
                     FirstSettingReset = true;

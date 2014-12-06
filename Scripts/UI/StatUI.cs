@@ -95,6 +95,8 @@ namespace UpvoidMiner
         {
             get
             {
+                return ""; // ray is too expensive for now
+
                 if (!Visible)
                     return "";
 

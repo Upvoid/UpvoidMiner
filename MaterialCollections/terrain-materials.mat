@@ -130,9 +130,9 @@
 
 [Vegetation/GrassBlades] : Default
     Shader: Vegetation/GrassBlades.Opaque
-	Texture: uColor, Grassblade
+    Texture: uColor, Grassblade
     Parameter: uColorModulation, 1
-	Parameter: uFadeDistance, 35
+    Parameter: uFadeDistance, 35
     Culling: None
     MaxDistance: 30
 
@@ -153,6 +153,9 @@
     Parameter: uLodFactor, 4
     Parameter: uLodTransitionPart, .4
     Parameter: uColorModulation, 1
+    Parameter: uRoughness, 0.7
+    Parameter: uFresnel, 1.5
+    Parameter: uGlossiness, 0.0
 
 [Terrain/Rock01] : Terrain/BaseRock
     Texture: uColorXZ, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
@@ -503,6 +506,9 @@
     Parameter: uTexScaleXZ, .5
     Parameter: uTexScaleZY, .5
     Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.3
+    Parameter: uFresnel, 8.3
+    Parameter: uGlossiness, 0.9
 
 [Particles/Terrain/Iron] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
@@ -583,6 +589,9 @@
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
     Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.5
+    Parameter: uFresnel, 10.3
+    Parameter: uGlossiness, 0.6
 
 [Particles/Terrain/OreGold] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh

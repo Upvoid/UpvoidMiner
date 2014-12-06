@@ -119,6 +119,12 @@
     "Path": "~.obj",
     "Descriptor": "File"
 },
+{
+    "Type": "Mesh",
+    "Name": "Vegetation/Tree02/Leaves_low",
+    "Path": "~.obj",
+    "Descriptor": "File"
+},
 
 {
     "Type": "Mesh",
