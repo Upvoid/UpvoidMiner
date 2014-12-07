@@ -407,8 +407,8 @@
     Parameter: uTexScaleZY, 5
     Parameter: uBlendingCoefficient, 4
     Parameter: uRoughness, 0.8
-    Parameter: uFresnel, 8.3
-    Parameter: uGlossiness, 0.8
+    Parameter: uFresnel, 4.3
+    Parameter: uGlossiness, 0.4
 
 [Particles/Terrain/CopperOre] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
@@ -416,8 +416,8 @@
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.8
-    Parameter: uFresnel, 8.3
-    Parameter: uGlossiness, 0.8
+    Parameter: uFresnel, 4.3
+    Parameter: uGlossiness, 0.4
 
 [Terrain/VerdaniumOre] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap

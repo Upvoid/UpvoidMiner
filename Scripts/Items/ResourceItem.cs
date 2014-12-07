@@ -36,7 +36,7 @@ namespace UpvoidMiner
             base(substance.Name, "The terrain resource " + substance.Name, 1.0f, ItemCategory.Resources, volume)
         {
             Substance = substance;
-            Icon = substance.Name;
+            Icon = "Substances/" + substance.Name;
         }
 
         /// <summary>

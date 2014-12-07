@@ -104,7 +104,7 @@ namespace UpvoidMiner
             Shape = shape;
             Size = size;
             Description = "A " + shape + " made of " + substance.Name + " with " + DimensionString;
-            Icon = substance.Name + "," + shape;
+            Icon = "Substances/" + substance.Name + "," + shape;
             IsDroppable = true;
         }
 

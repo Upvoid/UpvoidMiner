@@ -16,7 +16,7 @@ namespace UpvoidMiner
         protected Substance(string name, float massDensity)
         {
             Name = name;
-            Icon = Resources.UseTextureData("Items/Icons/" + Name, UpvoidMiner.ModDomain);
+            Icon = Resources.UseTextureData("Items/Icons/Substances/" + Name, UpvoidMiner.ModDomain);
             MassDensity = massDensity;
         }
 

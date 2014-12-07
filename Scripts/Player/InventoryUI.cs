@@ -125,7 +125,9 @@ namespace UpvoidMiner
                 this.item = item;
                 IconStack = new List<IconUI>();
                 foreach (var icon in item.Icon.Split(','))
+                {
                     IconStack.Add(new IconUI(Resources.UseTextureData("Items/Icons/" + icon, UpvoidMiner.ModDomain)));
+                }
             }
         }
 

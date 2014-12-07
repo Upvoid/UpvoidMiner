@@ -58,25 +58,7 @@ namespace UpvoidMiner
             addResource(desertResource);
 
             // Stones
-            var substances = new List<Substance>
-            {
-                new Stone01Substance(),
-                new Stone02Substance(),
-                new Stone03Substance(),
-                new Stone04Substance(),
-                new Stone05Substance(),
-                new Stone06Substance(),
-                new Stone07Substance(),
-                new Stone08Substance(),
-                new Stone09Substance(),
-                new Stone10Substance(),
-                new Stone11Substance(),
-                new Stone12Substance(),
-                new Stone13Substance(),
-                new Stone14Substance()
-            };
-            for (int i = 1; i <= 14; ++i)
-                addResource(new SolidTerrainResource(substances[i-1], "Terrain/Rock" + i.ToString("00"), "Particles/Terrain/Rock" + i.ToString("00"), 2700f));
+            addResource(new SolidTerrainResource(new Stone09Substance(), "Terrain/Rock09", "Particles/Terrain/Rock09", 2700f));
 
             // Wood
             addResource(new SolidTerrainResource(new WoodSubstance(), "Terrain/Wood", "Particles/Terrain/Wood", 600f));
