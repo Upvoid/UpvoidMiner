@@ -100,6 +100,9 @@
     Parameter: uLodRefDist, 2
     Parameter: uLodFactor, 3.7
     Parameter: uLodTransitionPart, .2
+    Parameter: uRoughness, 0.7
+    Parameter: uFresnel, 1.5
+    Parameter: uGlossiness, 0.1
 
 [Terrain/Dirt] : Default
     Shader: Terrain/MinerTerrain
@@ -109,7 +112,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Grass/Grass02.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil01.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil01.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 2
     Parameter: uTexScaleXZ, 4
     Parameter: uTexScaleZY, 2
@@ -118,6 +120,9 @@
     Parameter: uLodFactor, 3.7
     Parameter: uLodTransitionPart, .2
     Parameter: uColorModulation, 1
+    Parameter: uRoughness, 0.7
+    Parameter: uFresnel, 1.5
+    Parameter: uGlossiness, 0.1
 
 [TerrainFoliage] : Default
     Shader: Vegetation/TerrainFoliage

@@ -9,7 +9,7 @@ uniform sampler2D uNormal;
 
 uniform float uRoughness = 0.5;
 uniform float uFresnel = 1.3;
-uniform float uGlossiness = 0.5;
+uniform float uGlossiness = 0.2;
 
 in vec3 vNormal;
 in vec3 vTangent;

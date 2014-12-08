@@ -8,7 +8,7 @@ uniform sampler2D uColor;
 
 uniform float uRoughness = 0.5;
 uniform float uFresnel = 1.3;
-uniform float uGlossiness = 0.5;
+uniform float uGlossiness = 0.2;
 
 uniform vec4 uColorModulation = vec4(1.0);
 uniform float uVisibility = 1.0;

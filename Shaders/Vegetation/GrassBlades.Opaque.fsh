@@ -8,7 +8,7 @@ uniform float uFadeDistance = 25.0;
 
 uniform float uRoughness = 0.5;
 uniform float uFresnel = 1.3;
-uniform float uGlossiness = 0.5;
+uniform float uGlossiness = 0.2;
 
 in vec3 vWorldPos;
 in float vX;
