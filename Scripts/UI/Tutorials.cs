@@ -167,7 +167,7 @@ namespace UpvoidMiner.UI
 
         public readonly static TutorialMessage MsgBasicRecipeConvertWood = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 2, "MsgBasicRecipeCraftingWoodCylinder", Modes.Adventure);
         public readonly static TutorialMessage MsgBasicRecipeCraftingWoodCylinder = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgBasicRecipeCraftingHandle", Modes.Adventure);
-        public readonly static TutorialMessage MsgBasicRecipeCraftingHandle = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 4, "MsgBasicRecipeWoodShovel", Modes.Adventure);
+        public readonly static TutorialMessage MsgBasicRecipeCraftingHandle = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 4, "MsgBasicRecipeWoodPickaxe", Modes.Adventure);
         public readonly static TutorialMessage MsgBasicRecipeWoodPickaxe = new TutorialMessage((c, t) => c.ToString("0") + "/" + t, 1, "MsgBasicDiggingStone", Modes.Adventure);
 
         public readonly static TutorialMessage MsgBasicDiggingStone = new TutorialMessage((c, t) => c.ToString("0.0") + "/" + t, 30, "MsgBasicDiggingGod", Modes.Adventure);

@@ -226,11 +226,11 @@ namespace UpvoidMiner
                 LocalScript.player.Inventory.RemoveItem(new ResourceItem(mat, RequiredVolume));
 
             // Tutorial
-            if (newItem && TypeSelection == 0 && mat.Name == "Dirt")
+            if (newItem && TypeSelection == 0 && mat is DirtSubstance)
                 Tutorials.MsgBasicCraftingDirtCube.Report(1);
-            if (newItem && TypeSelection != 0 && mat.Name.StartsWith("Stone"))
+            if (newItem && TypeSelection != 0 && mat is StoneSubstance)
                 Tutorials.MsgBasicCraftingStoneNonCube.Report(1);
-            if (TypeSelection == 2 && mat.Name.StartsWith("BirchWood") && Math.Abs(cylinderSettings.Size.x - 0.3f) < 0.05f && Math.Abs(cylinderSettings.Size.y - 0.5f) < 0.05f)
+            if (TypeSelection == 2 && mat is WoodSubstance && Math.Abs(cylinderSettings.Size.x - 0.3f) < 0.05f && Math.Abs(cylinderSettings.Size.y - 0.5f) < 0.05f)
                 Tutorials.MsgBasicRecipeCraftingWoodCylinder.Report(1);
             
         }

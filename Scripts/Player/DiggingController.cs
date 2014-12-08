@@ -515,12 +515,12 @@ namespace UpvoidMiner
                 {
                     if (instance.player.Inventory.Selection is ToolItem &&
                         (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Shovel &&
-                        material.Name == "Dirt")
+                        substance is DirtSubstance)
                         Tutorials.MsgBasicDiggingDirt.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ToolItem &&
                         (instance.player.Inventory.Selection as ToolItem).ToolType == ToolType.Pickaxe &&
-                        material.Name.StartsWith("Stone"))
+                        substance is StoneSubstance)
                         Tutorials.MsgBasicDiggingStone.Report(-volume);
 
                     if (instance.player.Inventory.Selection is ToolItem &&
@@ -566,10 +566,10 @@ namespace UpvoidMiner
                 }
                 else if (volume > 0)
                 {
-                    if (material.Name.StartsWith("Stone"))
+                    if (substance is StoneSubstance)
                         Tutorials.MsgBasicBuildingStone.Report(volume);
 
-                    if (material.Name == "Dirt")
+                    if (substance is DirtSubstance)
                         Tutorials.MsgBasicBuildingDirt.Report(volume);
 
                     if (instance.player.CurrentDiggingAlignment == DigAlignment.Terrain &&
@@ -579,7 +579,7 @@ namespace UpvoidMiner
                     if (instance.player.CurrentDiggingAddMode == AddMode.Overwrite)
                         Tutorials.MsgAdvancedBuildingReplaceAll.Report(volume);
 
-                    if (material.Name == "Dirt" &&
+                    if (substance is DirtSubstance &&
                         instance.player.DroneConstraints.Any(dc => dc.Drones.Count >= 2))
                         Tutorials.MsgAdvancedBuildingPlaceConstrained.Report(volume);
                 }

@@ -181,8 +181,8 @@ namespace UpvoidMiner
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
-        private const float digRadiusMaxFactorWood = 0.5f;
-        private const float digRadiusMaxFactorStone = 1f;
+        private const float digRadiusMaxFactorWood = 1f;
+        private const float digRadiusMaxFactorStone = 1.5f;
         private const float digRadiusMaxFactorCopper = 2f;
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;

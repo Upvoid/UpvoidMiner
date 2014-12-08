@@ -898,7 +898,7 @@ namespace UpvoidMiner
                         new RecipeItem(new CraftingItem(tool.Item2, mat),
                             new List<Item>
                             {
-                                new ResourceItem(mat, 0.1f)
+                                new ResourceItem(mat, 0.5f)
                             }));
                     Inventory.AddItem(new RecipeItem(new ToolItem(tool.Item1, mat),
                         new List<Item>

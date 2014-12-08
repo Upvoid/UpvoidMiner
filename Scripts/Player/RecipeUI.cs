@@ -186,7 +186,7 @@ namespace UpvoidMiner
             //Tutorial
             if (recipeItem.Result.Name == "Handle")
                 Tutorials.MsgBasicRecipeCraftingHandle.Report(4);
-            if (recipeItem.Result.Name == "Wooden Pickaxe")
+            if (recipeItem.Result.Name == "Wood Pickaxe")
                 Tutorials.MsgBasicRecipeWoodPickaxe.Report(1);
         }
 

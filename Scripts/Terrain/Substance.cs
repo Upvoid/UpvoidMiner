@@ -53,8 +53,8 @@ namespace UpvoidMiner
             return Assembly.GetExecutingAssembly().GetTypes()
                 .Where(myType => myType.IsClass && myType.IsSealed && myType.IsSubclassOf(typeof (Substance)))
                 .Select(Activator.CreateInstance).OfType<Substance>()
-                .Select(substance => substance.QueryResource().Index)
-                .ToList();
+                .Where(filter.Compile())
+                .Select(substance => substance.QueryResource().Index);
         }
 
         public virtual string MatOverlayName()
