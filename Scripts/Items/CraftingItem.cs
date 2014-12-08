@@ -15,66 +15,40 @@ namespace UpvoidMiner
             AxeHead,
         }
 
-        public enum MaterialType
+        private static string ItemName(ItemType type, Substance substance)
         {
-            Wood,
-            Stone,
-            Copper,
-            Other
-        }
-
-        private static string Adjective(MaterialType mat)
-        {
-            switch (mat)
-            {
-                case MaterialType.Wood:
-                    return "wooden";
-                case MaterialType.Stone:
-                    return "stone";
-                case MaterialType.Copper:
-                    return "copper";
-                case MaterialType.Other:
-                    return "";
-            }
-            return "";
-        }
-
-        private static string ItemName(ItemType type, MaterialType mat)
-        {
-            var adjective = Adjective(mat);
-            adjective = adjective.Length > 0 ? char.ToUpper(adjective[0]) + adjective.Substring(1) : "";
-
+            
             switch (type)
             {
                 case ItemType.Handle:
                     return "Handle";
                 case ItemType.ShovelBlade:
-                    return adjective + " Shovel Blade";
+                    return substance.Name + " Shovel Blade";
                 case ItemType.PickaxeHead:
-                    return adjective + " Pickaxe Head";
+                    return substance.Name + " Pickaxe Head";
                 case ItemType.AxeHead:
-                    return adjective + " Axe Head";
+                    return substance.Name + " Axe Head";
             }
             return "";
         }
 
-        private static string MakeDescription(ItemType type, MaterialType mat)
+        private static string MakeDescription(ItemType type, Substance substance)
         {
             switch (type)
             {
                 case ItemType.Handle:
                     return "A wooden handle.";
                 case ItemType.ShovelBlade:
-                    return "A " + Adjective(mat) + " shovel blade.";
+                    return "A shovel blade made from " + substance.Name + ".";
                 case ItemType.PickaxeHead:
-                    return "A " + Adjective(mat) + " pickaxe head.";
+                    return "A pickaxe head made from " + substance.Name + ".";
                 case ItemType.AxeHead:
-                    return "A " + Adjective(mat) + " axe head.";
+                    return "An axe head made from " + substance.Name + ".";
             }
 
             return "A nondescript object.";
         }
-        private static float MakeWeight(ItemType type, MaterialType mat)
+        private static float MakeWeight(ItemType type, Substance substance)
         {
             switch (type)
             {
@@ -90,9 +64,16 @@ namespace UpvoidMiner
 
             return 0.0f;
         }
-        private static string IconName(ItemType type, MaterialType mat)
+        private static string IconName(ItemType type, Substance substance)
         {
-            var suffix = mat != MaterialType.Other ? "," + mat + "Mat" : "";
+            var suffix = "";
+
+            if (substance != null)
+            {
+                var matName = substance.MatOverlayName();
+                if (matName != null)
+                    suffix += "," + matName;
+            }
             switch (type)
             {
                 case ItemType.Handle:
@@ -109,19 +90,19 @@ namespace UpvoidMiner
         }
 
         public readonly ItemType Type;
-        public readonly MaterialType Material;
+        public readonly Substance Substance;
 
-        public CraftingItem(ItemType type, MaterialType mat = MaterialType.Other, int stacksize = 1) :
-            base(ItemName(type, mat), MakeDescription(type, mat), MakeWeight(type, mat), ItemCategory.Crafting, stacksize)
+        public CraftingItem(ItemType type, Substance sub, int stacksize = 1) :
+            base(ItemName(type, sub), MakeDescription(type, sub), MakeWeight(type, sub), ItemCategory.Crafting, stacksize)
         {
             Type = type;
-            Material = mat;
+            Substance = sub;
         }
 
 
         public override string Icon
         {
-            get { return IconName(Type, Material); }
+            get { return IconName(Type, Substance); }
         }
 
         public override bool TryMerge(Item rhs, bool substract, bool force, bool dryrun = false)
@@ -129,14 +110,14 @@ namespace UpvoidMiner
             var item = rhs as CraftingItem;
             if (item == null) return false;
             if (item.Type != Type) return false;
-            if (item.Material != Material) return false;
+            if (item.Substance.GetType() != Substance.GetType()) return false;
 
             return Merge(item, substract, force, dryrun);
         }
 
         public override Item Clone()
         {
-            return new CraftingItem(Type, Material, StackSize);
+            return new CraftingItem(Type, Substance, StackSize);
         }
 
 

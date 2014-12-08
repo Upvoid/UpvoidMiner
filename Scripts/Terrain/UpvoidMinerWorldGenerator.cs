@@ -132,7 +132,7 @@ namespace UpvoidMiner
 
             // Get handle to dirt for generation.
             Instance.terrainDirt = TerrainResource.FromName("Dirt");
-            Instance.terrainRock = TerrainResource.FromName("Stone.09");
+            Instance.terrainRock = TerrainResource.FromName("Basalt");
             Instance.terrainCopperOre = TerrainResource.FromName("CopperOre");
             Instance.terrainDesert = TerrainResource.FromName("Sand");
             Instance.terrainOreGold = TerrainResource.FromName("OreGold");

@@ -27,12 +27,17 @@ namespace UpvoidMiner
             : base("Stone", -1f)
         {
         }
+
+        public override string MatOverlayName()
+        {
+            return "StoneMat";
+        }
     }
 
-    public sealed class Stone09Substance : StoneSubstance
+    public sealed class BasaltSubstance : StoneSubstance
     {
-        public Stone09Substance()
-            : base("Stone.09", 2700f)
+        public BasaltSubstance()
+            : base("Basalt", 2900f)
         {
         }
     }

@@ -58,10 +58,9 @@ namespace UpvoidMiner
             addResource(desertResource);
 
             // Stones
-            addResource(new SolidTerrainResource(new Stone09Substance(), "Terrain/Rock09", "Particles/Terrain/Rock09", 2700f));
+            addResource(new SolidTerrainResource(new BasaltSubstance(), "Terrain/Rock09", "Particles/Terrain/Rock09", 2700f));
 
             // Wood
-            addResource(new SolidTerrainResource(new WoodSubstance(), "Terrain/Wood", "Particles/Terrain/Wood", 600f));
             addResource(new SolidTerrainResource(new BirchWoodSubstance(), "Terrain/BirchWood", "Particles/Terrain/BirchWood", 650f));
 
             // Ores + Metals

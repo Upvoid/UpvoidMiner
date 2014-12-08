@@ -25,6 +25,11 @@ namespace UpvoidMiner
         public WoodSubstance() : base("Wood", -1f)
         {
         }
+
+        public override string MatOverlayName()
+        {
+            return "WoodMat";
+        }
     }
 
     public sealed class BirchWoodSubstance : WoodSubstance

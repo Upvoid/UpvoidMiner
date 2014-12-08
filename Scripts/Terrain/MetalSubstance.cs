@@ -21,6 +21,11 @@ namespace UpvoidMiner
         public CopperSubstance() : base("Copper", 8960f)
         {
         }
+
+        public override string MatOverlayName()
+        {
+            return "CopperMat";
+        }
     }
 
     public sealed class IronSubstance : MetalSubstance

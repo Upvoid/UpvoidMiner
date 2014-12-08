@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Engine.Resources;
@@ -18,6 +19,7 @@ namespace UpvoidMiner
             Name = name;
             Icon = Resources.UseTextureData("Items/Icons/Substances/" + Name, UpvoidMiner.ModDomain);
             MassDensity = massDensity;
+
         }
 
         public Substance() : this("Substance", -1f)
@@ -43,6 +45,20 @@ namespace UpvoidMiner
             var constructorInfo = Assembly.GetExecutingAssembly().GetType(name).GetConstructor(new Type[]{});
             if (constructorInfo != null)
                 return constructorInfo.Invoke(null) as Substance;
+            return null;
+        }
+
+        public static IEnumerable<int> GetConcreteSubstancesWhich(Expression<Func<Substance, bool>> filter)
+        {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(myType => myType.IsClass && myType.IsSealed && myType.IsSubclassOf(typeof (Substance)))
+                .Select(Activator.CreateInstance).OfType<Substance>()
+                .Select(substance => substance.QueryResource().Index)
+                .ToList();
+        }
+
+        public virtual string MatOverlayName()
+        {
             return null;
         }
     }
