@@ -131,6 +131,10 @@ namespace UpvoidMiner
             return new MaterialItem(Substance, Shape, Size, StackSize);
         }
 
+        public override Item Clone(Substance sub)
+        {
+            return new MaterialItem(sub, Shape, Size, StackSize);
+        }
 
         #region Inventory Logic
         /// <summary>

@@ -30,6 +30,12 @@ namespace UpvoidMiner
         {
             return new PipetteItem();
         }
+
+        public override Item Clone(Substance sub)
+        {
+            return new PipetteItem();
+        }
+
         public override bool HasRayPreview { get { return true; } }
 
         public override void OnRayPreview(Player _player, RayHit rayHit, CrosshairInfo crosshair)

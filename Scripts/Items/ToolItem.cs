@@ -149,8 +149,8 @@ namespace UpvoidMiner
                 return false;
             if (item.ToolType != ToolType)
                 return false;
-            if (item.Substance.GetType() != Substance.GetType())
-                return false;
+            if (!subtract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
+            if (subtract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
             return Merge(item, subtract, force, dryrun);
         }
 
@@ -160,6 +160,11 @@ namespace UpvoidMiner
         public override Item Clone()
         {
             return new ToolItem(ToolType, Substance, StackSize);
+        }
+
+        public override Item Clone(Substance sub)
+        {
+            return new ToolItem(ToolType, sub, StackSize);
         }
 
         /// <summary>

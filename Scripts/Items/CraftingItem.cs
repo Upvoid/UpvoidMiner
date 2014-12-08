@@ -110,7 +110,8 @@ namespace UpvoidMiner
             var item = rhs as CraftingItem;
             if (item == null) return false;
             if (item.Type != Type) return false;
-            if (item.Substance.GetType() != Substance.GetType()) return false;
+            if (!substract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
+            if (substract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
 
             return Merge(item, substract, force, dryrun);
         }
@@ -120,6 +121,9 @@ namespace UpvoidMiner
             return new CraftingItem(Type, Substance, StackSize);
         }
 
-
+        public override Item Clone(Substance sub)
+        {
+            return new CraftingItem(Type, sub, StackSize);
+        }
     }
 }

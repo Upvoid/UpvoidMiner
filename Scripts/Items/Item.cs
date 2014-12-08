@@ -181,6 +181,11 @@ namespace UpvoidMiner
         /// Creates a copy of this item.
         /// </summary>
         public abstract Item Clone();
+
+        /// <summary>
+        /// Creates a copy of this item with the given substance.
+        /// </summary>
+        public abstract Item Clone(Substance sub);
     }
 }
 

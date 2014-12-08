@@ -60,6 +60,11 @@ namespace UpvoidMiner
             return new ResourceItem(Substance, Volume);
         }
 
+        public override Item Clone(Substance sub)
+        {
+            return new ResourceItem(sub, Volume);
+        }
+
         #region Inventory Logic
         /// <summary>
         /// Renderjob for the preview sphere

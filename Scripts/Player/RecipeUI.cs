@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.XPath;
 using EfficientUI;
 using Engine.Resources;
 using Engine.Scripting;
@@ -152,15 +153,36 @@ namespace UpvoidMiner
             if (!CanCraft)
                 return;
 
+            Item firstRemoved = null;
             foreach (var ingredient in IngredientItems)
-                LocalScript.player.Inventory.Items.RemoveItem(ingredient.Ingredient,true);
+            {
+                var rem = LocalScript.player.Inventory.Items.RemoveItem(ingredient.Ingredient, true);
+                if (firstRemoved == null)
+                    firstRemoved = rem;
+            }
 
             var recipeItem = SelectedItem as RecipeItem;
             if (recipeItem == null)
                 return;
 
-            LocalScript.player.Inventory.Items.AddItem(recipeItem.Result.Clone());
+            if (recipeItem.CarryOverSubstance)
+            {
+                var substance = null as Substance;
+                if (firstRemoved is ToolItem)
+                    substance = (firstRemoved as ToolItem).Substance;
+                else if (firstRemoved is CraftingItem)
+                    substance = (firstRemoved as CraftingItem).Substance;
+                else if (firstRemoved is ResourceItem)
+                    substance = (firstRemoved as ResourceItem).Substance;
+                else if (firstRemoved is MaterialItem)
+                    substance = (firstRemoved as MaterialItem).Substance;
 
+                LocalScript.player.Inventory.Items.AddItem(substance != null
+                    ? recipeItem.Result.Clone(substance)
+                    : recipeItem.Result.Clone());
+            }
+            else
+                LocalScript.player.Inventory.Items.AddItem(recipeItem.Result.Clone());
             //Tutorial
             if (recipeItem.Result.Name == "Handle")
                 Tutorials.MsgBasicRecipeCraftingHandle.Report(4);

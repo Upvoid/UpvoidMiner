@@ -9,13 +9,15 @@ namespace UpvoidMiner
     {
         public readonly Item Result;
         public readonly List<Item> IngredientItems;
+        public readonly bool CarryOverSubstance;
 
 
-        public RecipeItem(Item result, List<Item> ingredientItems) : 
+        public RecipeItem(Item result, List<Item> ingredientItems, bool carryOverSubstance = true) : 
             base(result.Name + "Recipe", "A recipe for crafting " + result.Name, 0.0f, ItemCategory.Recipes)
         {
             Result = result;
             IngredientItems = ingredientItems;
+            CarryOverSubstance = carryOverSubstance;
         }
 
         public override bool IsEmpty
@@ -38,6 +40,11 @@ namespace UpvoidMiner
         public override Item Clone()
         {
             return new RecipeItem(Result,IngredientItems);
+        }
+
+        public override Item Clone(Substance sub)
+        {
+            return new RecipeItem(Result, IngredientItems);
         }
 
         public override string Icon

@@ -903,8 +903,8 @@ namespace UpvoidMiner
                     Inventory.AddItem(new RecipeItem(new ToolItem(tool.Item1, mat),
                         new List<Item>
                         {
-                            new CraftingItem(CraftingItem.ItemType.Handle,new WoodSubstance()),
-                            new CraftingItem(tool.Item2, mat)
+                            new CraftingItem(tool.Item2, mat),
+                            new CraftingItem(CraftingItem.ItemType.Handle,new WoodSubstance())
                         }));
                 }
             }
@@ -914,7 +914,7 @@ namespace UpvoidMiner
                     new List<Item>
                             {
                                 new ResourceItem(new CopperOreSubstance(), 40.0f)
-                            }));
+                            }, false));
 
             Gui.OnUpdate();
         }
