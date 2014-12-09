@@ -527,7 +527,7 @@ namespace UpvoidMiner
             {
                 switch ((int)settingShadowResolution.value)
                 {
-                    case 2:
+                    case 0:
                         return 0;
                     case 256:
                         return 1;
@@ -547,7 +547,7 @@ namespace UpvoidMiner
                 switch (value)
                 {
                     case 0:
-                        shadowRes = 2;
+                        shadowRes = 0;
                         break;
                     case 1:
                         shadowRes = 256;
