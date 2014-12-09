@@ -464,7 +464,24 @@ namespace UpvoidMiner
         [UIString]
         public string TextureResolutionString
         {
-            get { return (int)settingTextureResolution.value + "&sup2;"; }
+            get
+            { 
+                switch ((int)settingTextureResolution.value)
+                {
+                    case 128:
+                        return "Lowest";
+                    case 256:
+                        return "Low";
+                    case 512:
+                        return "Medium";
+                    case 1024:
+                        return "High";
+                    case 2048:
+                        return "Max";
+                    default:
+                        return "Unknown";
+                }
+            }
         }
 
         [UISlider(45, 135)]
@@ -551,10 +568,21 @@ namespace UpvoidMiner
         {
             get
             {
-                if (settingShadowResolution.value <= 2)
-                    return "none";
-                else
-                    return (int)settingShadowResolution.value + "&sup2;";
+                switch ((int)settingShadowResolution.value)
+                {
+                    case 2:
+                        return "Off";
+                    case 256:
+                        return "Low";
+                    case 512:
+                        return "Medium";
+                    case 1024:
+                        return "High";
+                    case 2048:
+                        return "Ultra";
+                    default:
+                        return "Unknown";
+                }
             }
         }
 
