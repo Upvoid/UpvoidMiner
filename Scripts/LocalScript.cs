@@ -324,7 +324,8 @@ namespace UpvoidMiner
 
             Scripting.OnEngineShutdown += (sender, args) =>
             {
-                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
+                if (Gui.DefaultUI != null)
+                    Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
                 if (player != null)
                 {
                     player.Save();
