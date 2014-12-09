@@ -36,7 +36,7 @@ void main()
     texColor.rgb *= uColorModulation.rgb;
 
 
-    vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
+    vec3 normalFront = vNormal * sign(dot(uSunDirection, vNormal));
 
     vec4 gb1, gb2;
     writeGBuffer(
