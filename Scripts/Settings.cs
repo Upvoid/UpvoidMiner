@@ -955,6 +955,8 @@ namespace UpvoidMiner
         [UIButton]
         public void ResetSettings()
         {
+            var currGrass = Grass;
+
             // Reset setting values
             Debug.Assert(allSettings.Count > 0);
             foreach (Setting set in allSettings)
@@ -1011,6 +1013,20 @@ namespace UpvoidMiner
             SaveAllSettings();
             RebuildPipeline();
             RebuildTextures();
+
+            if (currGrass != Grass)
+                if (LocalScript.world != null)
+                {
+                    // update terrain material activity
+                    foreach (var resource in TerrainResource.ListResources())
+                        if (resource is VegetatedTerrainResource)
+                        {
+                            var res = resource as VegetatedTerrainResource;
+                            res.Material.SetPipelineActive(res.GrassPipelineIndex, Grass);
+                        }
+                    // grass change requires terrain rebuilt
+                    LocalScript.world.Terrain.RebuildTerrainGeometry();
+                }
         }
 
         internal static void InitSettings()
