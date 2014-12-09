@@ -579,10 +579,11 @@ namespace UpvoidMiner
         {
             get
             {
+                if (settingShadowResolution.value < 256)
+                    return "Off";
+
                 switch ((int)settingShadowResolution.value)
                 {
-                    case 2:
-                        return "Off";
                     case 256:
                         return "Low";
                     case 512:
