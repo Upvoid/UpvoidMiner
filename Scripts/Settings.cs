@@ -29,6 +29,7 @@ using Engine.Webserver;
 using Engine.Network;
 using Newtonsoft.Json;
 using EfficientUI;
+using Engine.Statistics;
 using UpvoidMiner.UI;
 
 namespace UpvoidMiner
@@ -135,7 +136,7 @@ namespace UpvoidMiner
             public bool defValue;
             public bool preSaveValue;
 
-            public SettingBool(String identifier, bool defaultValue, String description = "") :
+            public SettingBool(string identifier, bool defaultValue, string description = "") :
                 base(identifier, description)
             {
                 defValue = defaultValue;
@@ -164,6 +165,43 @@ namespace UpvoidMiner
                 Scripting.SetUserSetting(id, value);
             }
         }
+
+        public class SettingString : Setting
+        {
+            public string value;
+            public string defValue;
+            public string preSaveValue;
+
+            public SettingString(string identifier, string defaultValue, string description = "") :
+                base(identifier, description)
+            {
+                defValue = defaultValue;
+                preSaveValue = defaultValue;
+
+                // Get initial value from file (or default value)
+                reloadSettingFromFile();
+
+                allSettings.Add(this);
+            }
+
+            public override void reloadSettingFromFile()
+            {
+                value = Scripting.GetUserSettingString(id, defValue);
+                preSaveValue = value;
+            }
+
+            public override void ResetSetting()
+            {
+                value = preSaveValue;
+            }
+
+            public override void SaveSetting()
+            {
+                preSaveValue = value;
+                Scripting.SetUserSettingString(id, value);
+            }
+        }
+
         // Window Manager
         private SettingDouble settingResolutionWidth = new SettingDouble("WindowManager/Width", -1);
         private SettingDouble settingResolutionHeight = new SettingDouble("WindowManager/Height", -1);
@@ -198,8 +236,21 @@ namespace UpvoidMiner
         private bool pipelineChanges = false;
         private bool textureChanges = false;
 
+        private SettingString settingProfile = new SettingString("Graphics/Profile", "Custom");
+
         [UIObject]
         public bool ChangesOnApply { get { return pipelineChanges || textureChanges; } }
+
+        private void PipelineChanged()
+        {
+            pipelineChanges = true;
+            settingProfile.value = "Custom";
+        }
+        private void TextureChanged()
+        {
+            textureChanges = true;
+            settingProfile.value = "Custom";
+        }
 
         [UICheckBox]
         public bool RestrictTo720p
@@ -210,7 +261,7 @@ namespace UpvoidMiner
                 if (settingRestrictTo720p.value == value)
                     return;
                 settingRestrictTo720p.value = value;
-                pipelineChanges = true;
+                PipelineChanged();
             }
         }
 
@@ -221,8 +272,8 @@ namespace UpvoidMiner
             {
                 if (settingInternalResolutionWidth.value < 2 || settingInternalResolutionHeight.value < 2)
                     return "native";
-                return settingInternalResolutionWidth.value.ToString() + "x" +
-                    settingInternalResolutionHeight.value.ToString();
+                return settingInternalResolutionWidth.value + "x" +
+                    settingInternalResolutionHeight.value;
             }
             set
             {
@@ -271,7 +322,11 @@ namespace UpvoidMiner
         public bool DigParticles
         {
             get { return settingDigParticles.value; }
-            set { settingDigParticles.value = value; }
+            set
+            {
+                settingDigParticles.value = value;
+                settingProfile.value = "Custom";
+            }
         }
 
         private Settings()
@@ -404,7 +459,7 @@ namespace UpvoidMiner
                 if (settingAnisotropicFiltering.value != anisFilt)
                 {
                     settingAnisotropicFiltering.value = anisFilt;
-                    textureChanges = true;
+                    TextureChanged();
                 }
             }
         }
@@ -463,7 +518,7 @@ namespace UpvoidMiner
                 if (settingTextureResolution.value != texRes)
                 {
                     settingTextureResolution.value = texRes;
-                    textureChanges = true;
+                    TextureChanged();
                 }
             }
         }
@@ -472,7 +527,7 @@ namespace UpvoidMiner
         public string TextureResolutionString
         {
             get
-            { 
+            {
                 switch ((int)settingTextureResolution.value)
                 {
                     case 128:
@@ -507,7 +562,7 @@ namespace UpvoidMiner
         {
             get { return (settingFullscreen.value > -1); }
             set
-            { 
+            {
                 settingFullscreen.value = value ? 0 : -1;
                 Engine.Windows.Windows.GetWindow(0).Fullscreen = settingFullscreen.value >= 0;
             }
@@ -569,7 +624,7 @@ namespace UpvoidMiner
                 if (settingShadowResolution.value != shadowRes)
                 {
                     settingShadowResolution.value = shadowRes;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
             }
         }
@@ -598,6 +653,9 @@ namespace UpvoidMiner
             }
         }
 
+        [UIObject]
+        public string Profile { get { return settingProfile.value; } }
+
         [UICheckBox]
         public bool Lensflares
         {
@@ -607,7 +665,7 @@ namespace UpvoidMiner
                 if (settingLensflares.value != value)
                 {
                     settingLensflares.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
             }
@@ -622,7 +680,7 @@ namespace UpvoidMiner
                 if (settingVolumetricScattering.value != value)
                 {
                     settingVolumetricScattering.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
 
@@ -638,7 +696,7 @@ namespace UpvoidMiner
                 if (settingTonemapping.value != value)
                 {
                     settingTonemapping.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
 
@@ -654,7 +712,7 @@ namespace UpvoidMiner
                 if (settingFXAA.value != value)
                 {
                     settingFXAA.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
             }
         }
@@ -681,6 +739,7 @@ namespace UpvoidMiner
                     LocalScript.world.Terrain.RebuildTerrainGeometry();
                 }
                 settingGrass.value = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -704,7 +763,9 @@ namespace UpvoidMiner
             set
             {
                 settingLodFalloff.value = value;
-                LocalScript.world.LodSettings.LodFalloff = value;
+                if (LocalScript.world != null && LocalScript.world.LodSettings != null)
+                    LocalScript.world.LodSettings.LodFalloff = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -715,7 +776,9 @@ namespace UpvoidMiner
             set
             {
                 settingMinLodDistance.value = value;
-                LocalScript.world.LodSettings.MinLodDistance = value;
+                if (LocalScript.world != null && LocalScript.world.LodSettings != null)
+                    LocalScript.world.LodSettings.MinLodDistance = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -749,6 +812,7 @@ namespace UpvoidMiner
 
                 settingMaxTreeDistance.value = value;
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
+                settingProfile.value = "Custom";
             }
         }
 
@@ -760,13 +824,14 @@ namespace UpvoidMiner
             ShadowResolution = 0;       // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = false;
-            FXAA = false;
-            Grass = false;
-            DigParticles = false;
+            FXAA = true;
+            Grass = true;
+            DigParticles = true;
             MinLodDistance = 0;
             LodFalloff = 10;
             MaxTreeDistance = 30;
             RestrictTo720p = true;
+            settingProfile.value = "Lowest";
         }
 
         [UIButton]
@@ -784,6 +849,7 @@ namespace UpvoidMiner
             LodFalloff = 20;
             MaxTreeDistance = 50;
             RestrictTo720p = false;
+            settingProfile.value = "Low";
         }
 
         [UIButton]
@@ -801,6 +867,7 @@ namespace UpvoidMiner
             LodFalloff = 30;
             MaxTreeDistance = 100;
             RestrictTo720p = false;
+            settingProfile.value = "Medium";
         }
 
         [UIButton]
@@ -818,6 +885,7 @@ namespace UpvoidMiner
             LodFalloff = 40;
             MaxTreeDistance = 200;
             RestrictTo720p = false;
+            settingProfile.value = "High";
         }
 
         [UIButton]
@@ -835,6 +903,7 @@ namespace UpvoidMiner
             LodFalloff = 50;
             MaxTreeDistance = 300;
             RestrictTo720p = false;
+            settingProfile.value = "Max";
         }
 
         private void SaveAllSettings()
@@ -858,7 +927,7 @@ namespace UpvoidMiner
         private void RebuildPipeline()
         {
             // rebuild pipeline on changes only
-            if (pipelineChanges)
+            if (pipelineChanges && LocalScript.camera != null)
                 Rendering.SetupDefaultPipeline(LocalScript.camera);
             pipelineChanges = false;
         }
@@ -921,8 +990,27 @@ namespace UpvoidMiner
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
             }
 
-
-            pipelineChanges = false;
+            switch (Profile)
+            {
+                case "Lowest":
+                    SettingsPresetMin();
+                    break;
+                case "Low":
+                    SettingsPresetLow();
+                    break;
+                case "Medium":
+                    SettingsPresetMedium();
+                    break;
+                case "High":
+                    SettingsPresetHigh();
+                    break;
+                case "Max":
+                    SettingsPresetMax();
+                    break;
+            }
+            SaveAllSettings();
+            RebuildPipeline();
+            RebuildTextures();
         }
 
         internal static void InitSettings()
