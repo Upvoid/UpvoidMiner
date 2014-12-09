@@ -19,7 +19,10 @@
     </style>
 </head>
 <body style="background: transparent; padding: 1%; height: 100%; overflow: hidden;">
-  <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px;"><i class="fa fa-warning"></i> This is an beta version. Expect crashes and bugs. <br> Please report any problems at <a href="javascript:clickCommunity()">community.upvoid.com</a>.</p>
+  <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px 10px;">
+    <i class="fa fa-warning"></i> This is an beta version. Expect crashes and bugs. <br> Please report any problems at <a href="javascript:clickCommunity()">community.upvoid.com</a>. <br>
+    Version: <span id="versionstring" class="text-info"></span>
+  </p>
     <div id="menu" class="panel panel-default upvoid-debug-menu InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; overflow-y:auto;">
         <div class="panel-body text-center">
             <h1>UpvoidMiner</h1>
@@ -101,6 +104,7 @@
     <hud name="Global">
         <uicollection name="Stats"></uicollection>
         <uicollection name="MemoryFailsafe"></uicollection>
+        <uiobject name="Version" onvalue="function(el, val){ $('#versionstring').html(val); }"></uiobject>
     </hud>
 </body>
 </html>
