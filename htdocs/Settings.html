@@ -60,22 +60,26 @@
                         <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-resolution">
                             <div class="panel-body">
-                                <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
-                                <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
-                                <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
+                                <!--<div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>-->
                                 
-                                <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
-                                    <option>Native Resolution</option>
-                                </select>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Internal Resolution (does not affect UI)</div>
+                                    <div class="panel-body">
+                                        <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
+                                            <option>Native Resolution</option>
+                                        </select>
+                                        <table>
+                                            <tr>
+                                                <td><uitextbox placeholder="width x height" name="InternalSize"></uitextbox></td>
+                                                <td><uibutton tag="a" name="ApplyInternalSize" class="btn btn-default">Apply Internal Size</uibutton></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
 
-                                <br>
-                                Internal Resolution (does not affect UI):
-                                <table>
-                                    <tr>
-                                        <td><uitextbox placeholder="width x height" name="InternalSize"></uitextbox></td>
-                                        <td><uibutton name="ApplyInternalSize" class="btn btn-default">Apply Internal Size</uibutton></td>
-                                    </tr>
-                                </table>
+                                <div style="width:100%; text-align:center;">
+                                <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox></div>
                             </div>
                         </div>
                     </div>
