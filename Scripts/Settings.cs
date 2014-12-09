@@ -219,6 +219,8 @@ namespace UpvoidMiner
         {
             get
             {
+                if (settingInternalResolutionWidth.value < 2 || settingInternalResolutionHeight.value < 2)
+                    return "native";
                 return settingInternalResolutionWidth.value.ToString() + "x" +
                     settingInternalResolutionHeight.value.ToString();
             }
@@ -299,10 +301,15 @@ namespace UpvoidMiner
         [UICallback]
         public void VideoModeCallback(int index)
         {
-            Debug.Assert(index < supportedVideoModes.Count());
+            if (index < 0 || index >= supportedVideoModes.Count)
+                return;
 
-            settingResolutionWidth.value = supportedVideoModes[index].Width;
-            settingResolutionHeight.value = supportedVideoModes[index].Height;
+            var w = supportedVideoModes[index].Width;
+            var h = supportedVideoModes[index].Height;
+            if (index == 0)
+                InternalSize = "";
+            else
+                InternalSize = w + " x " + h;
         }
 
         [UISlider(0, 100)]
@@ -499,7 +506,11 @@ namespace UpvoidMiner
         public bool Fullscreen
         {
             get { return (settingFullscreen.value > -1); }
-            set { settingFullscreen.value = value ? 0 : -1; }
+            set
+            { 
+                settingFullscreen.value = value ? 0 : -1;
+                Engine.Windows.Windows.GetWindow(0).Fullscreen = settingFullscreen.value >= 0;
+            }
         }
 
         [UICheckBox]
