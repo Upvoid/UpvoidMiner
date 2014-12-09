@@ -92,10 +92,15 @@
                 "faceTarget" : 2,
                 "constrainBoundaries" : true
             },
+            "LodCover" :
+            {
+               "Type" : "LodCover",
+               "Nodes" : ["NormalRepair"]
+            },
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["LodCover"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
@@ -587,10 +592,15 @@
                 "faceTarget" : 2,
                 "constrainBoundaries" : true
             },
+            "LodCover" :
+            {
+               "Type" : "LodCover",
+               "Nodes" : ["NormalRepair"]
+            },
             "Output":
             {
                 "Type": "Attribute",
-                "Nodes" : ["NormalRepair"],
+                "Nodes" : ["LodCover"],
                 "Copy": ["aPosition", "aNormal"],
                 "Calculated": {
                     "aColor": {
