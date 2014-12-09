@@ -145,7 +145,7 @@
     Texture: uColor, Mods/Upvoid/Resources.Vegetation/1.0.0::Fern/Fern.Diffuse
     Texture: uNormal, Mods/Upvoid/Resources.Vegetation/1.0.0::Fern/Fern.Normal
     Parameter: uFadeDistance, 35
-    Culling: None
+    Culling: Back
 	MaxDistance: 30
    Parameter: uDiscardBias, .1
     
