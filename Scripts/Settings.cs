@@ -990,21 +990,21 @@ namespace UpvoidMiner
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
             }
 
-            switch (Profile)
+            switch (Profile.ToLower())
             {
-                case "Lowest":
+                case "lowest":
                     SettingsPresetMin();
                     break;
-                case "Low":
+                case "low":
                     SettingsPresetLow();
                     break;
-                case "Medium":
+                case "medium":
                     SettingsPresetMedium();
                     break;
-                case "High":
+                case "high":
                     SettingsPresetHigh();
                     break;
-                case "Max":
+                case "max":
                     SettingsPresetMax();
                     break;
             }
