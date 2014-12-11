@@ -369,6 +369,16 @@ namespace UpvoidMiner
                 );
             itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, scaling, true));
 
+
+            {
+                var mj = new MeshRenderJob(
+                    Renderer.Lights.Mesh,
+                    Resources.UseMaterial("::Light", UpvoidMiner.ModDomain),
+                    Resources.UseMesh("::Debug/Sphere", null),
+                    mat4.Identity);
+                mj.SetColor("uColor", new vec4(new vec3(255, 127, 36) / 255f, 1));
+                itemEntity.AddRenderComponent(new RenderComponent(mj, mat4.Scale(5), true));
+            }
         }
         #endregion
     }
