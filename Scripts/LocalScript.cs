@@ -237,6 +237,12 @@ namespace UpvoidMiner
 
             // Do not play music. this is done by the music queue 8-)
             //music.Play();
+
+            world.AddRenderJob(new MeshRenderJob(
+                Renderer.Lights.Mesh,
+                Resources.UseMaterial("::Light", UpvoidMiner.ModDomain), 
+                Resources.UseMesh("::Debug/Sphere", null),
+                mat4.Translate(new vec3(0,40,0)) * mat4.Scale(10)));
         }
 
         static bool generationDone = false;
