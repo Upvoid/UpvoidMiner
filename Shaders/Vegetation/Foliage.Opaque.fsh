@@ -8,7 +8,7 @@ uniform sampler2D uColor;
 
 uniform float uRoughness = 0.5;
 uniform float uFresnel = 1.3;
-uniform float uGlossiness = 0.5;
+uniform float uGlossiness = 0.2;
 
 in vec2 vTexCoord;
 in vec3 vColor;

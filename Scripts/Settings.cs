@@ -29,6 +29,7 @@ using Engine.Webserver;
 using Engine.Network;
 using Newtonsoft.Json;
 using EfficientUI;
+using Engine.Statistics;
 using UpvoidMiner.UI;
 
 namespace UpvoidMiner
@@ -45,9 +46,7 @@ namespace UpvoidMiner
     {
         private readonly static List<Setting> allSettings = new List<Setting>();
         public static Settings settings;
-
         private List<VideoMode> supportedVideoModes;
-
         // Transforms a string of the form "widthxHeight" to VideoMode(width, height);
         private static VideoMode StringToVideoMode(string vidModString)
         {
@@ -63,7 +62,6 @@ namespace UpvoidMiner
             // Error
             return new VideoMode(-2, -2);
         }
-
         // A VideoMode wraps a width/height pair
         public struct VideoMode
         {
@@ -76,25 +74,22 @@ namespace UpvoidMiner
                 Height = height;
             }
         }
-
-
         // Encapsulates one single setting
         public abstract class Setting
         {
-            public string id;   // JSON key, e.g. "Graphics/Shadow Resolution"
-            public string desc;  // a longer description, e.g. for tooltips, optional
+            public string id;
+            // JSON key, e.g. "Graphics/Shadow Resolution"
+            public string desc;
+            // a longer description, e.g. for tooltips, optional
             public Setting(string identifier, string description)
             {
                 id = identifier;
                 desc = description;
             }
-
             // Reload the setting from user.settings file
             public abstract void reloadSettingFromFile();
-
             // Reset the setting to the state before it was saved to file
             public abstract void ResetSetting();
-
             // Save the current setting to user.settings file
             public abstract void SaveSetting();
         }
@@ -104,6 +99,7 @@ namespace UpvoidMiner
             public double value;
             public double defValue;
             public double preSaveValue;
+
             public SettingDouble(string identifier, double defaultValue, string description = "") :
                 base(identifier, description)
             {
@@ -134,13 +130,13 @@ namespace UpvoidMiner
             }
         }
 
-
         public class SettingBool : Setting
         {
             public bool value;
             public bool defValue;
             public bool preSaveValue;
-            public SettingBool(String identifier, bool defaultValue, String description = "") :
+
+            public SettingBool(string identifier, bool defaultValue, string description = "") :
                 base(identifier, description)
             {
                 defValue = defaultValue;
@@ -170,20 +166,54 @@ namespace UpvoidMiner
             }
         }
 
+        public class SettingString : Setting
+        {
+            public string value;
+            public string defValue;
+            public string preSaveValue;
+
+            public SettingString(string identifier, string defaultValue, string description = "") :
+                base(identifier, description)
+            {
+                defValue = defaultValue;
+                preSaveValue = defaultValue;
+
+                // Get initial value from file (or default value)
+                reloadSettingFromFile();
+
+                allSettings.Add(this);
+            }
+
+            public override void reloadSettingFromFile()
+            {
+                value = Scripting.GetUserSettingString(id, defValue);
+                preSaveValue = value;
+            }
+
+            public override void ResetSetting()
+            {
+                value = preSaveValue;
+            }
+
+            public override void SaveSetting()
+            {
+                preSaveValue = value;
+                Scripting.SetUserSettingString(id, value);
+            }
+        }
+
         // Window Manager
         private SettingDouble settingResolutionWidth = new SettingDouble("WindowManager/Width", -1);
         private SettingDouble settingResolutionHeight = new SettingDouble("WindowManager/Height", -1);
-        private SettingDouble settingFullscreen = new SettingDouble("WindowManager/Fullscreen", -1);
+        private SettingDouble settingFullscreen = new SettingDouble("WindowManager/FullscreenMode", -1);
         private SettingDouble settingInternalResolutionWidth = new SettingDouble("WindowManager/InternalWidth", -1);
         private SettingDouble settingInternalResolutionHeight = new SettingDouble("WindowManager/InternalHeight", -1);
         private SettingBool settingRestrictTo720p = new SettingBool("WindowManager/Restrict To 720p", false);
-
         // Audio
         private SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
         private SettingDouble settingSfxVolume = new SettingDouble("Audio/SFX Volume", 50);
         private SettingDouble settingMusicVolume = new SettingDouble("Audio/Music Volume", 50);
         private SettingBool settingMuteMusic = new SettingBool("Audio/Mute Music", false);
-
         // Graphics
         private SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
         private SettingDouble settingTextureResolution = new SettingDouble("Graphics/Texture Resolution", 512);
@@ -193,25 +223,34 @@ namespace UpvoidMiner
         private SettingBool settingFXAA = new SettingBool("Graphics/Enable FXAA", true);
         private SettingBool settingLensflares = new SettingBool("Graphics/Enable Lensflares", false);
         private SettingDouble settingFieldOfView = new SettingDouble("Graphics/Field of View", 75.0);
-
         // LoD
         private SettingBool settingGrass = new SettingBool("Graphics/Enable Grass", true);
         private SettingBool settingDigParticles = new SettingBool("Graphics/Enable Dig Particles", true);
         private SettingDouble settingMaxTreeDistance = new SettingDouble("Graphics/Max Tree Distance", 150);
         private SettingDouble settingMinLodDistance = new SettingDouble("Graphics/Min Lod Distance", 20);
         private SettingDouble settingLodFalloff = new SettingDouble("Graphics/Lod Falloff", 30);
-
         // Other
         private SettingDouble settingMouseSensitivity = new SettingDouble("Input/Mouse Sensitivity", 0.5);
         private SettingBool settingHideTutorial = new SettingBool("Misc/Hide Tutorial", false);
         private SettingBool settingShowStats = new SettingBool("Debug/Show Stats", false);
-
-
         private bool pipelineChanges = false;
         private bool textureChanges = false;
 
+        private SettingString settingProfile = new SettingString("Graphics/Profile", "Custom");
+
         [UIObject]
         public bool ChangesOnApply { get { return pipelineChanges || textureChanges; } }
+
+        private void PipelineChanged()
+        {
+            pipelineChanges = true;
+            settingProfile.value = "Custom";
+        }
+        private void TextureChanged()
+        {
+            textureChanges = true;
+            settingProfile.value = "Custom";
+        }
 
         [UICheckBox]
         public bool RestrictTo720p
@@ -219,9 +258,10 @@ namespace UpvoidMiner
             get { return settingRestrictTo720p.value; }
             set
             {
-                if (settingRestrictTo720p.value == value) return;
+                if (settingRestrictTo720p.value == value)
+                    return;
                 settingRestrictTo720p.value = value;
-                pipelineChanges = true;
+                PipelineChanged();
             }
         }
 
@@ -230,8 +270,10 @@ namespace UpvoidMiner
         {
             get
             {
-                return settingInternalResolutionWidth.value.ToString() + "x" +
-                       settingInternalResolutionHeight.value.ToString();
+                if (settingInternalResolutionWidth.value < 2 || settingInternalResolutionHeight.value < 2)
+                    return "native";
+                return settingInternalResolutionWidth.value + "x" +
+                    settingInternalResolutionHeight.value;
             }
             set
             {
@@ -280,7 +322,11 @@ namespace UpvoidMiner
         public bool DigParticles
         {
             get { return settingDigParticles.value; }
-            set { settingDigParticles.value = value; }
+            set
+            {
+                settingDigParticles.value = value;
+                settingProfile.value = "Custom";
+            }
         }
 
         private Settings()
@@ -310,10 +356,15 @@ namespace UpvoidMiner
         [UICallback]
         public void VideoModeCallback(int index)
         {
-            Debug.Assert(index < supportedVideoModes.Count());
+            if (index < 0 || index >= supportedVideoModes.Count)
+                return;
 
-            settingResolutionWidth.value = supportedVideoModes[index].Width;
-            settingResolutionHeight.value = supportedVideoModes[index].Height;
+            var w = supportedVideoModes[index].Width;
+            var h = supportedVideoModes[index].Height;
+            if (index == 0)
+                InternalSize = "";
+            else
+                InternalSize = w + " x " + h;
         }
 
         [UISlider(0, 100)]
@@ -367,12 +418,18 @@ namespace UpvoidMiner
             {
                 switch ((int)settingAnisotropicFiltering.value)
                 {
-                    case 1: return 0;
-                    case 2: return 1;
-                    case 4: return 2;
-                    case 8: return 3;
-                    case 16: return 4;
-                    default: return 0;
+                    case 1:
+                        return 0;
+                    case 2:
+                        return 1;
+                    case 4:
+                        return 2;
+                    case 8:
+                        return 3;
+                    case 16:
+                        return 4;
+                    default:
+                        return 0;
                 }
             }
             set
@@ -380,17 +437,29 @@ namespace UpvoidMiner
                 int anisFilt;
                 switch (value)
                 {
-                    case 0: anisFilt = 1; break;
-                    case 1: anisFilt = 2; break;
-                    case 2: anisFilt = 4; break;
-                    case 3: anisFilt = 8; break;
-                    case 4: anisFilt = 16; break;
-                    default: anisFilt = 1; break;
+                    case 0:
+                        anisFilt = 1;
+                        break;
+                    case 1:
+                        anisFilt = 2;
+                        break;
+                    case 2:
+                        anisFilt = 4;
+                        break;
+                    case 3:
+                        anisFilt = 8;
+                        break;
+                    case 4:
+                        anisFilt = 16;
+                        break;
+                    default:
+                        anisFilt = 1;
+                        break;
                 }
                 if (settingAnisotropicFiltering.value != anisFilt)
                 {
                     settingAnisotropicFiltering.value = anisFilt;
-                    textureChanges = true;
+                    TextureChanged();
                 }
             }
         }
@@ -408,12 +477,18 @@ namespace UpvoidMiner
             {
                 switch ((int)settingTextureResolution.value)
                 {
-                    case 128: return 0;
-                    case 256: return 1;
-                    case 512: return 2;
-                    case 1024: return 3;
-                    case 2048: return 4;
-                    default: return 128;
+                    case 128:
+                        return 0;
+                    case 256:
+                        return 1;
+                    case 512:
+                        return 2;
+                    case 1024:
+                        return 3;
+                    case 2048:
+                        return 4;
+                    default:
+                        return 128;
                 }
             }
             set
@@ -421,17 +496,29 @@ namespace UpvoidMiner
                 int texRes;
                 switch (value)
                 {
-                    case 0: texRes = 128; break;
-                    case 1: texRes = 256; break;
-                    case 2: texRes = 512; break;
-                    case 3: texRes = 1024; break;
-                    case 4: texRes = 2048; break;
-                    default: texRes = 128; break;
+                    case 0:
+                        texRes = 128;
+                        break;
+                    case 1:
+                        texRes = 256;
+                        break;
+                    case 2:
+                        texRes = 512;
+                        break;
+                    case 3:
+                        texRes = 1024;
+                        break;
+                    case 4:
+                        texRes = 2048;
+                        break;
+                    default:
+                        texRes = 128;
+                        break;
                 }
                 if (settingTextureResolution.value != texRes)
                 {
                     settingTextureResolution.value = texRes;
-                    textureChanges = true;
+                    TextureChanged();
                 }
             }
         }
@@ -439,7 +526,24 @@ namespace UpvoidMiner
         [UIString]
         public string TextureResolutionString
         {
-            get { return (int)settingTextureResolution.value + "&sup2;"; }
+            get
+            {
+                switch ((int)settingTextureResolution.value)
+                {
+                    case 128:
+                        return "Lowest";
+                    case 256:
+                        return "Low";
+                    case 512:
+                        return "Medium";
+                    case 1024:
+                        return "High";
+                    case 2048:
+                        return "Max";
+                    default:
+                        return "Unknown";
+                }
+            }
         }
 
         [UISlider(45, 135)]
@@ -457,7 +561,11 @@ namespace UpvoidMiner
         public bool Fullscreen
         {
             get { return (settingFullscreen.value > -1); }
-            set { settingFullscreen.value = value ? 0 : -1; }
+            set
+            {
+                settingFullscreen.value = value ? 0 : -1;
+                Engine.Windows.Windows.GetWindow(0).Fullscreen = settingFullscreen.value >= 0;
+            }
         }
 
         [UICheckBox]
@@ -467,7 +575,6 @@ namespace UpvoidMiner
             set { settingHideTutorial.value = value; }
         }
 
-
         [UISlider(0, 4)]
         public int ShadowResolution
         {
@@ -475,12 +582,18 @@ namespace UpvoidMiner
             {
                 switch ((int)settingShadowResolution.value)
                 {
-                    case 2: return 0;
-                    case 256: return 1;
-                    case 512: return 2;
-                    case 1024: return 3;
-                    case 2048: return 4;
-                    default: return 0;
+                    case 0:
+                        return 0;
+                    case 256:
+                        return 1;
+                    case 512:
+                        return 2;
+                    case 1024:
+                        return 3;
+                    case 2048:
+                        return 4;
+                    default:
+                        return 0;
                 }
             }
             set
@@ -488,18 +601,30 @@ namespace UpvoidMiner
                 int shadowRes;
                 switch (value)
                 {
-                    case 0: shadowRes = 2; break;
-                    case 1: shadowRes = 256; break;
-                    case 2: shadowRes = 512; break;
-                    case 3: shadowRes = 1024; break;
-                    case 4: shadowRes = 2048; break;
-                    default: shadowRes = 2; break;
+                    case 0:
+                        shadowRes = 0;
+                        break;
+                    case 1:
+                        shadowRes = 256;
+                        break;
+                    case 2:
+                        shadowRes = 512;
+                        break;
+                    case 3:
+                        shadowRes = 1024;
+                        break;
+                    case 4:
+                        shadowRes = 2048;
+                        break;
+                    default:
+                        shadowRes = 2;
+                        break;
                 }
 
                 if (settingShadowResolution.value != shadowRes)
                 {
                     settingShadowResolution.value = shadowRes;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
             }
         }
@@ -509,11 +634,27 @@ namespace UpvoidMiner
         {
             get
             {
-                if (settingShadowResolution.value <= 2)
-                    return "none";
-                else return (int)settingShadowResolution.value + "&sup2;";
+                if (settingShadowResolution.value < 256)
+                    return "Off";
+
+                switch ((int)settingShadowResolution.value)
+                {
+                    case 256:
+                        return "Low";
+                    case 512:
+                        return "Medium";
+                    case 1024:
+                        return "High";
+                    case 2048:
+                        return "Ultra";
+                    default:
+                        return "Unknown";
+                }
             }
         }
+
+        [UIObject]
+        public string Profile { get { return settingProfile.value; } }
 
         [UICheckBox]
         public bool Lensflares
@@ -524,7 +665,7 @@ namespace UpvoidMiner
                 if (settingLensflares.value != value)
                 {
                     settingLensflares.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
             }
@@ -539,7 +680,7 @@ namespace UpvoidMiner
                 if (settingVolumetricScattering.value != value)
                 {
                     settingVolumetricScattering.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
 
@@ -555,7 +696,7 @@ namespace UpvoidMiner
                 if (settingTonemapping.value != value)
                 {
                     settingTonemapping.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
 
 
@@ -571,7 +712,7 @@ namespace UpvoidMiner
                 if (settingFXAA.value != value)
                 {
                     settingFXAA.value = value;
-                    pipelineChanges = true;
+                    PipelineChanged();
                 }
             }
         }
@@ -598,6 +739,7 @@ namespace UpvoidMiner
                     LocalScript.world.Terrain.RebuildTerrainGeometry();
                 }
                 settingGrass.value = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -621,7 +763,9 @@ namespace UpvoidMiner
             set
             {
                 settingLodFalloff.value = value;
-                LocalScript.world.LodSettings.LodFalloff = value;
+                if (LocalScript.world != null && LocalScript.world.LodSettings != null)
+                    LocalScript.world.LodSettings.LodFalloff = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -632,7 +776,9 @@ namespace UpvoidMiner
             set
             {
                 settingMinLodDistance.value = value;
-                LocalScript.world.LodSettings.MinLodDistance = value;
+                if (LocalScript.world != null && LocalScript.world.LodSettings != null)
+                    LocalScript.world.LodSettings.MinLodDistance = value;
+                settingProfile.value = "Custom";
             }
         }
 
@@ -666,6 +812,7 @@ namespace UpvoidMiner
 
                 settingMaxTreeDistance.value = value;
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
+                settingProfile.value = "Custom";
             }
         }
 
@@ -677,13 +824,14 @@ namespace UpvoidMiner
             ShadowResolution = 0;       // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
             Tonemapping = false;
-            FXAA = false;
-            Grass = false;
-            DigParticles = false;
+            FXAA = true;
+            Grass = true;
+            DigParticles = true;
             MinLodDistance = 0;
             LodFalloff = 10;
             MaxTreeDistance = 30;
             RestrictTo720p = true;
+            settingProfile.value = "Lowest";
         }
 
         [UIButton]
@@ -701,6 +849,7 @@ namespace UpvoidMiner
             LodFalloff = 20;
             MaxTreeDistance = 50;
             RestrictTo720p = false;
+            settingProfile.value = "Low";
         }
 
         [UIButton]
@@ -718,6 +867,7 @@ namespace UpvoidMiner
             LodFalloff = 30;
             MaxTreeDistance = 100;
             RestrictTo720p = false;
+            settingProfile.value = "Medium";
         }
 
         [UIButton]
@@ -735,6 +885,7 @@ namespace UpvoidMiner
             LodFalloff = 40;
             MaxTreeDistance = 200;
             RestrictTo720p = false;
+            settingProfile.value = "High";
         }
 
         [UIButton]
@@ -752,6 +903,7 @@ namespace UpvoidMiner
             LodFalloff = 50;
             MaxTreeDistance = 300;
             RestrictTo720p = false;
+            settingProfile.value = "Max";
         }
 
         private void SaveAllSettings()
@@ -775,17 +927,16 @@ namespace UpvoidMiner
         private void RebuildPipeline()
         {
             // rebuild pipeline on changes only
-            if (pipelineChanges)
+            if (pipelineChanges && LocalScript.camera != null)
                 Rendering.SetupDefaultPipeline(LocalScript.camera);
             pipelineChanges = false;
         }
-
 
         [UIButton]
         public void ApplySettings()
         {
             if (settingInternalResolutionWidth.value != settingInternalResolutionWidth.preSaveValue ||
-               settingInternalResolutionHeight.value != settingInternalResolutionHeight.preSaveValue)
+                settingInternalResolutionHeight.value != settingInternalResolutionHeight.preSaveValue)
             {
                 ApplyInternalSize();
             }
@@ -804,6 +955,8 @@ namespace UpvoidMiner
         [UIButton]
         public void ResetSettings()
         {
+            var currGrass = Grass;
+
             // Reset setting values
             Debug.Assert(allSettings.Count > 0);
             foreach (Setting set in allSettings)
@@ -839,8 +992,41 @@ namespace UpvoidMiner
                 UpvoidMinerWorldGenerator.setTreeLodSettings(fadeOutMin, fadeOutMax, fadeTime);
             }
 
+            switch (Profile.ToLower())
+            {
+                case "lowest":
+                    SettingsPresetMin();
+                    break;
+                case "low":
+                    SettingsPresetLow();
+                    break;
+                case "medium":
+                    SettingsPresetMedium();
+                    break;
+                case "high":
+                    SettingsPresetHigh();
+                    break;
+                case "max":
+                    SettingsPresetMax();
+                    break;
+            }
+            SaveAllSettings();
+            RebuildPipeline();
+            RebuildTextures();
 
-            pipelineChanges = false;
+            if (currGrass != Grass)
+                if (LocalScript.world != null)
+                {
+                    // update terrain material activity
+                    foreach (var resource in TerrainResource.ListResources())
+                        if (resource is VegetatedTerrainResource)
+                        {
+                            var res = resource as VegetatedTerrainResource;
+                            res.Material.SetPipelineActive(res.GrassPipelineIndex, Grass);
+                        }
+                    // grass change requires terrain rebuilt
+                    LocalScript.world.Terrain.RebuildTerrainGeometry();
+                }
         }
 
         internal static void InitSettings()

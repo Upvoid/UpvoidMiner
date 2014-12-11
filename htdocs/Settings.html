@@ -47,6 +47,17 @@
 
     </style>
 
+    <script type="text/javascript">
+     function onProfile(el, val)
+     {
+        $(el).find('[profile=Min]').attr(   "class", val == 'Lowest' ? "btn btn-primary" : "btn btn-default");
+        $(el).find('[profile=Low]').attr(   "class", val == 'Low'    ? "btn btn-primary" : "btn btn-default");
+        $(el).find('[profile=Medium]').attr("class", val == 'Medium' ? "btn btn-primary" : "btn btn-default");
+        $(el).find('[profile=High]').attr(  "class", val == 'High'   ? "btn btn-primary" : "btn btn-default");
+        $(el).find('[profile=Max]').attr(   "class", val == 'Max'    ? "btn btn-primary" : "btn btn-default");
+     }
+    </script>
+
 </head>
 <body style="background: transparent; padding: 1em;">
     <div id="menu" class="panel panel-default" style="width: 75%; max-width: 400px; margin: 50px auto 0px auto; overflow-y:auto;">
@@ -60,22 +71,26 @@
                         <div class="panel-heading" onclick="$('.panel-collapse').collapse('hide'); $('#group-resolution').collapse('toggle')">Resolution <span class="caret"></span></div>
                         <div class="panel-collapse collapse" id="group-resolution">
                             <div class="panel-body">
-                                <div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>
-                                <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox>
-                                <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
+                                <!--<div style="text-align:center;"><p style="color: #f00;"><i class="fa fa-warning"></i> Restart the game to apply changes.</p></div>-->
                                 
-                                <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
-                                    <option>Native Resolution</option>
-                                </select>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Internal Resolution (does not affect UI)</div>
+                                    <div class="panel-body">
+                                        <select onchange="javscript:videoModeCallback(this)" class="form-control InputConsumer" id="select-resolution" size="4">
+                                            <option>Native Resolution</option>
+                                        </select>
+                                        <table>
+                                            <tr>
+                                                <td><uitextbox placeholder="width x height" name="InternalSize"></uitextbox></td>
+                                                <td><uibutton tag="a" name="ApplyInternalSize" class="btn btn-default">Apply Internal Size</uibutton></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <uiobject name="VideoModesObject" onValue="onVideoModeChanged"></uiobject>
 
-                                <br>
-                                Internal Resolution (does not affect UI):
-                                <table>
-                                    <tr>
-                                        <td><uitextbox placeholder="width x height" name="InternalSize"></uitextbox></td>
-                                        <td><uibutton name="ApplyInternalSize" class="btn btn-default">Apply Internal Size</uibutton></td>
-                                    </tr>
-                                </table>
+                                <div style="width:100%; text-align:center;">
+                                <uicheckbox name="Fullscreen">Fullscreen Mode</uicheckbox></div>
                             </div>
                         </div>
                     </div>
@@ -119,12 +134,13 @@
 
                                 <div style="text-align:center;">
                                    <div class="btn-group btn-group-sm">
-                                      <uibutton name="SettingsPresetMin" tag="a">Min</uibutton>
-                                      <uibutton name="SettingsPresetLow" tag="a">Low</uibutton>
-                                      <uibutton name="SettingsPresetMedium" tag="a">Med</uibutton>
-                                      <uibutton name="SettingsPresetHigh" tag="a">High</uibutton>
-                                      <uibutton name="SettingsPresetMax" tag="a">Max</uibutton>
+                                      <uibutton profile="Min" name="SettingsPresetMin" tag="a">Lowest</uibutton>
+                                      <uibutton profile="Low" name="SettingsPresetLow" tag="a">Low</uibutton>
+                                      <uibutton profile="Medium" name="SettingsPresetMedium" tag="a">Medium</uibutton>
+                                      <uibutton profile="High" name="SettingsPresetHigh" tag="a">High</uibutton>
+                                      <uibutton profile="Max" name="SettingsPresetMax" tag="a">Max</uibutton>
                                    </div>
+                                   <uiobject name="Profile" onvalue="function(el, val) { onProfile($(el).parent(), val); }"></uiobject>
                                </div>
 
                                <br>

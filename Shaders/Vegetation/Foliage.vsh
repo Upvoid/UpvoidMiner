@@ -55,7 +55,7 @@ void main()
    disc = (1-uDiscardBias) + 0.05-clamp(disc/50,0,1-uDiscardBias);
    vDisc = disc;
 
-   vNormal = aInstNormal;
+   vNormal = aNormal;
 
    // projected vertex position used for the interpolation
    gl_Position  = uViewProjectionMatrix * worldPos;

@@ -8,7 +8,7 @@ uniform sampler2D uColor;
 
 uniform float uRoughness = 0.5;
 uniform float uFresnel = 1.3;
-uniform float uGlossiness = 0.5;
+uniform float uGlossiness = 0.2;
 
 uniform vec4 uColorModulation = vec4(1.0);
 uniform float uVisibility = 1.0;
@@ -36,7 +36,7 @@ void main()
     texColor.rgb *= uColorModulation.rgb;
 
 
-    vec3 normalFront = mix(vNormal, -vNormal, float(!gl_FrontFacing));
+    vec3 normalFront = vNormal * sign(dot(uSunDirection, vNormal));
 
     vec4 gb1, gb2;
     writeGBuffer(

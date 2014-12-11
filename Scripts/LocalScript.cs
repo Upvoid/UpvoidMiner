@@ -86,8 +86,12 @@ namespace UpvoidMiner
         {
             [UICollection("Stats")]
             public StatUI Stats { get { return stats; } }
+
             [UICollection("MemoryFailsafe")]
             public MemoryFailsafe MemoryFailsafe { get { return memFailsafe; } }
+
+            [UIObject]
+            public string Version { get { return Scripting.Version; } }
 
             public GlobalHud()
                 : base("Global")
@@ -95,6 +99,7 @@ namespace UpvoidMiner
                 UIProxyManager.AddProxy(this);
             }
         }
+
         private static GlobalHud globalHud = new GlobalHud();
 
         /// <summary>
@@ -319,7 +324,8 @@ namespace UpvoidMiner
 
             Scripting.OnEngineShutdown += (sender, args) =>
             {
-                Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
+                if (Gui.DefaultUI != null)
+                    Gui.DefaultUI.LoadURL(UpvoidMiner.ModDomain, "ShutdownScreen.html");
                 if (player != null)
                 {
                     player.Save();
