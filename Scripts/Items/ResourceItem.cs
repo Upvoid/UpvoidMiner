@@ -30,21 +30,13 @@ namespace UpvoidMiner
         /// <summary>
         /// The terrain material that this resource represents.
         /// </summary>
-        public readonly TerrainResource Material;
+        public readonly Substance Substance;
 
-        public override string Identifier
+        public ResourceItem(Substance substance, float volume = 0f) :
+            base(substance.Name, "The terrain resource " + substance.Name, 1.0f, ItemCategory.Resources, volume)
         {
-            get
-            {
-                return "01-Resources." + Material.Index.ToString("00") + "-" + Material.Name;
-            }
-        }
-        
-        public ResourceItem(TerrainResource material, float volume = 0f) :
-            base(material.Name, "The terrain resource " + material.Name, 1.0f, ItemCategory.Resources, volume)
-        {
-            Material = material;
-            Icon = material.Name;
+            Substance = substance;
+            Icon = "Substances/" + substance.Name;
         }
 
         /// <summary>
@@ -53,8 +45,9 @@ namespace UpvoidMiner
         public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
             ResourceItem item = rhs as ResourceItem;
-            if ( item == null ) return false;
-            if ( item.Material != Material ) return false;
+            if (item == null) return false;
+            if (!subtract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
+            if (subtract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
 
             return Merge(item, subtract, force, dryrun);
         }
@@ -64,7 +57,12 @@ namespace UpvoidMiner
         /// </summary>
         public override Item Clone()
         {
-            return new ResourceItem(Material, Volume);
+            return new ResourceItem(Substance, Volume);
+        }
+
+        public override Item Clone(Substance sub)
+        {
+            return new ResourceItem(sub, Volume);
         }
 
         #region Inventory Logic
@@ -118,7 +116,7 @@ namespace UpvoidMiner
                     throw new InvalidOperationException("Unknown digging shape");
             }
 
-            player.PlaceMaterial(Material, _worldNormal, _worldPos, radius);
+            player.PlaceMaterial(Substance.QueryResource(), _worldNormal, _worldPos, radius);
         }
 
         public override void OnSelect(Player player)

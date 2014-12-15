@@ -57,17 +57,6 @@ namespace UpvoidMiner
             return null;
         }
 
-        public Item ItemFromIdentifier(string identifier)
-        {
-            foreach (Item item in Items)
-            {
-                if (item.Identifier == identifier)
-                    return item;
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Creates a new item collection.
         /// </summary>
@@ -107,10 +96,10 @@ namespace UpvoidMiner
         /// <summary>
         /// Removes the amount of items represented by the argument item from the collection.
         /// Does not necessarily decrease the number of items in the list.
-        /// Returns false if the item could not be fully removed (i.e. the collection had less of this item than the item indicated).
+        /// Returns the item that was removed if successful, otherwise null.
         /// If force is true, items will be removed even if the result is negative (e.g. useful for removing resources).
         /// </summary>
-        public bool RemoveItem(Item item, bool force)
+        public Item RemoveItem(Item item, bool force)
         {
             // Try to substract with already possessed items.
             foreach (var it in Items)
@@ -128,12 +117,12 @@ namespace UpvoidMiner
                         if (OnQuantityChange != null)
                             OnQuantityChange(it);
                     }
-                    return true;
+                    return it;
                 }
             }
 
             // Unable to remove.
-            return false;
+            return null;
         }
 
         /// <summary>

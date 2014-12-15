@@ -31,6 +31,8 @@ namespace UpvoidMiner
         /// The underlying terrain material.
         /// </summary>
         public readonly TerrainMaterial Material;
+
+        public readonly Substance Substance;
         /// <summary>
         /// The index of the material
         /// </summary>
@@ -50,11 +52,12 @@ namespace UpvoidMiner
         /// </summary>
         public TextureDataResource Icon { get; protected set; }
 
-        public TerrainResource(string name, float massDensity, bool translucent = false)
+        public TerrainResource(Substance substance, float massDensity, bool translucent = false)
         {
-            Material = Scripting.IsHost ? terrain.RegisterMaterial(name, translucent) : terrain.QueryMaterialFromName(name);
+            Name = substance.Name;
+            Material = Scripting.IsHost ? terrain.RegisterMaterial(Name, translucent) : terrain.QueryMaterialFromName(Name);
             Index = Material.MaterialIndex;
-            Name = name;
+            Substance = substance;
             MassDensity = massDensity;
         }
     }

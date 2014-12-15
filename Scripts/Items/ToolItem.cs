@@ -23,6 +23,8 @@ namespace UpvoidMiner
         DroneChain
     }
 
+
+
     /// <summary>
     /// An item that is a tool
     /// </summary>
@@ -33,39 +35,96 @@ namespace UpvoidMiner
         /// </summary>
         public readonly ToolType ToolType;
 
-        public override string Identifier
+        public readonly Substance Substance;
+
+        private readonly IEnumerable<int> ManipulatableIndices;
+
+        private Substance SubstanceClass
         {
             get
             {
-                return "00-Tools." + ((int)ToolType).ToString("00") + "-" + Name;
+                if (Substance is WoodSubstance)
+                    return new WoodSubstance();
+
+                if (Substance is StoneSubstance)
+                    return new StoneSubstance();
+                
+                if (Substance is CopperSubstance)
+                    return new CopperSubstance();
+
+                return null;
             }
         }
-
-        public ToolItem(ToolType type, int stackSize = 1) :
+        
+        public ToolItem(ToolType type, Substance material, int stackSize = 1) :
             base("", "", 1.0f, ItemCategory.Tools, stackSize)
         {
             ToolType = type;
+            Substance = material;
             Icon = ToolType.ToString();
+            
+            if (material != null)
+            {
+                var matName = material.MatOverlayName();
+                if (matName != null)
+                    Icon += "," + matName;
+            }
+            string materialString = material == null ? "" : Substance.Name;
+            if (Substance is WoodSubstance)
+            {
+                digRadiusMaxFactor = digRadiusMaxFactorWood;
+            }
+            else if (Substance is StoneSubstance)
+            {
+                digRadiusMaxFactor = digRadiusMaxFactorStone;
+            }
+            else if (Substance is CopperSubstance)
+            {
+                digRadiusMaxFactor = digRadiusMaxFactorCopper;
+            }
+            else
+            {
+                digRadiusMaxFactor = 1.0f;
+            }
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
-                    Name = "Pickaxe";
+                    Name = materialString + " Pickaxe";
                     Description = "Tool used for mining stone.";
+                    if (Substance is WoodSubstance)
+                        ManipulatableIndices = Substance.GetConcreteSubstancesWhich(substance => substance is LooseSubstance || substance is StoneSubstance);
+                    else if (Substance is StoneSubstance)
+                        ManipulatableIndices = 
+                            Substance.GetConcreteSubstancesWhich(
+                            substance => 
+                                substance is LooseSubstance || substance is StoneSubstance || 
+                                substance is CopperOreSubstance || substance is CopperSubstance);
+                    else if (Substance is CopperSubstance)
+                        ManipulatableIndices =
+                            Substance.GetConcreteSubstancesWhich(
+                                substance =>
+                                    substance is LooseSubstance || substance is RockSubstance ||
+                                    substance is MetalSubstance);
+                    else
+                        ManipulatableIndices = null;
                     break;
                 case ToolType.Shovel:
-                    Name = "Shovel";
+                    Name = materialString + " Shovel";
                     Description = "Tool used for excavating earth.";
+                    ManipulatableIndices = Substance.GetConcreteSubstancesWhich(substance => substance is LooseSubstance);
                     break;
                 case ToolType.Axe:
-                    Name = "Axe";
+                    Name = materialString + " Axe";
                     Description = "Tool used for chopping trees.";
+                    ManipulatableIndices = Substance.GetConcreteSubstancesWhich(substance => substance is PlantSubstance);
                     break;
                 case ToolType.GodsShovel:
                     Name = "God's Shovel";
                     Description = "The epic shovel of god.";
+                    ManipulatableIndices = null;
                     break;
                 case ToolType.Hammer:
-                    Name = "Hammer";
+                    Name = materialString + " Hammer";
                     Description = "Tool used for crafting mechanics.";
                     break;
 
@@ -85,12 +144,13 @@ namespace UpvoidMiner
         /// </summary>
         public override bool TryMerge(Item rhs, bool subtract, bool force, bool dryrun = false)
         {
-            ToolItem item = rhs as ToolItem;
+            var item = rhs as ToolItem;
             if (item == null)
                 return false;
             if (item.ToolType != ToolType)
                 return false;
-
+            if (!subtract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
+            if (subtract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
             return Merge(item, subtract, force, dryrun);
         }
 
@@ -99,7 +159,12 @@ namespace UpvoidMiner
         /// </summary>
         public override Item Clone()
         {
-            return new ToolItem(ToolType, StackSize);
+            return new ToolItem(ToolType, Substance, StackSize);
+        }
+
+        public override Item Clone(Substance sub)
+        {
+            return new ToolItem(ToolType, sub, StackSize);
         }
 
         /// <summary>
@@ -116,9 +181,13 @@ namespace UpvoidMiner
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
-        private const float digRadiusMinFactor = 0.4f;
+        private const float digRadiusMaxFactorWood = 1f;
+        private const float digRadiusMaxFactorStone = 1.5f;
+        private const float digRadiusMaxFactorCopper = 2f;
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
+        private const float digRadiusMinFactor = 0.4f;
+        private readonly float digRadiusMaxFactor = 0.4f;
 
         public float DigRadiusShovel { get { return digRadiusShovel; } }
 
@@ -265,9 +334,9 @@ namespace UpvoidMiner
             // Limit shape if non-noclip
             if (!LocalScript.NoclipEnabled && ToolType != ToolType.GodsShovel)
             {
-                if (digRadiusShovel > digRadiusShovelInitial) digRadiusShovel = digRadiusShovelInitial;
+                if (digRadiusShovel > digRadiusShovelInitial * digRadiusMaxFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMaxFactor;
                 if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
-                if (digRadiusPickaxe > digRadiusPickaxeInitial) digRadiusPickaxe = digRadiusPickaxeInitial;
+                if (digRadiusPickaxe > digRadiusPickaxeInitial * digRadiusMaxFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMaxFactor;
                 if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
             }
 
@@ -313,13 +382,8 @@ namespace UpvoidMiner
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
-                    // Pickaxe has small radius but can dig everywhere
-                    player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, null);
-                    return;
-
                 case ToolType.Shovel:
-                    // Shovel has big radius but can only dig dirt
-                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, new[] { TerrainResource.FromName("Dirt").Index, TerrainResource.FromName("Desert").Index });
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, ManipulatableIndices);
                     return;
 
                 case ToolType.GodsShovel:
@@ -341,7 +405,7 @@ namespace UpvoidMiner
                     player.AddDrone(_worldPos);
                     // Remove that drone from inventory.
                     if (!player.GodMode)
-                        player.Inventory.RemoveItem(new ToolItem(ToolType));
+                        player.Inventory.RemoveItem(new ToolItem(ToolType,Substance));
 
                     // Tutorial
                     Tutorials.MsgAdvancedBuildingPlaceDrone.Report(1);

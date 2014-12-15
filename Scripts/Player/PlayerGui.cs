@@ -56,6 +56,10 @@ namespace UpvoidMiner
         /// </summary>
         private CraftingUI craftingUI = new CraftingUI();
         /// <summary>
+        /// Recipe UI
+        /// </summary>
+        private RecipeUI recipeUI = new RecipeUI();
+        /// <summary>
         /// Inventory UI
         /// </summary>
         private InventoryUI inventoryUI = new InventoryUI();
@@ -92,7 +96,7 @@ namespace UpvoidMiner
                 {
                     icon = item.Icon;
                     id = item.Id;
-                    identifier = item.Identifier;
+                    identifier = "";
                     name = item.Name;
                     quickAccessSlot = item.QuickAccessIndex;
                     quantity = 1.0f;
@@ -128,11 +132,6 @@ namespace UpvoidMiner
                 public static Dictionary<string, GuiItem> FromItemCollection(IEnumerable<Item> items)
                 {
                     Dictionary<string, GuiItem> guiItems = new Dictionary<string, GuiItem>();
-                    foreach (Item item in items)
-                    {
-                        guiItems.Add(item.Identifier, new GuiItem(item));
-                    }
-
                     return guiItems;
                 }
             }
@@ -190,14 +189,7 @@ namespace UpvoidMiner
             Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "SetToolSettings", webSetToolSettings);
             updateSocket = new WebSocketHandler();
             Webserver.DefaultWebserver.RegisterWebSocketHandler(UpvoidMiner.ModDomain, "InventoryUpdate", updateSocket);
-
-            // On all relevant changes in the inventory, we order the GUI client to update itself.
-            player.Inventory.OnSelectionChanged += (arg1, arg2) => OnUpdate();
-            player.Inventory.OnQuickAccessChanged += (arg1, arg2) => OnUpdate();
-            player.Inventory.Items.OnAdd += arg1 => OnUpdate();
-            player.Inventory.Items.OnRemove += arg1 => OnUpdate();
-            player.Inventory.Items.OnQuantityChange += arg1 => OnUpdate();
-
+            
             // Workaround for missing keyboard input in the Gui: Toggle the inventory from here
             Input.OnPressInput += (object sender, InputPressArgs e) =>
             {
@@ -253,10 +245,7 @@ namespace UpvoidMiner
 
             foreach (var item in player.Inventory.QuickAccessItems)
             {
-                if (item != null)
-                    info.quickAccess.Add(item.Identifier);
-                else
-                    info.quickAccess.Add("");
+                info.quickAccess.Add("");
             }
 
             info.selection = player.Inventory.SelectionIndex;
@@ -336,49 +325,7 @@ namespace UpvoidMiner
 
             player.DropItem(item);
         }
-
-        void webDismantleItem(WebRequest request, WebResponse response)
-        {
-            // The GUI client calls this when an item is droppped from the inventory.
-
-            int itemId = Convert.ToInt32(request.GetQuery("itemId"));
-            Item item = player.Inventory.Items.ItemById(itemId);
-
-            if (item == null)
-                return;
-
-            // For dismantling, we need a crafting rule that results in the given item
-            foreach (var cr in player.Inventory.DiscoveredRules)
-            {
-                if (cr.CouldBeDismantled(item))
-                {
-                    //TODO: perform dismantling
-                    break;
-                }
-            }
-        }
-
-        void webCraftItem(WebRequest request, WebResponse response)
-        {
-            // The GUI client calls this when the player crafts an item.
-
-            string itemIdentifier = request.GetQuery("itemIdentifier");
-            Item item = player.Inventory.Items.ItemFromIdentifier(itemIdentifier);
-
-            if (item == null)
-                return;
-
-            // For crafting, we need a crafting rule that results in the given item
-            foreach (var cr in player.Inventory.DiscoveredRules)
-            {
-                if (cr.CouldBeCraftable(item))
-                {
-                    cr.Craft(item, player.Inventory.Items);
-                    break;
-                }
-            }
-        }
-
+        
         void webSetToolSettings(WebRequest request, WebResponse response)
         {
             string settingsString = request.GetQuery("DiggingSettings");

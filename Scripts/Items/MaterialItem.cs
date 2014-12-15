@@ -45,7 +45,7 @@ namespace UpvoidMiner
         /// <summary>
         /// The resource that his item is made of.
         /// </summary>
-        public readonly TerrainResource Material;
+        public readonly Substance Substance;
         /// <summary>
         /// The shape of this item.
         /// </summary>
@@ -58,15 +58,7 @@ namespace UpvoidMiner
         /// Cone: radius, height, radius
         /// </summary>
         public readonly vec3 Size;
-
-        public override string Identifier
-        {
-            get
-            {
-                return "02-Materials." + ((int)Shape).ToString("00") + "-" + Shape + "." + Material.Index.ToString("00") + "-" + Material.Name + "." + Size.ToString();
-            }
-        }
-
+        
         /// <summary>
         /// Volume of this material item.
         /// </summary>
@@ -105,14 +97,14 @@ namespace UpvoidMiner
             }
         }
 
-        public MaterialItem(TerrainResource material, MaterialShape shape, vec3 size, int stackSize = 1) :
-            base(material.Name + " " + shape, null, material.MassDensity * VolumeOf(shape, size), ItemCategory.Material, stackSize)
+        public MaterialItem(Substance substance, MaterialShape shape, vec3 size, int stackSize = 1) :
+            base(substance.Name + " " + shape, null, substance.MassDensity * VolumeOf(shape, size), ItemCategory.Material, stackSize)
         {
-            Material = material;
+            Substance = substance;
             Shape = shape;
             Size = size;
-            Description = "A " + shape + " made of " + material.Name + " with " + DimensionString;
-            Icon = material.Name + "," + shape;
+            Description = "A " + shape + " made of " + substance.Name + " with " + DimensionString;
+            Icon = "Substances/" + substance.Name + "," + shape;
             IsDroppable = true;
         }
 
@@ -123,7 +115,8 @@ namespace UpvoidMiner
         {
             MaterialItem item = rhs as MaterialItem;
             if (item == null) return false;
-            if (item.Material != Material) return false;
+            if (!subtract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
+            if (subtract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
             if (item.Shape != Shape) return false;
             if (item.Size != Size) return false;
 
@@ -135,9 +128,13 @@ namespace UpvoidMiner
         /// </summary>
         public override Item Clone()
         {
-            return new MaterialItem(Material, Shape, Size, StackSize);
+            return new MaterialItem(Substance, Shape, Size, StackSize);
         }
 
+        public override Item Clone(Substance sub)
+        {
+            return new MaterialItem(sub, Shape, Size, StackSize);
+        }
 
         #region Inventory Logic
         /// <summary>
@@ -161,7 +158,7 @@ namespace UpvoidMiner
             if (!previewPlacable || player == null)
                 return;
 
-            Item droppedItem = new MaterialItem(Material, Shape, Size);
+            Item droppedItem = new MaterialItem(Substance, Shape, Size);
 
             switch (player.CurrentPhysicsMode)
             {
@@ -189,7 +186,7 @@ namespace UpvoidMiner
             }
 
             // Tutorial
-            if (Shape == MaterialShape.Cube && Material.Name == "Dirt")
+            if (Shape == MaterialShape.Cube && Substance is DirtSubstance)
                 Tutorials.MsgBasicCraftingDirtCubePlace.Report(1);
         }
 
@@ -347,8 +344,9 @@ namespace UpvoidMiner
             itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
 
             MaterialResource material;
-            if (Material is SolidTerrainResource)
-                material = (Material as SolidTerrainResource).RenderMaterial;
+            var mat = Substance.QueryResource();
+            if (mat is SolidTerrainResource)
+                material = (mat as SolidTerrainResource).RenderMaterial;
             else
                 throw new NotImplementedException("Unknown terrain resource");
 

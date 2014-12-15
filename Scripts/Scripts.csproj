@@ -57,13 +57,16 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="Audio\MusicQueue.cs" />
+    <Compile Include="Items\CraftingItem.cs" />
     <Compile Include="Items\ItemManager.cs" />
     <Compile Include="Items\PipetteItem.cs" />
+    <Compile Include="Items\RecipeItem.cs" />
     <Compile Include="LocalScript.cs" />
     <Compile Include="HostScript.cs" />
     <Compile Include="Player\CharacterController.cs" />
     <Compile Include="Player\CraftingUI.cs" />
     <Compile Include="Player\DiggingController.cs" />
+    <Compile Include="Player\RecipeUI.cs" />
     <Compile Include="Player\UsageUI.cs" />
     <Compile Include="Player\InventoryUI.cs" />
     <Compile Include="Player\Player.cs" />
@@ -79,13 +82,14 @@
     <Compile Include="Items\VolumeItem.cs" />
     <Compile Include="Items\ResourceItem.cs" />
     <Compile Include="Items\MaterialItem.cs" />
-    <Compile Include="Items\CraftingRule.cs" />
     <Compile Include="Items\ItemCollection.cs" />
-    <Compile Include="Items\ExplicitCraftingRule.cs" />
-    <Compile Include="Items\MaterialCraftingRule.cs" />
-    <Compile Include="Items\Inventory.CraftingRules.cs" />
     <Compile Include="Items\ToolItem.cs" />
     <Compile Include="Player\InputController.cs" />
+    <Compile Include="Terrain\LooseSubstance.cs" />
+    <Compile Include="Terrain\MetalSubstance.cs" />
+    <Compile Include="Terrain\RockSubstance.cs" />
+    <Compile Include="Terrain\PlantSubstance.cs" />
+    <Compile Include="Terrain\Substance.cs" />
     <Compile Include="Terrain\TerrainResource.cs" />
     <Compile Include="Terrain\UpvoidMinerWorldGenerator.cs" />
     <Compile Include="Terrain\TerrainResource.Register.cs" />

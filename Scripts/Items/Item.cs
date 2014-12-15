@@ -34,8 +34,6 @@ namespace UpvoidMiner
         /// The item's name. Does not have to be unique.
         /// </summary>
         public virtual string Name { get; protected set; }
-
-        public abstract string Identifier { get; }
         
         /// <summary>
         /// A short description of the item.
@@ -183,6 +181,11 @@ namespace UpvoidMiner
         /// Creates a copy of this item.
         /// </summary>
         public abstract Item Clone();
+
+        /// <summary>
+        /// Creates a copy of this item with the given substance.
+        /// </summary>
+        public abstract Item Clone(Substance sub);
     }
 }
 

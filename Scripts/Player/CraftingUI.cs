@@ -109,7 +109,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.Name : "";
+                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.Name : "";
             }
         }
 
@@ -118,7 +118,7 @@ namespace UpvoidMiner
         {
             get
             {
-                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.Icon : null;
+                return SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.Icon : null;
             }
         }
 
@@ -137,7 +137,7 @@ namespace UpvoidMiner
             get
             {
                 return (RequiredVolume *
-                    (SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Material.MassDensity : 0f)).ToString("0");
+                    (SelectedItem is ResourceItem ? (SelectedItem as ResourceItem).Substance.MassDensity : 0f)).ToString("0");
             }
         }
 
@@ -200,7 +200,7 @@ namespace UpvoidMiner
             var resourceItem = SelectedItem as ResourceItem;
             if (resourceItem == null)
                 return;
-            var mat = resourceItem.Material;
+            var mat = resourceItem.Substance;
 
             MaterialItem item;
             switch (TypeSelection)
@@ -226,10 +226,13 @@ namespace UpvoidMiner
                 LocalScript.player.Inventory.RemoveItem(new ResourceItem(mat, RequiredVolume));
 
             // Tutorial
-            if (newItem && TypeSelection == 0 && mat.Name == "Dirt")
+            if (newItem && TypeSelection == 0 && mat is DirtSubstance)
                 Tutorials.MsgBasicCraftingDirtCube.Report(1);
-            if (newItem && TypeSelection != 0 && mat.Name.StartsWith("Stone"))
+            if (newItem && TypeSelection != 0 && mat is StoneSubstance)
                 Tutorials.MsgBasicCraftingStoneNonCube.Report(1);
+            if (TypeSelection == 2 && mat is WoodSubstance && Math.Abs(cylinderSettings.Size.x - 0.3f) < 0.05f && Math.Abs(cylinderSettings.Size.y - 0.5f) < 0.05f)
+                Tutorials.MsgBasicRecipeCraftingWoodCylinder.Report(1);
+            
         }
     }
 }

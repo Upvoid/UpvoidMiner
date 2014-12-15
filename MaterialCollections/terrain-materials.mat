@@ -398,6 +398,52 @@
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Color: uSpecularColor, .1, .1, .1, 8
 
+[Terrain/CopperOre] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScaleXY, 5
+    Parameter: uTexScaleXZ, 5
+    Parameter: uTexScaleZY, 5
+    Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.9
+    Parameter: uFresnel, 4.3
+    Parameter: uGlossiness, 0.2
+
+[Particles/Terrain/CopperOre] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uNormal, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
+    Color: uSpecularColor, .1, .1, .1, 8
+    Parameter: uRoughness, 0.9
+    Parameter: uFresnel, 4.3
+    Parameter: uGlossiness, 0.2
+
+[Terrain/VerdaniumOre] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScaleXY, 5
+    Parameter: uTexScaleXZ, 5
+    Parameter: uTexScaleZY, 5
+    Parameter: uBlendingCoefficient, 4
+
+[Particles/Terrain/VerdaniumOre] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
+    Color: uSpecularColor, .1, .1, .1, 8
+
 [Terrain/Wood] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
@@ -514,12 +560,18 @@
     Parameter: uTexScaleXZ, 1.3
     Parameter: uTexScaleZY, 1.3
     Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.3
+    Parameter: uFresnel, 8.3
+    Parameter: uGlossiness, 0.9
 
 [Particles/Terrain/Copper] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/Coins.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Coins.Normal
     Color: uSpecularColor, .1, .1, .1, 8
+    Parameter: uRoughness, 0.3
+    Parameter: uFresnel, 8.3
+    Parameter: uGlossiness, 0.9
 
 [Terrain/BlueCrystal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap

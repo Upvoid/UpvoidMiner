@@ -50,6 +50,7 @@ namespace UpvoidMiner
         /// </summary>
         private TerrainResource terrainDirt;
         private TerrainResource terrainRock;
+        private TerrainResource terrainCopperOre;
         private TerrainResource terrainDesert;
         private TerrainResource terrainOreGold;
 
@@ -131,8 +132,9 @@ namespace UpvoidMiner
 
             // Get handle to dirt for generation.
             Instance.terrainDirt = TerrainResource.FromName("Dirt");
-            Instance.terrainRock = TerrainResource.FromName("Stone.09");
-            Instance.terrainDesert = TerrainResource.FromName("Desert");
+            Instance.terrainRock = TerrainResource.FromName("Basalt");
+            Instance.terrainCopperOre = TerrainResource.FromName("CopperOre");
+            Instance.terrainDesert = TerrainResource.FromName("Sand");
             Instance.terrainOreGold = TerrainResource.FromName("OreGold");
 
             UpvoidMiner.SavePathEntities = UpvoidMiner.SavePathBase + "/Entities";
@@ -195,6 +197,24 @@ namespace UpvoidMiner
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
                 concat.AddNode(union);
             }
+            {
+                StringBuilder copperDefines = new StringBuilder();
+                copperDefines.Append("pos = vec3(x, y, z); start = 20; end = -80;");
+                copperDefines.Append("center = (start+end)/2; width = (start-end)/2;");
+                copperDefines.Append("perlins(x,y,z) $= ::Perlin;");
+                copperDefines.Append("Weight = -step(step(y-end)+step(start-y)-1.5);");
+                copperDefines.Append("fY = y/20; pX = perlins(fY*1.23+x/20,fY,fY*0.5439+z/20)*20+x;pZ = perlins(fY*2.143+x/20,fY,-fY*0.239+z/20)*20+z;");
+                copperDefines.Append("Density = (perlins(pX/10,y/80,pZ/10)+1)/2;");
+                copperDefines.Append("Weight + Density + 0.8");
+                string copperDef = copperDefines.ToString();
+                CsgExpression copperExpression = new CsgExpression(terrainCopperOre.Index,copperDef,UpvoidMiner.ModDomain);
+                CsgOpUnion union = new CsgOpUnion();
+                union.AddNode(new CsgExpression(terrainRock.Index,"1",null));
+                union.AddNode(copperExpression);
+                CsgFilterNode filter = new CsgFilterNode(true,union);
+                filter.AddMaterial(terrainRock.Index);
+                concat.AddNode(filter);
+            }
             /*
             {
 
@@ -218,7 +238,7 @@ namespace UpvoidMiner
             }
             */
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Trees", UpvoidMiner.ModDomain), world, 4));
-            concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("DesertVegetation", UpvoidMiner.ModDomain), world, 4));
+            //concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("DesertVegetation", UpvoidMiner.ModDomain), world, 4));
             concat.AddNode(new CsgAutomatonNode(Resources.UseAutomaton("Surface", UpvoidMiner.ModDomain), world, 4));
 
 

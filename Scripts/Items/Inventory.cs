@@ -50,12 +50,7 @@ namespace UpvoidMiner
         /// Quick access items (indices 1-9 indicate user-definable quick access 1-9, 0 is special for selected item)
         /// </summary>
         private Item[] quickAccessItems = new Item[10];
-
-        /// <summary>
-        /// List of all crafting rules, discovered or undiscovered.
-        /// </summary>
-        private List<CraftingRule> craftingRules = new List<CraftingRule>();
-
+        
         /// <summary>
         /// Index of the selected item (index points into quickAccessItems array)
         /// </summary>
@@ -133,6 +128,9 @@ namespace UpvoidMiner
         {
             // If appended and enough space, also add it to quickAccess.
             // Caution: highest quick access idx is only temporary.
+            if (item is RecipeItem || item is CraftingItem)
+                return;
+
             for (int i = 0; i < QuickAccessSlotCount; ++i)
             {
                 if (quickAccessItems[i] == null)
@@ -224,30 +222,14 @@ namespace UpvoidMiner
         /// <summary>
         /// Adds a resource of a given terrain material type. Amount can be negative.
         /// </summary>
-        public void AddResource(TerrainResource mat, float amount)
+        public void AddResource(Substance sub, float amount)
         {
-            Debug.Assert(mat != null);
+            Debug.Assert(sub != null);
 
             if (amount > 0)
-                AddItem(new ResourceItem(mat, amount));
+                AddItem(new ResourceItem(sub, amount));
             else
-                RemoveItem(new ResourceItem(mat, -amount));
-        }
-
-        /// <summary>
-        /// Gets a list of all discovered rules.
-        /// Can implicitly discover applicable rules.
-        /// </summary>
-        public List<CraftingRule> DiscoveredRules
-        {
-            get
-            {
-                List<CraftingRule> rules = new List<CraftingRule>();
-                foreach (var rule in craftingRules)
-                    if (rule.Discovered)
-                        rules.Add(rule);
-                return rules;
-            }
+                RemoveItem(new ResourceItem(sub, -amount));
         }
     }
 }

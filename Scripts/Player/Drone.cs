@@ -178,7 +178,7 @@ namespace UpvoidMiner
                 return;
 
             // Interacting with an item means picking it up. Answer by sending the item to the sender.
-            interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(new ToolItem(ToolType.DroneChain));
+            interactionMsg.Sender[AddItemTrigger] |= new AddItemMessage(new ToolItem(ToolType.DroneChain, new IronSubstance()));
 
             // Remove drone from drone constraints.
             Owner.RemoveDrone(this);

@@ -101,7 +101,7 @@ namespace UpvoidMiner
 
             // Tutorial
             Tutorials.MsgBasicCraftingCollect.Report(1);
-            if (RepresentedItem is MaterialItem && (RepresentedItem as MaterialItem).Material.Name.Contains("Wood"))
+            if (RepresentedItem is MaterialItem && (RepresentedItem as MaterialItem).Substance is WoodSubstance)
                 Tutorials.MsgBasicChoppingCollect.Report(1);
         }
 
