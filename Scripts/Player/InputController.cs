@@ -170,10 +170,6 @@ namespace UpvoidMiner
                         }
                         break;
 
-                    case InputKey.T:
-                        LocalScript.PlaceTorch();
-                        break;
-
                     case InputKey.Period:
                         if (LocalScript.musicQueue != null)
                             LocalScript.musicQueue.SkipCurrentSong();

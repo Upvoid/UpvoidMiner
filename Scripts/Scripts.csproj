@@ -61,6 +61,7 @@
     <Compile Include="Items\ItemManager.cs" />
     <Compile Include="Items\PipetteItem.cs" />
     <Compile Include="Items\RecipeItem.cs" />
+    <Compile Include="Items\TorchItem.cs" />
     <Compile Include="LocalScript.cs" />
     <Compile Include="HostScript.cs" />
     <Compile Include="Player\CharacterController.cs" />

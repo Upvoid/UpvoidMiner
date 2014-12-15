@@ -45,6 +45,7 @@
 { "Name" : "Items/Icons/PickaxeHead", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/AxeHead", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
+{ "Name" : "Items/Icons/Torch", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 {
     "Descriptor" : "File",

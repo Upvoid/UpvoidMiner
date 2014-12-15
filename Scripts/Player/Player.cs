@@ -149,6 +149,11 @@ namespace UpvoidMiner
         public List<DroneConstraint> DroneConstraints = new List<DroneConstraint>();
 
         /// <summary>
+        /// List of torches.
+        /// </summary>
+        public List<TorchItem> Torches = new List<TorchItem>();
+
+        /// <summary>
         /// True iff the player is physically frozen because the world around him is not yet generated.
         /// </summary>
         /// <value>The position.</value>
@@ -273,6 +278,10 @@ namespace UpvoidMiner
                     drone.Update(elapsedSeconds);
                 foreach (var dc in DroneConstraints)
                     dc.Update(elapsedSeconds);
+
+                // Update torches
+                foreach (var torch in Torches)
+                    torch.Update(elapsedSeconds);
 
                 bool menuOrInventoryOpen = Gui.IsInventoryOpen || Gui.IsMenuOpen;
 
@@ -596,12 +605,20 @@ namespace UpvoidMiner
                 public int StackSize;
             }
 
+            [Serializable]
+            public class TorchItemSave
+            {
+                public long Id;
+                public int StackSize;
+            }
+
             public ResourceItemSave ResourceItem;
             public ToolItemSave ToolItem;
             public MaterialItemSave MaterialItem;
             public PipetteItemSave PipetteItem;
             public RecipeItemSave RecipeItem;
             public CraftingItemSave CraftingItem;
+            public TorchItemSave TorchItem;
 
             public long Id()
             {
@@ -615,6 +632,8 @@ namespace UpvoidMiner
                     return CraftingItem.Id;
                 if (RecipeItem != null)
                     return RecipeItem.Id;
+                if (TorchItem != null)
+                    return TorchItem.Id;
                 return -1;
             }
 
@@ -632,7 +651,8 @@ namespace UpvoidMiner
                     return new RecipeItem(RecipeItem.ResultSave.DeserializeItem(), RecipeItem.IngredientItemSaves.Select(ingredient => ingredient.DeserializeItem()).ToList());
                 if (CraftingItem != null)
                     return new CraftingItem(CraftingItem.Type,Substance.Deserialize(CraftingItem.Substance),CraftingItem.StackSize);
-
+                if (TorchItem != null)
+                    return new TorchItem(TorchItem.StackSize);
                 return null;
             }
         }
@@ -740,6 +760,17 @@ namespace UpvoidMiner
                             Type = (item as CraftingItem).Type,
                             Substance = (item as CraftingItem).Substance.Serialize(),
                             StackSize = (item as CraftingItem).StackSize
+                        }
+                    };
+                }
+                else if (item is TorchItem)
+                {
+                    return new ItemSave
+                    {
+                        TorchItem = new ItemSave.TorchItemSave
+                        {
+                            Id = item.Id,
+                            StackSize = (item as TorchItem).StackSize,
                         }
                     };
                 }
@@ -915,6 +946,11 @@ namespace UpvoidMiner
                             {
                                 new ResourceItem(new CopperOreSubstance(), 40.0f)
                             }, false));
+
+            // Resupply torches
+            var torches = Inventory.Items.Sum(i => i is TorchItem ? (i as TorchItem).StackSize : 0);
+            if (torches < 10)
+                Inventory.AddItem(new TorchItem(10 - torches));
 
             Gui.OnUpdate();
         }

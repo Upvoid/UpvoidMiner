@@ -14,7 +14,7 @@ out vec4 vColor;
 out float vLife;
 out vec3 vWorldPos;
 out vec3 vEyePos;
-out vec3 vScreenPos;
+out vec4 vScreenPos;
 
 uniform mat4 uModelMatrix;
 
@@ -104,7 +104,8 @@ void main()
 
    if(uConstrainRotationToY > 0.5)
    {
-        vec3 biTangent = vec3(cos(100*iAngle),0, sin(100*iAngle)); //normalize((uInverseViewMatrix * vec4(0,0,-1,0)).xyz);
+         // vec3(cos(100*iAngle),0, sin(100*iAngle)); //
+        vec3 biTangent = normalize((uInverseViewMatrix * vec4(0,0,-1,0)).xyz);
         vec3 normal = vec3(0,1,0);
         vec3 tangent = normalize(cross(biTangent, normal));
         biTangent = normalize(cross(normal, tangent));
@@ -147,7 +148,8 @@ void main()
 
    // projected vertex position used for the interpolation
    vec4 screenPos = uProjectionMatrix * vec4(vEyePos,1);
-   vScreenPos = screenPos.xyz / screenPos.w;
+   vScreenPos = screenPos;//screenPos.xyz / screenPos.w;
+
 
    gl_Position  = screenPos;
 }

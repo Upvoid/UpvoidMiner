@@ -26,6 +26,7 @@
                 "Items/ToolItem.cs",
                 "Items/RecipeItem.cs",
                 "Items/CraftingItem.cs",
+                "Items/TorchItem.cs",
                 "Player/Player.cs",
                 "Player/CraftingUI.cs",
                 "Player/InventoryUI.cs",

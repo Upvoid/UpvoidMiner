@@ -72,11 +72,8 @@ namespace UpvoidMiner
         // The "global" music volume is defined via settings
         const float musicVolume = 1.0f;
         const float birdVolume = 0.5f;
-        private static TorchFireParticles torchFireParticles;
-        public static List<vec3> torchFirePositions = new List<vec3>();
         public static StatUI stats = new StatUI();
         public static MemoryFailsafe memFailsafe = new MemoryFailsafe();
-        private static Random random = new Random();
 
         /// <summary>
         /// Set this to true to enable free camera movement.
@@ -104,18 +101,6 @@ namespace UpvoidMiner
         }
 
         private static GlobalHud globalHud = new GlobalHud();
-
-        /// <summary>
-        /// Returns a random direction (currently biased towards cube edges).
-        /// </summary>
-        public static vec3 RandomDir()
-        {
-            return new vec3(
-                (float)random.NextDouble() - .5f,
-                (float)random.NextDouble() - .5f,
-                (float)random.NextDouble() - .5f
-                ).Normalized;
-        }
 
         /// <summary>
         /// This is called by the engine at mod startup and initializes the local part of the UpvoidMiner mod.
@@ -315,9 +300,6 @@ namespace UpvoidMiner
             ParticleEntity = new AnonymousEntity(mat4.Identity);
             world.AddEntity(ParticleEntity, Network.GCManager.CurrentUserID);
 
-            // Torch particles
-            torchFireParticles = new TorchFireParticles();
-
             // Create shape indicator entity.
             ShapeIndicatorEntity = new AnonymousEntity(mat4.Identity);
             world.AddEntity(ShapeIndicatorEntity, Network.GCManager.CurrentUserID);
@@ -495,12 +477,6 @@ namespace UpvoidMiner
                         birdSound.Volume = 0.0f;
                     }
                 }
-
-
-                foreach (vec3 torchPos in torchFirePositions)
-                {
-                    UpdateTorchFire(torchPos);
-                }
             }
         }
         // This socket notifies the client GUI about progress in the downloading of resources.
@@ -524,106 +500,6 @@ namespace UpvoidMiner
                 resourceDownloadReceivedBytes = Download.BytesReceived;
             }
         }
-
-        public static void PlaceTorch()
-        {
-            // Send a ray query to find the position on the terrain we are looking at.
-            Engine.Physics.RayHit hit = world.Physics.RayTest(camera.Position, camera.Position + camera.ForwardDirection * 10, player.Character.Body);
-            if (hit != null)
-            {
-                vec3 normal = hit.Normal;
-                float transY = -0.5f +0.4f * normal.y;
-
-                world.AddRenderJob(new MeshRenderJob(
-                    Renderer.Opaque.Mesh,
-                    Resources.UseMaterial("::Torch", UpvoidMiner.ModDomain),
-                    Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
-                    mat4.Translate(hit.Position + new vec3(0,transY,0)) * mat4.Scale(1f)));
-
-                world.AddRenderJob(new MeshRenderJob(
-                    Renderer.Lights.Mesh,
-                    Resources.UseMaterial("::Light", UpvoidMiner.ModDomain),
-                    Resources.UseMesh("::Debug/Sphere", UpvoidMiner.ModDomain),
-                    mat4.Translate(hit.Position + new vec3(0,transY + 0.7f,0)) * mat4.Scale(1.5f)));
-
-
-                torchFirePositions.Add(hit.Position + new vec3(0, transY + 1.0f, 0));
-            }
-        }
-
-        public static void UpdateTorchFire(vec3 torchPos)
-        {
-
-            Debug.Assert(torchFireParticles != null);
-
-            vec3 partPos = torchPos + RandomDir() * (float)random.NextDouble() * .005f;
-            vec3 partVel = 0.02f * RandomDir() * (1.0f + (float)random.NextDouble() * 1.0f);
-            partVel.y = Math.Abs(partVel.y); // upwards direction
-            float partSize = .2f + (float)random.NextDouble() * .25f;
-            float curLife = .0f;
-            float maxLife = 0.3f + (float)random.NextDouble() * .2f;
-
-            // Random orientation
-            vec3 tangent = RandomDir();
-
-            torchFireParticles.particles.AddParticle(
-                partPos.x, partPos.y, partPos.z,
-                partVel.x, partVel.y, partVel.z,
-                partSize, curLife, maxLife,
-                tangent.x, tangent.y, tangent.z,
-                0.02f * (float)(random.NextDouble() * Math.PI * 2) - 0.01f);
-        }
-
-        /// <summary>
-        /// Particle system for torch fire particles
-        /// </summary>
-        class TorchFireParticles
-        {
-            public CpuParticleSystem particles = null;
-
-            public TorchFireParticles()
-            {
-
-                particles = new CpuParticleSystem(2, 0.05);
-
-                particles.AddAttributeVec3("aPosition");
-                particles.AddAttributeVec3("aVelocity");
-                particles.AddAttributeFloat("aSize");
-                particles.AddAttributeFloat("aCurrentLifetime");
-                particles.AddAttributeFloat("aMaxLifetime");
-                particles.AddAttributeVec3("aTangent");
-                particles.AddAttributeFloat("aAngle");
-
-                CpuParticleModifier mody = new CpuParticleModifier();
-                particles.AddModifier(mody);
-
-                string modyAttributesInOut = "aPosition:vec3;aVelocity:vec3;aCurrentLifetime:float";
-                string modyExpression =
-                    "t = particle::TIMESTEP;" +
-                    "l = particle::aCurrentLifetime + t;" +
-                    "v = particle::aVelocity + t * vec(0, 1.5, 0);" + // negative gravity :D
-                    "p = particle::aPosition + t * v;" +
-                    "vec(p, v, l)";
-
-                mody.AddFiller(new CpuParticleExpressionFiller(modyAttributesInOut, modyAttributesInOut, modyExpression, null));
-
-                string lifeAttributes = "aCurrentLifetime:float;aMaxLifetime:float";
-                string deathExpression = "ite(particle::aCurrentLifetime - particle::aMaxLifetime, 1, 0)";
-
-                particles.AddDeathCondition(new CpuParticleDeathCondition(lifeAttributes, deathExpression, null));
-
-                ParticleEntity.AddComponent(new CpuParticleComponent(particles, mat4.Identity));
-
-                ParticleEntity.AddComponent(new RenderComponent(
-                    (new CpuParticleRenderJob(particles,
-                                              Renderer.Transparent.CpuParticles,
-                                              Resources.UseMaterial("TorchFire", UpvoidMiner.ModDomain),
-                                              Resources.UseMesh("::Debug/Quad", UpvoidMiner.ModDomain),
-                                              mat4.Identity)),
-                    mat4.Identity,
-                    true));
-            }
-        };
 
         /// <summary>
         /// MonoDevelop's debugger requires an executable program, so here is a dummy Main method.

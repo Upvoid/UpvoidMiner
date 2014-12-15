@@ -8,12 +8,13 @@ uniform sampler3D uColor;
 
 uniform sampler2DRect uOpaqueDepth;
 
-in vec3 vNormal;
-in vec3 vWorldPos;
 in vec2 vTexCoord;
-in vec4 vScreenPos;
+in vec3 vWorldPos;
 in vec3 vEyePos;
-in float vLife;
+in vec4 vScreenPos;
+in vec3 iWorldPos;
+in float quadID;
+
 
 INPUT_CHANNEL_TransparentColor(vec4)
 INPUT_CHANNEL_Distortion(vec2)
@@ -25,9 +26,11 @@ void main()
 {
     INIT_CHANNELS;
 
-    // illumination
-    vec4 baseColor = texture(uColor, vec3(vec2(vTexCoord.x, vTexCoord.y + max(0, 0.1 * sin(vLife + uRuntime))), 0.5*vLife));
+    float texUnit = fract(quadID + uRuntime);
 
+    // illumination
+    vec4 baseColor = texture(uColor, vec3(vTexCoord, texUnit));
+    //baseColor.r = quadID;
     //baseColor.a *= 1.0 - 2*distance(vTexCoord.xy, vec2(0.5));
     baseColor.rgb /= baseColor.a + 0.01; // premultiplied alpha
     vec4 transColor = baseColor;

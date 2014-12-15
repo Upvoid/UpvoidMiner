@@ -312,4 +312,3 @@
    Shader: TorchFire
    Texture: uColor, ::Material/Particles/TorchFire3D
    Culling: None
-   Parameter: uConstrainRotationToY, 1

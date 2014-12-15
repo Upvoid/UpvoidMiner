@@ -1217,8 +1217,8 @@
 {
     "Descriptor" : {
         "Files" : [
-            "Particles/ParticleTextured3D.fsh",
-            "Particles/ParticleBillboardLinear.vsh"
+            "Torch/TorchFire.fsh",
+            "Torch/TorchFire.vsh"
         ],
         "Name" : "TorchFire",
         "Type" : "File"
@@ -1226,5 +1226,12 @@
     "Name" : "TorchFire",
     "Path" : "~.shader",
     "Type" : "Shader"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "TorchFire",
+    "Path": "~.obj",
+    "Descriptor": "File"
 }
 ]
