@@ -28,7 +28,7 @@ void main()
 
 
    vec3 pos = aPosition;
-   pos.y *= 0.9 + 0.05 * sin(3*uRuntime + 123.2 * quadID + 5 * cos(12*uRandom + uRuntime));
+   pos.y *= 0.9 + 0.05 * sin(3*uRuntime + 123.2 * quadID + 5 * cos(12*uRandom + quadID + uRuntime));
 
 
    // world space position:

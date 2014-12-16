@@ -156,7 +156,7 @@ namespace UpvoidMiner
             itemEntity.AddRenderComponent(lightComp);
 
             // This is a light. Register it (for flickering etc)
-            itemEntity.RegisterLightRenderComponent(lightComp, 2.0f + 0.2f * randomValue, 0.3f + 0.1f * randomValue, 12.5f + randomValue * 5.0f);
+            itemEntity.RegisterLightRenderComponent(lightComp, 6.0f + 1.0f * randomValue, 0.3f + 0.1f * randomValue, 5.5f + randomValue * 5.0f);
 
             
             /*
