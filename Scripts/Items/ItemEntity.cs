@@ -20,6 +20,7 @@ using Engine.Resources;
 using Engine.Universe;
 using Engine.Physics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UpvoidMiner.Items;
 using UpvoidMiner.UI;
 
@@ -35,6 +36,20 @@ namespace UpvoidMiner
 
         protected List<PhysicsComponent> physicsComponents = new List<PhysicsComponent>();
         protected List<RenderComponent> renderComponents = new List<RenderComponent>();
+
+
+        protected class LightConfiguration
+        {
+            public RenderComponent lightRenderComp;
+            public float initalLightRadius;
+            public float lightRadiusDeviation;
+            public float flickerSpeed;
+        }
+
+        // Accumulated time (summed up in the Update() step)
+        private float accumulatedTime;
+
+        protected List<LightConfiguration> lightConfigurations = new List<LightConfiguration>();
 
         public float Mass { get; private set; }
 
@@ -75,6 +90,16 @@ namespace UpvoidMiner
         {
             renderComponents.Add(comp);
             thisEntity.AddComponent(comp);
+        }
+
+        public void RegisterLightRenderComponent(RenderComponent lightRenderComp, float initalLightRadius = 1.0f, float lightRadiusDeviation = 0.25f, float flickerSpeed = 5.0f)
+        {
+            if (!renderComponents.Contains(lightRenderComp))
+            {
+                throw new InvalidOperationException("You need to add the RenderComponent to the list of RenderComponents first! Call AddRenderComponent before calling RegisterLightRenderComponent!");
+            }
+
+            lightConfigurations.Add(new LightConfiguration { lightRenderComp = lightRenderComp, initalLightRadius = initalLightRadius, lightRadiusDeviation = lightRadiusDeviation, flickerSpeed = flickerSpeed });
         }
 
         protected override void Init()
@@ -160,6 +185,20 @@ namespace UpvoidMiner
                 }
 
                 break; // only one RB supported
+            }
+        }
+
+        public void Update(float _elapsedSeconds)
+        {
+            accumulatedTime += _elapsedSeconds;
+
+            if(RepresentedItem is TorchItem)
+            {
+                // Update torch light
+                foreach(var lightConf in lightConfigurations)
+                {
+                    lightConf.lightRenderComp.Transform = mat4.Translate(new vec3(lightConf.lightRenderComp.Transform.col3)) * mat4.Scale(lightConf.initalLightRadius + 0.5f * (float)Math.Sin(lightConf.flickerSpeed * accumulatedTime) * lightConf.lightRadiusDeviation);
+                }
             }
         }
     }

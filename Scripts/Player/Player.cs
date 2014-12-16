@@ -149,11 +149,6 @@ namespace UpvoidMiner
         public List<DroneConstraint> DroneConstraints = new List<DroneConstraint>();
 
         /// <summary>
-        /// List of torches.
-        /// </summary>
-        public List<TorchItem> Torches = new List<TorchItem>();
-
-        /// <summary>
         /// True iff the player is physically frozen because the world around him is not yet generated.
         /// </summary>
         /// <value>The position.</value>
@@ -278,10 +273,6 @@ namespace UpvoidMiner
                     drone.Update(elapsedSeconds);
                 foreach (var dc in DroneConstraints)
                     dc.Update(elapsedSeconds);
-
-                // Update torches
-                foreach (var torch in Torches)
-                    torch.Update(elapsedSeconds);
 
                 bool menuOrInventoryOpen = Gui.IsInventoryOpen || Gui.IsMenuOpen;
 

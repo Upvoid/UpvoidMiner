@@ -7,6 +7,7 @@ using Engine.Rendering;
 using Engine.Resources;
 using Engine.Universe;
 using UpvoidMiner.UI;
+using UpvoidMiner.Items;
 
 namespace UpvoidMiner
 {
@@ -50,19 +51,6 @@ namespace UpvoidMiner
         {
             return new TorchItem(StackSize);
         }
-
-        /// <summary>
-        /// Renderjobs and -components for the preview sphere
-        /// </summary>
-        private MeshRenderJob torchLightRenderJob;
-
-        private vec3 torchLightPosition;
-        private float lightRadiusInitial = 2.0f;
-        private float lightRadiusDeviation = 0.5f;
-
-        public float LightRadiusInitial { get { return lightRadiusInitial; } }
-        public float LightRadiusDeviation { get { return lightRadiusDeviation; } }
-
 
         public override void OnSelect(Player player)
         {
@@ -110,41 +98,92 @@ namespace UpvoidMiner
             if (!success)
                 return;
 
-            vec3 normal = _worldNormal;
-            float transY = -0.5f + 0.4f * normal.y;
-            vec3 pos = _worldPos + _worldNormal * 0.3f;
+            ItemManager.InstantiateItem(new TorchItem(), mat4.Translate(_worldPos + new vec3(0, -0.3f + _worldNormal.y * 0.7f, 0)), true);
+        }
 
-            torchLightPosition = pos;
 
-            player.ContainingWorld.AddRenderJob(new MeshRenderJob(
+
+        /// <summary>
+        /// Is called when a torch is placed
+        /// </summary>
+        public override void SetupItemEntity(ItemEntity itemEntity, Entity entity, bool fixedPosition = true)
+        {
+            // Create the physical representation of the item.
+            RigidBody body = new RigidBody(
+                fixedPosition ? 0 : 1.0f,
+                entity.Transform * mat4.Translate(new vec3(0, 0.0f, 0)),
+                new CylinderShape(0.2f, 0.4f)
+                );
+
+            if(!fixedPosition)
+            {
+                body.SetRestitution(0.5f);
+                body.SetFriction(1f);
+                body.SetDamping(0.2f, 0.4f);
+            }
+            
+            itemEntity.ContainingWorld.Physics.AddRigidBody(body);
+            itemEntity.AddPhysicsComponent(new PhysicsComponent(body, mat4.Identity));
+
+
+            vec3 offsetHandleAndFire = new vec3(0, 0.5f, 0);
+            vec3 offsetFireAndLight = new vec3(0, 0.4f, 0);
+
+            // Torch handle - opaque
+            itemEntity.AddRenderComponent(new RenderComponent(new MeshRenderJob(
                 Renderer.Opaque.Mesh,
                 Resources.UseMaterial("::Torch", UpvoidMiner.ModDomain),
                 Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
-                mat4.Translate(_worldPos + new vec3(0, transY, 0)) * mat4.Scale(1f)));
+                mat4.Identity), mat4.Translate(-offsetHandleAndFire) * mat4.Scale(1f)));
 
-            player.ContainingWorld.AddRenderJob(torchLightRenderJob = new MeshRenderJob(
-                Renderer.Lights.Mesh,
-                Resources.UseMaterial("::Light", UpvoidMiner.ModDomain),
-                Resources.UseMesh("::Debug/Sphere", UpvoidMiner.ModDomain),
-                mat4.Translate(torchLightPosition) * mat4.Scale(LightRadiusInitial)));
-
+            // Torch fire - additive transparent
             MeshRenderJob torchFire;
-            player.ContainingWorld.AddRenderJob(torchFire = new MeshRenderJob(
+            itemEntity.AddRenderComponent(new RenderComponent(torchFire = new MeshRenderJob(
                 Renderer.Additive.Mesh,
                 Resources.UseMaterial("TorchFire", UpvoidMiner.ModDomain),
                 Resources.UseMesh("TorchFire", UpvoidMiner.ModDomain),
-                mat4.Translate(_worldPos + new vec3(0, transY + 0.7f, 0))));
+                mat4.Identity), mat4.Identity));
 
-            torchFire.SetParameter("uRandom", (float)torchRandom.NextDouble());
+            float randomValue = (float)torchRandom.NextDouble();
+            torchFire.SetParameter("uRandom", randomValue);
 
-            player.Torches.Add(this);
-        }
+            // Torch light
+            RenderComponent lightComp = new RenderComponent(new MeshRenderJob(
+                Renderer.Lights.Mesh,
+                Resources.UseMaterial("::Light", UpvoidMiner.ModDomain),
+                Resources.UseMesh("::Debug/Sphere", UpvoidMiner.ModDomain),
+                mat4.Identity), mat4.Translate(offsetFireAndLight) * mat4.Scale(1.0f));
+            itemEntity.AddRenderComponent(lightComp);
 
-        public void Update(double _elapsedSeconds)
-        {
-            Debug.Assert(torchLightRenderJob != null);
+            // This is a light. Register it (for flickering etc)
+            itemEntity.RegisterLightRenderComponent(lightComp, 2.0f + 0.2f * randomValue, 0.3f + 0.1f * randomValue, 12.5f + randomValue * 5.0f);
 
-            torchLightRenderJob.ModelMatrix = mat4.Translate(torchLightPosition) * mat4.Scale(LightRadiusInitial + (float)Math.Sin(_elapsedSeconds) * LightRadiusDeviation);
+            
+            /*
+            MaterialResource material;
+            var mat = Substance.QueryResource();
+            if (mat is SolidTerrainResource)
+                material = (mat as SolidTerrainResource).RenderMaterial;
+            else
+                throw new NotImplementedException("Unknown terrain resource");
+
+            // Create the graphical representation of the item.
+            MeshRenderJob renderJob = new MeshRenderJob(
+                Renderer.Opaque.Mesh,
+                material,
+                mesh,
+                mat4.Identity
+                );
+            itemEntity.AddRenderComponent(new RenderComponent(renderJob, scaling, true));
+
+            MeshRenderJob renderJobShadow = new MeshRenderJob(
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
+                mesh,
+                mat4.Identity
+                );
+            itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, scaling, true));
+            */
         }
     }
 }
