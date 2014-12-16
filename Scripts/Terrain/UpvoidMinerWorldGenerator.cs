@@ -51,6 +51,7 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
         private TerrainResource terrainRock;
         private TerrainResource terrainCopperOre;
+        private TerrainResource terrainCoal;
         private TerrainResource terrainDesert;
         private TerrainResource terrainOreGold;
 
@@ -133,6 +134,7 @@ namespace UpvoidMiner
             // Get handle to dirt for generation.
             Instance.terrainDirt = TerrainResource.FromName("Dirt");
             Instance.terrainRock = TerrainResource.FromName("Basalt");
+            Instance.terrainCoal = TerrainResource.FromName("Coal");
             Instance.terrainCopperOre = TerrainResource.FromName("CopperOre");
             Instance.terrainDesert = TerrainResource.FromName("Sand");
             Instance.terrainOreGold = TerrainResource.FromName("OreGold");
@@ -196,6 +198,22 @@ namespace UpvoidMiner
                 //union.AddNode(groundTerrain);
                 //union.AddNode(new CsgExpression(terrainRock.Index, hillsDef + "y + Hills + (5 + perlins(x / 5, z / 6, y / 7) * 3 + perlins(z / 45, y / 46, x / 47) * 13)", UpvoidMiner.ModDomain));
                 concat.AddNode(union);
+            }
+            {
+                StringBuilder coalDefines = new StringBuilder();
+                coalDefines.Append("pos = vec3(x, y, z); start = 20; end = -80; bXZ = 50; bY = 10; bC = 0.4;");
+                coalDefines.Append("center = (start+end)/2; width = (start-end)/2;");
+                coalDefines.Append("perlin(x,y,z) $= ::Perlin;");
+                coalDefines.Append("worley(x,y,z) $= ::Worley;");
+                coalDefines.Append("worley(x/bXZ,y/bY,z/bXZ)-bC+(worley(2*x/bXZ,2*y/bY,2*z/bXZ)-bC)*0.5+(worley(4*x/bXZ,4*y/bY,4*z/bXZ)-bC)*0.25+perlin(x/40,y/40,z/40)*bC");
+                string coalDef = coalDefines.ToString();
+                CsgExpression coalExpression = new CsgExpression(terrainCoal.Index, coalDef, UpvoidMiner.ModDomain);
+                CsgOpUnion union = new CsgOpUnion();
+                union.AddNode(new CsgExpression(terrainRock.Index, "1", null));
+                union.AddNode(coalExpression);
+                CsgFilterNode filter = new CsgFilterNode(true, union);
+                filter.AddMaterial(terrainRock.Index);
+                concat.AddNode(filter);
             }
             {
                 StringBuilder copperDefines = new StringBuilder();
