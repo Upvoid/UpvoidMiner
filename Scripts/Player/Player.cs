@@ -938,11 +938,14 @@ namespace UpvoidMiner
                                 new ResourceItem(new CopperOreSubstance(), 40.0f)
                             }, false));
 
-            // Resupply torches
-            var torches = Inventory.Items.Sum(i => i is TorchItem ? (i as TorchItem).StackSize : 0);
-            if (torches < 10)
-                Inventory.AddItem(new TorchItem(10 - torches));
-
+            Inventory.AddItem(
+                new RecipeItem(new TorchItem(), 
+                    new List<Item>
+                            {
+                                new ResourceItem(new CoalSubstance(), 0.5f),
+                                new CraftingItem(CraftingItem.ItemType.Handle,new Substance())
+                            }, false));
+            
             Gui.OnUpdate();
         }
 

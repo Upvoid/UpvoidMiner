@@ -98,10 +98,7 @@ namespace UpvoidMiner
             if (_worldNormal.y < -0.2f)
                 return;
 
-            bool success = TryMerge(new TorchItem(), true, false);
-            if (!success)
-                return;
-
+            LocalScript.player.Inventory.Items.RemoveItem(new TorchItem(), true);
 
             mat4 transformation = mat4.Translate(_worldPos + new vec3(0, -0.6f + _worldNormal.y * 0.7f, 0) + 0.3f * _worldNormal);
 
