@@ -94,11 +94,30 @@ namespace UpvoidMiner
 
         public override void OnUse(Player player, vec3 _worldPos, vec3 _worldNormal, Entity _hitEntity)
         {
+            // No torches on overhangs, ceiling, etc.
+            if (_worldNormal.y < -0.2f)
+                return;
+
             bool success = TryMerge(new TorchItem(), true, false);
             if (!success)
                 return;
 
-            ItemManager.InstantiateItem(new TorchItem(), mat4.Translate(_worldPos + new vec3(0, -0.3f + _worldNormal.y * 0.7f, 0)), true);
+
+            mat4 transformation = mat4.Translate(_worldPos + new vec3(0, -0.6f + _worldNormal.y * 0.7f, 0) + 0.3f * _worldNormal);
+
+            // Orient torch by "mount point" normal when terrain is too steep
+            if(_worldNormal.y < 0.5f)
+            {
+                vec3 biTangent = _worldNormal;
+                vec3 tangent = -vec3.cross(biTangent, new vec3(0, 1, 0)).Normalized;
+                vec3 newNormal = vec3.cross(_worldNormal, tangent).Normalized;
+
+                transformation *= new mat4(tangent, newNormal, biTangent, vec3.Zero);
+            }
+
+            
+
+            ItemManager.InstantiateItem(new TorchItem(), transformation, true);
         }
 
 
@@ -135,6 +154,20 @@ namespace UpvoidMiner
                 Resources.UseMaterial("::Torch", UpvoidMiner.ModDomain),
                 Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
                 mat4.Identity), mat4.Translate(-offsetHandleAndFire) * mat4.Scale(1f)));
+
+            // This is unfinished work. TODO(ks): FIXME
+            /*const bool torchMount = false;
+            if (torchMount)
+            {
+                mat4 mountTrans = mat4.RotateX(70.0);
+                // Mount
+                itemEntity.AddRenderComponent(new RenderComponent(new MeshRenderJob(
+                    Renderer.Opaque.Mesh,
+                    Resources.UseMaterial("Terrain/Wood", UpvoidMiner.ModDomain),
+                    Resources.UseMesh("::Debug/Cylinder", UpvoidMiner.ModDomain),
+                    mat4.Identity), mat4.Translate(-0.25f * new vec3(entity.Transform.col2).Normalized) * mountTrans * mat4.Scale(new vec3(.05f, .2f, .05f))));
+            }*/
+            
 
             // Torch fire - additive transparent
             MeshRenderJob torchFire;

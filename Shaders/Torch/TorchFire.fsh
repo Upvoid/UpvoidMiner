@@ -26,7 +26,7 @@ void main()
 {
     INIT_CHANNELS;
 
-    float texUnit = fract(quadID + uRuntime);
+    float texUnit = fract(quadID + 0.7*uRuntime);
 
     // illumination
     vec4 baseColor = texture(uColor, vec3(vTexCoord, texUnit));
