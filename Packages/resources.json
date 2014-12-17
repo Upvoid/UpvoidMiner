@@ -1191,6 +1191,17 @@
 
 {
     "Descriptor" : {
+        "Collection" : "materials",
+        "Name" : "TorchFire",
+        "Type" : "FromCollection"
+    },
+    "Name" : "TorchFire",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
+
+{
+    "Descriptor" : {
         "Files" : [
             "Vegetation/Flowers/Flower.Opaque.fsh",
             "Vegetation/Flowers/Flower.vsh"
@@ -1201,5 +1212,26 @@
     "Name" : "Vegetation/Flower.Opaque",
     "Path" : "~.shader",
     "Type" : "Shader"
+},
+
+{
+    "Descriptor" : {
+        "Files" : [
+            "Torch/TorchFire.fsh",
+            "Torch/TorchFire.vsh"
+        ],
+        "Name" : "TorchFire",
+        "Type" : "File"
+    },
+    "Name" : "TorchFire",
+    "Path" : "~.shader",
+    "Type" : "Shader"
+},
+
+{
+    "Type": "Mesh",
+    "Name": "TorchFire",
+    "Path": "~.obj",
+    "Descriptor": "File"
 }
 ]

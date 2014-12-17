@@ -453,7 +453,7 @@ namespace UpvoidMiner
                 }
 
                 // update items
-                ItemManager.Update();
+                ItemManager.Update(_elapsedSeconds);
 
                 // Update all trees and keep position of closest tree, if any
                 vec3 closestTree = UpvoidMinerWorldGenerator.UpdateTrees(camera.Position);

@@ -46,11 +46,12 @@ namespace UpvoidMiner.Items
         /// <summary>
         /// Updates all items
         /// </summary>
-        public static void Update()
+        public static void Update(float _elapsedSeconds)
         {
             foreach (var entity in Item2Entity.Values)
             {
                 entity.UpdatePhysics();
+                entity.Update(_elapsedSeconds);
             }
         }
     }

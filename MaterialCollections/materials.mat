@@ -307,3 +307,8 @@
    Culling: None
    MaxDistance: 30
    Parameter: uDiscardBias, .5
+
+[TorchFire] : CpuParticleDefault
+   Shader: TorchFire
+   Texture: uColor, ::Material/Particles/TorchFire3D
+   Culling: None

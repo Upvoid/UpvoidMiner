@@ -589,7 +589,7 @@ namespace UpvoidMiner
         /// <summary>
         /// Returns a random direction (currently biased towards cube edges).
         /// </summary>
-        private static vec3 RandomDir()
+        public static vec3 RandomDir()
         {
             return new vec3(
                 (float)random.NextDouble() - .5f,
