@@ -24,12 +24,17 @@ void main()
    // Pass attributes
    vTexCoord = aTexCoord;
 
-   quadID = uRandom + int(gl_VertexID) / 4;
-
+   quadID = 15.0 * uRandom + int(gl_VertexID) / 4;
 
    vec3 pos = aPosition;
-   pos.y *= 0.9 + 0.05 * sin(3*uRuntime + 123.2 * quadID + 5 * cos(12*uRandom + quadID + uRuntime));
+   pos.y *= 0.9 + 0.05 * sin(uRuntime + 123.2 * quadID + 2 * cos(12*uRandom + quadID + uRuntime));
 
+   // Some smooth flame movement
+   if(aPosition.y > 0.5)
+   {
+      pos.z += 0.1 * sin(quadID + uRuntime);
+      pos.x += 0.1 * cos(quadID + uRuntime);
+   }
 
    // world space position:
    vWorldPos = (uModelMatrix * (vec4(pos, 1))).xyz;
