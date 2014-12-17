@@ -98,7 +98,8 @@ namespace UpvoidMiner
                             Substance.GetConcreteSubstancesWhich(
                             substance => 
                                 substance is LooseSubstance || substance is StoneSubstance || 
-                                substance is CopperOreSubstance || substance is CopperSubstance);
+                                substance is CopperOreSubstance || substance is CopperSubstance || 
+                                substance is CoalSubstance);
                     else if (Substance is CopperSubstance)
                         ManipulatableIndices =
                             Substance.GetConcreteSubstancesWhich(
