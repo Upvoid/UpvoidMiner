@@ -42,10 +42,30 @@ namespace UpvoidMiner
         }
     }
 
-    public sealed class CoalSubstance : RockSubstance
+    public class CoalSubstance : RockSubstance
     {
+        protected CoalSubstance(string name, float massDensity) : base(name, massDensity)
+        {
+        }
+
         public CoalSubstance()
-            : base("Coal", 1300f)
+            : base("Coal", -1f)
+        {
+        }
+    }
+
+    public sealed class CharcoalSubstance : CoalSubstance
+    {
+        public CharcoalSubstance()
+            : base("Charcoal", 300f)
+        {
+        }
+    }
+
+    public sealed class BlackCoalSubstance : CoalSubstance
+    {
+        public BlackCoalSubstance()
+            : base("Black Coal", 1300f)
         {
         }
     }

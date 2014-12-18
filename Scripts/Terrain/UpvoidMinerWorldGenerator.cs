@@ -51,7 +51,7 @@ namespace UpvoidMiner
         private TerrainResource terrainDirt;
         private TerrainResource terrainRock;
         private TerrainResource terrainCopperOre;
-        private TerrainResource terrainCoal;
+        private TerrainResource terrainBlackCoal;
         private TerrainResource terrainDesert;
         private TerrainResource terrainOreGold;
 
@@ -134,7 +134,7 @@ namespace UpvoidMiner
             // Get handle to dirt for generation.
             Instance.terrainDirt = TerrainResource.FromName("Dirt");
             Instance.terrainRock = TerrainResource.FromName("Basalt");
-            Instance.terrainCoal = TerrainResource.FromName("Coal");
+            Instance.terrainBlackCoal = TerrainResource.FromName("BlackCoal");
             Instance.terrainCopperOre = TerrainResource.FromName("CopperOre");
             Instance.terrainDesert = TerrainResource.FromName("Sand");
             Instance.terrainOreGold = TerrainResource.FromName("OreGold");
@@ -201,13 +201,15 @@ namespace UpvoidMiner
             }
             {
                 StringBuilder coalDefines = new StringBuilder();
-                coalDefines.Append("pos = vec3(x, y, z); start = 20; end = -80; bXZ = 50; bY = 10; bC = 0.4;");
+                coalDefines.Append("pos = vec3(x, y, z); start = 60; end = -120; bXZ = 50; bY = 10; bC = 0.4;");
                 coalDefines.Append("center = (start+end)/2; width = (start-end)/2;");
                 coalDefines.Append("perlin(x,y,z) $= ::Perlin;");
                 coalDefines.Append("worley(x,y,z) $= ::Worley;");
-                coalDefines.Append("worley(x/bXZ,y/bY,z/bXZ)-bC+(worley(2*x/bXZ,2*y/bY,2*z/bXZ)-bC)*0.5+(worley(4*x/bXZ,4*y/bY,4*z/bXZ)-bC)*0.25+perlin(x/40,y/40,z/40)*bC");
+                coalDefines.Append("Weight = -step(step(y-end)+step(start-y)-1.5);");
+                coalDefines.Append("Density = worley(x/bXZ,y/bY,z/bXZ)-bC+(worley(2*x/bXZ,2*y/bY,2*z/bXZ)-bC)*0.5+(worley(4*x/bXZ,4*y/bY,4*z/bXZ)-bC)*0.25+perlin(x/40,y/40,z/40)*bC;");
+                coalDefines.Append("Weight + Density + 0.8");
                 string coalDef = coalDefines.ToString();
-                CsgExpression coalExpression = new CsgExpression(terrainCoal.Index, coalDef, UpvoidMiner.ModDomain);
+                CsgExpression coalExpression = new CsgExpression(terrainBlackCoal.Index, coalDef, UpvoidMiner.ModDomain);
                 CsgOpUnion union = new CsgOpUnion();
                 union.AddNode(new CsgExpression(terrainRock.Index, "1", null));
                 union.AddNode(coalExpression);
@@ -231,7 +233,7 @@ namespace UpvoidMiner
                 union.AddNode(copperExpression);
                 CsgFilterNode filter = new CsgFilterNode(true,union);
                 filter.AddMaterial(terrainRock.Index);
-                concat.AddNode(filter);
+                //concat.AddNode(filter);
             }
             /*
             {

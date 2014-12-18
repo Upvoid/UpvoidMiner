@@ -939,6 +939,13 @@ namespace UpvoidMiner
                             }, false));
 
             Inventory.AddItem(
+                new RecipeItem(new ResourceItem(new CharcoalSubstance(),0.1f), 
+                    new List<Item>
+                            {
+                                new ResourceItem(new WoodSubstance(), 1.0f)
+                            }, false));
+
+            Inventory.AddItem(
                 new RecipeItem(new TorchItem(), 
                     new List<Item>
                             {

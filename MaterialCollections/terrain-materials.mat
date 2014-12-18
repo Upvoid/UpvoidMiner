@@ -484,7 +484,27 @@
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Color: uSpecularColor, .1, .1, .1, 8
 
-[Terrain/Coal] : Default
+[Terrain/Charcoal] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, /Resources.TerrainMaterials::Stones/Charcoal.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Stones/Charcoal.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Stones/Charcoal.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Stones/Charcoal.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Stones/Charcoal.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Stones/Charcoal.Normal
+    Color: uSpecularColor, .02, .02, .02, 9
+    Parameter: uTexScaleXY, 2.8
+    Parameter: uTexScaleXZ, 2.8
+    Parameter: uTexScaleZY, 2.8
+    Parameter: uBlendingCoefficient, 4
+
+[Particles/Terrain/Charcoal] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, /Resources.TerrainMaterials::Stones/Charcoal.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Stones/Charcoal.Normal
+    Color: uSpecularColor, .1, .1, .1, 8
+
+[Terrain/BlackCoal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
     Texture: uColorXZ, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
     Texture: uColorXY, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
@@ -497,12 +517,18 @@
     Parameter: uTexScaleXZ, 2.8
     Parameter: uTexScaleZY, 2.8
     Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.7
+    Parameter: uFresnel, 8.3
+    Parameter: uGlossiness, 0.9
 
-[Particles/Terrain/Coal] : CpuParticleDefault
+[Particles/Terrain/BlackCoal] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Stones/Stones10.Normal
     Color: uSpecularColor, .1, .1, .1, 8
+    Parameter: uRoughness, 0.7
+    Parameter: uFresnel, 8.3
+    Parameter: uGlossiness, 0.9
 
 [Terrain/Iron] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap

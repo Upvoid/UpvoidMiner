@@ -528,10 +528,20 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
-        "Name" : "Terrain/Coal",
+        "Name" : "Terrain/Charcoal",
         "Type" : "FromCollection"
     },
-    "Name" : "Terrain/Coal",
+    "Name" : "Terrain/Charcoal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Terrain/BlackCoal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/BlackCoal",
     "Path" : "~.mat",
     "Type" : "Material"
  },
@@ -811,10 +821,20 @@
 {
     "Descriptor" : {
         "Collection" : "terrain-materials",
-        "Name" : "Particles/Terrain/Coal",
+        "Name" : "Particles/Terrain/Charcoal",
         "Type" : "FromCollection"
     },
-    "Name" : "Particles/Terrain/Coal",
+    "Name" : "Particles/Terrain/Charcoal",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/BlackCoal",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/BlackCoal",
     "Path" : "~.mat",
     "Type" : "Material"
  },

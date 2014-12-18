@@ -15,6 +15,7 @@
 
 { "Name" : "Items/Icons/Substances/Wood", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Stone", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Coal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 { "Name" : "Items/Icons/Substances/Dirt", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/BirchWood", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
@@ -27,7 +28,8 @@
 { "Name" : "Items/Icons/Substances/VerdaniumOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Aegirium", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
-{ "Name" : "Items/Icons/Substances/Coal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Charcoal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/BlackCoal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Copper", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Gold", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Iron", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
