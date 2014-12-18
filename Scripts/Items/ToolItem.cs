@@ -73,18 +73,22 @@ namespace UpvoidMiner
             if (Substance is WoodSubstance)
             {
                 digRadiusMaxFactor = digRadiusMaxFactorWood;
+                durability = initialDurability *= durabilityFactorWood;
             }
             else if (Substance is StoneSubstance)
             {
                 digRadiusMaxFactor = digRadiusMaxFactorStone;
+                durability = initialDurability *= durabilityFactorStone;
             }
             else if (Substance is CopperSubstance)
             {
                 digRadiusMaxFactor = digRadiusMaxFactorCopper;
+                durability = initialDurability *= durabilityFactorCopper;
             }
             else
             {
                 digRadiusMaxFactor = 1.0f;
+                durability = initialDurability = -1.0f;
             }
             switch (ToolType)
             {
@@ -182,17 +186,30 @@ namespace UpvoidMiner
         /// </summary>
         private const float digRadiusShovelInitial = 1.4f;
         private const float digRadiusPickaxeInitial = 0.9f;
+        private const float digRadiusAxeInitial = 0.9f;
         private const float digRadiusMaxFactorWood = 1f;
         private const float digRadiusMaxFactorStone = 1.5f;
         private const float digRadiusMaxFactorCopper = 2f;
         private float digRadiusShovel = digRadiusShovelInitial;
         private float digRadiusPickaxe = digRadiusPickaxeInitial;
+        private float digRadiusAxe = digRadiusAxeInitial;
         private const float digRadiusMinFactor = 0.4f;
         private readonly float digRadiusMaxFactor = 0.4f;
+
+        /// <summary>
+        /// Amount of terrain left that can be excavated with this tool
+        /// </summary>
+        private float durability;
+        private float initialDurability = 200.0f;
+        private const float durabilityFactorWood = 1f;
+        private const float durabilityFactorStone = 2f;
+        private const float durabilityFactorCopper = 4f;
 
         public float DigRadiusShovel { get { return digRadiusShovel; } }
 
         public float DigRadiusPickaxe { get { return digRadiusPickaxe; } }
+
+        public float DigRadiusAxe { get { return digRadiusAxe; } }
 
         public override void OnSelect(Player player)
         {
@@ -201,7 +218,6 @@ namespace UpvoidMiner
             {
                 case ToolType.Hammer:
                 case ToolType.DroneChain:
-                case ToolType.Axe:
                     return;
             }
 
@@ -265,6 +281,7 @@ namespace UpvoidMiner
             // Adjust dig-radius between 0.5m and 5m radius
             digRadiusShovel = Math.Max(0.5f, Math.Min(5f, digRadiusShovel + _delta / 5f));
             digRadiusPickaxe = Math.Max(0.5f, Math.Min(5f, digRadiusPickaxe + _delta / 5f));
+            digRadiusAxe = Math.Max(0.5f, Math.Min(5f, digRadiusAxe + _delta / 5f));
         }
 
         /// <summary>
@@ -317,10 +334,6 @@ namespace UpvoidMiner
                 case ToolType.Hammer:
                 case ToolType.DroneChain:
                     return;
-                case ToolType.Axe:
-                    if (rayHit != null && rayHit.HasTerrainCollision)
-                        crosshair.Disabled = true;
-                    return;
             }
 
 
@@ -339,6 +352,8 @@ namespace UpvoidMiner
                 if (digRadiusShovel < digRadiusShovelInitial * digRadiusMinFactor) digRadiusShovel = digRadiusShovelInitial * digRadiusMinFactor;
                 if (digRadiusPickaxe > digRadiusPickaxeInitial * digRadiusMaxFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMaxFactor;
                 if (digRadiusPickaxe < digRadiusPickaxeInitial * digRadiusMinFactor) digRadiusPickaxe = digRadiusPickaxeInitial * digRadiusMinFactor;
+                if (digRadiusAxe > digRadiusAxeInitial * digRadiusMaxFactor) digRadiusAxe = digRadiusAxeInitial * digRadiusMaxFactor;
+                if (digRadiusAxe < digRadiusAxeInitial * digRadiusMinFactor) digRadiusAxe = digRadiusAxeInitial * digRadiusMinFactor;
             }
 
             float useRadius = 0.0f;
@@ -352,6 +367,8 @@ namespace UpvoidMiner
                         crosshair.Disabled = false;
                     else crosshair.Disabled = true;
                     useRadius = digRadiusShovel; break;
+                case ToolType.Axe:
+                    useRadius = digRadiusAxe; break;
                 case ToolType.GodsShovel:
                     useRadius = digRadiusShovel; break;
                 default: break;
@@ -383,8 +400,10 @@ namespace UpvoidMiner
             switch (ToolType)
             {
                 case ToolType.Pickaxe:
-                case ToolType.Shovel:
                     player.DigMaterial(_worldNormal, _worldPos, digRadiusPickaxe, ManipulatableIndices);
+                    return;
+                case ToolType.Shovel:
+                    player.DigMaterial(_worldNormal, _worldPos, digRadiusShovel, ManipulatableIndices);
                     return;
 
                 case ToolType.GodsShovel:
@@ -399,6 +418,8 @@ namespace UpvoidMiner
                         // Hitmessage to make the log know it has been hit
                         _hitEntity[TriggerId.getIdByName("Hit")] |= new HitMessage(player.thisEntity);
                     }
+                    else
+                        player.DigMaterial(_worldNormal, _worldPos, digRadiusAxe, ManipulatableIndices);
                     return;
 
                 case ToolType.DroneChain:

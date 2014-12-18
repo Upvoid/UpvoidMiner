@@ -201,7 +201,7 @@ namespace UpvoidMiner
             }
             {
                 StringBuilder coalDefines = new StringBuilder();
-                coalDefines.Append("pos = vec3(x, y, z); start = 60; end = -120; bXZ = 50; bY = 10; bC = 0.4;");
+                coalDefines.Append("pos = vec3(x, y, z); start = 60; end = -120; bXZ = 50; bY = 10; bC = 0.3;");
                 coalDefines.Append("center = (start+end)/2; width = (start-end)/2;");
                 coalDefines.Append("perlin(x,y,z) $= ::Perlin;");
                 coalDefines.Append("worley(x,y,z) $= ::Worley;");

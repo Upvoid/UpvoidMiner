@@ -26,6 +26,7 @@ namespace UpvoidMiner
                 case ToolType.GodsShovel:
                 case ToolType.Shovel:
                 case ToolType.Pickaxe:
+                case ToolType.Axe:
                     return true;
                 default:
                     return false;
