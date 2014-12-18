@@ -64,7 +64,8 @@ namespace UpvoidMiner
             addResource(new SolidTerrainResource(new BirchWoodSubstance(), "Terrain/BirchWood", "Particles/Terrain/BirchWood", 650f));
 
             // Ores + Metals
-            addResource(new SolidTerrainResource(new CoalSubstance(), "Terrain/Coal", "Particles/Terrain/Coal", 1300f));
+            addResource(new SolidTerrainResource(new CharcoalSubstance(), "Terrain/Charcoal", "Particles/Terrain/Charcoal", 1300f));
+            addResource(new SolidTerrainResource(new BlackCoalSubstance(), "Terrain/BlackCoal", "Particles/Terrain/BlackCoal", 1300f));
             addResource(new SolidTerrainResource(new CopperSubstance(), "Terrain/Copper", "Particles/Terrain/Copper", 9001f));
             addResource(new SolidTerrainResource(new IronSubstance(), "Terrain/Iron", "Particles/Terrain/Iron", 7700f));
             addResource(new SolidTerrainResource(new GoldSubstance(), "Terrain/Gold", "Particles/Terrain/Gold", 19302f));

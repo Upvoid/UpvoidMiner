@@ -949,7 +949,7 @@ namespace UpvoidMiner
                 new RecipeItem(new TorchItem(), 
                     new List<Item>
                             {
-                                new ResourceItem(new CoalSubstance(), 0.5f),
+                                new ResourceItem(new CoalSubstance(), 0.1f),
                                 new CraftingItem(CraftingItem.ItemType.Handle,new Substance())
                             }, false));
             

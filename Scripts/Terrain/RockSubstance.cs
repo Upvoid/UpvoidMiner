@@ -65,7 +65,7 @@ namespace UpvoidMiner
     public sealed class BlackCoalSubstance : CoalSubstance
     {
         public BlackCoalSubstance()
-            : base("Black Coal", 1300f)
+            : base("BlackCoal", 1300f)
         {
         }
     }
