@@ -51,6 +51,8 @@
 
 { "Name" : "Items/Icons/Torch", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
+{ "Name" : "Items/Icons/Hands", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+
 {
     "Descriptor" : "File",
     "Name" : "item-materials",

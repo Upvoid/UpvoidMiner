@@ -888,12 +888,17 @@ namespace UpvoidMiner
             if (drones < 5)
                 Inventory.AddItem(new ToolItem(ToolType.DroneChain, new IronSubstance(), 5 - drones));
 
+            // Resupply hands
+            if (Inventory.Items.Sum(i => i is ToolItem && (i as ToolItem).ToolType == ToolType.Hands ? 1 : 0) == 0)
+                Inventory.AddItem(new ToolItem(ToolType.Hands, new Substance()));
+
+
             // Resupply Recipes
             foreach (var item in Inventory.Items.Reverse().OfType<RecipeItem>())
             {
                 Inventory.Items.RemoveItem(item, true);
             }
-            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.Handle,new WoodSubstance(),4), 
+            Inventory.AddItem(new RecipeItem(new CraftingItem(CraftingItem.ItemType.Handle,new WoodSubstance(),20), 
                 new List<Item>
                     {
                         new MaterialItem(new WoodSubstance(), MaterialShape.Cylinder, new vec3(0.3f,0.5f,0.3f))
@@ -939,7 +944,7 @@ namespace UpvoidMiner
                             }, false));
 
             Inventory.AddItem(
-                new RecipeItem(new ResourceItem(new CharcoalSubstance(),0.1f), 
+                new RecipeItem(new ResourceItem(new CharcoalSubstance(),0.8f), 
                     new List<Item>
                             {
                                 new ResourceItem(new WoodSubstance(), 1.0f)

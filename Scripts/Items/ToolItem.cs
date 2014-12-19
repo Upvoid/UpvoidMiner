@@ -20,7 +20,8 @@ namespace UpvoidMiner
         Axe,
         Hammer,
         GodsShovel,
-        DroneChain
+        DroneChain,
+        Hands,
     }
 
 
@@ -136,6 +137,11 @@ namespace UpvoidMiner
                 case ToolType.DroneChain:
                     Name = "Chain Drone";
                     Description = "Drone used for creating chains of vertical digging constraints.";
+                    break;
+
+                case ToolType.Hands:
+                    Name = "Hands";
+                    Description = "A pair of hands. Useful for gathering wood when your last axe breaks.";
                     break;
 
                 default:
@@ -311,6 +317,9 @@ namespace UpvoidMiner
                     case ToolType.Hammer:
                         return false;
 
+                    case ToolType.Hands:
+                        return true;
+
                     default:
                         return false;
                 }
@@ -328,11 +337,12 @@ namespace UpvoidMiner
 
             crosshair.Disabled = rayHit == null;
 
-            // no preview for hammer/drone/axe
+            // no preview for hammer/drone/hands
             switch (ToolType)
             {
                 case ToolType.Hammer:
                 case ToolType.DroneChain:
+                case ToolType.Axe:
                     return;
             }
 
@@ -420,6 +430,15 @@ namespace UpvoidMiner
                     }
                     else
                         player.DigMaterial(_worldNormal, _worldPos, digRadiusAxe, ManipulatableIndices);
+                    return;
+
+                case ToolType.Hands:
+
+                    if (_hitEntity != null)
+                    {
+                        // Hitmessage to make the log know it has been hit
+                        _hitEntity[TriggerId.getIdByName("Hit")] |= new HitMessage(player.thisEntity);
+                    }
                     return;
 
                 case ToolType.DroneChain:
