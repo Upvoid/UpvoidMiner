@@ -595,6 +595,16 @@
     "Path" : "~.mat",
     "Type" : "Material"
 },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Terrain/Placeholder",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Terrain/Placeholder",
+    "Path" : "~.mat",
+    "Type" : "Material"
+},
 
 {
     "Descriptor" : {
@@ -875,6 +885,16 @@
         "Type" : "FromCollection"
     },
     "Name" : "Particles/Terrain/Copper",
+    "Path" : "~.mat",
+    "Type" : "Material"
+ },
+{
+    "Descriptor" : {
+        "Collection" : "terrain-materials",
+        "Name" : "Particles/Terrain/Placeholder",
+        "Type" : "FromCollection"
+    },
+    "Name" : "Particles/Terrain/Placeholder",
     "Path" : "~.mat",
     "Type" : "Material"
  },

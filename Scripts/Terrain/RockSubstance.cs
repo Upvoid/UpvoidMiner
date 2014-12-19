@@ -97,6 +97,22 @@ namespace UpvoidMiner
         }
     }
 
+    public sealed class TinOreSubstance : OreSubstance
+    {
+        public TinOreSubstance()
+            : base("TinOre", 6980f)
+        {
+        }
+    }
+
+    public sealed class IronOreSubstance : OreSubstance
+    {
+        public IronOreSubstance()
+            : base("IronOre", 5260f)
+        {
+        }
+    }
+
     public sealed class GoldOreSubstance : OreSubstance
     {
         public GoldOreSubstance()

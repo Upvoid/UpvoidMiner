@@ -641,3 +641,29 @@
     Texture: uColor, OreGold.Diffuse
     Texture: uNormal, OreGold.Normal
     Color: uSpecularColor, 1, 1, 1, 16
+
+[Terrain/Placeholder] : Default
+    Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
+    Texture: uColorXZ, GlassTiles01.Diffuse
+    Texture: uColorXY, GlassTiles01.Diffuse
+    Texture: uColorZY, GlassTiles01.Diffuse
+    Texture: uNormalXZ, GlassTiles01.Normal
+    Texture: uNormalXY, GlassTiles01.Normal
+    Texture: uNormalZY, GlassTiles01.Normal
+    Color: uSpecularColor, 1, 1, 1, 16
+    Parameter: uTexScaleXY, 3
+    Parameter: uTexScaleXZ, 3
+    Parameter: uTexScaleZY, 3
+    Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0
+    Parameter: uFresnel, 100.3
+    Parameter: uGlossiness, 1.0
+
+[Particles/Terrain/Placeholder] : CpuParticleDefault
+    Shader: Particles/Opaque/Mesh
+    Texture: uColor, GlassTiles01.Diffuse
+    Texture: uNormal, GlassTiles01.Normal
+    Color: uSpecularColor, 1, 1, 1, 16
+    Parameter: uRoughness, 0
+    Parameter: uFresnel, 100.3
+    Parameter: uGlossiness, 1.0
