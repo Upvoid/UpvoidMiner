@@ -644,12 +644,12 @@
 
 [Terrain/Placeholder] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
-    Texture: uColorXZ, GlassTiles01.Diffuse
-    Texture: uColorXY, GlassTiles01.Diffuse
-    Texture: uColorZY, GlassTiles01.Diffuse
-    Texture: uNormalXZ, GlassTiles01.Normal
-    Texture: uNormalXY, GlassTiles01.Normal
-    Texture: uNormalZY, GlassTiles01.Normal
+    Texture: uColorXZ, /Resources.TerrainMaterials::Textures/GlassTiles01.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Textures/GlassTiles01.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Textures/GlassTiles01.Diffuse
+    Texture: uNormalXZ, /Resources.TerrainMaterials::Textures/GlassTiles01.Normal
+    Texture: uNormalXY, /Resources.TerrainMaterials::Textures/GlassTiles01.Normal
+    Texture: uNormalZY, /Resources.TerrainMaterials::Textures/GlassTiles01.Normal
     Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uTexScaleXY, 3
     Parameter: uTexScaleXZ, 3
@@ -661,8 +661,8 @@
 
 [Particles/Terrain/Placeholder] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
-    Texture: uColor, GlassTiles01.Diffuse
-    Texture: uNormal, GlassTiles01.Normal
+    Texture: uColor, /Resources.TerrainMaterials::Textures/GlassTiles01.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Textures/GlassTiles01.Normal
     Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uRoughness, 0
     Parameter: uFresnel, 100.3
