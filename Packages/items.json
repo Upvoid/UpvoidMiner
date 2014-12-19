@@ -24,6 +24,8 @@
 { "Name" : "Items/Icons/Substances/Basalt", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 { "Name" : "Items/Icons/Substances/CopperOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/TinOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/IronOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/GoldOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/VerdaniumOre", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Aegirium", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
@@ -31,8 +33,11 @@
 { "Name" : "Items/Icons/Substances/Charcoal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/BlackCoal", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Copper", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
-{ "Name" : "Items/Icons/Substances/Gold", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Tin", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Bronze", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Substances/Iron", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Steel", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
+{ "Name" : "Items/Icons/Substances/Gold", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 
 { "Name" : "Items/Icons/Sphere", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },
 { "Name" : "Items/Icons/Cylinder", "Type" : "Texture", "Descriptor" : { "Type": "File", "sRGB": true }, "Path" : "~.png" },

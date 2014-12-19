@@ -67,15 +67,15 @@ namespace UpvoidMiner
             addResource(new SolidTerrainResource(new CharcoalSubstance(), "Terrain/Charcoal", "Particles/Terrain/Charcoal", 1300f));
             addResource(new SolidTerrainResource(new BlackCoalSubstance(), "Terrain/BlackCoal", "Particles/Terrain/BlackCoal", 1300f));
             addResource(new SolidTerrainResource(new CopperSubstance(), "Terrain/Copper", "Particles/Terrain/Copper", 9001f));
-            addResource(new SolidTerrainResource(new TinSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", 1f));
-            addResource(new SolidTerrainResource(new BronzeSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", 1f));
+            addResource(new SolidTerrainResource(new TinSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", -1f));
+            addResource(new SolidTerrainResource(new BronzeSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", -1f));
             addResource(new SolidTerrainResource(new IronSubstance(), "Terrain/Iron", "Particles/Terrain/Iron", 7700f));
-            addResource(new SolidTerrainResource(new SteelSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", 1f));
+            addResource(new SolidTerrainResource(new SteelSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", -1f));
             addResource(new SolidTerrainResource(new GoldSubstance(), "Terrain/Gold", "Particles/Terrain/Gold", 19302f));
 
             addResource(new SolidTerrainResource(new CopperOreSubstance(), "Terrain/CopperOre", "Particles/Terrain/CopperOre", 4900f));
-            addResource(new SolidTerrainResource(new TinOreSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", 1f));
-            addResource(new SolidTerrainResource(new IronOreSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", 1f));
+            addResource(new SolidTerrainResource(new TinOreSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", -1f));
+            addResource(new SolidTerrainResource(new IronOreSubstance(), "Terrain/Placeholder", "Particles/Terrain/Placeholder", -1f));
             addResource(new SolidTerrainResource(new GoldOreSubstance(), "Terrain/OreGold", "Particles/Terrain/OreGold", 4000f));
 
             // Rares

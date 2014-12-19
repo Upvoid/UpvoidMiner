@@ -655,8 +655,8 @@
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
     Parameter: uBlendingCoefficient, 4
-    Parameter: uRoughness, 0
-    Parameter: uFresnel, 100.3
+    Parameter: uRoughness, 0.4
+    Parameter: uFresnel, 10.3
     Parameter: uGlossiness, 1.0
 
 [Particles/Terrain/Placeholder] : CpuParticleDefault
@@ -664,6 +664,6 @@
     Texture: uColor, /Resources.TerrainMaterials::Manmade/GlassTiles01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Manmade/GlassTiles01.Normal
     Color: uSpecularColor, 1, 1, 1, 16
-    Parameter: uRoughness, 0
-    Parameter: uFresnel, 100.3
+    Parameter: uRoughness, 0.4
+    Parameter: uFresnel, 10.3
     Parameter: uGlossiness, 1.0

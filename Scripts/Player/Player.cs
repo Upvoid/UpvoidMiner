@@ -827,7 +827,7 @@ namespace UpvoidMiner
                 Inventory.AddItem(new ToolItem(ToolType.Axe, new CopperSubstance()));
                 Inventory.AddItem(new ToolItem(ToolType.DroneChain, new IronSubstance(), 5));
                 Inventory.AddItem(new PipetteItem());
-                foreach (var resource in TerrainResource.ListResources())
+                foreach (var resource in TerrainResource.ListResources().Where(resource => resource.MassDensity > 0.0f))
                     Inventory.AddResource(resource.Substance, 1e9f);
                 genDefault = false;
             }

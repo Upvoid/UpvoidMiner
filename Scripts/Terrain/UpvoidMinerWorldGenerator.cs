@@ -234,7 +234,7 @@ namespace UpvoidMiner
                 union.AddNode(copperExpression);
                 CsgFilterNode filter = new CsgFilterNode(true,union);
                 filter.AddMaterial(terrainRock.Index);
-                //concat.AddNode(filter);
+                concat.AddNode(filter);
             }
             /*
             {
