@@ -201,6 +201,9 @@ namespace UpvoidMiner
             [UICollection("ToolItem")]
             public ItemUI ThisItem { get { return this; } }
 
+            [UIObject]
+            public double Durability { get { return item is ToolItem ? (item as ToolItem).DurabilityPercentage : -1.0; } }
+
             [UIString]
             public string StackSize { get { return LocalScript.player == null || LocalScript.player.GodMode || !(item is DiscreteItem) || (item as DiscreteItem).StackSize == 1 ? "" 
                     : (item as DiscreteItem).StackSize + "x"; } }

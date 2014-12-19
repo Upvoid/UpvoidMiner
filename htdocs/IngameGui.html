@@ -272,6 +272,17 @@
             top: 8px;
             text-align: center;
         }
+
+        .durability {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0;
+            height: 4px;
+            background: #f00;
+        }
+        .durability .progress-bar:last-child:before{display:block;content:'div::before';position:absolute;width:100%;height:100%;left:0;right:0;z-index:-1;background-color:#f00;}
     </style>
     <div id="cl-menu" class="ingame-overlay">
         <div class="valign">
@@ -354,6 +365,10 @@
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
                 <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
+                <div class="progress durability">
+                    <div class="progress-bar progress-bar-success durability-pb"></div>
+                </div>
+                <uiobject name="Durability" onvalue="function(el, val) { var pb = $(el).parent().children('.durability'); pb.css('display', val < 0 || val == 1 ? 'none' : 'block'); if (val >= 0) pb.children('.durability-pb').css('width', val * 100 + '%'); }"></uiobject>
             </uitemplate>
             <uitemplate name="ResourceItem" class="inv-item">
                 <uicollection name="IconStack" class="itemstack"></uicollection>
