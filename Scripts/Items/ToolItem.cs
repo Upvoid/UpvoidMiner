@@ -40,6 +40,9 @@ namespace UpvoidMiner
 
         private readonly IEnumerable<int> ManipulatableIndices;
 
+        public double DurabilityPercentage { get { return initialDurability < 0 ? -1.0 : durability / initialDurability; } }
+        public double Durability { get { return durability; } set { durability = (float)value; } }
+
         private Substance SubstanceClass
         {
             get
