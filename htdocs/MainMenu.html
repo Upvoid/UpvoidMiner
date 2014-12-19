@@ -3,6 +3,7 @@
 <html style="height:100%;">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/font-awesome.css">
     <link rel="stylesheet" href="/Mods/Upvoid/Web.Tools.Common/1.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="paper.bootstrap.min.css">
     <script src="/Mods/Upvoid/Web.Tools.Common/1.0.0/js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
@@ -16,21 +17,33 @@
       {
          display:none !Important;
       }
+      
+      #news-space
+      {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          width: 320px;
+      }
+      
     </style>
 </head>
 <body style="background: transparent; padding: 1%; height: 100%; overflow: hidden;">
-  <p style="color: #c00; position: absolute; background: rgba(255,255,255,0.5); padding: 5px 10px;">
-    <i class="fa fa-warning"></i> This is a beta version. Expect crashes and bugs. <br> Please report any problems at <a href="javascript:clickCommunity()">community.upvoid.com</a>. <br>
-    Version: <span id="versionstring" class="text-info"></span>
-  </p>
+  <div class="panel panel-default" style="position: absolute; top: 10px; left: 10px; z-index: -1;">
+    <div class="panel-heading"><i class="fa fa-warning"></i> This is a beta version. Expect crashes and bugs.</div>
+    <div class="panel-body">
+        Please report any problems at <a href="javascript:clickCommunity()">community.upvoid.com</a>. <br>
+        Version: <span id="versionstring" class="text-info"></span>
+    </div>
+  </div>
     <div id="menu" class="panel panel-default upvoid-debug-menu InputConsumer" style="width: 75%; max-width: 400px; margin: 7% auto auto auto; overflow-y:auto;">
         <div class="panel-body text-center">
-            <h1>UpvoidMiner</h1>
+            <h1 style="font-size: 48px; color: #000;"><img src="/Resource/Texture/Mods/Upvoid/UpvoidMiner/0.0.1::/Gui/Icon-48px" style="margin-right: -10px; margin-top: -5px;"> UpvoidMiner</h1>
 
             <ul class="nav nav-pills nav-stacked">
                 <li id="start-button-adventure"><a href="javascript: clickStart(false)"><big><b>Start Adventure Mode</b></big></a></li>
                 <li id="start-button-god"><a href="javascript: clickStart(true)"><big><b>Start God Mode</b></big></a></li>
-                                <li>&nbsp;</li>
+                <li>&nbsp;</li>
                 <li><a href="Settings.html">Settings</a></li>
                 <li><a href="Controls.html">Controls</a></li>
                 <li><a href="Credits.html">Credits</a></li>
@@ -38,9 +51,16 @@
                 <li class="upvoid-debug"><a href="javascript:clickStats()"><i class="fa fa-external-link"></i> Statistics Webpage</a></li>
                 <li class="upvoid-debug"><a href="javascript:clickReport()"><i class="fa fa-external-link"></i> Engine Report</a></li>
                 <li><a href="javascript: clickQuit()">Quit</a></li>
-            </ul>
-
-
+            </ul>			
+        </div>
+    </div>
+    
+    <div id="news-space" class="panel panel-default">
+        <div class="panel-heading">Want more gameplay? <div class="pull-right"><a href="#"><i class="fa fa-times"></i></a></div></div>
+        <div class="panel-body">
+            <p>UpvoidMiner is just a small tech demo.<br>For more features, check out our upcoming game, <a href="javascript:void()" onclick="$.get('/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=https://upvoid.com/geomechanic/')">GeoMechanic</a>. Support us by preordering now!</p>
+            <img style="width:100%; margin: 5px 0;" src="/Resource/Texture/Mods/Upvoid/UpvoidMiner/0.0.1::/Gui/GeomechanicPreview">
+            <a class="btn btn-danger btn-block" href="javascript:void()" onclick="$.get('/Mods/Upvoid/UpvoidMiner/0.0.1/OpenSiteInBrowser?url=https://upvoid.com/geomechanic/')">Preorder now</a>
         </div>
     </div>
 

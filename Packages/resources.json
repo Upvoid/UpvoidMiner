@@ -1233,5 +1233,21 @@
     "Name": "TorchFire",
     "Path": "~.obj",
     "Descriptor": "File"
+},
+{
+    "Descriptor" : {
+        "Type": "File"
+    },
+    "Name" : "Gui/Icon-48px",
+    "Path" : "~.png",
+    "Type" : "Texture"
+},
+{
+    "Descriptor" : {
+        "Type": "File"
+    },
+    "Name" : "Gui/GeomechanicPreview",
+    "Path" : "~.jpg",
+    "Type" : "Texture"
 }
 ]
