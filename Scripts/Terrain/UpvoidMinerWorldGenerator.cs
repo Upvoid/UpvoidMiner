@@ -207,6 +207,7 @@ namespace UpvoidMiner
                 coalDefines.Append("worley(x,y,z) $= ::Worley;");
                 coalDefines.Append("Weight = -step(step(y-end)+step(start-y)-1.5);");
                 coalDefines.Append("Density = worley(x/bXZ,y/bY,z/bXZ)-bC+(worley(2*x/bXZ,2*y/bY,2*z/bXZ)-bC)*0.5+(worley(4*x/bXZ,4*y/bY,4*z/bXZ)-bC)*0.25+perlin(x/40,y/40,z/40)*bC;");
+                //coalDefines.Append("Density = distance(Worley,vec(x/bXZ,y/bY,z/bXZ));");
                 coalDefines.Append("Weight + Density + 0.8");
                 string coalDef = coalDefines.ToString();
                 CsgExpression coalExpression = new CsgExpression(terrainBlackCoal.Index, coalDef, UpvoidMiner.ModDomain);

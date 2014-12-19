@@ -510,6 +510,9 @@ namespace UpvoidMiner
                 if (!instance.player.GodMode)
                     instance.player.Inventory.AddResource(substance, -volume);
 
+                if (instance.player.Inventory.Selection is ToolItem && volume < 0)
+                    (instance.player.Inventory.Selection as ToolItem).RemoveDurability(instance.player, -volume);
+
                 // Tutorial
                 if (volume < 0)
                 {

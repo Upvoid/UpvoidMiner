@@ -441,6 +441,17 @@ namespace UpvoidMiner
                     throw new InvalidOperationException("Unknown tool");
             }
         }
+
+        public void RemoveDurability(Player player, float amount)
+        {
+            if (durability < 0)
+                return;
+
+            durability -= amount;
+
+            if (durability <= 0)
+                player.Inventory.RemoveItem(new ToolItem(ToolType, Substance));
+        }
     }
 }
 
