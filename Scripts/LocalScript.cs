@@ -142,6 +142,8 @@ namespace UpvoidMiner
                 Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "OpenSiteInBrowser", (request, response) => Scripting.OpenUrlExternal(request.GetQuery("url")));
             }
 
+            Webserver.DefaultWebserver.RegisterDynamicContent(UpvoidMiner.ModDomain, "NewsScreenClosed", webNewsScreenClosed);
+
             // Create a simple camera that allows free movement.
             camera = new GenericCamera();
             camera.Position = new vec3(150, 40, 150);
@@ -499,6 +501,22 @@ namespace UpvoidMiner
                 resourceDownloadTotalBytes = Download.BytesTotal;
                 resourceDownloadReceivedBytes = Download.BytesReceived;
             }
+        }
+
+        /// <summary>
+        /// Used by the news screen in the main menu to save when the screen is closed and to check whether it should be displayed
+        /// </summary>
+        static void webNewsScreenClosed(WebRequest request, WebResponse response)
+        {
+            // Has the news screen just been closed?
+            if (request.GetQuery("closed") == "true")
+            {
+                Scripting.SetUserSetting("UpvoidMiner/NewsScreenClosed", true);
+            }
+
+            bool closed = Scripting.GetUserSetting("UpvoidMiner/NewsScreenClosed", false);
+
+            response.AppendBody("{\"closed\": "+(closed ? "true" : "false")+"}");
         }
 
         /// <summary>
