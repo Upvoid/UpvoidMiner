@@ -477,12 +477,20 @@
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
     Parameter: uBlendingCoefficient, 4
+    Parameter: uRoughness, 0.5;
+    Parameter: uFresnel, 1.3;
+    Parameter: uGlossiness, 0.2;
+    Parameter: uBlackness, 1.0;
 
 [Particles/Terrain/BirchWood] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Color: uSpecularColor, .1, .1, .1, 8
+    Parameter: uRoughness, 0.5;
+    Parameter: uFresnel, 1.3;
+    Parameter: uGlossiness, 0.2;
+    Parameter: uBlackness, 1.0;
 
 [Terrain/Charcoal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
