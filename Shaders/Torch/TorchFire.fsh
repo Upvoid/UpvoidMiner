@@ -4,7 +4,7 @@
 #pragma ACGLimport <Common/Lighting.fsh>
 #pragma ACGLimport <Common/Particles.fsh>
 
-uniform sampler3D uColor;
+uniform sampler2DArray uColor;
 
 uniform sampler2DRect uOpaqueDepth;
 
@@ -26,10 +26,21 @@ void main()
 {
     INIT_CHANNELS;
 
-    float texUnit = fract(quadID + 0.7*uRuntime);
+    const int numberOfSlices = 5;
+
+    float texUnit = quadID + .7*uRuntime;
+
+    // We got 5 fire textures (0..4)
+    float fractPart = fract(texUnit);
+    int intPart  = int(texUnit) % numberOfSlices;
+    int intPart2 = (intPart+1) % numberOfSlices;
 
     // illumination
-    vec4 baseColor = texture(uColor, vec3(vTexCoord, texUnit));
+    vec4 texColor1 = texture(uColor, vec3(vTexCoord, float(intPart)));
+    vec4 texColor2 = texture(uColor, vec3(vTexCoord, float(intPart2)));
+
+    // interpolation
+    vec4 baseColor = mix(texColor1, texColor2, fractPart);
 
     // get current depth
     float depth = texture(uOpaqueDepth, gl_FragCoord.xy).r;
