@@ -212,7 +212,7 @@ namespace UpvoidMiner
         private float initialDurability = 200.0f;
         private const float durabilityFactorWood = 1f;
         private const float durabilityFactorStone = 2f;
-        private const float durabilityFactorCopper = 4f;
+        private const float durabilityFactorCopper = 20f;
 
         public float DigRadiusShovel { get { return digRadiusShovel; } }
 

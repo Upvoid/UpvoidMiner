@@ -211,8 +211,8 @@ namespace UpvoidMiner
         private SettingBool settingRestrictTo720p = new SettingBool("WindowManager/Restrict To 720p", false);
         // Audio
         private SettingDouble settingMasterVolume = new SettingDouble("Audio/Master Volume", 100);
-        private SettingDouble settingSfxVolume = new SettingDouble("Audio/SFX Volume", 50);
-        private SettingDouble settingMusicVolume = new SettingDouble("Audio/Music Volume", 50);
+        private SettingDouble settingSfxVolume = new SettingDouble("Audio/SFX Volume", 100);
+        private SettingDouble settingMusicVolume = new SettingDouble("Audio/Music Volume", 25);
         private SettingBool settingMuteMusic = new SettingBool("Audio/Mute Music", false);
         // Graphics
         private SettingDouble settingAnisotropicFiltering = new SettingDouble("Graphics/Anisotropic Filtering", 4);
