@@ -400,9 +400,9 @@
 
 [Terrain/CopperOre] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
-    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001
-    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/CopperOre0001
-    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColorXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001.Diffuse
+    Texture: uColorXY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Diffuse
+    Texture: uColorZY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Diffuse
     Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
@@ -417,7 +417,7 @@
 
 [Particles/Terrain/CopperOre] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
-    Texture: uColor, /Resources.TerrainMaterials::Minerals/CopperOre0001
+    Texture: uColor, /Resources.TerrainMaterials::Minerals/CopperOre0001.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.9
