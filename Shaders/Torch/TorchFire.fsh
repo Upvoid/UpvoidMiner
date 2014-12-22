@@ -30,10 +30,6 @@ void main()
 
     // illumination
     vec4 baseColor = texture(uColor, vec3(vTexCoord, texUnit));
-    //baseColor.r = quadID;
-    //baseColor.a *= 1.0 - 2*distance(vTexCoord.xy, vec2(0.5));
-    baseColor.rgb /= baseColor.a + 0.01; // premultiplied alpha
-    vec4 transColor = baseColor;
 
     // get current depth
     float depth = texture(uOpaqueDepth, gl_FragCoord.xy).r;
@@ -43,9 +39,9 @@ void main()
 
     float dist = vEyePos.z - opaqueEyePos.z;
 
-    transColor.a *= smoothstep(0, .1, dist);
+    baseColor.a *= smoothstep(0, .1, dist);
 
-    vec3 color = transColor.rgb * transColor.a;
+    vec3 color = baseColor.rgb * baseColor.a;
     //transColor.rgba = vec4(vLife, 0.0, 0.0, 1.0);
     OUTPUT_Color(color);
 }
