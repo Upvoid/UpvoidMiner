@@ -26,9 +26,9 @@ namespace UpvoidMiner
         {
         }
 
-        public override string MatOverlayName()
+        public override string MatOverlayName
         {
-            return "WoodMat";
+            get { return "WoodMat"; }
         }
     }
 

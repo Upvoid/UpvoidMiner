@@ -70,7 +70,7 @@ namespace UpvoidMiner
 
             if (substance != null)
             {
-                var matName = substance.MatOverlayName();
+                var matName = substance.MatOverlayName;
                 if (matName != null)
                     suffix += "," + matName;
             }

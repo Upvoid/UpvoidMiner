@@ -48,18 +48,18 @@ namespace UpvoidMiner
             return null;
         }
 
-        public static IEnumerable<int> GetConcreteSubstancesWhich(Expression<Func<Substance, bool>> filter)
+        public static IEnumerable<int> GetConcreteSubstancesWhich(Func<Substance, bool> filter)
         {
             return Assembly.GetExecutingAssembly().GetTypes()
                 .Where(myType => myType.IsClass && myType.IsSealed && myType.IsSubclassOf(typeof (Substance)))
                 .Select(Activator.CreateInstance).OfType<Substance>()
-                .Where(filter.Compile())
+                .Where(filter)
                 .Select(substance => substance.QueryResource().Index);
         }
 
-        public virtual string MatOverlayName()
+        public virtual string MatOverlayName
         {
-            return null;
+            get { return null; }
         }
     }
 }

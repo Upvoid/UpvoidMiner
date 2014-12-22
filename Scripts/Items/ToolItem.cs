@@ -69,7 +69,7 @@ namespace UpvoidMiner
             
             if (material != null)
             {
-                var matName = material.MatOverlayName();
+                var matName = material.MatOverlayName;
                 if (matName != null)
                     Icon += "," + matName;
             }

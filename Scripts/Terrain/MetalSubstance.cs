@@ -22,9 +22,9 @@ namespace UpvoidMiner
         {
         }
 
-        public override string MatOverlayName()
+        public override string MatOverlayName
         {
-            return "CopperMat";
+            get { return "CopperMat"; }
         }
     }
 
@@ -43,9 +43,9 @@ namespace UpvoidMiner
         {
         }
 
-        public override string MatOverlayName()
+        public override string MatOverlayName
         {
-            return "BronzeMat";
+            get { return "BronzeMat"; }
         }
     }
 
@@ -64,9 +64,9 @@ namespace UpvoidMiner
         {
         }
 
-        public override string MatOverlayName()
+        public override string MatOverlayName
         {
-            return "SteelMat";
+            get { return "SteelMat"; }
         }
     }
 
