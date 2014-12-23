@@ -239,7 +239,7 @@ namespace UpvoidMiner
                 }
 
                 // Movement noise
-                if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode)
+                if (TouchesGround && Body.GetVelocity().LengthSqr > 0.1f && !GodMode && !LocalScript.NoclipEnabled)
                 {
                     // Resume movement noise (This is a no-op if sound is already playing)
                     // Note that changing sound attributes is a no-op when old and new value are equal,
@@ -247,7 +247,7 @@ namespace UpvoidMiner
 
                     if (IsRunning)
                     {
-                        movementNoiseSound.Pitch = 1.7f;
+                        movementNoiseSound.Pitch = 1.5f;
                     }
                     else
                     {
