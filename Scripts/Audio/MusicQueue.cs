@@ -111,9 +111,9 @@ namespace UpvoidMiner
                 return;
             }
 
-            if (current.IsPlaying())
+            if (current.IsPlaying() || current.IsLoading())
             {
-                // Sound is currently playing, nothing to do here
+                // Sound is currently playing or still loading, nothing to do here
                 return;
             }
 
