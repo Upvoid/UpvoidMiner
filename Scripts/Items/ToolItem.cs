@@ -165,6 +165,7 @@ namespace UpvoidMiner
                 return false;
             if (!subtract && !Substance.GetType().IsInstanceOfType(item.Substance)) return false;
             if (subtract && !item.Substance.GetType().IsInstanceOfType(Substance)) return false;
+            if (Math.Abs(Durability - item.Durability) > 0.01) return false;
             return Merge(item, subtract, force, dryrun);
         }
 
@@ -472,7 +473,10 @@ namespace UpvoidMiner
             durability -= amount;
 
             if (durability <= 0)
+            {
+                durability = initialDurability; //For stacks of tools
                 player.Inventory.RemoveItem(new ToolItem(ToolType, Substance));
+            }
         }
     }
 }
