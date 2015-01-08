@@ -152,6 +152,13 @@ namespace UpvoidMiner
                 Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
                 mat4.Identity), mat4.Translate(-offsetHandleAndFire) * mat4.Scale(1f)));
 
+            // Torch handle - shadow
+            itemEntity.AddRenderComponent(new RenderComponent(new MeshRenderJob(
+                Renderer.Shadow.Mesh,
+                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
+                Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
+                mat4.Identity), mat4.Translate(-offsetHandleAndFire) * mat4.Scale(1f)));
+
             // This is unfinished work. TODO(ks): FIXME
             /*const bool torchMount = false;
             if (torchMount)
