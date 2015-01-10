@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Engine;
+using Engine.Audio;
 using Engine.Physics;
 using Engine.Rendering;
 using Engine.Resources;
@@ -16,12 +17,76 @@ namespace UpvoidMiner
     /// </summary>
     public class TorchItem : DiscreteItem
     {
+        // We only want three fire sounds (max.) for all the torches (instead of spamming the audio engine with multiple fire sounds)
+        private static SoundResource fireSoundRes = null;
+        private static Sound[] fireSound = null;
+
+        const float TorchFireVolume = 1.0f;
+
+        public static void UpdateTorchSound(List<vec4> positions)
+        {
+            if(fireSound == null)
+            {
+                // Sound not set up yet, nothing to do here, just return silently.
+                return;
+            }
+
+            if(positions.Count > 3)
+            {
+                throw new InvalidOperationException("Too many torch positions (" + positions.Count + " total, but only 3 are allowed!). This must not happen.");
+            }
+
+            for (int i = 0; i < 3; ++i)
+            {
+                if(i >= positions.Count)
+                {
+                    // "Invalidate" sound
+                    fireSound[i].Volume = 0.0f;
+
+                    // Go on with next sound
+                    continue;
+                }
+
+                vec4 curr = positions[i];
+                float disToCam = curr.w;
+
+                if(disToCam < 20.0f)
+                {
+                    fireSound[i].Position = new vec3(curr);
+                    fireSound[i].Volume = TorchFireVolume;
+                }
+                else
+                {
+                    fireSound[i].Volume = 0.0f;
+                }
+            }
+        }
+
         private static Random torchRandom = new Random();
 
         public TorchItem(int stackSize = 1) :
             base("Torch", "A torch that gives light.", 1.0f, ItemCategory.Tools, stackSize)
         {
             Icon = "Torch";
+
+            // Setup the audio stuff, if not done already
+            if(fireSoundRes == null)
+            {
+                fireSoundRes = Resources.UseSound("Mods/Upvoid/Resources.SFX/1.0.0::Miscellaneous/Fire", UpvoidMiner.ModDomain);
+
+                // 3 sounds (max.)
+                fireSound = new Sound[3];
+
+                for (int i = 0; i < 3; ++i)
+                {
+                    // Start with zero volume, we adapt that later
+                    fireSound[i] = new Sound(fireSoundRes, vec3.Zero, true, 1.0f, 0.6f, (int)AudioType.SFX, true); // Pitch: 0.6
+                    fireSound[i].ReferenceDistance = 2.0f;
+
+                    // Play it all the time. Volume is zero if no torch exists.
+                    fireSound[i].Play();
+                }
+            }
         }
 
         /// <summary>
@@ -98,7 +163,8 @@ namespace UpvoidMiner
             if (_worldNormal.y < -0.2f)
                 return;
 
-            LocalScript.player.Inventory.Items.RemoveItem(new TorchItem(), true);
+            if (!LocalScript.player.GodMode) // Don't remove in godmode
+                LocalScript.player.Inventory.Items.RemoveItem(new TorchItem(), true);
 
             mat4 transformation = mat4.Translate(_worldPos + new vec3(0, -0.6f + _worldNormal.y * 0.7f, 0) + 0.3f * _worldNormal);
 
@@ -194,33 +260,6 @@ namespace UpvoidMiner
 
             // This is a light. Register it (for flickering etc)
             itemEntity.RegisterLightRenderComponent(lightComp, 6.0f + 1.0f * randomValue, 0.3f + 0.1f * randomValue, 5.5f + randomValue * 5.0f);
-
-            
-            /*
-            MaterialResource material;
-            var mat = Substance.QueryResource();
-            if (mat is SolidTerrainResource)
-                material = (mat as SolidTerrainResource).RenderMaterial;
-            else
-                throw new NotImplementedException("Unknown terrain resource");
-
-            // Create the graphical representation of the item.
-            MeshRenderJob renderJob = new MeshRenderJob(
-                Renderer.Opaque.Mesh,
-                material,
-                mesh,
-                mat4.Identity
-                );
-            itemEntity.AddRenderComponent(new RenderComponent(renderJob, scaling, true));
-
-            MeshRenderJob renderJobShadow = new MeshRenderJob(
-                Renderer.Shadow.Mesh,
-                Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
-                mesh,
-                mat4.Identity
-                );
-            itemEntity.AddRenderComponent(new RenderComponent(renderJobShadow, scaling, true));
-            */
         }
     }
 }

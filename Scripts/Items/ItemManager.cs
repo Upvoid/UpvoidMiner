@@ -48,11 +48,49 @@ namespace UpvoidMiner.Items
         /// </summary>
         public static void Update(float _elapsedSeconds)
         {
+            // Find the three closest torches
+            vec3 refPos = LocalScript.camera != null ? LocalScript.camera.Position : vec3.Zero;
+
+            // vec4 contains: position (x,y,z) and distance to player (w)
+            List<vec4> torchPositions = new List<vec4>();
+            torchPositions.Add(new vec4(0, 0, 0, float.MaxValue));
+            torchPositions.Add(new vec4(0, 0, 0, float.MaxValue));
+            torchPositions.Add(new vec4(0, 0, 0, float.MaxValue));
+
             foreach (var entity in Item2Entity.Values)
             {
                 entity.UpdatePhysics();
                 entity.Update(_elapsedSeconds);
+
+                if(entity.RepresentedItem is TorchItem)
+                {
+                    vec3 torchPos = new vec3(entity.thisEntity.Transform.col3);
+                    float dis = vec3.distance(refPos, torchPos);
+
+                    if (dis < torchPositions[0].w)
+                    {
+                        // Closest torch (of those known)
+                        torchPositions[2] = torchPositions[1]; // Move down the line...
+                        torchPositions[1] = torchPositions[0]; // Move down the line...
+                        torchPositions[0] = new vec4(torchPos, dis);
+                    }
+                    else if (dis < torchPositions[1].w)
+                    {
+                        // Second-closest torch (of those known)
+                        torchPositions[2] = torchPositions[1]; // Move down the line...
+                        torchPositions[1] = new vec4(torchPos, dis);
+                    }
+                    else if (dis < torchPositions[2].w)
+                    {
+                        // Third-closest torch (of those known)
+                        torchPositions[2] = new vec4(torchPos, dis);
+                    }
+                    // Otherwise: Further away than at least three other torches
+                }
             }
+
+            // Update the torch fire sound
+            TorchItem.UpdateTorchSound(torchPositions);
         }
     }
 }
