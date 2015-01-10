@@ -211,15 +211,20 @@ namespace UpvoidMiner
             vec3 offsetHandleAndFire = new vec3(0, 0.5f, 0);
             vec3 offsetFireAndLight = new vec3(0, 0.4f, 0);
 
+            RenderComponent rcTorchHandle;
+            RenderComponent rcTorchShadow;
+            RenderComponent rcTorchFire;
+            RenderComponent rcTorchLight;
+
             // Torch handle - opaque
-            itemEntity.AddRenderComponent(new RenderComponent(new MeshRenderJob(
+            itemEntity.AddRenderComponent(rcTorchHandle = new RenderComponent(new MeshRenderJob(
                 Renderer.Opaque.Mesh,
                 Resources.UseMaterial("::Torch", UpvoidMiner.ModDomain),
                 Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
                 mat4.Identity), mat4.Translate(-offsetHandleAndFire) * mat4.Scale(1f)));
 
             // Torch handle - shadow
-            itemEntity.AddRenderComponent(new RenderComponent(new MeshRenderJob(
+            itemEntity.AddRenderComponent(rcTorchShadow = new RenderComponent(new MeshRenderJob(
                 Renderer.Shadow.Mesh,
                 Resources.UseMaterial("::Shadow", UpvoidMiner.ModDomain),
                 Resources.UseMesh("::Assets/Torch", UpvoidMiner.ModDomain),
@@ -241,7 +246,7 @@ namespace UpvoidMiner
 
             // Torch fire - additive transparent
             MeshRenderJob torchFire;
-            itemEntity.AddRenderComponent(new RenderComponent(torchFire = new MeshRenderJob(
+            itemEntity.AddRenderComponent(rcTorchFire = new RenderComponent(torchFire = new MeshRenderJob(
                 Renderer.Additive.Mesh,
                 Resources.UseMaterial("TorchFire", UpvoidMiner.ModDomain),
                 Resources.UseMesh("TorchFire", UpvoidMiner.ModDomain),
@@ -251,15 +256,25 @@ namespace UpvoidMiner
             torchFire.SetParameter("uRandom", randomValue);
 
             // Torch light
-            RenderComponent lightComp = new RenderComponent(new MeshRenderJob(
+            rcTorchLight = new RenderComponent(new MeshRenderJob(
                 Renderer.Lights.Mesh,
                 Resources.UseMaterial("::Light", UpvoidMiner.ModDomain),
                 Resources.UseMesh("::Debug/Sphere", UpvoidMiner.ModDomain),
                 mat4.Identity), mat4.Translate(offsetFireAndLight) * mat4.Scale(1.0f));
-            itemEntity.AddRenderComponent(lightComp);
+            itemEntity.AddRenderComponent(rcTorchLight);
 
             // This is a light. Register it (for flickering etc)
-            itemEntity.RegisterLightRenderComponent(lightComp, 6.0f + 1.0f * randomValue, 0.3f + 0.1f * randomValue, 5.5f + randomValue * 5.0f);
+            itemEntity.RegisterLightRenderComponent(rcTorchLight, 6.0f + 1.0f * randomValue, 0.3f + 0.1f * randomValue, 5.5f + randomValue * 5.0f);
+
+            // Fade out torches too far away
+            float fadeOutMin = 100;
+            float fadeOutMax = 105;
+            float fadeTime = 1.0f; // 1 second
+
+            rcTorchHandle.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rcTorchShadow.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rcTorchFire.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rcTorchLight.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
         }
     }
 }
