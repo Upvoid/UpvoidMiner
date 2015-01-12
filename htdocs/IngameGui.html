@@ -53,6 +53,14 @@
         }
     </style>
     <script type="text/javascript">
+
+        $('html').on('click', function(e) {
+          if (typeof $(e.target).data('original-title') == 'undefined' &&
+             !$(e.target).parents().is('.popover.in')) {
+            $('[data-original-title]').popover('hide');
+          }
+        });
+
         EfficientUI.addTemplateUrl("Tutorials.html");
 
         function onCraftTypeSelect(val)
@@ -318,7 +326,7 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading" style="position:relative;">Physics Items 
-                        <a tabindex="0" class="btn btn-default btn-sm delete-menu" role="button" data-html="true" data-placement="auto bottom" data-trigger="focus" data-container="body" data-toggle="popover" title="For low physics performance" data-content="content">Deletion Menu <span class="caret"></span></a>
+                        <a tabindex="0" class="btn btn-default btn-sm delete-menu" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" title="For low physics performance" data-content="content">Deletion Menu <span class="caret"></span></a>
                     </div>
                     <div class="panel-body inv-bag">
                         <uicollection name="MaterialItems" class="inv-items"></uicollection>
@@ -355,7 +363,7 @@
                 <a class="item-btn" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
-                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ToolItem" class="inv-item">
@@ -363,7 +371,7 @@
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
-                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <a tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
                 <div class="progress durability">
                     <div class="progress-bar progress-bar-success durability-pb"></div>
@@ -375,7 +383,7 @@
                 <div class="inv-volume"><uistring name="Volume" tag="div" class="inv-volume-inner"></uistring></div>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
-                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
+                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe')"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="MaterialItem" class="inv-item">
@@ -383,7 +391,7 @@
                 <div class="inv-stacksize"><uistring name="StackSize" tag="div" class="inv-stacksize-inner"></uistring></div>
                 <uistring name="Hotkey" tag="div" class="inv-hotkey"></uistring>
                 <uiobject name="Name" onvalue="function(el, val) { $(el).parent().children('a').attr('data-original-title', val); }"></uiobject>
-                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" data-trigger="focus" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe');"></a>
+                <a href="#" tabindex="0" class="item-btn" role="button" data-html="true" data-placement="auto bottom" data-container="body" data-toggle="popover" title="title" data-content="content" onclick="EfficientUI.SendCallback(this, 'SelectMe');"></a>
                 <div class="inv-item-info"><uicollection name="ItemInfo"></uicollection></div>
             </uitemplate>
             <uitemplate name="ItemIcon">
