@@ -54,10 +54,13 @@
     </style>
     <script type="text/javascript">
 
+        // Hide Popovers on clicking when not clicking inside of a popover
         $('html').on('click', function(e) {
           if (typeof $(e.target).data('original-title') == 'undefined' &&
              !$(e.target).parents().is('.popover.in')) {
+
             $('[data-original-title]').popover('hide');
+            window.setTimeout( function(){$('.popover').remove();}, 100);
           }
         });
 
@@ -344,8 +347,8 @@
                     </div>
                 </div>
 
-                <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); $('[data-original-title]').popover('hide'); }"></uiobject>
-                <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); $('[data-original-title]').popover('hide'); }"></uiobject>
+                <uiobject name="IsUIOpen" onvalue="function(el, val) { $('#ui-body').css('display', val ? 'block' : 'none'); $('.popover').remove(); }"></uiobject>
+                <uiobject name="IsInventoryOpen" onvalue="function(el, val) { $('.ingame-overlay').css('display', val ? 'block' : 'none'); $('.popover').remove(); }"></uiobject>
                 <uiobject name="CanDeletePhysics" onvalue="function(el, val) { $('.delete-menu').css('display', val ? 'block' : 'none'); }"></uiobject>
                 <uiobject name="DeleteMenuRed" onvalue="function(el, val) { $('.delete-menu').attr('class', val ? 'btn btn-danger btn-sm delete-menu' : 'btn btn-default btn-sm delete-menu'); }"></uiobject>
             </ui>
