@@ -135,7 +135,8 @@ void main()
    mat3 localModel = rotate(mat3(inormal, iTangent, iBiTangent), iAngularVelocity, iCurLife * length(iAngularVelocity));
 
    // world space normal/tangent:
-   mat3 normalMatrix = mat3(uModelMatrix) * localModel;
+   mat3 model3 = mat3(uModelMatrix);
+   mat3 normalMatrix = model3 * localModel;
    vNormal = normalMatrix * aNormal;
    vTangent = normalMatrix * aTangent;
 
