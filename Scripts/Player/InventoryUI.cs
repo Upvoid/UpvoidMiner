@@ -293,11 +293,11 @@ namespace UpvoidMiner
                     Bar[idx] = new ResourceItemUI(item as ResourceItem);
                 else if (item is RecipeItem)
                     Bar[idx] = new RecipeItemUI(item as RecipeItem);
-                else if (item is ToolItem || item is PipetteItem)
+                else if (item is ToolItem || item is PipetteItem || item is TorchItem)
                     Bar[idx] = new ToolItemUI(item);
                 else if (item != null)
                     Bar[idx] = new CraftingItemUI(item);
-                else 
+                else
                     Bar[idx] = null;
             }
         }
@@ -336,7 +336,7 @@ namespace UpvoidMiner
                 ResourceItems.Add(new ResourceItemUI(item as ResourceItem));
             else if (item is RecipeItem)
                 RecipeItems.Add(new RecipeItemUI(item as RecipeItem));
-            else if (item is ToolItem || item is PipetteItem)
+            else if (item is ToolItem || item is PipetteItem || item is TorchItem)
                 ToolItems.Add(new ToolItemUI(item));
             else 
                 CraftingItems.Add(new CraftingItemUI(item));

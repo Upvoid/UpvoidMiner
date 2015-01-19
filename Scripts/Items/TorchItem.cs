@@ -271,6 +271,8 @@ namespace UpvoidMiner
             float fadeOutMax = 105;
             float fadeTime = 1.0f; // 1 second
 
+
+            // TODO(ks): smooth fading (uniform uVisibility etc.)
             rcTorchHandle.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
             rcTorchShadow.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
             rcTorchFire.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
