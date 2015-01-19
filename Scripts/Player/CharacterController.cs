@@ -293,6 +293,9 @@ namespace UpvoidMiner
                                 // we are definitely in a non-air chunk here
                                 // teleport one node size above
                                 Body.SetTransformation(mat4.Translate(new vec3(0, node.Size, 0)) * Body.GetTransformation());
+                                
+                                // Reset player velocity
+                                Body.SetVelocity(vec3.Zero);
                             }
                             else if (!volumeData.HasAirAt(pos))
                             {
@@ -308,6 +311,9 @@ namespace UpvoidMiner
                                 offset += 1.5f;
 
                                 Body.SetTransformation(mat4.Translate(new vec3(0, offset, 0)) * Body.GetTransformation());
+
+                                // Reset player velocity
+                                Body.SetVelocity(vec3.Zero);
                             }
                         }
                     }
