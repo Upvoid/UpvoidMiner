@@ -8,7 +8,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock04.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock04.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 30
     Parameter: uTexScaleXZ, 30
     Parameter: uTexScaleZY, 30
@@ -22,7 +21,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Vegetated/Vegetated04.Normal
     Texture: uNormalXY, ::Terrain/Cliffs0144_5_S.normals
     Texture: uNormalZY, ::Terrain/Cliffs0144_5_S.normals
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 30
     Parameter: uTexScaleXZ, 30
     Parameter: uTexScaleZY, 30
@@ -36,7 +34,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Soil/Soil05.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock04.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock04.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 30
     Parameter: uTexScaleXZ, 30
     Parameter: uTexScaleZY, 30
@@ -50,7 +47,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Soil/Soil05.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil09.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil09.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 30
     Parameter: uTexScaleXZ, 30
     Parameter: uTexScaleZY, 30
@@ -61,25 +57,11 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, ::compatibility/terrain/RockRough0008_2_S
     Texture: uNormal, ::compatibility/terrain/RockRough0008_2_S.normals
-    Color: uSpecularColor, .1, .1, .1, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Particles/Terrain/Desert] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Soil/Soil09.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Soil/Soil09.Normal
-    Color: uSpecularColor, .0, .0, .0, 8
-    ParticleAttribute: aParticlePosition
-    ParticleAttribute: aParticleSize
-    ParticleAttribute: aParticleTangent
-    ParticleAttribute: aParticleBitangent
-    ParticleAttribute: aParticleColor
-    ParticleAttribute: aParticleLife
 
 [Terrain/DirtVegetated] : Default
     Shader: Terrain/VegetatedTerrain
@@ -92,7 +74,6 @@
     Texture: uNormalXZDirt, /Resources.TerrainMaterials::Soil/Soil01.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Soil/Soil01.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Soil/Soil01.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScaleXY, 2
     Parameter: uTexScaleXZ, 4
     Parameter: uTexScaleZY, 2
@@ -128,7 +109,6 @@
     Shader: Vegetation/TerrainFoliage
     Texture: uColor, Flowers
     Texture: uNormal, Flowers.Normal
-    Color: uSpecularColor, .0, .0, .0, 4
     Parameter: uTexScale, 2
     Parameter: uBlendingCoefficient, 4
     Parameter: uColorModulation, 1
@@ -145,7 +125,9 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock13.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
+    Parameter: uRoughness, 0.5
+    Parameter: uFresnel, 1.5
+    Parameter: uGlossiness, 0.2
 
 [Terrain/BaseRock] : Default
     Shader: Terrain/MinerTerrain
@@ -273,131 +255,68 @@
     Texture: uNormalXY, /Resources.TerrainMaterials::Rock/Rock14.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Rock/Rock14.Normal
 
-[Particles/Terrain/Rock01] : CpuParticleDefault
+
+[Particles/Terrain/BaseRock] : CpuParticleDefault
     Shader: Particles/Opaque/Mesh
-    Texture: uColor, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
-    Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock01.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.5
     Parameter: uFresnel, 1.5
     Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock02] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock01] : Particles/Terrain/BaseRock
+    Texture: uColor, /Resources.TerrainMaterials::Rock/Rock01.Diffuse
+    Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock01.Normal  
+
+[Particles/Terrain/Rock02] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock02.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock03] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock03] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock03.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock03.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock04] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock04] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock04.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock04.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock05] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock05] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock05.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock05.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock06] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock06] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock06.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock06.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.7
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.0
 
-[Particles/Terrain/Rock07] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock07] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock07.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock07.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock08] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock08] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock08.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock08.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock09] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock09] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock09.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock09.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
     
-[Particles/Terrain/Rock10] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock10] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock10.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock10.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock11] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock11] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock11.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock11.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock12] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock12] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock12.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock12.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock13] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock13] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock13.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock13.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
-[Particles/Terrain/Rock14] : CpuParticleDefault
-    Shader: Particles/Opaque/Mesh
+[Particles/Terrain/Rock14] : Particles/Terrain/BaseRock
     Texture: uColor, /Resources.TerrainMaterials::Rock/Rock14.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Rock/Rock14.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
-    Parameter: uRoughness, 0.5
-    Parameter: uFresnel, 1.5
-    Parameter: uGlossiness, 0.2
 
 [Terrain/FireRock] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -407,7 +326,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/FireRock.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/FireRock.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 5
     Parameter: uTexScaleXZ, 5
     Parameter: uTexScaleZY, 5
@@ -420,7 +338,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Minerals/FireRock.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/FireRock.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.5
     Parameter: uFresnel, 1.5
     Parameter: uGlossiness, 0.2
@@ -433,7 +350,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 5
     Parameter: uTexScaleXZ, 5
     Parameter: uTexScaleZY, 5
@@ -446,7 +362,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Minerals/Alienrock.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/Alienrock.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.7
     Parameter: uFresnel, 1.5
     Parameter: uGlossiness, 0.0
@@ -459,7 +374,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 5
     Parameter: uTexScaleXZ, 5
     Parameter: uTexScaleZY, 5
@@ -472,7 +386,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Minerals/CopperOre0001.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/CopperOre0001.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.9
     Parameter: uFresnel, 4.3
     Parameter: uGlossiness, 0.2
@@ -485,7 +398,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 5
     Parameter: uTexScaleXZ, 5
     Parameter: uTexScaleZY, 5
@@ -498,7 +410,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Minerals/VerdaniumOre.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.7
     Parameter: uFresnel, 1.5
     Parameter: uGlossiness, 0.0
@@ -511,7 +422,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Wood/Wood21.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Wood/Wood21.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Wood/Wood21.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, .8
     Parameter: uTexScaleXZ, .8
     Parameter: uTexScaleZY, .8
@@ -524,7 +434,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood21.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood21.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.7
     Parameter: uFresnel, 1.5
     Parameter: uGlossiness, 0.0
@@ -537,7 +446,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Wood/Wood02.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Wood/Wood02.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 3
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
@@ -551,7 +459,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Wood/Wood02.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Wood/Wood02.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.5;
     Parameter: uFresnel, 1.3;
     Parameter: uGlossiness, 0.2;
@@ -565,7 +472,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Stones/Charcoal.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Stones/Charcoal.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Stones/Charcoal.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 2.8
     Parameter: uTexScaleXZ, 2.8
     Parameter: uTexScaleZY, 2.8
@@ -575,7 +481,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Stones/Charcoal.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Stones/Charcoal.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
 
 [Terrain/BlackCoal] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -585,7 +490,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Stones/Stones10.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Stones/Stones10.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Stones/Stones10.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 2.8
     Parameter: uTexScaleXZ, 2.8
     Parameter: uTexScaleZY, 2.8
@@ -598,7 +502,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Stones/Stones10.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Stones/Stones10.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.7
     Parameter: uFresnel, 8.3
     Parameter: uGlossiness, 0.9
@@ -611,7 +514,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, .5
     Parameter: uTexScaleXZ, .5
     Parameter: uTexScaleZY, .5
@@ -624,7 +526,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Manmade/Chainlinks.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Manmade/Chainlinks.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.3
     Parameter: uFresnel, 8.3
     Parameter: uGlossiness, 0.9
@@ -637,7 +538,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/GoldBars.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Goods/GoldBars.Normal
-    Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uTexScaleXY, 3.5
     Parameter: uTexScaleXZ, 3.5
     Parameter: uTexScaleZY, 3.5
@@ -647,7 +547,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/GoldBars.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/GoldBars.Normal
-    Color: uSpecularColor, 1, 1, 1, 8
 
 [Terrain/Copper] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -657,7 +556,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/Coins.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Goods/Coins.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Goods/Coins.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 1.3
     Parameter: uTexScaleXZ, 1.3
     Parameter: uTexScaleZY, 1.3
@@ -670,7 +568,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/Coins.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Coins.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
     Parameter: uRoughness, 0.3
     Parameter: uFresnel, 8.3
     Parameter: uGlossiness, 0.9
@@ -683,7 +580,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Goods/Gems01.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Goods/Gems01.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Goods/Gems01.Normal
-    Color: uSpecularColor, .02, .02, .02, 9
     Parameter: uTexScaleXY, 3
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
@@ -693,7 +589,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Goods/Gems01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Goods/Gems01.Normal
-    Color: uSpecularColor, .1, .1, .1, 8
 
 [Terrain/OreGold] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -703,7 +598,6 @@
     Texture: uNormalXZ, OreGold.Normal
     Texture: uNormalXY, OreGold.Normal
     Texture: uNormalZY, OreGold.Normal
-    Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uTexScaleXY, 3
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
@@ -716,7 +610,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, OreGold.Diffuse
     Texture: uNormal, OreGold.Normal
-    Color: uSpecularColor, 1, 1, 1, 16
 
 [Terrain/Placeholder] : Default
     Shader: ::Opaque/MeshTripleProjectionObjectNormalmap
@@ -726,7 +619,6 @@
     Texture: uNormalXZ, /Resources.TerrainMaterials::Manmade/GlassTiles01.Normal
     Texture: uNormalXY, /Resources.TerrainMaterials::Manmade/GlassTiles01.Normal
     Texture: uNormalZY, /Resources.TerrainMaterials::Manmade/GlassTiles01.Normal
-    Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uTexScaleXY, 3
     Parameter: uTexScaleXZ, 3
     Parameter: uTexScaleZY, 3
@@ -739,7 +631,6 @@
     Shader: Particles/Opaque/Mesh
     Texture: uColor, /Resources.TerrainMaterials::Manmade/GlassTiles01.Diffuse
     Texture: uNormal, /Resources.TerrainMaterials::Manmade/GlassTiles01.Normal
-    Color: uSpecularColor, 1, 1, 1, 16
     Parameter: uRoughness, 0.4
     Parameter: uFresnel, 10.3
     Parameter: uGlossiness, 1.0
