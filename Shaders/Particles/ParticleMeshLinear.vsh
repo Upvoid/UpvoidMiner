@@ -135,6 +135,7 @@ void main()
    mat3 localModel = rotate(mat3(inormal, iTangent, iBiTangent), iAngularVelocity, iCurLife * length(iAngularVelocity));
 
    // world space normal/tangent:
+   // Saving casted mat3 into an extra variable, otherwise some AMD shader compilers will crash.
    mat3 model3 = mat3(uModelMatrix);
    mat3 normalMatrix = model3 * localModel;
    vNormal = normalMatrix * aNormal;
