@@ -77,18 +77,18 @@ ConcurrentQueue             (https://github.com/cameron314/concurrentqueue) Simp
 
 ===============
 
-The individual license files for the libraries above can be found in the folder "licenseS".
+The individual license files for the libraries above can be found in the folder "LICENSES".
 However, you can find generic versions for most of the licenses at the following locations:
 
-SIL OFL 1.1 http://scripts.sil.org/OFL
-Mozilla Public License (MPL) 2.0 https://www.mozilla.org/MPL/2.0/
-zlib http://opensource.org/licenses/Zlib
-GNU Lesser General Public License, Version 2.1 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+SIL OFL 1.1                                     http://scripts.sil.org/OFL
+Mozilla Public License (MPL) 2.0                https://www.mozilla.org/MPL/2.0/
+zlib                                            http://opensource.org/licenses/Zlib
+GNU Lesser General Public License, Version 2.1  http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
 GNU Library General Public License, Version 2.0 http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
-Apache License 2.0 http://www.apache.org/licenses/LICENSE-2.0
-MIT http://opensource.org/licenses/mit-license.html
-CC BY 2.5 http://creativecommons.org/licenses/by/2.5/
-CC BY 3.0 http://creativecommons.org/licenses/by/3.0/
-CC BY 4.0 http://creativecommons.org/licenses/by/4.0/
-BSD 3-clause http://opensource.org/licenses/BSD-3-Clause
-Google APIs Terms of Service ("API ToS") https://developers.google.com/terms/
+Apache License 2.0                              http://www.apache.org/licenses/LICENSE-2.0
+MIT                                             http://opensource.org/licenses/mit-license.html
+CC BY 2.5                                       http://creativecommons.org/licenses/by/2.5/
+CC BY 3.0                                       http://creativecommons.org/licenses/by/3.0/
+CC BY 4.0                                       http://creativecommons.org/licenses/by/4.0/
+BSD 3-clause                                    http://opensource.org/licenses/BSD-3-Clause
+Google APIs Terms of Service ("API ToS")        https://developers.google.com/terms/
