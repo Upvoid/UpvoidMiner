@@ -300,15 +300,18 @@ namespace UpvoidMiner
 
             // Create particle entity.
             ParticleEntity = new AnonymousEntity(mat4.Identity);
-            world.AddEntity(ParticleEntity, Network.GCManager.CurrentUserID);
+            //TODO(MS):refactor
+            //world.AddEntity(ParticleEntity, Network.GCManager.CurrentUserID);
 
             // Create shape indicator entity.
             ShapeIndicatorEntity = new AnonymousEntity(mat4.Identity);
-            world.AddEntity(ShapeIndicatorEntity, Network.GCManager.CurrentUserID);
+            //TODO(MS):refactor
+            //world.AddEntity(ShapeIndicatorEntity, Network.GCManager.CurrentUserID);
 
             // Create the Player EntityScript and add it to the world.
             player = new Player(camera, godMode);
-            world.AddEntity(player, mat4.Translate(Player.SpawnPosition), Network.GCManager.CurrentUserID);
+            //TODO(MS):refactor
+            //world.AddEntity(player, mat4.Translate(Player.SpawnPosition), Network.GCManager.CurrentUserID);
 
             // Register the update callback that updates the camera position.
             Scripting.RegisterUpdateFunction(Update, UpvoidMiner.Mod);

@@ -1003,7 +1003,8 @@ namespace UpvoidMiner
                 DroneConstraints.Add(new DroneConstraint(d));
 
             // Add the drone as new entity.
-            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), Network.GCManager.CurrentUserID);
+            //TODO(MS):refactor
+            ContainingWorld.AddEntity(d, mat4.Translate(d.CurrentPosition), /*Network.GCManager.CurrentUserID*/0);
         }
 
         /// <summary>
