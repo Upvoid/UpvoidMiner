@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using EfficientUI;
-using EfficientUI.Scripts.Elements;
 using Engine.Resources;
 using Engine.Universe;
 using UpvoidMiner.Items;
