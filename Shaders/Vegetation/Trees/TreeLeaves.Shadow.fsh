@@ -12,6 +12,12 @@ in float vZ;
 
 out float fShadow;
 
+float random(vec2 p)
+{
+  // e^pi, 2^sqrt(2)
+  return fract(cos(dot(p, vec2(23.140693,2.665144)))*123456.0);
+}
+
 void main()
 {
     vec4 texColor = texture(uColor, vTexCoord);
@@ -19,9 +25,19 @@ void main()
     if(texColor.a < 0.5)
         discard;
         
-   float posFactor = uVisibility;
-   if(int(13.479*gl_FragCoord.x + gl_FragCoord.y * 273.524 * gl_FragCoord.x) % 200 >= posFactor * 250)
-      discard;
+   // Convention: uVisibility < 0: fading out (fading in otherwise)
+    bool fadingIn = uVisibility > 0;
+
+    if(fadingIn)
+    {
+      if(random(gl_FragCoord.xy) >= uVisibility)
+        discard;
+    }
+    else
+    {
+      if(random(gl_FragCoord.xy) <= uVisibility + 1)
+        discard;
+    }
 
     float z = vZ;
     z = (z+1) / 2.0;

@@ -21,13 +21,29 @@ in vec2 vTexCoord;
 OUTPUT_CHANNEL_GBuffer1(vec4)
 OUTPUT_CHANNEL_GBuffer2(vec4)
 
+float random(vec2 p)
+{
+  // e^pi, 2^sqrt(2)
+  return fract(cos(dot(p, vec2(23.140693,2.665144)))*123456.0);
+}
+
 void main()
 {
     INIT_CHANNELS;
 
-   float posFactor = uVisibility;
-   if(int(13.479*gl_FragCoord.x + gl_FragCoord.y * 273.524 * gl_FragCoord.x) % 200 >= posFactor * 250)
-      discard;
+   // Convention: uVisibility < 0: fading out (fading in otherwise)
+    bool fadingIn = uVisibility > 0;
+
+    if(fadingIn)
+    {
+      if(random(gl_FragCoord.xy) >= uVisibility)
+        discard;
+    }
+    else
+    {
+      if(random(gl_FragCoord.xy) <= uVisibility + 1)
+        discard;
+    }
 
     // normalmap
     vec3 normal = applyNormalmap(vNormal, vTangent, unpack8bitNormalmap(texture(uNormal, vTexCoord).rgb));

@@ -147,10 +147,10 @@ namespace UpvoidMiner
             float fadeOutMax = Math.Max(10, maxTreeDistanceSetting + 5);    // >= 10
             float fadeTime = 1.0f; // 1 second
 
-            rc1.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
-            rc2.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
-            rc3.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
-            rc4.ConfigureLod(fadeOutMin, fadeOutMax, fadeTime);
+            rc1.ConfigureLod(0, 0, fadeOutMin, fadeOutMax, fadeTime);
+            rc2.ConfigureLod(0, 0, fadeOutMin, fadeOutMax, fadeTime);
+            rc3.ConfigureLod(0, 0, fadeOutMin, fadeOutMax, fadeTime);
+            rc4.ConfigureLod(0, 0, fadeOutMin, fadeOutMax, fadeTime);
 
             t.RjLeaves0.Add(rc1);
             //t.RjLeaves0.Add(new RenderComponent(leavesZPre, transform2));

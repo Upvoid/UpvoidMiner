@@ -81,13 +81,13 @@ namespace UpvoidMiner
                 // Configure LoD for all Leaves-Renderjobs
                 foreach (RenderComponent r in t.RjLeaves0)
                 {
-                    r.ConfigureLod(minFadeDistance, maxFadeDistance, fadeTime);
+                    r.ConfigureLod(0, 0, minFadeDistance, maxFadeDistance, fadeTime);
                 }
 
                 // Configure LoD for all Trunk-Renderjobs
                 foreach (RenderComponent r in t.RjTrunk)
                 {
-                    r.ConfigureLod(minFadeDistance, maxFadeDistance, fadeTime);
+                    r.ConfigureLod(0, 0, minFadeDistance, maxFadeDistance, fadeTime);
                 }
             }
         }
