@@ -219,7 +219,7 @@ namespace UpvoidMiner
         private SettingDouble settingTextureResolution = new SettingDouble("Graphics/Texture Resolution", 512);
         private SettingDouble settingShadowResolution = new SettingDouble("Graphics/Shadow Resolution", 512);
         private SettingBool settingVolumetricScattering = new SettingBool("Graphics/Enable Volumetric Scattering", false);
-        private SettingBool settingTonemapping = new SettingBool("Graphics/Enable Tonemapping", true);
+        private SettingBool settingTonemapping = new SettingBool("Graphics/Enable Tonemapping", false);
         private SettingBool settingFXAA = new SettingBool("Graphics/Enable FXAA", true);
         private SettingBool settingLensflares = new SettingBool("Graphics/Enable Lensflares", false);
         private SettingDouble settingFieldOfView = new SettingDouble("Graphics/Field of View", 75.0);
@@ -859,7 +859,7 @@ namespace UpvoidMiner
             TextureResolution = 2;   // NOTE: This is the setting in [0..4]
             ShadowResolution = 2;    // NOTE: This is the setting in [0..4]
             VolumetricScattering = false;
-            Tonemapping = true;
+            Tonemapping = false;//true;
             FXAA = true;
             Grass = true;
             DigParticles = true;
@@ -877,7 +877,7 @@ namespace UpvoidMiner
             TextureResolution = 3;     // NOTE: This is the setting in [0..4]
             ShadowResolution = 3;      // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
-            Tonemapping = true;
+            Tonemapping = false;//true;
             FXAA = true;
             Grass = true;
             DigParticles = true;
@@ -895,7 +895,7 @@ namespace UpvoidMiner
             TextureResolution = 4;    // NOTE: This is the setting in [0..4]
             ShadowResolution = 4;     // NOTE: This is the setting in [0..4]
             VolumetricScattering = true;
-            Tonemapping = true;
+            Tonemapping = false;//true;
             FXAA = true;
             Grass = true;
             DigParticles = true;
@@ -1033,6 +1033,8 @@ namespace UpvoidMiner
         {
             if (settings == null)
                 settings = new Settings();
+            // Tonemapping is disabled for now
+            settings.Tonemapping = false;
         }
     }
 }
